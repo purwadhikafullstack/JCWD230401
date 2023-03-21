@@ -60,3 +60,11 @@ special_price
 transaction
 
 git commit -m "develop-2:setup sequelize"  
+
+git commit -m "TPK-2-1 : Prepare landing page"
+
+git push origin TPK-2
+
+git checkout -b TPK-4
+
+register

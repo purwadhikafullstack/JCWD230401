@@ -1,26 +1,28 @@
 import axios from "axios";
 import logo from "./logo.svg";
 import "./App.css";
-import { useEffect, useState } from "react";
+import { Route, Routes, useLocation } from "react-router-dom";
+import Landing from "./Pages/Landing";
+import NavbarMobile from "./Components/NavbarMobile";
+import Navbar from "./Components/Navbar";
+import React from "react";
+import Footer from "./Components/Footer";
+
 
 function App() {
-  const [message, setMessage] = useState("");
+  const location = useLocation();
 
-  useEffect(() => {
-    (async () => {
-      const { data } = await axios.get(
-        `${process.env.REACT_APP_API_BASE_URL}/greetings`
-      );
-      setMessage(data?.message || "");
-    })();
-  }, []);
+
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        {message}
-      </header>
-    </div>
+<>
+      {location.pathname === "/" && <Navbar />}
+      {location.pathname === "/" && <Footer />}
+      <Routes>
+              <Route path="/" element={<Landing />} />
+      </Routes>
+      {location.pathname === "/" && <NavbarMobile />}
+    </>
   );
 }
 
