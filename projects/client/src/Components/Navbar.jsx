@@ -23,6 +23,7 @@ import { TbHomeHeart } from "react-icons/tb";
 import { AiOutlineSearch } from "react-icons/ai";
 // import Login from '../pages/Login';
 import { useNavigate } from 'react-router-dom';
+import CategorySlider from './CategorySlider';
 // import { useDispatch, useSelector } from 'react-redux';
 // import { logoutAction } from '../reducers/auth';
 
@@ -30,7 +31,7 @@ import { useNavigate } from 'react-router-dom';
 export default function Navbar() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [scrollBehavior, setScrollBehavior] = React.useState('outside');
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
   // const dispatch = useDispatch();
   // const imageprofile = useSelector((state) => state.authReducer.image_profile);
   // const roleId = useSelector((state) => state.authReducer.roleId);
@@ -44,7 +45,7 @@ export default function Navbar() {
   return (
     <>
       <Box position="fixed" w='full' bg='white' zIndex={1}>
-        <Box boxShadow={'xs'} px={10}>
+        <Box boxShadow={'xs'} px={{base:'4',sm:'10'}}>
           <Flex h={16} alignItems={'center'} justifyContent={'space-between'}>
             <HStack alignItems={'center'}>
               {/* Logo Tempatku */}
@@ -79,7 +80,7 @@ export default function Navbar() {
               <Button
                 variant={'ghost'}
                 size={'sm'}
-                mr={4}
+                // mr={4}
                 // display={{ base: "none", sm: "none", md: "block" }}
                 _hover={'none'}
               >
@@ -117,7 +118,9 @@ export default function Navbar() {
                       </ModalContent>
                     </Modal>
                   </MenuItem>
-                  <MenuItem>
+                  <MenuItem
+                  onClick={() => navigate('/userregister')}
+                  >
                     Register
                   </MenuItem>
                 </MenuList>
@@ -163,6 +166,9 @@ export default function Navbar() {
             </Flex>
           </Flex>
         </Box>
+      <Box>
+      <CategorySlider />
+      </Box>
       </Box>
     </>
   );

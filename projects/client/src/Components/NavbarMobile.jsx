@@ -23,7 +23,7 @@ export default function NavbarMobile() {
             display={{ base: 'block', sm: 'none' }}
             position="fixed"
             bottom="0"
-            bg='white'
+            bg={{base:'white', sm:'none'}}
             w='full'
         >
             <Container

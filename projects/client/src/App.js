@@ -7,6 +7,7 @@ import NavbarMobile from "./Components/NavbarMobile";
 import Navbar from "./Components/Navbar";
 import React from "react";
 import Footer from "./Components/Footer";
+import UserRegister from "./Pages/UserRegister";
 
 
 function App() {
@@ -20,6 +21,7 @@ function App() {
       {location.pathname === "/" && <Footer />}
       <Routes>
               <Route path="/" element={<Landing />} />
+              <Route path="/userregister" element={<UserRegister />} />
       </Routes>
       {location.pathname === "/" && <NavbarMobile />}
     </>

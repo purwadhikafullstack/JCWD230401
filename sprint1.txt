@@ -62,3 +62,41 @@ transaction
 git commit -m "develop-2:setup sequelize"  
 
 git commit -m "TPK-2-1 : Prepare landing page"
+
+git commit -m "develop-2:setup sequelize"  
+
+git commit -m "TPK-2-1 : Prepare landing page"
+
+git push origin TPK-2
+
+
+register
+
+remote: Create a pull request for 'TPK-2' on GitHub by visiting:
+remote:      https://github.com/Abdi-01/JCWD230401/pull/new/TPK-2
+
+base repository: Abdi-01/JCWD230401, base:develop
+head repository: Abdi-01/JCWD230401, base:TPK-2 (branch kita)
+git checkout -b TPK-4
+
+TPK - 4
+
+1. const ormTransaction = await model.sequelize.transaction();
+
+2. let regis = await model.users.create(req.body, { transaction: ormTransaction });
+
+3. await ormTransaction.commit(); //kalo berhasil nambahin data ke database
+
+4. await ormTransaction.rollback(); // cancelation of the process
+
+td bikin validator register phone number
+
+ alert(error.response.data.error[0].msg); --> dapetin error message dr backend
+
+commit rollback still not functioning --> kasus: name di regis page left blank intentionally
+fill in all the fields error --> masih masuk ke database mysql --> fix: ilangin
+
+fix: bikin validator buat name 
+
+            alert(error.response.data.error[0].msg); // name , email, password
+            alert(error.response.data.error[1].msg); // phone

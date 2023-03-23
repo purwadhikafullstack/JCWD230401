@@ -1,22 +1,23 @@
+const { join } = require("path");
 require("dotenv/config");
+require("dotenv").config({path:join(__dirname, ".env")});
 const express = require("express");
 const cors = require("cors");
-const { join } = require("path");
 
+console.log(__dirname)
 const PORT = process.env.PORT || 8000;
 const app = express();
-app.use(
-  cors({
-    origin: [
-      process.env.WHITELISTED_DOMAIN &&
-        process.env.WHITELISTED_DOMAIN.split(","),
-    ],
-  })
-);
-
 app.use(express.json());
 
+app.use(
+  cors()
+);
+
+
 //#region API ROUTES
+
+const userRouter = require('./routers/userRouter');
+app.use('/user', userRouter);
 
 // ===========================
 // NOTE : Add your routes here

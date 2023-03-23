@@ -1,17 +1,22 @@
 import { Flex, Box, Stack, VStack, HStack } from "@chakra-ui/react"
 import Banner from "../Components/Banner"
+// import CategorySlider from "../Components/CategorySlider"
 import PropertyCard from "../Components/PropertyCard"
 import SearchBar from "../Components/SearchBar"
+
 
 export default function Landing() {
     return (
         <>
+        {/* <Flex w={'full'} >
+            <CategorySlider />
+        </Flex> */}
             <Flex w={'full'} 
             >
                 <Banner />
             </Flex>
             <Box pt={{md:'3'}} p={{base:'8', sm:'0'}}
-            pb={{base:'24', sm:'0'}}
+            pb={{base:'24', sm:'32', lg:'0'}}
             >
                 <SearchBar />
             </Box>
