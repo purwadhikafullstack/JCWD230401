@@ -8,12 +8,37 @@ import Navbar from "./Components/Navbar";
 import React from "react";
 import Footer from "./Components/Footer";
 import UserRegister from "./Pages/UserRegister";
+import { useDispatch, useSelector } from "react-redux";
+import { loginAction } from "./reducers/auth";
+import { API_URL } from "./helper";
 
 
 function App() {
   const location = useLocation();
+  const dispatch = useDispatch();
+  const roleId = useSelector((state) => state.authReducer.roleId);
 
+  const keeplogin = async () => {
+    try {
+      let token = localStorage.getItem("tempatku_login");
+      if (token) {
+        let response = await axios.get(`${API_URL}/user/keeplogin`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        console.log("ini respon dari keeplogin :", response.data);
+        localStorage.setItem("tempatku_login", response.data.token);
+        dispatch(loginAction(response.data));
+      }
+    } catch (error) {
+      console.log("ini error dari keeplogin : ", error);
+    }
+  };
 
+  React.useEffect(() => {
+    keeplogin();
+  }, []);
 
   return (
 <>

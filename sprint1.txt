@@ -100,3 +100,97 @@ fix: bikin validator buat name
 
             alert(error.response.data.error[0].msg); // name , email, password
             alert(error.response.data.error[1].msg); // phone
+
+git add .
+git commit -m "TPK-4-1 : register as a user"
+git push origin TPK-4
+
+git checkout -b TPK-6
+
+TPK - 6
+-validator login ✅
+-login form: email/phone number, password
+-tambahan fitur: keep login 
+
+BE
+1. userController & index js 
+2. userRouter 
+3. index.js utama
+4. validator helper 
+
+FE 
+1. login page
+2. navbar 
+
+kalo phone number bisa buat login brarti gabole sama dong
+
+now: lg gbs login pake phone and password
+
+server: Error: WHERE parameter "email" has invalid "undefined" value
+server:     at MySQLQueryGenerator.whereItemQuery (C:\Users\Marceline Megan\Desktop\JCWD230401\node_modules\sequelize\lib\dialects\abstract\query-generator.js:1705:13)
+server:     at C:\Users\Marceline Megan\Desktop\JCWD230401\node_modules\sequelize\lib\dialects\abstract\query-generator.js:1696:25
+
+hrs ditulis jg dengan string kosong ---> this is a problem td nyoba fix it in validator nullable;true it didnt work
+
+{
+  "email":"",
+  "phone":"087875084660",
+  "password":"Admin123"
+}
+
+output 1 pake phone login
+{
+  "success": true,
+  "message": "Login success ✅",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXVpZCI6IjhiZjc4M2NlLTk4NzctNDE0Yi04M2M5LTYzZmMwMjk1MGNhMiIsImlhdCI6MTY3OTU0NTQwNywiZXhwIjoxNjgwOTg1NDA3fQ.6QFN7S-KRH2DbZnCbRpRvk9qQXEytwnEzDz1klRyvqA",
+  "name": "megan",
+  "email": "megan@gmail.com",
+  "phone": "087875084660",
+  "roleId": null,
+  "image_profile": null
+}
+
+output 2 pake email login 
+{
+  "success": true,
+  "message": "Login success ✅",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXVpZCI6IjhiZjc4M2NlLTk4NzctNDE0Yi04M2M5LTYzZmMwMjk1MGNhMiIsImlhdCI6MTY3OTU0NTU5NCwiZXhwIjoxNjgwOTg1NTk0fQ.OWYo-Q4oybWxQQ-r4caAukb9JQSyUeJ-okVc2wHIAAo",
+  "name": "megan",
+  "email": "megan@gmail.com",
+  "phone": "087875084660",
+  "roleId": null,
+  "image_profile": null
+}
+
+nyoba keeplogin pake 2 token yg berbeda bisa, hrs dibikin yg paling baru aja bisanya? --> iya dibikin kondisi hrs token terbaru!!!!!
+output keeplogin:
+{
+  "success": true,
+  "message": "keep login success ✅",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXVpZCI6IjhiZjc4M2NlLTk4NzctNDE0Yi04M2M5LTYzZmMwMjk1MGNhMiIsImlhdCI6MTY3OTU0NTc1MCwiZXhwIjoxNjgwOTg1NzUwfQ.EOwu-OxHunOV3evBddFwGY96xtVVboF2VwF2XTBX5pk",
+  "name": "megan",
+  "email": "megan@gmail.com",
+  "phone": "087875084660",
+  "roleId": null,
+  "image_profile": null
+}
+
+note: login page -> component
+
+oh di register nya lupa return roleId : 1 krn user
+
+ganti design booking.com
+banner static boleh kek video
+
+bikin kondisi bisa deteksi ini email atau phone number
+
+inin register gausa orm transaction
+krn query cm 1 create doang
+const ormTransaction = await model.sequelize.transaction(); //pake ini klo ad lebih dr 1 query //buat nanggulangin error dr mysql bbrp query yg dijalankan trs ad error
+
+
+tombol request verifikasi ulang
+
+git add .
+git commit -m "TPK-6-1 : login as a user, keep login"
+git push origin TPK-6

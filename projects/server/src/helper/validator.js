@@ -25,11 +25,22 @@ module.exports = {
 
         await check("phone")
           .notEmpty()
-          .isMobilePhone("id-ID")
+          .isMobilePhone()
+          .withMessage("Invalid phone number")
+          .run(req);
+      } else if (req.path == "/auth") {
+        await check("email")
+          .notEmpty({nullable:true})
+          .isEmail()
+          .withMessage("Invalid email address/field is empty")
+          .run(req);
+
+        await check("phone")
+          .notEmpty({nullable:true})
+          .isMobilePhone()
           .withMessage("Invalid phone number")
           .run(req);
       }
-
       await check("password")
         .notEmpty()
         .isStrongPassword({

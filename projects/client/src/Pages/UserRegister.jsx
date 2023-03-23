@@ -10,7 +10,7 @@ import {
     Link,
     Stack,
     Image,
-    Text, Icon, HStack, Box, Divider, Center, Card, CardBody, InputGroup, InputRightElement
+    Text, Icon, HStack, Box, Divider, Center, Card, CardBody, InputGroup, InputRightElement, useDisclosure
 } from '@chakra-ui/react';
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
 import { useNavigate } from 'react-router-dom';
@@ -28,6 +28,8 @@ export default function UserRegister() {
     const [email, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
     const [passwordConfirmation, setPasswordConfirmation] = React.useState('');
+    const { isOpen, onOpen, onClose } = useDisclosure();
+
 
 
     const onBtnRegister = async () => {
@@ -164,7 +166,10 @@ export default function UserRegister() {
                                     >
                                         <Text>Have an account?</Text>
                                         {/* usenavigate ke landing, tp login nya ada di landing page modal, hrs bikin modal login lsg kebuka in order to have this  */}
-                                        <Text onClick={() => navigate('/')} color='#0969da'
+                                        <Text onClick={() => {
+                                            navigate('/');
+                                            // onOpen();
+                                        }} color='#0969da'
                                             cursor={'pointer'}
                                         >
                                             Login.

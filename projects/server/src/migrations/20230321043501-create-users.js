@@ -58,6 +58,9 @@ module.exports = {
         type: Sequelize.BOOLEAN,
         defaultValue: 0
       },
+      tokenUpdate: {
+        type: Sequelize.STRING
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATEONLY
