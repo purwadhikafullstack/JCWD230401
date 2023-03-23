@@ -12,7 +12,7 @@ export default function Banner() {
         <Flex
             w={'full'}
             mt='16'
-            h={{base:'40vh', lg:'60vh'}}
+            h={{base:'50vh', lg:'100vh'}}
             // h={{base:'40vh'}}
 
             backgroundImage={

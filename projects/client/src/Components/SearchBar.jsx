@@ -19,9 +19,9 @@ export default function SearchBar() {
 
     return (
         <>
-            <Flex h={{ base: '12', md: '16' }} m='auto' px='1' alignItems={'center'} justifyContent={'space-between'} maxW={{ md: '700px', lg: '900px' }}
+            <Flex h={{ base: '12', md:'16', lg: '16' }} m='auto' px='1' alignItems={'center'} justifyContent={'space-between'} maxW={{ md: '500px', lg: '900px' }}
                 // direction={{ base: 'column', md: 'row' }}
-                flexDir={{ base: 'column', md: 'row' }}
+                flexDir={{ base: 'column', lg: 'row' }}
                 position='sticky'
             >
                 {/* Location Nearby (geolocation) */}
@@ -82,7 +82,7 @@ export default function SearchBar() {
                 {/* <Box border={'1px'} h='full' w='full' flex='2'>  
                 </Box> */}
                 {/* Search Filter Button */}
-                <Box border={'2px'} borderBottom={'2px'} borderColor='gray.200' h='full' w='full' flex={{ base: 'none', md: '1' }}>
+                <Box border={'2px'} borderBottom={'2px'} borderColor='gray.200' h='full' w='full' flex={{ base: 'none', lg: '1' }}>
                     <Button
                         pointerEvents='visible'
                         leftIcon={<FiSearch color='white' />}

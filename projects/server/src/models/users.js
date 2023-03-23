@@ -20,14 +20,14 @@ module.exports = (sequelize, DataTypes) => {
     password: DataTypes.STRING,
     phone: DataTypes.STRING,
     birth: DataTypes.DATEONLY,
-    gender: DataTypes.ENUM,
+    gender: DataTypes.ENUM('Male', 'Female'),
     image_profile: DataTypes.STRING,
     image_ktp: DataTypes.STRING,
     attempts: DataTypes.INTEGER,
     isVerified: DataTypes.BOOLEAN,
     isDeleted: DataTypes.BOOLEAN,
     roleId: DataTypes.INTEGER,
-    statusId: DataTypes.INTEGER
+    isSuspended: DataTypes.BOOLEAN
   }, {
     sequelize,
     modelName: 'users',
