@@ -3,15 +3,15 @@ require("dotenv/config");
 require("dotenv").config({path:join(__dirname, ".env")});
 const express = require("express");
 const cors = require("cors");
+const bearerToken = require('express-bearer-token')
 
-console.log(__dirname)
+
+// console.log(__dirname);
 const PORT = process.env.PORT || 8000;
 const app = express();
 app.use(express.json());
-
-app.use(
-  cors()
-);
+app.use(cors());
+app.use(bearerToken());
 
 
 //#region API ROUTES

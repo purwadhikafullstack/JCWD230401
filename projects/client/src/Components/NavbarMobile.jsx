@@ -11,7 +11,7 @@ import {
 import React from 'react';
 import { AiOutlineSearch, AiOutlineHeart } from "react-icons/ai";
 import { RiSuitcaseLine } from "react-icons/ri";
-// import Login from '../pages/Login';
+import Login from './Login';
 
 export default function NavbarMobile() {
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -75,7 +75,7 @@ export default function NavbarMobile() {
                             <ModalContent>
                                 <ModalCloseButton />
                                 <ModalBody>
-                                    {/* <Login /> */}
+                                    <Login />
                                 </ModalBody>
                             </ModalContent>
                         </Modal>
