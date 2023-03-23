@@ -100,3 +100,4 @@ fix: bikin validator buat name
 
             alert(error.response.data.error[0].msg); // name , email, password
             alert(error.response.data.error[1].msg); // phone
+
