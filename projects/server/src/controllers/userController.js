@@ -20,19 +20,17 @@ module.exports = {
         if (req.body.password == req.body.confirmationPassword) {
           delete req.body.confirmationPassword;
           req.body.password = bcrypt.hashSync(req.body.password, salt);
-          console.log("Check data after hash password :", req.body);
+          console.log("Check data after hash password :", req.body); //testing purposes
           const uuid = uuidv4();
           const { name, email, password, phone } = req.body;
-          let regis = await model.users.create(
-            {
-              uuid,
-              name,
-              email,
-              phone,
-              password,
-              roleId: 1,
-            }
-          );
+          let regis = await model.users.create({
+            uuid,
+            name,
+            email,
+            phone,
+            password,
+            roleId: 1,
+          });
           return res.status(200).send({
             success: true,
             message: "register account success ✅",
@@ -75,7 +73,7 @@ module.exports = {
           let { id, uuid, name, email, phone, roleId, image_profile } =
             getuser[0].dataValues;
           // GENERATE TOKEN ---> 400h buat gampang aja developnya jgn lupa diganti!
-          let token = createToken({ id, uuid }, "400h");
+          let token = createToken({ uuid }, "400h"); //td id, uuid
           // LOGIN SUCCESS
           return res.status(200).send({
             success: true,
@@ -117,7 +115,7 @@ module.exports = {
       let { id, uuid, name, email, phone, roleId, image_profile } =
         getuser[0].dataValues;
       // GENERATE TOKEN ---> 400h buat gampang aja developnya jgn lupa diganti!
-      let token = createToken({ id, uuid }, "400h");
+      let token = createToken({ uuid }, "400h"); // td uuid
       // KEEP LOGIN SUCCESS
       return res.status(200).send({
         success: true,
@@ -129,6 +127,79 @@ module.exports = {
         roleId,
         image_profile,
       });
+    } catch (error) {
+      console.log(error);
+      next(error);
+    }
+  },
+
+  //4. CHANGE PASSWORD
+  changepassword: async (req, res, next) => {
+    try {
+      //1. get old password
+      let getData = await model.users.findAll({
+        where: {
+          uuid: req.decrypt.uuid, 
+        },
+        attributes: ["password"],
+      });
+      //1. compare current password (hashed) & req.body.password
+      if (getData.length > 0) {
+        let comparecurrentpw = bcrypt.compareSync(
+          req.body.password,
+          getData[0].dataValues.password //currentpw
+        );
+        if (comparecurrentpw) {
+          //2. compare newpassword & confirmationpassword
+          if (req.body.newPassword == req.body.confirmationPassword) {
+            //3. compare new password & current password (hashed)
+            let comparecurrentandnewpw = bcrypt.compareSync(
+              req.body.newPassword,
+              getData[0].dataValues.password //currentpw
+            );
+            if (!comparecurrentandnewpw) {
+              delete req.body.confirmationPassword;
+              //4. hash right before update
+              req.body.newPassword = bcrypt.hashSync(req.body.newPassword, salt);
+              //5. update the password field in the database with the value of req.body.newPassword
+              await model.users.update(
+                { password: req.body.newPassword },
+                {
+                  where: {
+                    uuid: req.decrypt.uuid,
+                  },
+                }
+              );
+              return res.status(200).send({
+                success: true,
+                message: "Change password success ✅",
+              });
+            } else {
+              res.status(400).send({
+                success: false,
+                message:
+                  "Error❌: Your new password cannot be the same as your current password.",
+              });
+            }
+          } else {
+            res.status(400).send({
+              success: false,
+              message:
+                "Error❌: New password and confirmation password do not match.",
+            });
+          }
+        } else {
+          res.status(400).send({
+            success: false,
+            message: "Error❌: Current password is incorrect", 
+          });
+        }
+      } else {
+        res.status(400).send({
+          success: false,
+          message: "Error❌: Current password not found", 
+        });
+      }
     } catch (error) {
       console.log(error);
       next(error);

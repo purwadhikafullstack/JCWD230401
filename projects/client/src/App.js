@@ -11,12 +11,13 @@ import UserRegister from "./Pages/UserRegister";
 import { useDispatch, useSelector } from "react-redux";
 import { loginAction } from "./reducers/auth";
 import { API_URL } from "./helper";
+import ChangePassword from "./Pages/ChangePassword";
 
 
 function App() {
   const location = useLocation();
   const dispatch = useDispatch();
-  const roleId = useSelector((state) => state.authReducer.roleId);
+  // const roleId = useSelector((state) => state.authReducer.roleId);
 
   const keeplogin = async () => {
     try {
@@ -46,6 +47,7 @@ function App() {
       {location.pathname === "/" && <Footer />}
       <Routes>
               <Route path="/" element={<Landing />} />
+              <Route path="/changepassword" element={<ChangePassword />} />
               <Route path="/userregister" element={<UserRegister />} />
       </Routes>
       {location.pathname === "/" && <NavbarMobile />}

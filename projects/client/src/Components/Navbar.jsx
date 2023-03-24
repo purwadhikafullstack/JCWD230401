@@ -106,41 +106,25 @@ export default function Navbar() {
                   // src={imageprofile}
                   />
                 </MenuButton>
-                {/* <MenuList>
-                  <MenuItem onClick={onOpen} maxH={'100vh'}>Login
-                    <Modal onClose={onClose} isOpen={isOpen} scrollBehavior={scrollBehavior} >
-                      <ModalOverlay />
-                      <ModalContent>
-                        <ModalCloseButton />
-                        <ModalBody>
-                          <Login /> 
-                        </ModalBody>
-                      </ModalContent>
-                    </Modal>
-                  </MenuItem>
-                  <MenuItem
-                  onClick={() => navigate('/userregister')}
-                  >
-                    Register
-                  </MenuItem>
-                </MenuList> */}
                 {
+                  // User
                   roleId == 1 ?
                     <MenuList>
                       <MenuItem>Profile</MenuItem>
                       <MenuItem>Bookings</MenuItem>
-                      <MenuItem>Change Password</MenuItem>
+                      <MenuItem onClick={() => navigate('/changepassword')}>Change Password</MenuItem>
                       <MenuItem
                         onClick={onBtnLogout}
                       >Logout</MenuItem>
                     </MenuList>
                     :
+                    // Tenant
                     roleId == 2 ?
                       <MenuList>
                         <MenuItem>Profile</MenuItem>
                         <MenuItem>Property</MenuItem>
                         <MenuItem>Report</MenuItem>
-                        <MenuItem>Change Password</MenuItem>
+                        <MenuItem onClick={() => navigate('/changepassword')}>Change Password</MenuItem>
                         <MenuItem
                           onClick={onBtnLogout}
                         >Logout</MenuItem>
