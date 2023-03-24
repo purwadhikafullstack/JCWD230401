@@ -1,7 +1,5 @@
 const { check, validationResult } = require("express-validator");
 
-//untuk login/auth belom
-
 module.exports = {
   checkUser: async (req, res, next) => {
     try {
@@ -30,15 +28,45 @@ module.exports = {
           .run(req);
       } else if (req.path == "/auth") {
         await check("email")
-          .notEmpty({nullable:true})
+          .if((value, { req }) => !req.body.phone)
+          .notEmpty({ nullable: true })
           .isEmail()
           .withMessage("Invalid email address/field is empty")
           .run(req);
 
         await check("phone")
-          .notEmpty({nullable:true})
+          .if((value, { req }) => !req.body.email)
+          .notEmpty({ nullable: true })
           .isMobilePhone()
           .withMessage("Invalid phone number")
+          .run(req);
+      } else if (req.path == "/changepw") {
+        await check("newPassword")
+          .notEmpty()
+          .isStrongPassword({
+            minLength: 6,
+            minLowercase: 1,
+            minNumbers: 1,
+            minUppercase: 1,
+            minSymbols: 0,
+          })
+          .withMessage(
+            "Password must be at least 6 characters, includes a number, one uppercase letter, and one lowercase letter"
+          )
+          .run(req);
+
+        await check("confirmationPassword")
+          .notEmpty()
+          .isStrongPassword({
+            minLength: 6,
+            minLowercase: 1,
+            minNumbers: 1,
+            minUppercase: 1,
+            minSymbols: 0,
+          })
+          .withMessage(
+            "Password must be at least 6 characters, includes a number, one uppercase letter, and one lowercase letter"
+          )
           .run(req);
       }
       await check("password")
