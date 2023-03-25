@@ -11,7 +11,7 @@ import {
 } from '@chakra-ui/react';
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { API_URL } from '../helper';
 
 export default function ResetPassword() {
@@ -20,6 +20,30 @@ export default function ResetPassword() {
     const [showPasswordConfirmation, setShowPasswordConfirmation] = useState(false);
     const [passwordConfirmation, setPasswordConfirmation] = React.useState('');
     const navigate = useNavigate();
+    const params = useParams(); //data token di params
+
+    const onBtnResetPassword = async () => {
+        try {
+            let response = await axios.patch(`${API_URL}/user/resetpw`, {
+                newPassword: newPassword,
+                confirmationPassword: passwordConfirmation
+            }, {
+                headers: {
+                    Authorization: `Bearer ${params.token}`
+                }
+            });
+            console.log("ini hasil response onbtnresetpassword :", response); //testing purposes
+            alert(response.data.message);
+            navigate('/');
+        } catch (error) {
+            console.log("ini error dari onBtnResetPassword : ", error); 
+            alert(error.response.data.message);
+            alert(error.response.data.error[0].msg); //error msg validator new pw
+            alert(error.response.data.error[1].msg); //error msg validator confirmation pw
+        }
+    }
+
+    console.log("ini isi params :", params); //testing purposes
 
     return (
         <Flex
@@ -45,7 +69,7 @@ export default function ResetPassword() {
                     <InputGroup>
                         <Input
                             type={showNewPassword ? 'text' : 'password'}
-                            // onChange={(e) => setNewPassword(e.target.value)}
+                            onChange={(e) => setNewPassword(e.target.value)}
                         />
                         <InputRightElement h={'full'}>
                             <Button
@@ -66,7 +90,7 @@ export default function ResetPassword() {
                     <InputGroup>
                         <Input
                             type={showPasswordConfirmation ? 'text' : 'password'} 
-                            // onChange={(e) => setPasswordConfirmation(e.target.value)}
+                            onChange={(e) => setPasswordConfirmation(e.target.value)}
                         />
                         <InputRightElement h={'full'}>
                             <Button
@@ -89,6 +113,7 @@ export default function ResetPassword() {
                             bg: '#D3212D',
                         }}
                         type='button'
+                        onClick={onBtnResetPassword}
                     >
                         Reset Password
                     </Button>

@@ -83,7 +83,6 @@ export default function Login() {
                                 <FormLabel>Password</FormLabel>
                                 <Button
                                     as='a'
-                                    href='#'
                                     variant='link'
                                     size='xs'
                                     color='#0969da'

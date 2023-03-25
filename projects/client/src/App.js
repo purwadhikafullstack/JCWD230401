@@ -52,7 +52,7 @@ function App() {
               <Route path="/changepassword" element={<ChangePassword />} />
               <Route path="/userregister" element={<UserRegister />} />
               <Route path="/forgotpassword" element={<ForgotPassword />} />
-              <Route path="/resetpassword" element={<ResetPassword />} />
+              <Route path="/resetpassword/:token" element={<ResetPassword />} />
       </Routes>
       {location.pathname === "/" && <NavbarMobile />}
     </>

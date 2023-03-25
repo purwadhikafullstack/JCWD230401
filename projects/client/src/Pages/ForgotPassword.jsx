@@ -1,3 +1,4 @@
+import React, { useState } from 'react';
 import {
     Button,
     FormControl,
@@ -8,10 +9,26 @@ import {
     Text,
     useColorModeValue,
 } from '@chakra-ui/react';
-
+import axios from 'axios';
+import { API_URL } from '../helper';
 
 
 export default function ForgotPassword() {
+    const [email, setEmail] = React.useState('');
+
+    const onBtnForgotPassword = async () => {
+        try {
+            let response = await axios.post(`${API_URL}/user/forgotpw`, {
+                email: email
+            });
+            console.log("ini hasil response onBtnForgotPassword :", response); //testing purposes
+            alert(response.data.message);
+        } catch (error) {
+            console.log("ini error dari onBtnForgotPassword : ", error); //testing purposes
+            alert(error.response.data.message);
+            alert(error.response.data.error[0].msg);
+        }
+    }
     return (
         <Flex
             minH={'100vh'}
@@ -40,17 +57,19 @@ export default function ForgotPassword() {
                         placeholder="your-email@example.com"
                         _placeholder={{ color: 'gray.500' }}
                         type="email"
+                        onChange = {(e)=> setEmail(e.target.value)}
                     />
                 </FormControl>
                 <Stack spacing={6}>
                     <Button
-                          bg={'#D3212D'}
-                          color={'white'}
-                          _hover={{
-                              bg: '#D3212D',
-                          }}
-                          >
-                        Request Reset
+                        bg={'#D3212D'}
+                        color={'white'}
+                        _hover={{
+                            bg: '#D3212D',
+                        }}
+                        onClick={onBtnForgotPassword}
+                    >
+                        Request Reset Password
                     </Button>
                 </Stack>
             </Stack>
