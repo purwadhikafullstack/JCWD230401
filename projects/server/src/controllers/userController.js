@@ -57,6 +57,7 @@ module.exports = {
   //2. LOGIN
   login: async (req, res, next) => {
     try {
+      //1. find email or phone from db
       let getuser = await model.users.findAll({
         where: sequelize.or(
           { email: req.body.email },
@@ -64,16 +65,29 @@ module.exports = {
         ),
       });
       console.log("ini getuser buat login :", getuser);
+      console.log("ini getuser[0].dataValues.attempts buat login :", getuser[0].dataValues.attempts );
+      //2. if found compare hashed password with req.body.password
       if (getuser.length > 0) {
-        let decrypt = bcrypt.compareSync(
+        let checkpw = bcrypt.compareSync(
           req.body.password,
           getuser[0].dataValues.password
         );
-        if (decrypt) {
-          let { id, uuid, name, email, phone, roleId, image_profile } =
+        //3. if isSuspended false 0 & checkpw true 1 ? reset pw attempts : pw attempts + 1 
+        if (checkpw && getuser[0].dataValues.isSuspended == 0) {
+          //4. update the attempts field in the database with 0
+          await model.users.update(
+            { attempts: 0 }
+            ,
+            {
+              where: {
+                id: getuser[0].dataValues.id,
+              },
+            }
+          );
+          let { id, uuid, name, email, phone, roleId, image_profile, isSuspended, attempts } =
             getuser[0].dataValues;
           // GENERATE TOKEN ---> 400h buat gampang aja developnya jgn lupa diganti!
-          let token = createToken({ uuid }, "400h"); //td id, uuid
+          let token = createToken({ id, roleId, isSuspended }, "400h"); 
           // LOGIN SUCCESS
           return res.status(200).send({
             success: true,
@@ -82,14 +96,42 @@ module.exports = {
             name,
             email,
             phone,
-            roleId,
+            roleId, //---> kirim or not?
+            attempts,
             image_profile,
           });
         } else {
-          res.status(400).send({
-            success: false,
-            message: "Wrong password ❌",
-          });
+          //3. jika salah passwordnya attempt + 1 sampe 5 kali nanti suspended 
+          if(getuser[0].dataValues.attempts < 5){
+            await model.users.update(
+              { attempts: getuser[0].dataValues.attempts + 1 }
+              ,
+              {
+                where: {
+                  id: getuser[0].dataValues.id,
+                },
+              }
+            );
+            res.status(400).send({
+              success: false,
+              message: `Wrong password ❌ attempt number : ${getuser[0].dataValues.attempts + 1}`,
+            });
+          }else{
+            await model.users.update(
+              { isSuspended: 1 }
+              , //atau jd true?
+              {
+                where: {
+                  id: getuser[0].dataValues.id,
+                },
+              }
+            );
+            
+            res.status(400).send({
+              success: false,
+              message: "Account suspended ❌ please reset your password",
+            });
+          }
         }
       } else {
         res.status(400).send({
@@ -109,13 +151,13 @@ module.exports = {
       console.log("Decrypt token:", req.decrypt);
       let getuser = await model.users.findAll({
         where: {
-          uuid: req.decrypt.uuid,
+          id: req.decrypt.id,
         },
       });
-      let { id, uuid, name, email, phone, roleId, image_profile } =
+      let { id, uuid, name, email, phone, roleId, image_profile, isSuspended } =
         getuser[0].dataValues;
       // GENERATE TOKEN ---> 400h buat gampang aja developnya jgn lupa diganti!
-      let token = createToken({ uuid }, "400h"); // td uuid
+      let token = createToken({ id, roleId, isSuspended }, "400h"); 
       // KEEP LOGIN SUCCESS
       return res.status(200).send({
         success: true,
@@ -139,7 +181,7 @@ module.exports = {
       //1. get old password
       let getData = await model.users.findAll({
         where: {
-          uuid: req.decrypt.uuid, 
+          id: req.decrypt.id, //sesuai kebutuhn bisa ambil slh 1 dr createTokennya //ini id aja
         },
         attributes: ["password"],
       });
@@ -166,7 +208,7 @@ module.exports = {
                 { password: req.body.newPassword },
                 {
                   where: {
-                    uuid: req.decrypt.uuid,
+                    id: req.decrypt.id,
                   },
                 }
               );
