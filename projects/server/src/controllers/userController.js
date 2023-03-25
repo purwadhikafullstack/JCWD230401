@@ -119,7 +119,7 @@ module.exports = {
           }else{
             await model.users.update(
               { isSuspended: 1 }
-              , //atau jd true?
+              , 
               {
                 where: {
                   id: getuser[0].dataValues.id,

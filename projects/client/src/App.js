@@ -12,7 +12,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { loginAction } from "./reducers/auth";
 import { API_URL } from "./helper";
 import ChangePassword from "./Pages/ChangePassword";
-
+import ForgotPassword from "./Pages/ForgotPassword";
+import ResetPassword from "./Pages/ResetPassword";
 
 function App() {
   const location = useLocation();
@@ -43,12 +44,15 @@ function App() {
 
   return (
 <>
+{/* blm dikasi boundaries login sesuai roleI bisa akses apa */}
       {location.pathname === "/" && <Navbar />}
       {location.pathname === "/" && <Footer />}
       <Routes>
               <Route path="/" element={<Landing />} />
               <Route path="/changepassword" element={<ChangePassword />} />
               <Route path="/userregister" element={<UserRegister />} />
+              <Route path="/forgotpassword" element={<ForgotPassword />} />
+              <Route path="/resetpassword" element={<ResetPassword />} />
       </Routes>
       {location.pathname === "/" && <NavbarMobile />}
     </>

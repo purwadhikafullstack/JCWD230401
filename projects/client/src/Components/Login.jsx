@@ -88,6 +88,7 @@ export default function Login() {
                                     size='xs'
                                     color='#0969da'
                                     fontWeight='500'
+                                    onClick={()=> navigate('/forgotpassword')}
                                 >
                                     Forgot password?
                                 </Button>
