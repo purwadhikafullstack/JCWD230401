@@ -34,7 +34,7 @@ export default function ResetPassword() {
             });
             console.log("ini hasil response onbtnresetpassword :", response); //testing purposes
             alert(response.data.message);
-            navigate('/');
+            navigate('/', { replace: true });
         } catch (error) {
             console.log("ini error dari onBtnResetPassword : ", error); 
             alert(error.response.data.message);

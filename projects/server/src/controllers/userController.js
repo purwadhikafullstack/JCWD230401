@@ -99,7 +99,7 @@ module.exports = {
             attempts,
           } = getuser[0].dataValues;
           // GENERATE TOKEN ---> 400h buat gampang aja developnya jgn lupa diganti!
-          let token = createToken({ id, roleId, isSuspended }, "400h");
+          let token = createToken({ id, roleId, isSuspended }, "400h"); //24 jam
           // LOGIN SUCCESS
           return res.status(200).send({
             success: true,
@@ -169,7 +169,7 @@ module.exports = {
       let { id, uuid, name, email, phone, roleId, image_profile, isSuspended } =
         getuser[0].dataValues;
       // GENERATE TOKEN ---> 400h buat gampang aja developnya jgn lupa diganti!
-      let token = createToken({ id, roleId, isSuspended }, "400h");
+      let token = createToken({ id, roleId, isSuspended }, "400h"); //24 jam
       // KEEP LOGIN SUCCESS
       return res.status(200).send({
         success: true,
@@ -275,7 +275,7 @@ module.exports = {
       // console.log("ini getData buat forgot pw :", getData);
       //2. create token to send by email ---> 400h buat gampang aja developnya
       let { id, name, roleId, isSuspended } = getData[0].dataValues;
-      let token = createToken({ id, roleId, isSuspended }, "400h"); // apa aja yg jd token?
+      let token = createToken({ id, roleId, isSuspended }, "400h"); // apa aja yg jd token? //1 jam (forgot pw dan verifikasi)
       //3. send reset pw email
       await transporter.sendMail({
         from: "Tracker admin",

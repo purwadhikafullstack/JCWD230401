@@ -5,60 +5,70 @@ import {
     Heading,
     Text,
     Stack,
-    Image, Flex
+    Image, Flex, HStack
 } from '@chakra-ui/react';
+import { BsStarFill } from "react-icons/bs";
 
 const IMAGE =
     'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1740&q=80';
 
 export default function PropertyCard() {
     return (
-        <Center pt={6} 
+        <Center
+        // pt={6} 
         // px='1'
         >
             <Box
                 role={'group'}
-                px={{base:'2',md:'2' ,lg:'2'}}
-                py={{base:'0',md:'2' ,lg:'2'}}
-                maxW={{base:'350px', md:'360px', lg:'330px'}}
+                px={{ base: '2', md: '2', lg: '2' }}
+                py={{ base: '2', md: '2', lg: '2' }}
+                maxW={{ base: '350px', md: '330px', lg: '330px' }}
                 w={'full'}
                 bg='white'
-                // boxShadow={'xs'}
+                boxShadow={'xs'}
                 rounded={'lg'}
                 pos={'relative'}
                 zIndex={0}>
                 <Box
                     rounded={'lg'}
-                    // mt={-12}
                     pos={'relative'}
                     height={'230px'}
                 >
                     <Image
                         rounded={'lg'}
-                        // height={230}
-                        // width={250}
-                        height={{base:'300px', lg:'250px'}}
-                        width={{base:'400px',lg:'270px'}}
+                        height={{ base: '300px', lg: '230px' }}
+                        width={{ base: '400px', lg: '250px' }}
                         objectFit={'cover'}
                         src={IMAGE}
                     />
                 </Box>
-                <Stack pt={{base:'20', lg:'8'}} align={'start'}>
-                    <Text fontWeight={700} fontSize={'lg'} >
-                        Hotel Veranda Labuansait
-                    </Text>
+                <Box
+                    pt={{ base: '20', lg: '2' }}
+                    px='2'
+                    pb='2'
+                    align={'start'}
+                >
+                    <HStack justifyContent={'space-between'}>
+                        <Text fontWeight={600} fontSize={'lg'} >
+                            Hotel Veranda
+                        </Text>
+                        <Flex>
+                            <BsStarFill />
+                            <Text fontWeight={600} fontSize={'md'} textAlign={'left'} pl='1' mt='-1'>
+                                5.0
+                            </Text>
+                        </Flex>
+                    </HStack>
                     <Text fontWeight={'normal'} fontSize={'sm'} >
                         Uluwatu, Indonesia
                     </Text>
-                    <Text fontWeight={700} fontSize={'lg'}>
-                        <Flex justify={'center'}  alignItems={'center'}>
-                            Rp 500.000
-                            <Text fontWeight={'normal'} pl='1' fontSize={'sm'}>
-                                / night
-                            </Text>
-                        </Flex>
+                    <Text fontWeight={600} fontSize={'md'} textAlign={'left'} display='flex'>
+                        Rp 500.000
+                        <Text fontWeight={'normal'} pl='1' fontSize={'sm'} mt='0.5'>
+                            / night
+                        </Text>
                     </Text>
-                </Stack>
+                </Box>
             </Box>
         </Center>
     );
