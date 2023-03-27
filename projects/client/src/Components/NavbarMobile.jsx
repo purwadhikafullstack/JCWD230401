@@ -25,6 +25,7 @@ export default function NavbarMobile() {
             bottom="0"
             bg={{base:'white', sm:'none'}}
             w='full'
+            zIndex={1}
         >
             <Container
                 maxW={'6xl'}

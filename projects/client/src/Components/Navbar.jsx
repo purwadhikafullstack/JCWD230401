@@ -23,7 +23,7 @@ import { TbHomeHeart } from "react-icons/tb";
 import { AiOutlineSearch } from "react-icons/ai";
 import Login from './Login';
 import { useNavigate } from 'react-router-dom';
-import CategorySlider from './CategorySlider';
+// import CategorySlider from './CategorySlider';
 import { useDispatch, useSelector } from 'react-redux';
 import { logoutAction } from '../reducers/auth';
 
@@ -44,7 +44,9 @@ export default function Navbar() {
 
   return (
     <>
-      <Box position="fixed" w='full' bg='white' zIndex={1}>
+      <Box 
+      // position="fixed"
+       w='full' bg='white' zIndex={1}>
         <Box boxShadow={'xs'} px={{ base: '4', sm: '10' }}>
           <Flex h={16} alignItems={'center'} justifyContent={'space-between'}>
             <HStack alignItems={'center'}>
@@ -77,7 +79,7 @@ export default function Navbar() {
 
             <Flex alignItems={'center'}>
               {/* Become TENANT */}
-              <Button
+              {/* <Button
                 variant={'ghost'}
                 size={'sm'}
                 // mr={4}
@@ -85,7 +87,7 @@ export default function Navbar() {
                 _hover={'none'}
               >
                 Become a Tenant
-              </Button>
+              </Button> */}
               {/* Main Menu */}
               <Menu >
                 <MenuButton
@@ -152,7 +154,7 @@ export default function Navbar() {
           </Flex>
         </Box>
         <Box>
-          <CategorySlider />
+          {/* <CategorySlider /> */}
         </Box>
       </Box>
     </>
