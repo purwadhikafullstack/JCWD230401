@@ -9,7 +9,7 @@ app.use(
   cors({
     origin: [
       process.env.WHITELISTED_DOMAIN &&
-        process.env.WHITELISTED_DOMAIN.split(","),
+      process.env.WHITELISTED_DOMAIN.split(","),
     ],
   })
 );
@@ -17,6 +17,7 @@ app.use(
 app.use(express.json());
 
 //#region API ROUTES
+const transactionRouter = require('./routers/transactionRouter');
 
 // ===========================
 // NOTE : Add your routes here
@@ -30,6 +31,10 @@ app.get("/api/greetings", (req, res, next) => {
     message: "Hello, Student !",
   });
 });
+
+app.use('/transaction', transactionRouter)
+
+
 
 // ===========================
 
