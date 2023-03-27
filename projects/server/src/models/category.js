@@ -17,6 +17,7 @@ module.exports = (sequelize, DataTypes) => {
     uuid: DataTypes.STRING,
     category: DataTypes.STRING,
     isDeleted: DataTypes.TINYINT,
+    picture: DataTypes.STRING
   }, {
     sequelize,
     modelName: 'category',

@@ -5,7 +5,7 @@ const fs = require("fs");
 
 module.exports = {
     // get property
-    getAllProperty: async (req, res, next) => {
+    getAllPropertyTenant: async (req, res, next) => {
         try {
             let get = await model.property.findAll({
                 where: {
@@ -68,7 +68,7 @@ module.exports = {
         try {
             let get = await model.property.findAll({
                 where: { uuid: req.params.uuid },
-                attributes: ["image"],
+                attributes: ["picture"],
             });
             console.log("req.body.data", req.body.data);
             console.log("req.files", req.files);

@@ -3,7 +3,7 @@ const sequelize = require("sequelize");
 const { v4: uuidv4 } = require("uuid");
 
 module.exports = {
-    getAllCategory: async (req, res, next) => {
+    getAllCategoryTenant: async (req, res, next) => {
         try {
             let get = await model.category.findAll({
                 where: {
@@ -22,11 +22,27 @@ module.exports = {
     },
     addCategory: async (req, res, next) => {
         try {
-            let add = await model.category.create({
-                uuid: uuidv4(),
-                category: req.body.category,
-            });
-            console.log("add category", add);
+            console.log("req.body.data", req.body.data);
+            console.log("req.files", req.files);
+            let { category } = JSON.parse(req.body.data);
+            if (req.files.length === 0) {
+                let add = await model.category.create({
+                    uuid: uuidv4(),
+                    category: req.body.category,
+                });
+                console.log("add category", add);
+                return res.status(200).send({
+                    success: true,
+                    message: "Added new category",
+                    data: add,
+                });
+            } else {
+                await model.category.create({
+                    uuid: uuidv4(),
+                    category: req.body.category,
+                    picture: `/picCategory/${req.files[0]?.filename}`,
+                });
+            }
             return res.status(200).send({
                 success: true,
                 message: "Added new category",
@@ -61,20 +77,51 @@ module.exports = {
     },
     editCategory: async (req, res, next) => {
         try {
-            let edit = await model.category.update(
-                {
-                    category: req.body.category,
-                },
-                {
-                    where: {
-                        id: req.body.id,
+            let get = await model.category.findAll({
+                where: { uuid: req.params.uuid },
+                attributes: ["picture"],
+            });
+            console.log("req.body.data", req.body.data);
+            console.log("req.files", req.files);
+            let { category } = JSON.parse(req.body.data);
+            if (req.files.length === 0) {
+                let edit = await model.category.update(
+                    {
+                        category: req.body.category,
                     },
+                    {
+                        where: {
+                            id: req.body.id,
+                        },
+                    }
+                );
+                console.log("Data edit:", edit);
+                res.status(200).send({
+                    success: true,
+                    message: "Category edited",
+                });
+            } else {
+                await model.property.update(
+                    {
+                        category,
+                        picture: `/picCategory/${req.files[0]?.filename}`,
+                    },
+                    {
+                        where: {
+                            id: req.body.id,
+                        },
+                    }
+                );
+                if (
+                    fs.existsSync(`./src/public${get[0].dataValues.picture}`) &&
+                    !get[0].dataValues.picture.includes("default")
+                ) {
+                    fs.unlinkSync(`./src/public${get[0].dataValues.picture}`);
                 }
-            );
-            res.status(200).send({
+            }
+            return res.status(200).send({
                 success: true,
                 message: "Category edited",
-                data: edit,
             });
         } catch (error) {
             console.log(error);
