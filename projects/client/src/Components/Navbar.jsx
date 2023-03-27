@@ -21,46 +21,49 @@ import {
 import { HamburgerIcon, CloseIcon, AddIcon } from '@chakra-ui/icons';
 import { TbHomeHeart } from "react-icons/tb";
 import { AiOutlineSearch } from "react-icons/ai";
-// import Login from '../pages/Login';
+import Login from './Login';
 import { useNavigate } from 'react-router-dom';
-// import { useDispatch, useSelector } from 'react-redux';
-// import { logoutAction } from '../reducers/auth';
+// import CategorySlider from './CategorySlider';
+import { useDispatch, useSelector } from 'react-redux';
+import { logoutAction } from '../reducers/auth';
 
 
 export default function Navbar() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [scrollBehavior, setScrollBehavior] = React.useState('outside');
-  // const navigate = useNavigate();
-  // const dispatch = useDispatch();
-  // const imageprofile = useSelector((state) => state.authReducer.image_profile);
-  // const roleId = useSelector((state) => state.authReducer.roleId);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const imageprofile = useSelector((state) => state.authReducer.image_profile);
+  const roleId = useSelector((state) => state.authReducer.roleId);
 
-  // const onBtnLogout = () => {
-  //   localStorage.removeItem('tempatku_login');
-  //   dispatch(logoutAction());
-  //   navigate('/', { replace: true });
-  // }
+  const onBtnLogout = () => {
+    localStorage.removeItem('tempatku_login');
+    dispatch(logoutAction());
+    navigate('/', { replace: true });
+  }
 
   return (
     <>
-      <Box position="fixed" w='full' bg='white' zIndex={1}>
-        <Box boxShadow={'xs'} px={10}>
+      <Box 
+      // position="fixed"
+       w='full' bg='white' zIndex={1}>
+        <Box boxShadow={'xs'} px={{ base: '4', sm: '10' }}>
           <Flex h={16} alignItems={'center'} justifyContent={'space-between'}>
             <HStack alignItems={'center'}>
               {/* Logo Tempatku */}
               <Icon fontSize="40px" as={TbHomeHeart}
                 color='#D3212D'
-                display={{ 
-                  
+                display={{
+
                   // base: "none", sm: "none", md: "block" 
-                
+
                 }}
               />
               <Text
-                display={{ 
-                  
+                display={{
+
                   // base: "none", sm: "none", md: "block" 
-                
+
                 }}
                 fontSize="23px"
                 fontWeight="600"
@@ -73,18 +76,18 @@ export default function Navbar() {
                 display={{ base: 'none', md: 'flex' }}>
               </HStack>
             </HStack>
-            
+
             <Flex alignItems={'center'}>
               {/* Become TENANT */}
-              <Button
+              {/* <Button
                 variant={'ghost'}
                 size={'sm'}
-                mr={4}
+                // mr={4}
                 // display={{ base: "none", sm: "none", md: "block" }}
                 _hover={'none'}
               >
                 Become a Tenant
-              </Button>
+              </Button> */}
               {/* Main Menu */}
               <Menu >
                 <MenuButton
@@ -105,40 +108,27 @@ export default function Navbar() {
                   // src={imageprofile}
                   />
                 </MenuButton>
-                <MenuList>
-                  <MenuItem onClick={onOpen} maxH={'100vh'}>Login
-                    <Modal onClose={onClose} isOpen={isOpen} scrollBehavior={scrollBehavior} >
-                      <ModalOverlay />
-                      <ModalContent>
-                        <ModalCloseButton />
-                        <ModalBody>
-                          {/* <Login />  */}
-                        </ModalBody>
-                      </ModalContent>
-                    </Modal>
-                  </MenuItem>
-                  <MenuItem>
-                    Register
-                  </MenuItem>
-                </MenuList>
-
-                {/* {
+                {
+                  // User
                   roleId == 1 ?
                     <MenuList>
                       <MenuItem>Profile</MenuItem>
                       <MenuItem>Bookings</MenuItem>
-                      <MenuItem 
-                      onClick={onBtnLogout}
+                      <MenuItem onClick={() => navigate('/changepassword')}>Change Password</MenuItem>
+                      <MenuItem
+                        onClick={onBtnLogout}
                       >Logout</MenuItem>
                     </MenuList>
                     :
+                    // Tenant
                     roleId == 2 ?
                       <MenuList>
                         <MenuItem>Profile</MenuItem>
                         <MenuItem>Property</MenuItem>
                         <MenuItem>Report</MenuItem>
-                        <MenuItem 
-                        onClick={onBtnLogout}
+                        <MenuItem onClick={() => navigate('/changepassword')}>Change Password</MenuItem>
+                        <MenuItem
+                          onClick={onBtnLogout}
                         >Logout</MenuItem>
                       </MenuList>
                       :
@@ -149,19 +139,22 @@ export default function Navbar() {
                             <ModalContent>
                               <ModalCloseButton />
                               <ModalBody>
-                                <Login /> 
+                                <Login />
                               </ModalBody>
                             </ModalContent>
                           </Modal>
                         </MenuItem>
-                        <MenuItem 
-                        onClick={() => navigate('/register')}
+                        <MenuItem
+                          onClick={() => navigate('/userregister')}
                         >Register</MenuItem>
                       </MenuList>
-                } */}
+                }
               </Menu>
             </Flex>
           </Flex>
+        </Box>
+        <Box>
+          {/* <CategorySlider /> */}
         </Box>
       </Box>
     </>

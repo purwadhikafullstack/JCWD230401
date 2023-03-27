@@ -27,7 +27,8 @@ module.exports = (sequelize, DataTypes) => {
     isVerified: DataTypes.BOOLEAN,
     isDeleted: DataTypes.BOOLEAN,
     roleId: DataTypes.INTEGER,
-    statusId: DataTypes.INTEGER
+    isSuspended: DataTypes.BOOLEAN,
+    tokenUpdate: DataTypes.STRING
   }, {
     sequelize,
     modelName: 'users',

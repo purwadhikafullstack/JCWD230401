@@ -27,6 +27,7 @@ module.exports = {
         type: Sequelize.STRING
       },
       phone: {
+        allowNull: false,
         type: Sequelize.STRING
       },
       birth: {
@@ -42,7 +43,8 @@ module.exports = {
         type: Sequelize.STRING
       },
       attempts: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        defaultValue: 0
       },
       isVerified: {
         type: Sequelize.BOOLEAN
@@ -56,6 +58,9 @@ module.exports = {
       isSuspended: {
         type: Sequelize.BOOLEAN,
         defaultValue: 0
+      },
+      tokenUpdate: {
+        type: Sequelize.STRING
       },
       createdAt: {
         allowNull: false,

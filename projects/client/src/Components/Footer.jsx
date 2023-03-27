@@ -17,7 +17,7 @@ export default function Footer() {
             bg={'white'}
             color={useColorModeValue('gray.700', 'gray.200')}
             display={{ base: 'none', md: 'block' }}
-            position="fixed"
+            // position="fixed"
             bottom="0"
             zIndex={'1'}
             w='full'
