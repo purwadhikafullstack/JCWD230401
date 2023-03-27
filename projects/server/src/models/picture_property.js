@@ -15,7 +15,8 @@ module.exports = (sequelize, DataTypes) => {
   }
   picture_property.init({
     picture: DataTypes.STRING,
-    isDeleted: DataTypes.BOOLEAN
+    isDeleted: DataTypes.BOOLEAN,
+    propertyId: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'picture_property',
