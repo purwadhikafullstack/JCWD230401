@@ -79,15 +79,15 @@ export default function Navbar() {
 
             <Flex alignItems={'center'}>
               {/* Become TENANT */}
-              {/* <Button
+              <Button
                 variant={'ghost'}
                 size={'sm'}
-                // mr={4}
+                mr={4}
                 // display={{ base: "none", sm: "none", md: "block" }}
                 _hover={'none'}
               >
                 Become a Tenant
-              </Button> */}
+              </Button>
               {/* Main Menu */}
               <Menu >
                 <MenuButton

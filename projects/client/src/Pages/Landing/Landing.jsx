@@ -1,7 +1,7 @@
 import "./Landing.css";
 import React, { useState } from 'react';
 import {
-    Box, Heading, Select
+    Box, Heading
 } from '@chakra-ui/react';
 import Footer from "../../Components/Footer";
 import Search from './images/search.png';
@@ -20,24 +20,48 @@ import Ubud1 from './images/ubud-1.jpg';
 import Bandung1 from './images/bandung-1.jpg';
 import Bali1 from './images/bali-1.png';
 import NusaPenida1 from './images/nusapenida-1.png';
-
+import axios from 'axios';
+import { API_URL } from '../../helper';
 
 export default function Landing() {
-    const [inputTypeIn, setInputTypeIn] = useState('');
-    const [inputTypeOut, setInputTypeOut] = useState('');
+    // Location
+    const [inputLocation, setInputLocation] = useState('');
+    const [showLocation, setShowLocation] = useState([]); 
+
+    //api to fetch search result
+    const onSearch = (searchTerm) => {
+        setInputLocation(searchTerm); //if suggestion clicked, it will be put inside the input field
+        console.log("Ini adalah search : ", searchTerm)
+    }
+
+    const getAllLocations = async () => {
+        try {
+            let response = await axios.get(`${API_URL}/location/list`, {
+                city: showLocation
+            })
+            // console.log("ini response.data dari getAllLocations 🪶 : ", response.data.data); 
+            setShowLocation(response.data.data)
+        } catch (error) {
+            console.log("ini error dari getAllLocations:", error);
+        }
+    }
+
+    // Jalanin fungsi getAllLocations
+    React.useEffect(()=>{
+        getAllLocations()
+    }, [inputLocation]);
+
+    // Check In Check Out
+    const [inputCheckIn, setInputCheckIn] = useState('');
+    const [inputCheckOut, setInputCheckOut] = useState('');
 
     const OnBtnCheckIn = () => {
-        setInputTypeIn('date');
+        setInputCheckIn('date');
     };
     const OnBtnCheckOut = () => {
-        setInputTypeOut('date');
-
+        setInputCheckOut('date');
     };
-    // const onBlurInput = () => {
-    //     setInputTypeIn('');
-    //     setInputTypeOut('');
-    //   };
-    
+
     return (
         <>
             {/* BANNER */}
@@ -51,38 +75,39 @@ export default function Landing() {
                         <form>
                             <div className="location-input">
                                 <label>Location</label>
-                                {/* <input type="text" placeholder="Where are you going?" /> */}
-                                {/* Should be input text and suggestions show B --> batam, bandung, bali */}
-                                <Select placeholder='Where are you going?'
-                                textColor={'gray.400'}
-                                textAlign={'left'}
-                                variant='unstyled'
-                                icon={''}
-                                py={{base:'4',lg:'0'}}
-                                >
-                                    {/* Popular destinations nearby */}
-                                    <option value='option1'>Ubud</option>
-                                    <option value='option2'>Bali</option>
-                                    <option value='option3'>Canggu</option>
-                                    <option value='option4'>Uluwatu</option>
-                                    <option value='option5'>Jakarta</option>
-                                    <option value='option6'>Bandung</option>
-                                    <option value='option7'>Yogyakarta</option>
-                                    <option value='option8'>Semarang</option>
-                                    <option value='option9'>Nusa Penida</option>
-                                    <option value='option10'>Surabaya</option>
-                                </Select>
+                                <input type="text" placeholder="Where are you going?" 
+                                onChange={(e)=>setInputLocation(e.target.value)}
+                                value={inputLocation}
+                                />
+                                <div className="dropdown">
+                                {showLocation.filter(item => {
+                                    const searchTerm = inputLocation.toLowerCase();
+                                    const city = item.city.toLowerCase(); 
+                                    return (searchTerm && city.startsWith(searchTerm) && city !== searchTerm);
+                                }
+                                ).slice(0,5) //will show only first 5 items di location input field
+                                .map((item)=>
+                                (<div 
+                                onClick={()=>onSearch(item.city)} 
+                                className="dropdown-row"
+                                key={item.city} 
+                                >{item.city}</div>))}
+                                </div>
                             </div>
                             <div>
                                 <label>Check in</label>
-                                <input type={inputTypeIn} placeholder="Add Date" onClick={OnBtnCheckIn} 
-                                // onBlur={onBlurInput}
+                                <input 
+                                type={inputCheckIn} 
+                                placeholder="Choose Date" onClick={OnBtnCheckIn}
+                                onChange={(e) => setInputCheckIn(e.target.value)}
                                 />
                             </div>
                             <div>
                                 <label>Check out</label>
-                                <input type={inputTypeOut} placeholder="Add Date" onClick={OnBtnCheckOut} 
-                                // onBlur={onBlurInput}
+                                <input 
+                                type={inputCheckOut} 
+                                placeholder="Choose Date" onClick={OnBtnCheckOut}
+                                onChange={(e) => setInputCheckOut(e.target.value)}
                                 />
                             </div>
                             <div>
