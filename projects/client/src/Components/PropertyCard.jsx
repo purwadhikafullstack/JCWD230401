@@ -50,7 +50,7 @@ export default function PropertyCard() {
                 >
                     <HStack justifyContent={'space-between'}>
                         <Text fontWeight={600} fontSize={'lg'} >
-                            Hotel Veranda Tanjung Duren
+                            Hotel Veranda
                         </Text>
                         <Flex>
                             <BsStarFill />

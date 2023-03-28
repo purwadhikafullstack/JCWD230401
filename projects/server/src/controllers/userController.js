@@ -311,7 +311,7 @@ module.exports = {
         console.log("Decrypt token : ", req.decrypt);
         //1. hash right before update
         req.body.newPassword = bcrypt.hashSync(req.body.newPassword, salt);
-        //2. update the password & isSuspended 
+        //2. update the password & isSuspended
         await model.users.update(
           { password: req.body.newPassword, isSuspended: 0 },
           {
@@ -337,6 +337,4 @@ module.exports = {
       next(error);
     }
   },
-
-  
 };
