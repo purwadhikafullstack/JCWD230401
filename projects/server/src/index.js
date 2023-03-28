@@ -20,6 +20,8 @@ const transactionRouter = require('./routers/transactionRouter');
 const userRouter = require('./routers/userRouter');
 app.use('/user', userRouter);
 
+const locationRouter = require('./routers/locationRouter');
+app.use('/location', locationRouter);
 // ===========================
 // NOTE : Add your routes here
 
