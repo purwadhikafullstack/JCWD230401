@@ -19,11 +19,16 @@ module.exports = (sequelize, DataTypes) => {
     description: DataTypes.STRING,
     isDeleted: DataTypes.BOOLEAN,
     categoryId: DataTypes.INTEGER,
-    picture_propertyId: DataTypes.INTEGER,
     userId: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'property',
   });
+
+  property.associate = (models) => {
+    property.hasMany(models.picture_property, { foreignKey: 'propertyId' });
+    property.hasOne(models.location, { foreignKey: 'propertyId' }); 
+    property.hasMany(models.room, { foreignKey: 'propertyId' }); 
+}
   return property;
 };

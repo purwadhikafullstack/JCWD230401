@@ -1,5 +1,5 @@
 import "./Landing.css";
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     Box, Heading, Select
 } from '@chakra-ui/react';
@@ -20,11 +20,16 @@ import Ubud1 from './images/ubud-1.jpg';
 import Bandung1 from './images/bandung-1.jpg';
 import Bali1 from './images/bali-1.png';
 import NusaPenida1 from './images/nusapenida-1.png';
+import axios from "axios";
+import { API_URL } from "../../helper";
 
 
 export default function Landing() {
     const [inputTypeIn, setInputTypeIn] = useState('');
     const [inputTypeOut, setInputTypeOut] = useState('');
+    const [allCategory, setAllCategory] = useState([]);
+    const [allProperty, setAllProperty] = useState([]);
+    const token = localStorage.getItem('tempatku_login')
 
     const OnBtnCheckIn = () => {
         setInputTypeIn('date');
@@ -37,7 +42,45 @@ export default function Landing() {
     //     setInputTypeIn('');
     //     setInputTypeOut('');
     //   };
-    
+
+    const getAllCategory = async () => {
+        let get = await axios.get(`${API_URL}/category`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            }
+        });
+        setAllCategory(get.data)
+    }
+
+    const printAllCategory = () => {
+        return allCategory.map((val, idx) => {
+            return <div>
+                <img src={`${API_URL}${val.picture}`} />
+                <span>
+                    <h3>{val.category}</h3>
+                </span>
+            </div>
+        })
+    }
+
+    const getAllProperty = async () => {
+        let get = await axios.get(`${API_URL}/property`);
+        console.log("get all property",get)
+        setAllProperty(get.data)
+    }
+
+    const printAllProperty = () => {
+        return allProperty.map((val,idx) => {
+            return <PropertyCard property={val.property} picture={val.picture_properties[0].picture}
+            location={val.location} price={val.rooms[0].price}/>
+        })
+    }
+
+    useEffect(() => {
+        getAllCategory()
+        getAllProperty()
+    }, [])
+
     return (
         <>
             {/* BANNER */}
@@ -54,11 +97,11 @@ export default function Landing() {
                                 {/* <input type="text" placeholder="Where are you going?" /> */}
                                 {/* Should be input text and suggestions show B --> batam, bandung, bali */}
                                 <Select placeholder='Where are you going?'
-                                textColor={'gray.400'}
-                                textAlign={'left'}
-                                variant='unstyled'
-                                icon={''}
-                                py={{base:'4',lg:'0'}}
+                                    textColor={'gray.400'}
+                                    textAlign={'left'}
+                                    variant='unstyled'
+                                    icon={''}
+                                    py={{ base: '4', lg: '0' }}
                                 >
                                     {/* Popular destinations nearby */}
                                     <option value='option1'>Ubud</option>
@@ -75,13 +118,13 @@ export default function Landing() {
                             </div>
                             <div>
                                 <label>Check in</label>
-                                <input type={inputTypeIn} placeholder="Add Date" onClick={OnBtnCheckIn} 
+                                <input type={inputTypeIn} placeholder="Add Date" onClick={OnBtnCheckIn}
                                 // onBlur={onBlurInput}
                                 />
                             </div>
                             <div>
                                 <label>Check out</label>
-                                <input type={inputTypeOut} placeholder="Add Date" onClick={OnBtnCheckOut} 
+                                <input type={inputTypeOut} placeholder="Add Date" onClick={OnBtnCheckOut}
                                 // onBlur={onBlurInput}
                                 />
                             </div>
@@ -110,42 +153,7 @@ export default function Landing() {
                 <br />
                 {/* PROPERTY TYPE */}
                 <div className="property-type">
-                    <div>
-                        <img src={Hotels1} />
-                        <span>
-                            <h3>Hotels</h3>
-                        </span>
-                    </div>
-                    <div>
-                        <img src={Apartments1} />
-                        <span>
-                            <h3>Apartments</h3>
-                        </span>
-                    </div>
-                    <div>
-                        <img src={Resorts1} />
-                        <span>
-                            <h3>Resorts</h3>
-                        </span>
-                    </div>
-                    <div>
-                        <img src={Villas1} />
-                        <span>
-                            <h3>Villas</h3>
-                        </span>
-                    </div>
-                    <div>
-                        <img src={GuestHouse1} />
-                        <span>
-                            <h3>Guest houses</h3>
-                        </span>
-                    </div>
-                    <div>
-                        <img src={Homestays1} />
-                        <span>
-                            <h3>Homestays</h3>
-                        </span>
-                    </div>
+                    {printAllCategory()}
                 </div>
                 <br />
                 <br />
@@ -201,18 +209,7 @@ export default function Landing() {
                 {/* PROPERTY RECOMMENDATIONS */}
                 <br />
                 <div className="recommendations">
-                    <PropertyCard />
-                    <PropertyCard />
-                    <PropertyCard />
-                    <PropertyCard />
-                    <PropertyCard />
-                    <PropertyCard />
-                    <PropertyCard />
-                    <PropertyCard />
-                    <PropertyCard />
-                    <PropertyCard />
-                    <PropertyCard />
-                    <PropertyCard />
+                    {printAllProperty()}
                 </div>
                 <a href="#" className="see-more-btn">See more properties</a>
             </Box>

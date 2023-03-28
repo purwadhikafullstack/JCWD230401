@@ -15,10 +15,15 @@ module.exports = (sequelize, DataTypes) => {
   }
   picture_property.init({
     picture: DataTypes.STRING,
-    isDeleted: DataTypes.BOOLEAN
+    isDeleted: DataTypes.BOOLEAN,
+    propertyId: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'picture_property',
   });
+
+  picture_property.associate = (models) => {
+    picture_property.belongsTo(models.property, { foreignKey: 'propertyId' });
+}
   return picture_property;
 };

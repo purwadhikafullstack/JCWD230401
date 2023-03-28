@@ -13,12 +13,19 @@ app.use(express.json());
 app.use(cors());
 app.use(bearerToken());
 
+app.use("/", express.static(__dirname + "/public"));
+
 
 //#region API ROUTES
 const transactionRouter = require('./routers/transactionRouter');
-
+const categoryRouter = require('./routers/categoryRouter');
 const userRouter = require('./routers/userRouter');
+const propertyRouter = require('./routers/propertyRouter');
 app.use('/user', userRouter);
+app.use('/transaction', transactionRouter)
+app.use('/category', categoryRouter)
+app.use('/property', propertyRouter)
+
 
 // ===========================
 // NOTE : Add your routes here
@@ -33,7 +40,6 @@ app.get("/api/greetings", (req, res, next) => {
   });
 });
 
-app.use('/transaction', transactionRouter)
 
 
 

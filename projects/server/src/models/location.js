@@ -19,10 +19,15 @@ module.exports = (sequelize, DataTypes) => {
     city: DataTypes.STRING,
     province: DataTypes.STRING,
     zip: DataTypes.STRING,
+    country: DataTypes.STRING,
     propertyId: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'location',
   });
+
+  location.associate = (models) => {
+    location.belongsTo(models.property, { foreignKey: 'propertyId' });
+}
   return location;
 };
