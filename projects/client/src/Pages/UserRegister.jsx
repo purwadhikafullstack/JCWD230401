@@ -198,8 +198,11 @@ export default function UserRegister() {
                         </Button>
                         {/* Login */}
                     </Stack>
-                    <Stack pb="6" px="10">
-                        <Card variant="none" borderColor="#d0d7de" mt="2">
+                    <Stack
+                        pb='6'
+                        px='10'
+                    >
+                        <Card variant='none' borderColor='#d0d7de' mt='2'>
                             <CardBody>
                                 <Center>
                                     <HStack fontSize="sm">

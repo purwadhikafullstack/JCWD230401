@@ -15,7 +15,9 @@ module.exports = (sequelize, DataTypes) => {
   }
   category.init({
     uuid: DataTypes.STRING,
-    category: DataTypes.STRING
+    category: DataTypes.STRING,
+    picture: DataTypes.STRING,
+    isDeleted: DataTypes.BOOLEAN,
   }, {
     sequelize,
     modelName: 'category',
