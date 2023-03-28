@@ -19,7 +19,6 @@ module.exports = (sequelize, DataTypes) => {
     description: DataTypes.STRING,
     isDeleted: DataTypes.BOOLEAN,
     categoryId: DataTypes.INTEGER,
-    picture_propertyId: DataTypes.INTEGER,
     userId: DataTypes.INTEGER
   }, {
     sequelize,

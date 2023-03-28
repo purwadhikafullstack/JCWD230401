@@ -15,7 +15,8 @@ module.exports = (sequelize, DataTypes) => {
   }
   picture_room.init({
     picture: DataTypes.STRING,
-    isDeleted: DataTypes.BOOLEAN
+    isDeleted: DataTypes.BOOLEAN,
+    roomId: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'picture_room',

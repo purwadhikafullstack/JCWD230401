@@ -23,7 +23,6 @@ module.exports = (sequelize, DataTypes) => {
     booked: DataTypes.INTEGER,
     isAvailable: DataTypes.BOOLEAN,
     isDeleted: DataTypes.BOOLEAN,
-    picture_roomId: DataTypes.INTEGER,
     propertyId: DataTypes.INTEGER
   }, {
     sequelize,
