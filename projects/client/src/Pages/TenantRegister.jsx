@@ -16,16 +16,17 @@ import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { API_URL } from '../helper';
-import Userregisterbanner from '../assets/userregisterbanner.jpg'
+import { FiUpload } from 'react-icons/fi';
 
 
-export default function UserRegister() {
+export default function TenantRegister() {
     const [showPassword, setShowPassword] = useState(false);
     const [showPasswordConfirmation, setShowPasswordConfirmation] = useState(false);
     const navigate = useNavigate();
     const [name, setName] = React.useState('');
     const [phone, setPhone] = React.useState('');
     const [email, setEmail] = React.useState('');
+    const [idCard, setIdCard] = React.useState('');
     const [password, setPassword] = React.useState('');
     const [passwordConfirmation, setPasswordConfirmation] = React.useState('');
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -34,12 +35,13 @@ export default function UserRegister() {
 
     const onBtnRegister = async () => {
         try {
-            let response = await axios.post(`${API_URL}/user/register`, {
+            let response = await axios.post(`${API_URL}/user/registerastenant`, {
                 name: name,
                 phone: phone,
                 email: email,
                 password: password,
-                confirmationPassword: passwordConfirmation
+                confirmationPassword: passwordConfirmation,
+                image_ktp: idCard
             }
             );
             console.log("ini hasil response onbtnregister :", response); //testing purposes
@@ -69,7 +71,7 @@ export default function UserRegister() {
                 <Stack spacing={0} w={'full'} maxW={{ base: 'sm' }}>
                     <Heading fontSize={'3xl'} fontWeight='semibold'
                         my='8'
-                    >Register to tempatku</Heading>
+                    >Register as a Tenant</Heading>
                     <Stack spacing={2}>
                         <HStack>
                             <Box>
@@ -140,6 +142,10 @@ export default function UserRegister() {
                                 </InputRightElement>
                             </InputGroup>
                         </FormControl>
+                        {/* UPLOAD ID CARD */}
+                        <Button fontFamily={'heading'} bg={'gray.200'} color={'gray.800'} w='full' leftIcon={<Icon as={FiUpload} />}>
+                            Upload your id card
+                        </Button>
                     </Stack>
                     <Stack
                         pt='8'
@@ -187,8 +193,10 @@ export default function UserRegister() {
                 <Image
                     alt={'User Register Page Image'}
                     objectFit={'cover'}
-                    src={Userregisterbanner}
-
+                    src={
+                        'https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1352&q=80'
+                        // Tenantregisterbanner
+                    }
                 />
             </Flex>
         </Stack>

@@ -22,8 +22,10 @@ import Bali1 from './images/bali-1.png';
 import NusaPenida1 from './images/nusapenida-1.png';
 import axios from 'axios';
 import { API_URL } from '../../helper';
+import { useNavigate } from "react-router-dom";
 
 export default function Landing() {
+    const navigate = useNavigate();
     // Location
     const [inputLocation, setInputLocation] = useState('');
     const [showLocation, setShowLocation] = useState([]); 
@@ -218,7 +220,7 @@ export default function Landing() {
                 <div className="cta">
                     <h3>Sharing <br />Is Earning Now</h3>
                     <p>Great opportunity to make money by <br />sharing your extra space.</p>
-                    <a href="#" class="cta-btn">Become a Tenant</a>
+                    <a href="#" class="cta-btn" onClick={() => navigate('/tenantregister')}>Become a Tenant</a>
                 </div>
                 <Heading as='h2'>
                     Recommended for you

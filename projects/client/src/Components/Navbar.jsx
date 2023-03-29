@@ -84,6 +84,7 @@ export default function Navbar() {
                 mr={4}
                 // display={{ base: "none", sm: "none", md: "block" }}
                 _hover={'none'}
+                onClick={() => navigate('/tenantregister')}
               >
                 Become a Tenant
               </Button>

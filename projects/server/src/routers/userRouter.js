@@ -6,6 +6,7 @@ const {
   changepassword,
   forgotpassword,
   resetpassword,
+  registerastenant
 } = require("../controllers/userController");
 const { readToken } = require("../helper/jwt");
 const { checkUser } = require("../helper/validator");
@@ -16,5 +17,7 @@ route.get("/keeplogin", readToken, keeplogin);
 route.patch("/changepw", readToken, checkUser, changepassword);
 route.post("/forgotpw", checkUser, forgotpassword);
 route.patch("/resetpw", readToken, checkUser, resetpassword);
+route.post("/registerastenant", checkUser, registerastenant);
+
 
 module.exports = route;

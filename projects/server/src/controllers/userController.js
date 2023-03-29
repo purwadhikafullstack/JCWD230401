@@ -337,4 +337,52 @@ module.exports = {
       next(error);
     }
   },
+
+  //7. REGISTER AS TENANT
+  registerastenant: async (req, res, next) => {
+    try {
+      let checkExistingUser = await model.users.findAll({
+        where: sequelize.or(
+          { email: req.body.email },
+          { phone: req.body.phone }
+        ),
+      });
+      if (checkExistingUser == 0) {
+        if (req.body.password == req.body.confirmationPassword) {
+          delete req.body.confirmationPassword;
+          req.body.password = bcrypt.hashSync(req.body.password, salt);
+          console.log("Check data after hash password :", req.body); //testing purposes
+          const uuid = uuidv4();
+          const { name, email, password, phone, image_ktp } = req.body;
+          let regis = await model.users.create({
+            uuid,
+            name,
+            email,
+            phone,
+            image_ktp,
+            password,
+            roleId: 2,
+          });
+          return res.status(200).send({
+            success: true,
+            message: "register account success ✅",
+            data: regis,
+          });
+        } else {
+          res.status(400).send({
+            success: false,
+            message: "Error❌: Passwords do not match.",
+          });
+        }
+      } else {
+        res.status(400).send({
+          success: false,
+          message: "Error❌: Email or phone number exist.",
+        });
+      }
+    } catch (error) {
+      console.log(error);
+      next(error);
+    }
+  }
 };
