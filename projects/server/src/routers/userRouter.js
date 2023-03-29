@@ -21,7 +21,7 @@ route.post("/forgotpw", checkUser, forgotpassword);
 route.patch("/resetpw", readToken, checkUser, resetpassword);
 route.post("/registerastenant"
 // , checkUser
-, uploader('/imgIdCard', 'IDC').array('image_ktp', 1), registerastenant);
+,uploader('/imgIdCard', 'IDC').array('image_ktp', 1), registerastenant);
 
 
 module.exports = route;

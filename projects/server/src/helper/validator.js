@@ -181,17 +181,10 @@ module.exports = {
           )
           .run(req);
 
-        // await check("image")
-        //   .notEmpty()
-        //   .withMessage("Image file is required")
-        //   .custom((value, { req }) => {
-        //     if (req.file && req.file.mimetype.startsWith("image/")) {
-        //       return true;
-        //     } else {
-        //       throw new Error("File type is not supported");
-        //     }
-        //   })
-        //   .run(req);
+        await check("image_ktp")
+          .notEmpty()
+          .withMessage("Image file is required")
+          .run(req);
       }
 
       const validation = validationResult(req);

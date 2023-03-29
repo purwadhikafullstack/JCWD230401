@@ -21,8 +21,8 @@ import { FiUpload } from 'react-icons/fi';
 
 export default function TenantRegister() {
     const [showPassword, setShowPassword] = useState(false);
-    // const [showPasswordConfirmation, setShowPasswordConfirmation] = useState(false);
-    // const [passwordConfirmation, setPasswordConfirmation] = React.useState('');
+    const [showPasswordConfirmation, setShowPasswordConfirmation] = useState(false);
+    const [passwordConfirmation, setPasswordConfirmation] = React.useState('');
     const navigate = useNavigate();
     const [name, setName] = React.useState('');
     const [phone, setPhone] = React.useState('');
@@ -46,6 +46,7 @@ export default function TenantRegister() {
             formData.append("email", email);
             formData.append("phone", phone);
             formData.append("password", password);
+            formData.append("confirmationPassword", passwordConfirmation);
             console.log("ini isi dari formData", formData);
             let response = await axios.post(`${API_URL}/user/registerastenant`,
                 formData
@@ -59,8 +60,8 @@ export default function TenantRegister() {
         } catch (error) {
             console.log("ini error dari onBtnRegister : ", error); //testing purposes
             alert(error.response.data.message);
-            // alert(error.response.data.error[0].msg);
-            // alert(error.response.data.error[1].msg);
+            alert(error.response.data.error[0].msg);
+            alert(error.response.data.error[1].msg);
         }
     }
 
@@ -128,7 +129,7 @@ export default function TenantRegister() {
                                 </InputRightElement>
                             </InputGroup>
                         </FormControl>
-                        {/* <FormControl id="confirmation_password">
+                        <FormControl id="confirmation_password">
                             <FormLabel>Confirmation Password</FormLabel>
                             <InputGroup>
                                 <Input
@@ -146,7 +147,7 @@ export default function TenantRegister() {
                                     </Button>
                                 </InputRightElement>
                             </InputGroup>
-                        </FormControl> */}
+                        </FormControl>
                         {/* UPLOAD ID CARD */}
                         <FormControl id="upload-id-card">
                             <FormLabel>Upload your id card</FormLabel>
