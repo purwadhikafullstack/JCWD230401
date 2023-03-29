@@ -342,30 +342,48 @@ module.exports = {
   //7. REGISTER AS TENANT
   registerastenant: async (req, res, next) => {
     try {
-      console.log("req.body.data : ", req.body.data);
-      console.log("req.files  : ", req.files);
-      req.body.password = bcrypt.hashSync(req.body.password, salt);
-      console.log("Check data after hash password :", req.body); //testing purposes, kalau req.body.password dpt hashed one
-      const uuid = uuidv4();
-      const { name, email, password, phone } = req.body;
-
-      let regis = await model.users.create({
-        uuid,
-        name,
-        email,
-        phone,
-        image_ktp: `/imgIdCard/${req.files[0]?.filename}`,
-        password,
-        roleId: 2,
+      let checkExistingUser = await model.users.findAll({
+        where: sequelize.or(
+          { email: req.body.email },
+          { phone: req.body.phone }
+        ),
       });
-      return res.status(200).send({
-        success: true,
-        message: "register account success ✅",
-        data: regis,
-      });
+      if (checkExistingUser == 0) {
+        if (req.body.password == req.body.confirmationPassword) {
+          delete req.body.confirmationPassword;
+          req.body.password = bcrypt.hashSync(req.body.password, salt);
+          console.log("Check data after hash password :", req.body); //testing purposes
+          const uuid = uuidv4();
+          const { name, email, password, phone } = JSON.parse(req.body);
+          let regis = await model.users.create({
+            uuid,
+            name,
+            email,
+            phone,
+            image_ktp: `/imgIdCard/${req.files[0]?.filename}`,
+            password,
+            roleId: 2,
+          });
+          return res.status(200).send({
+            success: true,
+            message: "register account success ✅",
+            data: regis,
+          });
+        } else {
+          res.status(400).send({
+            success: false,
+            message: "Error❌: Passwords do not match.",
+          });
+        }
+      } else {
+        res.status(400).send({
+          success: false,
+          message: "Error❌: Email or phone number exist.",
+        });
+      }
     } catch (error) {
       console.log(error);
       next(error);
     }
-  },
+  }
 };

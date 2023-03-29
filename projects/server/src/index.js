@@ -12,6 +12,8 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 app.use(bearerToken());
+// #destination file storage(image/pdf/document)
+app.use("/", express.static(__dirname + "/src/public"));
 
 
 //#region API ROUTES
