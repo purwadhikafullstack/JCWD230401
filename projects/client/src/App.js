@@ -13,6 +13,7 @@ import ChangePassword from "./Pages/ChangePassword";
 import ForgotPassword from "./Pages/ForgotPassword";
 import ResetPassword from "./Pages/ResetPassword";
 import Landing from "./Pages/Landing/Landing";
+import TenantRegister from "./Pages/TenantRegister";
 
 function App() {
   const location = useLocation();
@@ -42,16 +43,17 @@ function App() {
   }, []);
 
   return (
-<>
-{/* blm dikasi boundaries login sesuai roleI bisa akses apa */}
+    <>
+      {/* blm dikasi boundaries login sesuai roleI bisa akses apa */}
       {location.pathname === "/" && <Navbar />}
       <Routes>
-              {/* <Route path="/" element={<Landing />} /> */}
-              <Route path="/changepassword" element={<ChangePassword />} />
-              <Route path="/userregister" element={<UserRegister />} />
-              <Route path="/forgotpassword" element={<ForgotPassword />} />
-              <Route path="/resetpassword/:token" element={<ResetPassword />} />
-              <Route path="/" element={<Landing />} /> 
+        {/* <Route path="/" element={<Landing />} /> */}
+        <Route path="/changepassword" element={<ChangePassword />} />
+        <Route path="/userregister" element={<UserRegister />} />
+        <Route path="/tenantregister" element={<TenantRegister />} />
+        <Route path="/forgotpassword" element={<ForgotPassword />} />
+        <Route path="/resetpassword/:token" element={<ResetPassword />} />
+        <Route path="/" element={<Landing />} />
       </Routes>
       {location.pathname === "/" && <NavbarMobile />}
     </>

@@ -23,7 +23,6 @@ import { TbHomeHeart } from "react-icons/tb";
 import { AiOutlineSearch } from "react-icons/ai";
 import Login from './Login';
 import { useNavigate } from 'react-router-dom';
-// import CategorySlider from './CategorySlider';
 import { useDispatch, useSelector } from 'react-redux';
 import { logoutAction } from '../reducers/auth';
 
@@ -85,6 +84,7 @@ export default function Navbar() {
                 mr={4}
                 // display={{ base: "none", sm: "none", md: "block" }}
                 _hover={'none'}
+                onClick={() => navigate('/tenantregister')}
               >
                 Become a Tenant
               </Button>
@@ -154,7 +154,6 @@ export default function Navbar() {
           </Flex>
         </Box>
         <Box>
-          {/* <CategorySlider /> */}
         </Box>
       </Box>
     </>

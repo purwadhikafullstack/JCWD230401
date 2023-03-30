@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import {
     Button,
     Checkbox,
@@ -16,31 +16,40 @@ import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { API_URL } from '../helper';
-import Userregisterbanner from '../assets/userregisterbanner.jpg'
+import { FiUpload } from 'react-icons/fi';
 
 
-export default function UserRegister() {
+export default function TenantRegister() {
     const [showPassword, setShowPassword] = useState(false);
     const [showPasswordConfirmation, setShowPasswordConfirmation] = useState(false);
+    const [passwordConfirmation, setPasswordConfirmation] = React.useState('');
     const navigate = useNavigate();
     const [name, setName] = React.useState('');
     const [phone, setPhone] = React.useState('');
     const [email, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
-    const [passwordConfirmation, setPasswordConfirmation] = React.useState('');
-    const { isOpen, onOpen, onClose } = useDisclosure();
+    const [fileImage, setFileImage] = useState(null); 
+    const inputFile = useRef(null);
+    const [image, setImage] = useState("https://fakeimg.pl/350x200/");
 
-
+    //untuk upload ktp
+    const onChangeFile = (event) => {
+        console.log("ini isi dari onchangefile :", event.target.files);
+        setFileImage(event.target.files[0]); //change to setFileIdCardImage
+    };
 
     const onBtnRegister = async () => {
         try {
-            let response = await axios.post(`${API_URL}/user/register`, {
-                name: name,
-                phone: phone,
-                email: email,
-                password: password,
-                confirmationPassword: passwordConfirmation
-            }
+            let formData = new FormData();
+            formData.append("image_ktp", fileImage);
+            formData.append("name", name);
+            formData.append("email", email);
+            formData.append("phone", phone);
+            formData.append("password", password);
+            formData.append("confirmationPassword", passwordConfirmation);
+            console.log("ini isi dari formData", formData);
+            let response = await axios.post(`${API_URL}/user/registerastenant`,
+                formData
             );
             console.log("ini hasil response onbtnregister :", response); //testing purposes
             console.log("ini hasil response onbtnregister message from be :", response.data.message); //testing purposes
@@ -69,7 +78,7 @@ export default function UserRegister() {
                 <Stack spacing={0} w={'full'} maxW={{ base: 'sm' }}>
                     <Heading fontSize={'3xl'} fontWeight='semibold'
                         my='8'
-                    >Register to tempatku</Heading>
+                    >Register as a Tenant</Heading>
                     <Stack spacing={2}>
                         <HStack>
                             <Box>
@@ -123,7 +132,6 @@ export default function UserRegister() {
                         <FormControl id="confirmation_password">
                             <FormLabel>Confirmation Password</FormLabel>
                             <InputGroup>
-                                {/* Input Password Confirmation*/}
                                 <Input
                                     type={showPasswordConfirmation ? 'text' : 'password'} onChange={(e) => setPasswordConfirmation(e.target.value)}
                                 />
@@ -139,6 +147,40 @@ export default function UserRegister() {
                                     </Button>
                                 </InputRightElement>
                             </InputGroup>
+                        </FormControl>
+                        {/* UPLOAD ID CARD */}
+                        <FormControl id="upload-id-card">
+                            <FormLabel>Upload your id card</FormLabel>
+                            <Image
+                                boxSize='200px'
+                                objectFit='cover'
+                                src={fileImage
+                                    ? URL.createObjectURL(
+                                        fileImage
+                                    )
+                                    : image}
+                                w='full'
+                            />
+                            <Button fontFamily={'heading'} bg={'gray.200'} color={'gray.800'} w='full'
+                                leftIcon={<Icon as={FiUpload} ml='8' fontSize={'2xl'} />}
+                                variant={"link"}
+                                onClick={() =>
+                                    inputFile.current.click()
+                                }
+                            >
+                                {/* Upload your id card */}
+                                <Input
+                                    my='4'
+                                    ml='6'
+                                    type="file"
+                                    id="file"
+                                    ref={inputFile}
+                                    // style={{ display: "none" }}
+                                    onChange={onChangeFile}
+                                    accept="image/*"
+                                    variant='unstyled'
+                                ></Input>
+                            </Button>
                         </FormControl>
                     </Stack>
                     <Stack
@@ -187,8 +229,9 @@ export default function UserRegister() {
                 <Image
                     alt={'User Register Page Image'}
                     objectFit={'cover'}
-                    src={Userregisterbanner}
-
+                    src={
+                        'https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1352&q=80'
+                    }
                 />
             </Flex>
         </Stack>

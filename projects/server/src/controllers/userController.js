@@ -4,6 +4,7 @@ const { v4: uuidv4 } = require("uuid");
 const bcrypt = require("bcrypt");
 const { createToken } = require("../helper/jwt");
 const transporter = require("../helper/nodemailer");
+const fs = require("fs");
 
 let salt = bcrypt.genSaltSync(10);
 
@@ -311,7 +312,7 @@ module.exports = {
         console.log("Decrypt token : ", req.decrypt);
         //1. hash right before update
         req.body.newPassword = bcrypt.hashSync(req.body.newPassword, salt);
-        //2. update the password & isSuspended 
+        //2. update the password & isSuspended
         await model.users.update(
           { password: req.body.newPassword, isSuspended: 0 },
           {
@@ -338,5 +339,60 @@ module.exports = {
     }
   },
 
-  
+  //7. REGISTER AS TENANT
+  registerastenant: async (req, res, next) => {
+    try {
+      console.log("req.body : ", req.body);
+      console.log("req.files  : ", req.files);
+      let checkExistingUser = await model.users.findAll({
+        where: sequelize.or(
+          { email: req.body.email },
+          { phone: req.body.phone }
+        ),
+      });
+      if (checkExistingUser == 0) {
+        if (req.files.length == 1) {
+          if (req.body.password == req.body.confirmationPassword) {
+            delete req.body.confirmationPassword;
+            req.body.password = bcrypt.hashSync(req.body.password, salt);
+            console.log("Check data after hash password :", req.body); //testing purposes
+            const uuid = uuidv4();
+            const { name, email, password, phone } = req.body;
+            let regis = await model.users.create({
+              uuid,
+              name,
+              email,
+              phone,
+              image_ktp: `/imgIdCard/${req.files[0]?.filename}`,
+              password,
+              roleId: 2,
+            });
+            return res.status(200).send({
+              success: true,
+              message: "register account success ✅",
+              data: regis,
+            });
+          } else {
+            res.status(400).send({
+              success: false,
+              message: "Error❌: Passwords do not match.",
+            });
+          }
+        } else {
+          res.status(400).send({
+            success: false,
+            message: "Error❌: Image file is required",
+          });
+        }
+      } else {
+        res.status(400).send({
+          success: false,
+          message: "Error❌: Email or phone number exist.",
+        });
+      }
+    } catch (error) {
+      console.log(error);
+      next(error);
+    }
+  },
 };
