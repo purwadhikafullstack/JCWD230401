@@ -59,7 +59,7 @@ module.exports = {
   //2. LOGIN
   login: async (req, res, next) => {
     try {
-      //1. find email or phone from db
+      //1. find email or phone from db  //bisa include lsg sama tabel user detail
       let getuser = await model.users.findAll({
         where: sequelize.or(
           { email: req.body.email },

@@ -4,7 +4,7 @@ const authSlice = createSlice({
   name: "auth",
 
   initialState: {
-    name: "",
+    name: "", //hrs dijoin user tabel sama user detail
     email: "",
     roleId: "",
     image_profile: "https://ionicframework.com/docs/img/demos/avatar.svg",
