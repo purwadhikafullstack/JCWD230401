@@ -92,8 +92,8 @@ export default function Navbar() {
                     Become a Tenant
                   </Button>
                   :
+                  // Tenant
                   roleId == 2 ?
-                    // Tenant
                     <Button
                       variant={'ghost'}
                       size={'sm'}

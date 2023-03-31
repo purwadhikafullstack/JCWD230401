@@ -30,8 +30,8 @@ export default function Login() {
                     phone: !emailOrPhone.includes('@') ? emailOrPhone : "",
                     password: password
                 });
-                console.log("response . data dari login : ", response.data)
-                console.log("response . data dari login roleId : ", response.data.roleId)
+                // console.log("response.data dari login : ", response.data)
+                // console.log("response.data dari login roleId : ", response.data.roleId)
                 if (response.data.length == 0) {
                     alert('Account not found ❌');
                 } else {
@@ -49,7 +49,6 @@ export default function Login() {
                     }
                 }
             }
-
         } catch (error) {
             console.log("ini error dari onBtnLogin : ", error);
             alert(error.response.data.message);
