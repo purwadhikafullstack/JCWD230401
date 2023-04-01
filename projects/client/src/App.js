@@ -15,12 +15,14 @@ import Landing from "./Pages/Landing/Landing";
 import TenantRegister from "./Pages/TenantRegister";
 import Dashboard from "./Pages/Dashboard/Dashboard";
 import NotFound from "./Pages/NotFound";
+import Verification from "./Pages/Verification";
+
 
 function App() {
   const location = useLocation();
   const dispatch = useDispatch();
   const roleId = useSelector((state) => state.authReducer.roleId);
-  console.log("ini isi roleId dari useSelector di App.js : ", roleId);
+  // console.log("ini isi roleId dari useSelector di App.js : ", roleId);
 
   const keeplogin = async () => {
     try {
@@ -57,6 +59,7 @@ function App() {
             <Route path="/tenantregister" element={<TenantRegister />} />
             <Route path="/forgotpassword" element={<ForgotPassword />} />
             <Route path="/resetpassword/:token" element={<ResetPassword />} />
+            <Route path="/verifyaccount/:token" element={<Verification />} />
             <Route path="/" element={<Landing />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
@@ -68,8 +71,9 @@ function App() {
             <Route path="/tenantregister" element={<TenantRegister />} />
             <Route path="/forgotpassword" element={<ForgotPassword />} />
             <Route path="/resetpassword/:token" element={<ResetPassword />} />
-            <Route path="/" element={<Landing />} />
+            <Route path="/verifyaccount/:token" element={<Verification />} />
             <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/" element={<Landing />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         ) : (
@@ -80,6 +84,7 @@ function App() {
             <Route path="/tenantregister" element={<TenantRegister />} />
             <Route path="/forgotpassword" element={<ForgotPassword />} />
             <Route path="/resetpassword/:token" element={<ResetPassword />} />
+            <Route path="/verifyaccount/:token" element={<Verification />} />
             <Route path="/" element={<Landing />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
