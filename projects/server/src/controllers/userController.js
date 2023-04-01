@@ -11,6 +11,7 @@ let salt = bcrypt.genSaltSync(10);
 module.exports = {
   //1. REGISTER
   register: async (req, res, next) => {
+    const ormTransaction = await model.sequelize.transaction();
     try {
       let checkExistingUser = await model.users.findAll({
         where: sequelize.or(
@@ -25,6 +26,7 @@ module.exports = {
           console.log("Check data after hash password :", req.body); //testing purposes
           const uuid = uuidv4();
           const { name, email, password, phone } = req.body;
+          //1. Create data baru
           let regis = await model.users.create({
             uuid,
             name,
@@ -32,11 +34,38 @@ module.exports = {
             phone,
             password,
             roleId: 1,
+          }, {
+            transaction: ormTransaction,
           });
+          console.log("ini isi dari regis :", regis);
+          console.log("ini isi dari id regis :", regis.dataValues.id);
+          let { id, roleId } = regis.dataValues;
+          // GENERATE TOKEN 
+          let token = createToken({ id, roleId }, "24h"); 
+          // SEND VERIFICATION MAIL
+          await transporter.sendMail({
+            from: "Tracker admin",
+            to: req.body.email,
+            subject: "Account Verification",
+            html: `
+            <div>
+            <p>Hi ${name},</p>
+            <p>We're happy you signed up for tempatku.</p>
+            <p>Just click on the following link to verify your email address and activate your account.</p>
+            <a href="http://localhost:3000/verifyaccount/${token}">Verify Now</a> 
+            <p>Please note this link will expire within 24 hours.</p>
+            <br>
+            <p>Welcome to tempatku!</p>
+            <p>tempatku team</p>
+            </div>
+            `,
+          });
+          await ormTransaction.commit();
           return res.status(200).send({
             success: true,
-            message: "register account success ✅",
+            message: "register account success ✅ and you received an email to verify your account.",
             data: regis,
+            token //testing only
           });
         } else {
           res.status(400).send({
@@ -51,6 +80,7 @@ module.exports = {
         });
       }
     } catch (error) {
+      await ormTransaction.rollback();
       console.log(error);
       next(error);
     }
@@ -139,7 +169,6 @@ module.exports = {
                 },
               }
             );
-
             res.status(400).send({
               success: false,
               message: "Account suspended ❌ please reset your password",
@@ -395,4 +424,41 @@ module.exports = {
       next(error);
     }
   },
+
+  //8. ACCOUNT VERIFICATION //ooh bikin logic 1 time only verification disini di userController verify. id isVerified 1 alert aja your account is already verified jd di page verify gbs diteken lg, testing akses emailnya lg aja (pake And )
+  verify: async (req, res, next) => {
+    try {
+      console.log("Decrypt token:", req.decrypt);
+      let checkverifieduser = await model.users.findAll({
+        where: {
+          id: req.decrypt.id,
+        }
+      });
+      // console.log("ini isi checkverifieduser :", checkverifieduser);
+      console.log("ini isi isVerified dari checkverifieduser :", checkverifieduser[0].dataValues.isVerified);
+      if(!checkverifieduser[0].dataValues.isVerified){
+        let updateStatus = await model.users.update(
+          { isVerified: 1 },
+          {
+            where: {
+              id: req.decrypt.id,
+            },
+          }
+          );
+          console.log("isi updateStatus : ", updateStatus);
+          return res.status(200).send({
+            success: true,
+            message: "Your Account has been Verified ✅",
+          });
+        } else {
+          res.status(400).send({
+            success: false,
+            message: "Your account is already verified",
+          });
+        }
+    } catch (error) {
+      console.log(error);
+      next(error);
+    }
+  }
 };
