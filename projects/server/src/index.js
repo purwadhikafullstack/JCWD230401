@@ -27,6 +27,8 @@ app.use('/category', categoryRouter)
 app.use('/property', propertyRouter)
 
 
+const locationRouter = require('./routers/locationRouter');
+app.use('/location', locationRouter);
 // ===========================
 // NOTE : Add your routes here
 

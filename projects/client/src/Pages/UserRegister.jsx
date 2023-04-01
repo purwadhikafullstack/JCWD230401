@@ -159,7 +159,7 @@ export default function UserRegister() {
                         pb='6'
                         px='10'
                     >
-                        <Card variant='none' borderColor='#d0d7de'>
+                        <Card variant='none' borderColor='#d0d7de' mt='2'>
                             <CardBody>
                                 <Center>
                                     <HStack fontSize='sm'

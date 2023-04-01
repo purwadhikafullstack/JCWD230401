@@ -4,6 +4,7 @@ const { readToken } = require('../helper/jwt');
 const { checkUser } = require('../helper/validator');
 
 route.get('/', propertyController.getAllProperty)
+route.post('/filter', propertyController.filterProperty)
 
 
 module.exports = route;

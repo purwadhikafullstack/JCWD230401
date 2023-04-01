@@ -3,6 +3,6 @@ const { categoryController } = require('../controllers');
 const { readToken } = require('../helper/jwt');
 const { checkUser } = require('../helper/validator');
 
-route.get('/', readToken, categoryController.getAllCategory)
+route.get('/',categoryController.getAllCategory)
 
 module.exports = route;

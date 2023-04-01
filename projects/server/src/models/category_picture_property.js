@@ -3,7 +3,7 @@ const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class category extends Model {
+  class category_picture_property extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -13,18 +13,15 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
     }
   }
-  category.init({
-    uuid: DataTypes.STRING,
-    category: DataTypes.STRING,
-    isDeleted: DataTypes.BOOLEAN,
-    picture: DataTypes.STRING,
+  category_picture_property.init({
+    category: DataTypes.STRING
   }, {
     sequelize,
-    modelName: 'category',
+    modelName: 'category_picture_property',
   });
 
-  category.associate = (models) => {
-    category.hasMany(models.property, { foreignKey: 'categoryId' });
-}
-  return category;
+  category_picture_property.associate = (models) => {
+    category_picture_property.hasMany(models.picture_property, { foreignKey: 'category_picture_propertyId' });
+  }
+  return category_picture_property;
 };

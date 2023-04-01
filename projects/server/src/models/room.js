@@ -15,18 +15,20 @@ module.exports = (sequelize, DataTypes) => {
   }
   room.init({
     uuid: DataTypes.STRING,
-    name: DataTypes.STRING,
     price: DataTypes.INTEGER,
     description: DataTypes.STRING,
-    quantity: DataTypes.INTEGER,
     capacity: DataTypes.INTEGER,
-    booked: DataTypes.INTEGER,
-    isAvailable: DataTypes.BOOLEAN,
     isDeleted: DataTypes.BOOLEAN,
+    room_categoryId: DataTypes.INTEGER,
     propertyId: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'room',
   });
+
+  room.associate = (models) => {
+    room.belongsTo(models.property, { foreignKey: 'propertyId' });
+    room.belongsTo(models.room_category, { foreignKey: 'room_categoryId' });
+  }
   return room;
 };

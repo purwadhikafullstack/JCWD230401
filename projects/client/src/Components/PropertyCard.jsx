@@ -9,6 +9,7 @@ import {
 } from '@chakra-ui/react';
 import { BsStarFill } from "react-icons/bs";
 import { API_URL } from '../helper';
+import Carousel from './Carousel';
 
 const IMAGE =
     'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1740&q=80';
@@ -61,7 +62,7 @@ export default function PropertyCard(props) {
                         </Flex>
                     </HStack>
                     <Text fontWeight={'normal'} fontSize={'sm'} >
-                        {props.location.city}, {props.location.country}
+                        {props.location?.province.name}, {props.location?.country}
                     </Text>
                     <Text fontWeight={600} fontSize={'md'} textAlign={'left'} display='flex'>
                         Rp {props.price}

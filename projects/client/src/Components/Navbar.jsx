@@ -49,7 +49,7 @@ export default function Navbar() {
        w='full' bg='white' zIndex={1}>
         <Box boxShadow={'xs'} px={{ base: '4', sm: '10' }}>
           <Flex h={16} alignItems={'center'} justifyContent={'space-between'}>
-            <HStack alignItems={'center'}>
+            <HStack alignItems={'center'} onClick={() => navigate('/')} cursor='pointer'>
               {/* Logo Tempatku */}
               <Icon fontSize="40px" as={TbHomeHeart}
                 color='#D3212D'
@@ -79,15 +79,15 @@ export default function Navbar() {
 
             <Flex alignItems={'center'}>
               {/* Become TENANT */}
-              {/* <Button
+              <Button
                 variant={'ghost'}
                 size={'sm'}
-                // mr={4}
+                mr={4}
                 // display={{ base: "none", sm: "none", md: "block" }}
                 _hover={'none'}
               >
                 Become a Tenant
-              </Button> */}
+              </Button>
               {/* Main Menu */}
               <Menu >
                 <MenuButton
@@ -114,7 +114,7 @@ export default function Navbar() {
                     <MenuList>
                       <MenuItem>Profile</MenuItem>
                       <MenuItem>Bookings</MenuItem>
-                      <MenuItem onClick={() => navigate('/changepassword')}>Change Password</MenuItem>
+                      <MenuItem onClick={() => navigate('/auth/changepassword')}>Change Password</MenuItem>
                       <MenuItem
                         onClick={onBtnLogout}
                       >Logout</MenuItem>
@@ -126,7 +126,7 @@ export default function Navbar() {
                         <MenuItem>Profile</MenuItem>
                         <MenuItem>Property</MenuItem>
                         <MenuItem>Report</MenuItem>
-                        <MenuItem onClick={() => navigate('/changepassword')}>Change Password</MenuItem>
+                        <MenuItem onClick={() => navigate('/auth/changepassword')}>Change Password</MenuItem>
                         <MenuItem
                           onClick={onBtnLogout}
                         >Logout</MenuItem>
@@ -145,7 +145,7 @@ export default function Navbar() {
                           </Modal>
                         </MenuItem>
                         <MenuItem
-                          onClick={() => navigate('/userregister')}
+                          onClick={() => navigate('/auth/userregister')}
                         >Register</MenuItem>
                       </MenuList>
                 }

@@ -27,8 +27,9 @@ module.exports = (sequelize, DataTypes) => {
 
   property.associate = (models) => {
     property.hasMany(models.picture_property, { foreignKey: 'propertyId' });
-    property.hasOne(models.location, { foreignKey: 'propertyId' }); 
     property.hasMany(models.room, { foreignKey: 'propertyId' }); 
+    property.belongsTo(models.category, { foreignKey: 'categoryId' }); 
+    property.hasOne(models.property_location, { foreignKey: 'propertyId' }); 
 }
   return property;
 };

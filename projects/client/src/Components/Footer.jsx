@@ -22,6 +22,7 @@ export default function Footer() {
             zIndex={'1'}
             w='full'
             boxShadow={'xs'}
+            mt='5'
         >
             <Flex
                 // align='start'
