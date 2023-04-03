@@ -16,7 +16,8 @@ import TenantRegister from "./Pages/TenantRegister";
 import Dashboard from "./Pages/Dashboard/Dashboard";
 import NotFound from "./Pages/NotFound";
 import Verification from "./Pages/Verification";
-
+import ProductDetail from "./Pages/ProductDetail/ProductDetail";
+import TransactionPage from "./Pages/TransactionPage";
 
 function App() {
   const location = useLocation();
@@ -48,7 +49,7 @@ function App() {
 
   return (
     <>
-          {location.pathname === "/" && <Navbar />}
+          {location.pathname === "/" && <Navbar /> || "/productdetail" && <Navbar />}
         {location.pathname === "/dashboard" && roleId == 2 && <Navbar />}
       {
         // User
@@ -62,6 +63,8 @@ function App() {
             <Route path="/verifyaccount/:token" element={<Verification />} />
             <Route path="/" element={<Landing />} />
             <Route path="*" element={<NotFound />} />
+            <Route path="/productdetail" element={<ProductDetail />} /> 
+            <Route path="/transactionpage" element={<TransactionPage />} /> 
           </Routes>
         ) : // Tenant
         roleId == 2 ? (
@@ -75,6 +78,7 @@ function App() {
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/" element={<Landing />} />
             <Route path="*" element={<NotFound />} />
+            <Route path="/productdetail" element={<ProductDetail />} /> 
           </Routes>
         ) : (
           // Not logged in
@@ -87,6 +91,7 @@ function App() {
             <Route path="/verifyaccount/:token" element={<Verification />} />
             <Route path="/" element={<Landing />} />
             <Route path="*" element={<NotFound />} />
+            <Route path="/productdetail" element={<ProductDetail />} /> 
           </Routes>
         )
       }

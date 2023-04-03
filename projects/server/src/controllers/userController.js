@@ -51,7 +51,7 @@ module.exports = {
             <div>
             <p>Hi ${name},</p>
             <p>We're happy you signed up for tempatku.</p>
-            <p>Just click on the following link to verify your email address and activate your account.</p>
+            <p>Just click on the following link to verify and activate your account.</p>
             <a href="http://localhost:3000/verifyaccount/${token}">Verify Now</a> 
             <p>Please note this link will expire within 24 hours.</p>
             <br>
@@ -196,7 +196,7 @@ module.exports = {
           id: req.decrypt.id,
         },
       });
-      let { id, uuid, name, email, phone, roleId, image_profile, isSuspended } =
+      let { id, uuid, name, email, phone, roleId, image_profile, isSuspended, isVerified } =
         getuser[0].dataValues;
       // GENERATE TOKEN ---> 400h buat gampang aja developnya jgn lupa diganti!
       let token = createToken({ id, roleId, isSuspended }, "400h"); //24 jam
@@ -209,6 +209,7 @@ module.exports = {
         email,
         phone,
         roleId,
+        isVerified,
         image_profile,
       });
     } catch (error) {
@@ -425,7 +426,7 @@ module.exports = {
     }
   },
 
-  //8. ACCOUNT VERIFICATION //ooh bikin logic 1 time only verification disini di userController verify. id isVerified 1 alert aja your account is already verified jd di page verify gbs diteken lg, testing akses emailnya lg aja (pake And )
+  //8. ACCOUNT VERIFICATION 
   verify: async (req, res, next) => {
     try {
       console.log("Decrypt token:", req.decrypt);
@@ -456,6 +457,58 @@ module.exports = {
             message: "Your account is already verified",
           });
         }
+    } catch (error) {
+      console.log(error);
+      next(error);
+    }
+  },
+
+  //9. SEND VERIFICATION EMAIL
+  sendverificationemail: async (req, res, next) => {
+    try {
+      console.log("Decrypt token:", req.decrypt);
+      //find user by read token from login
+      let checkverifieduser = await model.users.findAll({
+        where: {
+          id: req.decrypt.id,
+        }
+      });
+      console.log("ini isi checkverifieduser :", checkverifieduser);
+      console.log("ini isi checkverifieduser isVerified :", checkverifieduser[0].dataValues.isVerified);
+      //if user isnt verified yet, send verification email
+      if(!checkverifieduser[0].dataValues.isVerified){
+        let { id, roleId, name } = checkverifieduser[0].dataValues; 
+        // GENERATE TOKEN 
+        let token = createToken({ id, roleId }, "24h"); 
+        // SEND VERIFICATION MAIL
+        await transporter.sendMail({
+          from: "Tracker admin",
+          to: checkverifieduser[0].dataValues.email,
+          subject: "Account Verification",
+          html: `
+          <div>
+          <p>Hi ${name},</p>
+          <p>We noticed your account has not been verified.</p>
+          <p>Just click on the following link to verify and activate your account.</p>
+          <a href="http://localhost:3000/verifyaccount/${token}">Verify Now</a> 
+          <p>Please note this link will expire within 24 hours.</p>
+          <br>
+          <p>Thanks,</p>
+          <p>tempatku team</p>
+          </div>
+          `,
+        });
+        return res.status(200).send({
+          success: true,
+          message: "You received an email to verify your account. Please check your email.",
+        });
+      } else { 
+        //message jgn dikeluarin (hidden?), continue lsg ke transaction page
+        res.status(400).send({ //what should it be? 
+          success: false,
+          message: "Your account is already verified, you can continue to transaction page",
+        });
+      }
     } catch (error) {
       console.log(error);
       next(error);
