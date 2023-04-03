@@ -47,15 +47,29 @@ module.exports = {
                         model: model.room, attributes: ['id', 'price'], required: true, order: [[model.room, 'price', 'asc']],
                         include: [{
                             model: model.order,
-                            required: false,
+                            required: true,
                             where: {
-                                roomId: {
-                                    [sequelize.Op.notIn]:
-                                    {
-                                        start_date: { [sequelize.Op.between]: ['2023-04-04', '2023-04-05'] },
-                                        end_date: { [sequelize.Op.between]: ['2023-04-04', '2023-04-05'] },
+                                start_date: {
+                                    [sequelize.Op.or]: {
+                                        [sequelize.Op.lt]: '2023-04-04', [sequelize.Op.gt]: '2023-04-05', [sequelize.Op.is]: null
+                                    }
+                                },
+                                end_date: {
+                                    [sequelize.Op.or]: {
+                                        [sequelize.Op.lt]: '2023-04-04', [sequelize.Op.gt]: '2023-04-05', [sequelize.Op.is]: null
                                     }
                                 }
+
+                                // roomId: {
+                                //     [sequelize.Op.notIn]:
+                                //     {
+                                //         [sequelize.Op.and]: {
+
+                                //         }
+                                //         start_date: { [sequelize.Op.between]: ['2023-04-04', '2023-04-05'] },
+                                //         end_date: { [sequelize.Op.between]: ['2023-04-04', '2023-04-05'] },
+                                //     }
+                                // }
                                 //     [sequelize.Op.or]: [
                                 //         {
                                 //             [sequelize.Op.not]: {
