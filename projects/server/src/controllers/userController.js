@@ -51,7 +51,7 @@ module.exports = {
             <div>
             <p>Hi ${name},</p>
             <p>We're happy you signed up for tempatku.</p>
-            <p>Just click on the following link to verify your email address and activate your account.</p>
+            <p>Just click on the following link to verify and activate your account.</p>
             <a href="http://localhost:3000/verifyaccount/${token}">Verify Now</a> 
             <p>Please note this link will expire within 24 hours.</p>
             <br>
@@ -196,7 +196,7 @@ module.exports = {
           id: req.decrypt.id,
         },
       });
-      let { id, uuid, name, email, phone, roleId, image_profile, isSuspended } =
+      let { id, uuid, name, email, phone, roleId, image_profile, isSuspended, isVerified } =
         getuser[0].dataValues;
       // GENERATE TOKEN ---> 400h buat gampang aja developnya jgn lupa diganti!
       let token = createToken({ id, roleId, isSuspended }, "400h"); //24 jam
@@ -209,6 +209,7 @@ module.exports = {
         email,
         phone,
         roleId,
+        isVerified,
         image_profile,
       });
     } catch (error) {
@@ -487,8 +488,8 @@ module.exports = {
           html: `
           <div>
           <p>Hi ${name},</p>
-          <p>We noticed your email address has not been verified.</p>
-          <p>Just click on the following link to verify your email address and activate your account.</p>
+          <p>We noticed your account has not been verified.</p>
+          <p>Just click on the following link to verify and activate your account.</p>
           <a href="http://localhost:3000/verifyaccount/${token}">Verify Now</a> 
           <p>Please note this link will expire within 24 hours.</p>
           <br>
@@ -499,7 +500,7 @@ module.exports = {
         });
         return res.status(200).send({
           success: true,
-          message: "You can not continue ❌, your account has not been verified yet. You received an email to verify your account. Please check your email.",
+          message: "You received an email to verify your account. Please check your email.",
         });
       } else { 
         //message jgn dikeluarin (hidden?), continue lsg ke transaction page
