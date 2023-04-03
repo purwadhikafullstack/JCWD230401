@@ -22,7 +22,6 @@
     "multer": "latest",
     "mysql2": "latest",
     "nodemailer": "latest",
-    "react-slick": "^0.29.0",
     "redis": "latest",
     "sequelize": "latest",
     "uuid": "latest"

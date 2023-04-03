@@ -40,10 +40,42 @@ module.exports = {
             let get = await model.property.findAndCountAll({
                 offset: parseInt(page * size),
                 limit: parseInt(size),
+                distinct: true,
                 where: { property: { [sequelize.Op.like]: `%${name}%` } },
                 include: [
                     {
-                        model: model.room, required: true, attributes: ['price'], order: [[model.room, 'price', 'asc']],
+                        model: model.room, attributes: ['id','price'], required: true, order: [[model.room, 'price', 'asc']],
+                        include: [{
+                            model: model.order,
+                            required: false,
+                            where: {
+                                
+                            //     [sequelize.Op.or]: [
+                            //         {
+                            //             [sequelize.Op.not]: {
+                            //                 [sequelize.Op.and]: [
+                            //                     { start_date: { [sequelize.Op.gte]: '2023-04-04' } },
+                            //                     { end_date: { [sequelize.Op.lte]: '2023-04-05' } },
+                            //                 ]
+                            //             }
+                            //         },
+                            //         { [sequelize.Op.and]: [{ start_date: { [sequelize.Op.is]: null } }, { end_date: { [sequelize.Op.is]: null } }] }
+                            //     ]
+
+                                // [sequelize.Op.not]: [
+                                //     {
+                                //         [sequelize.Op.or]: [
+                                //             { start_date: { [sequelize.Op.gte]: '2023-04-04' } },
+                                //             { end_date: { [sequelize.Op.lte]: '2023-04-05' } },
+                                //             { [sequelize.Op.and]: [{ start_date: { [sequelize.Op.is]: null } }, { end_date: { [sequelize.Op.is]: null } }] }
+                                //         ]
+                                //     }
+                                // ]
+
+                                start_date: { [sequelize.Op.is]: null }, 
+                                end_date: { [sequelize.Op.is]: null },
+                            }
+                        }]
                     },
                     {
                         model: model.picture_property, required: true, attributes: ['picture']
@@ -55,17 +87,56 @@ module.exports = {
                     },
                     { model: model.property_location, required: true, include: [{ model: model.province, required: true, where: { name: { [sequelize.Op.like]: `%${city}%` } } }] }
                 ],
-                order: sortby == 'property' ? [[ sortby, order]] : [[ model.room, sortby, order]]
+                order: sortby == 'property' ? [[sortby, order]] : [[model.room, sortby, order]]
             })
-            console.log("getttttt filter categoryyyy", get.count)
+            console.log("getttttt filter categoryyyy", get)
             return res.status(200).send({
                 data: get.rows,
-                totalPages: Math.ceil(get.count / size),
                 datanum: get.count,
             })
         } catch (error) {
             console.log(error);
             next(error);
+        }
+    },
+    testing: async (req, res, next) => {
+        try {
+            // let get = await model.room_category.findAll({
+            //     include: [{
+            //         model: model.room, where: {
+            //             // id: {
+            //             //     [sequelize.Op.notIn]: sequelize.literal(`
+            //             //     SELECT orders.roomId FROM orders JOIN transactions ON orders.transactionId = transactions.id WHERE transactions.transaction_statusId = 2`)
+            //             // }
+            //         }
+            //     }]
+            // })
+
+            const con = new sequelize(
+                'tempatku_database',
+                'daniel',
+                '1234567890',
+                {
+                    host: "localhost",
+                    dialect: "mysql",
+                    operatorsAliases: false,
+                    pool: {
+                        max: 5,
+                        min: 0,
+                        acquire: 30000,
+                        idle: 10000
+                    },
+                },
+            );
+
+            // const query = `select * from room_categories join rooms on room_categories.id = rooms.room_categoryId join picture_rooms on rooms.id = picture_rooms.roomId where rooms.id not in (select roomId from orders join transactions on orders.transactionId = transactions.id where transaction_statusId in (1,2))`
+            const query = `select * from room_categories join rooms on room_categories.id = rooms.room_categoryId where rooms.id not in (select roomId from orders join transactions on orders.transactionId = transactions.id where transaction_statusId in (1,2) and not (start_date >= '2023-04-04' and end_date <= '2023-04-05'));`
+            const get = await con.query(query, { type: sequelize.QueryTypes.SELECT })
+            console.log('ini gett queryyy', get)
+            res.status(200).send(get)
+        } catch (error) {
+            console.log(error);
+            next(error)
         }
     }
 }

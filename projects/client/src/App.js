@@ -14,6 +14,7 @@ import ForgotPassword from "./Pages/ForgotPassword";
 import ResetPassword from "./Pages/ResetPassword";
 import Landing from "./Pages/Landing/Landing";
 import FilteredProperty from "./Pages/FilteredProperty/FilteredProperty";
+import PropertyDetail from "./Pages/PropertyDetail/PropertyDetail";
 
 function App() {
   const location = useLocation();
@@ -63,6 +64,7 @@ function App() {
         <Route path="/auth/resetpassword/:token" element={<ResetPassword />} />
         <Route path="/" element={<Landing />} />
         <Route path="/property" element={<FilteredProperty />} />
+        <Route path="/property/detail/:uuid" element={<PropertyDetail />} />
       </Routes>
       {/* {location.pathname === "/" && <NavbarMobile />} */}
     </>

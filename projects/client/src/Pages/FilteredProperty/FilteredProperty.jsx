@@ -52,7 +52,7 @@ export default function FilteredProperty() {
     const location = useLocation();
     const [showProducts, setShowProducts] = useState([]);
     const [page, setPage] = useState(0);
-    const [size, setSize] = useState(3);
+    const [size, setSize] = useState(1);
     const [productName, setProductName] = useState("");
     const [totalData, setTotalData] = useState(0);
     const [currentPage, setCurrentPage] = useState(1);
@@ -90,12 +90,12 @@ export default function FilteredProperty() {
     const printAllProperty = () => {
         return showProducts.map((val, idx) => {
             // return <CardProperty property={val.property} price={val.rooms[0].price} />
-            return <PropertyCard property={val.property} price={val.rooms[0].price} picture={val.picture_properties[0].picture}/>
+            return <PropertyCard property={val.property} price={val.rooms[0].price} picture={val.picture_properties[0].picture} />
         })
     }
 
     const paginate = (pageNumber) => {
-        setPage(pageNumber)
+        setPage(pageNumber.selected)
     }
 
     useEffect(() => {
@@ -155,13 +155,16 @@ export default function FilteredProperty() {
                 <div className='property-fp'>
                     {printAllProperty()}
                 </div>
-                <Pagination
-                    size={size}
-                    page={page}
-                    totalData={totalData}
-                    paginate={paginate} />
+                <div>
+                    <h1>testt</h1>
+                    <Pagination
+                        size={size}
+                        totalData={totalData}
+                        paginate={paginate} />
+
+                </div>
             </Box>
-            <Footer />
+            {/* <Footer /> */}
         </Box>
     )
 }

@@ -13,7 +13,7 @@ export default function SearchBar(props) {
                             onChange={(e) => props.setProductName(e.target.value)}
                         // value={props.inputLocation}
                         />
-                        <div className="dropdown-fp">
+                        {/* <div className="dropdown-fp">
                             {props.showLocation.filter(item => {
                                 const searchTerm = props.inputLocation.toLowerCase();
                                 const city = item.city.toLowerCase();
@@ -26,7 +26,7 @@ export default function SearchBar(props) {
                                     className="dropdown-row-fp"
                                     key={item.city}
                                 >{item.city}</div>))}
-                        </div>
+                        </div> */}
                     </div>
                     <div>
                         <label>Location</label>
