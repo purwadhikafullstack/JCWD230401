@@ -44,23 +44,29 @@ module.exports = {
                 where: { property: { [sequelize.Op.like]: `%${name}%` } },
                 include: [
                     {
-                        model: model.room, attributes: ['id','price'], required: true, order: [[model.room, 'price', 'asc']],
+                        model: model.room, attributes: ['id', 'price'], required: true, order: [[model.room, 'price', 'asc']],
                         include: [{
                             model: model.order,
                             required: false,
                             where: {
-                                
-                            //     [sequelize.Op.or]: [
-                            //         {
-                            //             [sequelize.Op.not]: {
-                            //                 [sequelize.Op.and]: [
-                            //                     { start_date: { [sequelize.Op.gte]: '2023-04-04' } },
-                            //                     { end_date: { [sequelize.Op.lte]: '2023-04-05' } },
-                            //                 ]
-                            //             }
-                            //         },
-                            //         { [sequelize.Op.and]: [{ start_date: { [sequelize.Op.is]: null } }, { end_date: { [sequelize.Op.is]: null } }] }
-                            //     ]
+                                roomId: {
+                                    [sequelize.Op.notIn]:
+                                    {
+                                        start_date: { [sequelize.Op.between]: ['2023-04-04', '2023-04-05'] },
+                                        end_date: { [sequelize.Op.between]: ['2023-04-04', '2023-04-05'] },
+                                    }
+                                }
+                                //     [sequelize.Op.or]: [
+                                //         {
+                                //             [sequelize.Op.not]: {
+                                //                 [sequelize.Op.and]: [
+                                //                     { start_date: { [sequelize.Op.gte]: '2023-04-04' } },
+                                //                     { end_date: { [sequelize.Op.lte]: '2023-04-05' } },
+                                //                 ]
+                                //             }
+                                //         },
+                                //         { [sequelize.Op.and]: [{ start_date: { [sequelize.Op.is]: null } }, { end_date: { [sequelize.Op.is]: null } }] }
+                                //     ]
 
                                 // [sequelize.Op.not]: [
                                 //     {
@@ -71,9 +77,12 @@ module.exports = {
                                 //         ]
                                 //     }
                                 // ]
+                                // select * from rooms where rooms.id not in (
+                                //     select roomId from orders where start_date >= '2023-04-04' and end_date <= '2023-04-06'
+                                // )
 
-                                start_date: { [sequelize.Op.is]: null }, 
-                                end_date: { [sequelize.Op.is]: null },
+                                // start_date: { [sequelize.Op.is]: null }, 
+                                // end_date: { [sequelize.Op.is]: null },
                             }
                         }]
                     },
