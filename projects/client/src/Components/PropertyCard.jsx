@@ -8,11 +8,13 @@ import {
     Image, Flex, HStack
 } from '@chakra-ui/react';
 import { BsStarFill } from "react-icons/bs";
+import { API_URL } from '../helper';
+import Carousel from './Carousel';
 
 const IMAGE =
     'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1740&q=80';
 
-export default function PropertyCard() {
+export default function PropertyCard(props) {
     return (
         <Center
         // pt={6} 
@@ -39,7 +41,7 @@ export default function PropertyCard() {
                         height={{ base: '300px', lg: '230px' }}
                         width={{ base: '400px', lg: '250px' }}
                         objectFit={'cover'}
-                        src={IMAGE}
+                        src={`${API_URL}${props.picture}`}
                     />
                 </Box>
                 <Box
@@ -50,7 +52,7 @@ export default function PropertyCard() {
                 >
                     <HStack justifyContent={'space-between'}>
                         <Text fontWeight={600} fontSize={'lg'} >
-                            Hotel Veranda
+                            {props.property}
                         </Text>
                         <Flex>
                             <BsStarFill />
@@ -60,10 +62,10 @@ export default function PropertyCard() {
                         </Flex>
                     </HStack>
                     <Text fontWeight={'normal'} fontSize={'sm'} >
-                        Uluwatu, Indonesia
+                        {props.location?.province.name}, {props.location?.country}
                     </Text>
                     <Text fontWeight={600} fontSize={'md'} textAlign={'left'} display='flex'>
-                        Rp 500.000
+                        Rp {props.price}
                         <Text fontWeight={'normal'} pl='1' fontSize={'sm'} mt='0.5'>
                             / night
                         </Text>

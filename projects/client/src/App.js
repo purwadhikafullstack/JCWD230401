@@ -18,6 +18,8 @@ import NotFound from "./Pages/NotFound";
 import Verification from "./Pages/Verification";
 import ProductDetail from "./Pages/ProductDetail/ProductDetail";
 import TransactionPage from "./Pages/TransactionPage";
+import FilteredProperty from "./Pages/FilteredProperty/FilteredProperty";
+import PropertyDetail from "./Pages/PropertyDetail/PropertyDetail";
 
 function App() {
   const location = useLocation();

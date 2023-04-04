@@ -1,7 +1,7 @@
 {
   "development": {
-    "username": "root",
-    "password": "Admin123",
+    "username": "daniel",
+    "password": "1234567890",
     "database": "tempatku_database",
     "host": "127.0.0.1",
     "dialect": "mysql"

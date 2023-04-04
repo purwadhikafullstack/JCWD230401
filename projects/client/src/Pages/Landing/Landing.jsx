@@ -1,5 +1,5 @@
 import "./Landing.css";
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     Box, Heading
 } from '@chakra-ui/react';
@@ -20,15 +20,22 @@ import Ubud1 from './images/ubud-1.jpg';
 import Bandung1 from './images/bandung-1.jpg';
 import Bali1 from './images/bali-1.png';
 import NusaPenida1 from './images/nusapenida-1.png';
-import axios from 'axios';
-import { API_URL } from '../../helper';
-import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { API_URL } from "../../helper";
+
+import { useNavigate } from 'react-router-dom';
+
+
 
 export default function Landing() {
-    const navigate = useNavigate();
-    // Location
+    const [inputTypeIn, setInputTypeIn] = useState('');
+    const [inputTypeOut, setInputTypeOut] = useState('');
+    const [allCategory, setAllCategory] = useState([]);
+    const [allProperty, setAllProperty] = useState([]);
+    const token = localStorage.getItem('tempatku_login')
     const [inputLocation, setInputLocation] = useState('');
     const [showLocation, setShowLocation] = useState([]); 
+    const [guest, setGuest] = useState(5)
 
     //api to fetch search result
     const onSearch = (searchTerm) => {
@@ -37,15 +44,15 @@ export default function Landing() {
     }
 
     const getAllLocations = async () => {
-        try {
-            let response = await axios.get(`${API_URL}/location/list`, {
-                city: showLocation
-            })
-            // console.log("ini response.data dari getAllLocations 🪶 : ", response.data.data); 
-            setShowLocation(response.data.data)
-        } catch (error) {
-            console.log("ini error dari getAllLocations:", error);
-        }
+        // try {
+        //     let response = await axios.get(`${API_URL}/location/list`, {
+        //         city: showLocation
+        //     })
+        //     // console.log("ini response.data dari getAllLocations 🪶 : ", response.data.data); 
+        //     setShowLocation(response.data.data)
+        // } catch (error) {
+        //     console.log("ini error dari getAllLocations:", error);
+        // }
     }
 
     // Jalanin fungsi getAllLocations
@@ -63,6 +70,62 @@ export default function Landing() {
     const OnBtnCheckOut = () => {
         setInputCheckOut('date');
     };
+    // const onBlurInput = () => {
+    //     setInputTypeIn('');
+    //     setInputTypeOut('');
+    //   };
+
+    const getAllCategory = async () => {
+        let get = await axios.get(`${API_URL}/category`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            }
+        });
+        setAllCategory(get.data)
+    }
+
+    const printAllCategory = () => {
+        console.log("all categoryyyy",allCategory);
+        return allCategory.map((val, idx) => {
+            return <div>
+                <img src={`${API_URL}${val.picture}`} />
+                <span>
+                    <h3>{val.category}</h3>
+                </span>
+            </div>
+        })
+    }
+
+    const getAllProperty = async () => {
+        let get = await axios.get(`${API_URL}/property`);
+        console.log("get all property",get)
+        setAllProperty(get.data)
+    }
+
+    const printAllProperty = () => {
+        return allProperty.map((val,idx) => {
+            return <PropertyCard property={val.property} picture={val.picture_properties[0]?.picture}
+            location={val.property_location} price={val.rooms[0]?.price}/>
+        })
+    }
+
+    const navigate = useNavigate();
+
+    const handleSearch = () => {
+        navigate('/property', {
+            state : {
+                inputLocation: inputLocation,
+                inputCheckIn: inputCheckIn,
+                inputCheckOut: inputCheckOut,
+                guest: guest
+            }
+        })
+    }
+
+    useEffect(() => {
+        getAllCategory()
+        getAllProperty()
+    }, [])
 
     return (
         <>
@@ -99,24 +162,33 @@ export default function Landing() {
                             <div>
                                 <label>Check in</label>
                                 <input 
-                                type={inputCheckIn} 
-                                placeholder="Choose Date" onClick={OnBtnCheckIn}
+                                type={
+                                    'date'
+                                    // inputCheckIn
+                                } 
+                                placeholder="Choose Date" 
+                                // onClick={OnBtnCheckIn}
                                 onChange={(e) => setInputCheckIn(e.target.value)}
                                 />
                             </div>
                             <div>
                                 <label>Check out</label>
                                 <input 
-                                type={inputCheckOut} 
-                                placeholder="Choose Date" onClick={OnBtnCheckOut}
+                                type={
+                                    'date'
+                                    // inputCheckOut
+                                } 
+                                placeholder="Choose Date" 
+                                // onClick={OnBtnCheckOut}
                                 onChange={(e) => setInputCheckOut(e.target.value)}
                                 />
                             </div>
                             <div>
                                 <label>Guest</label>
-                                <input type="text" placeholder="Add Guest" />
+                                <input type="number" placeholder="Add Guest"
+                                 onChange={(e) => setGuest(e.target.value)}/>
                             </div>
-                            <button type="submit">
+                            <button type="button" onClick={handleSearch}>
                                 <img src={Search} />
                             </button>
                         </form>
@@ -137,42 +209,7 @@ export default function Landing() {
                 <br />
                 {/* PROPERTY TYPE */}
                 <div className="property-type">
-                    <div>
-                        <img src={Hotels1} />
-                        <span>
-                            <h3>Hotels</h3>
-                        </span>
-                    </div>
-                    <div>
-                        <img src={Apartments1} />
-                        <span>
-                            <h3>Apartments</h3>
-                        </span>
-                    </div>
-                    <div>
-                        <img src={Resorts1} />
-                        <span>
-                            <h3>Resorts</h3>
-                        </span>
-                    </div>
-                    <div>
-                        <img src={Villas1} />
-                        <span>
-                            <h3>Villas</h3>
-                        </span>
-                    </div>
-                    <div>
-                        <img src={GuestHouse1} />
-                        <span>
-                            <h3>Guest houses</h3>
-                        </span>
-                    </div>
-                    <div>
-                        <img src={Homestays1} />
-                        <span>
-                            <h3>Homestays</h3>
-                        </span>
-                    </div>
+                    {printAllCategory()}
                 </div>
                 <br />
                 <br />
@@ -228,20 +265,9 @@ export default function Landing() {
                 {/* PROPERTY RECOMMENDATIONS */}
                 <br />
                 <div className="recommendations">
-                    <PropertyCard />
-                    <PropertyCard />
-                    <PropertyCard />
-                    <PropertyCard />
-                    <PropertyCard />
-                    <PropertyCard />
-                    <PropertyCard />
-                    <PropertyCard />
-                    <PropertyCard />
-                    <PropertyCard />
-                    <PropertyCard />
-                    <PropertyCard />
+                    {printAllProperty()}
                 </div>
-                <a href="#" className="see-more-btn">See more properties</a>
+                <button onClick={() => navigate('/property')} type='button' className="see-more-btn">See more properties</button>
             </Box>
             <br />
             <br />
