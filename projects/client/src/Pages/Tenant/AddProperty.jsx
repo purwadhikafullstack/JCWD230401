@@ -300,7 +300,8 @@ function AddProperty(props) {
                                     </Button>
                                     <Flex
                                         justify={"space-between"}
-                                        w="100%"
+                                        w="96%"
+                                        mx={"4"}
                                         mb={"4"}
                                     >
                                         <Text alignSelf={"center"}>
