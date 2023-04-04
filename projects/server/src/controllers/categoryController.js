@@ -22,27 +22,11 @@ module.exports = {
     },
     addCategory: async (req, res, next) => {
         try {
-            console.log("req.body.data", req.body.data);
-            console.log("req.files", req.files);
-            let { category } = JSON.parse(req.body.data);
-            if (req.files.length === 0) {
-                let add = await model.category.create({
-                    uuid: uuidv4(),
-                    category: req.body.category,
-                });
-                console.log("add category", add);
-                return res.status(200).send({
-                    success: true,
-                    message: "Added new category",
-                    data: add,
-                });
-            } else {
-                await model.category.create({
-                    uuid: uuidv4(),
-                    category: req.body.category,
-                    picture: `/picCategory/${req.files[0]?.filename}`,
-                });
-            }
+            let add = await model.category.create({
+                uuid: uuidv4(),
+                category: req.body.category,
+            });
+            console.log("add category", add);
             return res.status(200).send({
                 success: true,
                 message: "Added new category",

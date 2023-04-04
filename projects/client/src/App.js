@@ -13,7 +13,7 @@ import ChangePassword from "./Pages/ChangePassword";
 import ForgotPassword from "./Pages/ForgotPassword";
 import ResetPassword from "./Pages/ResetPassword";
 import Landing from "./Pages/Landing/Landing";
-import Listing from "./Pages/Tenant/Listing";
+import AddProperty from "./Pages/Tenant/AddProperty";
 
 function App() {
     const location = useLocation();
@@ -63,7 +63,7 @@ function App() {
                     element={<ResetPassword />}
                 />
                 <Route path="/" element={<Landing />} />
-                <Route path="/listings" element={<Listing />} />
+                <Route path="/listings" element={<AddProperty />} />
             </Routes>
             {location.pathname === "/" && <NavbarMobile />}
         </>

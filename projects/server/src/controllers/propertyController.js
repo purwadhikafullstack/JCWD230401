@@ -24,41 +24,58 @@ module.exports = {
     },
     // create property
     addProperty: async (req, res, next) => {
+        const ormTransaction = await model.sequelize.transaction();
         try {
-            console.log("req.body.data", req.body.data);
-            console.log("req.files", req.files);
-            let { property, address, description, category, userId } =
-                JSON.parse(req.body.data);
-            if (req.files.length === 0) {
-                let add = await model.property.create({
+            // console.log("req.body.data", req.body.data);
+            // console.log("req.decrypt", req.decrypt);
+            // console.log("req.files", req.files);
+            let {
+                category,
+                property,
+                description,
+                address,
+                regency,
+                province,
+                zipcode,
+                country,
+            } = JSON.parse(req.body.data);
+            let addCategory = await model.category.create(
+                {
+                    uuid: uuidv4(),
+                    category: category,
+                },
+                { transaction: ormTransaction }
+            );
+            let addProperty = await model.property.create(
+                {
                     uuid: uuidv4(),
                     property,
-                    address,
                     description,
-                    categoryId: category,
-                    userId: userId,
-                });
-                console.log("Data Property:", add);
-                return res.status(200).send({
-                    success: true,
-                    message: "Added new property",
-                });
-            } else {
-                let add = await model.property.create({
-                    uuid: uuidv4(),
-                    property,
-                    address,
-                    description,
-                    categoryId: category,
-                    userId: userId,
-                    picture: `/picProperty/${req.files[0]?.filename}`,
-                });
+                    categoryId: addCategory.dataValues.id,
+                    userId: req.decrypt.id,
+                },
+                { transaction: ormTransaction }
+            );
+            // console.log("Data Property:", addProperty);
+            if (req.files.length) {
+                let addPictureProperty = await model.picture_property.create(
+                    {
+                        picture: `/ImgProperty/${req.files[0]?.filename}`,
+                        propertyId: addProperty.dataValues.id,
+                    },
+                    { transaction: ormTransaction }
+                );
+                // console.log("addPictureProperty:",addPictureProperty);
             }
+
+            await ormTransaction.commit();
+
             return res.status(200).send({
                 success: true,
                 message: "Added new property",
             });
         } catch (error) {
+            await ormTransaction.rollback();
             console.log(error);
             next(error);
         }
