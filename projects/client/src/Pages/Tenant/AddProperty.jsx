@@ -106,7 +106,7 @@ function AddProperty(props) {
         >
             <Box
                 border={"none"}
-                shadow={"lg"}
+                shadow={"2xl"}
                 rounded={"3xl"}
                 px={"8"}
                 mb={"10"}
@@ -309,8 +309,12 @@ function AddProperty(props) {
                                         </Text>
                                         <Button
                                             type="button"
+                                            display={"flex"}
+                                            flexDir="column"
                                             h={"35px"}
                                             w={"35px"}
+                                            variant="outline"
+                                            alignItems={"center"}
                                             onClick={() =>
                                                 setFileProperty(null)
                                             }
