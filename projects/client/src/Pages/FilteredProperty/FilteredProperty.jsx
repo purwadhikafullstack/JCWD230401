@@ -52,7 +52,7 @@ export default function FilteredProperty() {
     const location = useLocation();
     const [showProducts, setShowProducts] = useState([]);
     const [page, setPage] = useState(0);
-    const [size, setSize] = useState(1);
+    const [size, setSize] = useState(3);
     const [productName, setProductName] = useState("");
     const [totalData, setTotalData] = useState(0);
     const [currentPage, setCurrentPage] = useState(1);
@@ -155,16 +155,15 @@ export default function FilteredProperty() {
                 <div className='property-fp'>
                     {printAllProperty()}
                 </div>
-                <div>
-                    <h1>testt</h1>
-                    <Pagination
-                        size={size}
-                        totalData={totalData}
-                        paginate={paginate} />
-
-                </div>
             </Box>
-            {/* <Footer /> */}
+            <Flex justify={'center'}>
+                <Pagination
+                    size={size}
+                    totalData={totalData}
+                    paginate={paginate} />
+            </Flex>
+                <Footer />
+
         </Box>
     )
 }
