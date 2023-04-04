@@ -139,8 +139,9 @@ export default function Navbar() {
                 {
                   // User
                   roleId == 1 ?
-                    <MenuList>
-                      <MenuItem>Profile</MenuItem>
+                  <MenuList>
+                      <MenuItem onClick={() => navigate('/')}>Home</MenuItem>
+                      <MenuItem onClick={() => navigate('/editprofile')}>Profile</MenuItem>
                       <MenuItem>Bookings</MenuItem>
                       <MenuItem onClick={() => navigate('/changepassword')}>Change Password</MenuItem>
                       <MenuItem
@@ -151,6 +152,7 @@ export default function Navbar() {
                     // Tenant
                     roleId == 2 ?
                       <MenuList>
+                        <MenuItem onClick={() => navigate('/dashboard')}>Dashboard</MenuItem>
                         <MenuItem>Profile</MenuItem>
                         <MenuItem>Property</MenuItem>
                         <MenuItem>Report</MenuItem>

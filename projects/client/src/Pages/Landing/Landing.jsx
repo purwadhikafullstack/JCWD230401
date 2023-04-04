@@ -23,12 +23,27 @@ import NusaPenida1 from './images/nusapenida-1.png';
 import axios from 'axios';
 import { API_URL } from '../../helper';
 import { useNavigate } from "react-router-dom";
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 
 export default function Landing() {
     const navigate = useNavigate();
     // Location
     const [inputLocation, setInputLocation] = useState('');
-    const [showLocation, setShowLocation] = useState([]); 
+    const [showLocation, setShowLocation] = useState([]);
+    const [checkInDate, setCheckInDate] = useState(null);
+    const [checkOutDate, setCheckOutDate] = useState(null);
+    // Get current date
+    const currentDate = new Date();
+    // Set the minDate prop to the current date to disable yesterday and earlier dates
+    const minDate = currentDate;
+    // const highlightDates = (date) => {
+    //     if (checkInDate && checkOutDate) {
+    //         return date >= checkInDate && date <= checkOutDate;
+    //     } else {
+    //         return false;
+    //     }
+    // };
 
     //api to fetch search result
     const onSearch = (searchTerm) => {
@@ -49,7 +64,7 @@ export default function Landing() {
     }
 
     // Jalanin fungsi getAllLocations
-    React.useEffect(()=>{
+    React.useEffect(() => {
         getAllLocations()
     }, [inputLocation]);
 
@@ -77,46 +92,56 @@ export default function Landing() {
                         <form>
                             <div className="location-input">
                                 <label>Location</label>
-                                <input type="text" placeholder="Where are you going?" 
-                                onChange={(e)=>setInputLocation(e.target.value)}
-                                value={inputLocation}
+                                <input type="text" placeholder="Where are you going?"
+                                    onChange={(e) => setInputLocation(e.target.value)}
+                                    value={inputLocation}
                                 />
                                 <div className="dropdown">
-                                {showLocation.filter(item => {
-                                    const searchTerm = inputLocation.toLowerCase();
-                                    const city = item.city.toLowerCase(); 
-                                    return (searchTerm && city.startsWith(searchTerm) && city !== searchTerm);
-                                }
-                                ).slice(0,5) //will show only first 5 items di location input field
-                                .map((item)=>
-                                (<div 
-                                onClick={()=>onSearch(item.city)} 
-                                className="dropdown-row"
-                                key={item.city} 
-                                >{item.city}</div>))}
+                                    {showLocation.filter(item => {
+                                        const searchTerm = inputLocation.toLowerCase();
+                                        const city = item.city.toLowerCase();
+                                        return (searchTerm && city.startsWith(searchTerm) && city !== searchTerm);
+                                    }
+                                    ).slice(0, 5) //will show only first 5 items di location input field
+                                        .map((item) =>
+                                        (<div
+                                            onClick={() => onSearch(item.city)}
+                                            className="dropdown-row"
+                                            key={item.city}
+                                        >{item.city}</div>))}
                                 </div>
                             </div>
                             <div>
                                 <label>Check in</label>
-                                <input 
-                                type={inputCheckIn} 
-                                placeholder="Choose Date" onClick={OnBtnCheckIn}
-                                onChange={(e) => setInputCheckIn(e.target.value)}
+                                <DatePicker
+                                    selected={checkInDate}
+                                    onChange={(date) => setCheckInDate(date)}
+                                    dateFormat="dd/MM/yyyy"
+                                    placeholderText="Choose Date"
+                                    minDate={minDate}
+                                    // highlightDates={highlightDates}
+                                    // calendarClassName="highlight"
+                                    shouldCloseOnSelect={false}
                                 />
                             </div>
                             <div>
                                 <label>Check out</label>
-                                <input 
-                                type={inputCheckOut} 
-                                placeholder="Choose Date" onClick={OnBtnCheckOut}
-                                onChange={(e) => setInputCheckOut(e.target.value)}
+                                <DatePicker
+                                    selected={checkOutDate}
+                                    onChange={(date) => setCheckOutDate(date)}
+                                    dateFormat="dd/MM/yyyy"
+                                    placeholderText="Choose Date"
+                                    minDate={checkInDate ? new Date(checkInDate.getTime() + 24 * 60 * 60 * 1000) : undefined}
+                                    // highlightDates={highlightDates}
+                                    // calendarClassName="highlight"
+                                    shouldCloseOnSelect={false}
                                 />
                             </div>
                             <div>
                                 <label>Guest</label>
                                 <input type="text" placeholder="Add Guest" />
                             </div>
-                            <button type="submit">
+                            <button type="submit" style={{ background: "#D3212D" }}>
                                 <img src={Search} />
                             </button>
                         </form>

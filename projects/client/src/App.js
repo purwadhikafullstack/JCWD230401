@@ -18,6 +18,7 @@ import NotFound from "./Pages/NotFound";
 import Verification from "./Pages/Verification";
 import ProductDetail from "./Pages/ProductDetail/ProductDetail";
 import TransactionPage from "./Pages/TransactionPage";
+import EditProfile from "./Pages/EditProfile";
 
 function App() {
   const location = useLocation();
@@ -49,8 +50,11 @@ function App() {
 
   return (
     <>
-          {location.pathname === "/" && <Navbar /> || "/productdetail" && <Navbar />}
-        {location.pathname === "/dashboard" && roleId == 2 && <Navbar />}
+      {location.pathname === "/" && <Navbar />}
+      {location.pathname === "/editprofile" && <Navbar />}
+      {location.pathname === "/productdetail" && <Navbar />}
+      {location.pathname === "/dashboard" && roleId == 2 && <Navbar />}
+
       {
         // User
         roleId == 1 ? (
@@ -63,8 +67,9 @@ function App() {
             <Route path="/verifyaccount/:token" element={<Verification />} />
             <Route path="/" element={<Landing />} />
             <Route path="*" element={<NotFound />} />
-            <Route path="/productdetail" element={<ProductDetail />} /> 
-            <Route path="/transactionpage" element={<TransactionPage />} /> 
+            <Route path="/productdetail" element={<ProductDetail />} />
+            <Route path="/transactionpage" element={<TransactionPage />} />
+            <Route path="/editprofile" element={<EditProfile />} />
           </Routes>
         ) : // Tenant
         roleId == 2 ? (
@@ -78,7 +83,7 @@ function App() {
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/" element={<Landing />} />
             <Route path="*" element={<NotFound />} />
-            <Route path="/productdetail" element={<ProductDetail />} /> 
+            <Route path="/productdetail" element={<ProductDetail />} />
           </Routes>
         ) : (
           // Not logged in
@@ -91,7 +96,7 @@ function App() {
             <Route path="/verifyaccount/:token" element={<Verification />} />
             <Route path="/" element={<Landing />} />
             <Route path="*" element={<NotFound />} />
-            <Route path="/productdetail" element={<ProductDetail />} /> 
+            <Route path="/productdetail" element={<ProductDetail />} />
           </Routes>
         )
       }

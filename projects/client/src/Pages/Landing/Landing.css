@@ -19,7 +19,7 @@
 
 .search-bar{
   background: #fff;
-  width: 70%;
+  width: 80%;
   margin: 30px auto;
   padding: 6px 10px 6px 30px;
   border-radius: 10px;
@@ -37,7 +37,6 @@
   max-width: 160px;
 }
 .search-bar form button{
-  background: #D3212D;
   width: 55px;
   height: 55px;
   border-radius: 10%;
@@ -68,6 +67,9 @@
   cursor: pointer;
   text-align: start;
   margin: 2px 0;
+}
+.highlight {
+  background-color: #f5f5f5;
 }
 /* -------special-offers--------- */
 .special-offers{

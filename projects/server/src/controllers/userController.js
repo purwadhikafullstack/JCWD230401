@@ -128,6 +128,8 @@ module.exports = {
             image_profile,
             isSuspended,
             attempts,
+            gender,
+            birth
           } = getuser[0].dataValues;
           // GENERATE TOKEN ---> 400h buat gampang aja developnya jgn lupa diganti!
           let token = createToken({ id, roleId, isSuspended }, "400h"); //24 jam
@@ -142,6 +144,8 @@ module.exports = {
             roleId, //---> kirim or not?
             attempts,
             image_profile,
+            gender,
+            birth
           });
         } else {
           //3. jika salah passwordnya attempt + 1 sampe 5 kali nanti suspended
@@ -196,7 +200,7 @@ module.exports = {
           id: req.decrypt.id,
         },
       });
-      let { id, uuid, name, email, phone, roleId, image_profile, isSuspended, isVerified } =
+      let { id, uuid, name, email, phone, roleId, image_profile, isSuspended, isVerified, gender, birth } =
         getuser[0].dataValues;
       // GENERATE TOKEN ---> 400h buat gampang aja developnya jgn lupa diganti!
       let token = createToken({ id, roleId, isSuspended }, "400h"); //24 jam
@@ -211,6 +215,7 @@ module.exports = {
         roleId,
         isVerified,
         image_profile,
+        gender, birth
       });
     } catch (error) {
       console.log(error);
@@ -509,6 +514,36 @@ module.exports = {
           message: "Your account is already verified, you can continue to transaction page",
         });
       }
+    } catch (error) {
+      console.log(error);
+      next(error);
+    }
+  },
+
+  //10. EDIT PROFILE
+  editprofile: async (req, res, next) => {
+    try {
+      console.log("Decrypt token:", req.decrypt);
+      const { name, email, birth, gender } = req.body;
+      if(name || email || birth || gender){
+        await model.users.update(
+          req.body ,
+          {
+            where: {
+              id: req.decrypt.id,
+            },
+          }
+          );
+          return res.status(200).send({
+            success: true,
+            message: "Edit profile success ✅",
+          });
+        } else {
+          res.status(400).send({
+            success: false,
+            message: "Error❌: Cannot change user data",
+          });
+        }
     } catch (error) {
       console.log(error);
       next(error);
