@@ -9,6 +9,8 @@ const authSlice = createSlice({
     roleId: "",
     isVerified: "",
     image_profile: "https://ionicframework.com/docs/img/demos/avatar.svg",
+    birth: "",
+    gender: "",
   },
 
   reducers: {
@@ -18,10 +20,13 @@ const authSlice = createSlice({
         state.roleId = action.payload.roleId;
         state.isVerified = action.payload.isVerified;
         state.image_profile = action.payload.image_profile;
+        state.birth = action.payload.birth;
+        state.gender = action.payload.gender;
         console.log("Data roleId dari reducer :", state.roleId);
         console.log("Data isVerified dari reducer :", state.isVerified);
         console.log("Data image_profile dari reducer :", state.image_profile);
-
+        console.log("Data birth dari reducer :", state.birth);
+        console.log("Data gender dari reducer :", state.gender);
     },
     logoutAction: (state) => {
         state.name = "";
