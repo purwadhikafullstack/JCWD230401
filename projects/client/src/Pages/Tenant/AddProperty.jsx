@@ -119,7 +119,7 @@ function AddProperty(props) {
                 >
                     <h1>Add Listing</h1>
                 </Box>
-                <Box mt={"5"}>
+                <Box mt={"10"}>
                     <Box textAlign="left" fontSize={"3xl"} fontWeight="bold">
                         <h2>Basic Information</h2>
                     </Box>
@@ -264,6 +264,7 @@ function AddProperty(props) {
                                     border={"2px"}
                                     borderStyle={"dashed"}
                                     borderColor={"gray.300"}
+                                    borderRadius={"lg"}
                                     p={"4"}
                                 >
                                     <Button
@@ -304,28 +305,35 @@ function AddProperty(props) {
                                         mx={"4"}
                                         mb={"4"}
                                     >
-                                        <Text alignSelf={"center"}>
-                                            Your file: {fileProperty?.name}
-                                        </Text>
-                                        <Button
-                                            type="button"
-                                            display={"flex"}
-                                            flexDir="column"
-                                            h={"35px"}
-                                            w={"35px"}
-                                            variant="outline"
-                                            alignItems={"center"}
-                                            onClick={() =>
-                                                setFileProperty(null)
-                                            }
-                                        >
-                                            <Text fontSize={"xl"}>
-                                                <HiTrash
-                                                    fontWeight={"extrabold"}
-                                                    color="#D3212D"
-                                                />
-                                            </Text>
-                                        </Button>
+                                        {fileProperty ? (
+                                            <>
+                                                <Text alignSelf={"center"}>
+                                                    Your file:{" "}
+                                                    {fileProperty?.name}
+                                                </Text>
+                                                <Button
+                                                    type="button"
+                                                    display={"flex"}
+                                                    flexDir="column"
+                                                    h={"35px"}
+                                                    w={"35px"}
+                                                    variant="outline"
+                                                    alignItems={"center"}
+                                                    onClick={() =>
+                                                        setFileProperty(null)
+                                                    }
+                                                >
+                                                    <Text fontSize={"xl"}>
+                                                        <HiTrash
+                                                            fontWeight={
+                                                                "extrabold"
+                                                            }
+                                                            color="#D3212D"
+                                                        />
+                                                    </Text>
+                                                </Button>
+                                            </>
+                                        ) : null}
                                     </Flex>
                                 </Box>
                             </Box>
