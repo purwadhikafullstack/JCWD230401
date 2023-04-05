@@ -8,7 +8,7 @@ const {
   resetpassword,
   registerastenant,
   verify,
-  sendverificationemail, editprofile
+  sendverificationemail, editprofile, updateprofileimage
 } = require("../controllers/userController");
 const { readToken } = require("../helper/jwt");
 const uploader = require("../helper/uploader");
@@ -27,5 +27,8 @@ route.post("/registerastenant"
 route.patch("/verifyaccount", readToken, verify);
 route.post("/sendverificationemail", readToken, sendverificationemail);
 route.patch("/editprofile", readToken, checkUser, editprofile);
+route.patch("/updateprofileimage", readToken, uploader('/profileImage', 'PRF').array('image_profile', 1), updateprofileimage);
+
+
 
 module.exports = route;

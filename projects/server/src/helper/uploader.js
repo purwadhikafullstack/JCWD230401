@@ -23,6 +23,7 @@ const uploader = (directory, filePreFix) => {
     },
     filename: (req, file, cb) => {
       console.log("cek file original name :", file.originalname);
+      console.log("cek file  :", file);
       let ext =
         file.originalname.split(".")[file.originalname.split(".").length - 1];
       console.log("check extension : ", ext);
@@ -35,17 +36,23 @@ const uploader = (directory, filePreFix) => {
 
   //3. file filter config
   const fileFilter = (req, file, cb) => {
-    const extFilter = /\.(jpg|jpeg|png)/;
+    const extFilter = /\.(jpg|gif|png)/;
     let checkExt = file.originalname.toLowerCase().match(extFilter);
     if (checkExt) {
       cb(null, true);
     } else {
-      cb(new Error("Your file extension is denied ❌"), false);
+      cb(null, false);
+      return cb(new Error("Only .jpg, .png, and .gif format allowed!"));
     }
   };
-
-  //4. return multer
-  return multer({storage, fileFilter})
+  
+  //4. set file size limit
+  const limits = {
+    fileSize: 1024 * 1024, // 1 MB
+  };
+  
+  //5. return multer
+  return multer({ storage, fileFilter, limits });
 };
 
 module.exports = uploader;

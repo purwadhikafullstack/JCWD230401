@@ -69,15 +69,15 @@ export default function Landing() {
     }, [inputLocation]);
 
     // Check In Check Out
-    const [inputCheckIn, setInputCheckIn] = useState('');
-    const [inputCheckOut, setInputCheckOut] = useState('');
+    // const [inputCheckIn, setInputCheckIn] = useState('');
+    // const [inputCheckOut, setInputCheckOut] = useState('');
 
-    const OnBtnCheckIn = () => {
-        setInputCheckIn('date');
-    };
-    const OnBtnCheckOut = () => {
-        setInputCheckOut('date');
-    };
+    // const OnBtnCheckIn = () => {
+    //     setInputCheckIn('date');
+    // };
+    // const OnBtnCheckOut = () => {
+    //     setInputCheckOut('date');
+    // };
 
     return (
         <>
