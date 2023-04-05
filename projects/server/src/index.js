@@ -6,14 +6,14 @@ const cors = require("cors");
 const bearerToken = require('express-bearer-token')
 
 
-// console.log(__dirname);
+console.log("isi dari __dirname :" + __dirname); 
 const PORT = process.env.PORT || 8000;
 const app = express();
 app.use(express.json());
 app.use(cors());
 app.use(bearerToken());
 // #destination file storage(image/pdf/document)
-app.use("/", express.static(__dirname + "/src/public"));
+app.use("/", express.static(__dirname + "/public"));
 
 
 //#region API ROUTES

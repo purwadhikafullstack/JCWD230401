@@ -27,21 +27,24 @@ module.exports = {
           const uuid = uuidv4();
           const { name, email, password, phone } = req.body;
           //1. Create data baru
-          let regis = await model.users.create({
-            uuid,
-            name,
-            email,
-            phone,
-            password,
-            roleId: 1,
-          }, {
-            transaction: ormTransaction,
-          });
+          let regis = await model.users.create(
+            {
+              uuid,
+              name,
+              email,
+              phone,
+              password,
+              roleId: 1,
+            },
+            {
+              transaction: ormTransaction,
+            }
+          );
           console.log("ini isi dari regis :", regis);
           console.log("ini isi dari id regis :", regis.dataValues.id);
           let { id, roleId } = regis.dataValues;
-          // GENERATE TOKEN 
-          let token = createToken({ id, roleId }, "24h"); 
+          // GENERATE TOKEN
+          let token = createToken({ id, roleId }, "24h");
           // SEND VERIFICATION MAIL
           await transporter.sendMail({
             from: "Tracker admin",
@@ -63,9 +66,10 @@ module.exports = {
           await ormTransaction.commit();
           return res.status(200).send({
             success: true,
-            message: "register account success ✅ and you received an email to verify your account.",
+            message:
+              "register account success ✅ and you received an email to verify your account.",
             data: regis,
-            token //testing only
+            token, //testing only
           });
         } else {
           res.status(400).send({
@@ -129,7 +133,7 @@ module.exports = {
             isSuspended,
             attempts,
             gender,
-            birth
+            birth,
           } = getuser[0].dataValues;
           // GENERATE TOKEN ---> 400h buat gampang aja developnya jgn lupa diganti!
           let token = createToken({ id, roleId, isSuspended }, "400h"); //24 jam
@@ -145,7 +149,7 @@ module.exports = {
             attempts,
             image_profile,
             gender,
-            birth
+            birth,
           });
         } else {
           //3. jika salah passwordnya attempt + 1 sampe 5 kali nanti suspended
@@ -200,8 +204,19 @@ module.exports = {
           id: req.decrypt.id,
         },
       });
-      let { id, uuid, name, email, phone, roleId, image_profile, isSuspended, isVerified, gender, birth } =
-        getuser[0].dataValues;
+      let {
+        id,
+        uuid,
+        name,
+        email,
+        phone,
+        roleId,
+        image_profile,
+        isSuspended,
+        isVerified,
+        gender,
+        birth,
+      } = getuser[0].dataValues;
       // GENERATE TOKEN ---> 400h buat gampang aja developnya jgn lupa diganti!
       let token = createToken({ id, roleId, isSuspended }, "400h"); //24 jam
       // KEEP LOGIN SUCCESS
@@ -215,7 +230,8 @@ module.exports = {
         roleId,
         isVerified,
         image_profile,
-        gender, birth
+        gender,
+        birth,
       });
     } catch (error) {
       console.log(error);
@@ -431,18 +447,21 @@ module.exports = {
     }
   },
 
-  //8. ACCOUNT VERIFICATION 
+  //8. ACCOUNT VERIFICATION
   verify: async (req, res, next) => {
     try {
       console.log("Decrypt token:", req.decrypt);
       let checkverifieduser = await model.users.findAll({
         where: {
           id: req.decrypt.id,
-        }
+        },
       });
       // console.log("ini isi checkverifieduser :", checkverifieduser);
-      console.log("ini isi isVerified dari checkverifieduser :", checkverifieduser[0].dataValues.isVerified);
-      if(!checkverifieduser[0].dataValues.isVerified){
+      console.log(
+        "ini isi isVerified dari checkverifieduser :",
+        checkverifieduser[0].dataValues.isVerified
+      );
+      if (!checkverifieduser[0].dataValues.isVerified) {
         let updateStatus = await model.users.update(
           { isVerified: 1 },
           {
@@ -450,18 +469,18 @@ module.exports = {
               id: req.decrypt.id,
             },
           }
-          );
-          console.log("isi updateStatus : ", updateStatus);
-          return res.status(200).send({
-            success: true,
-            message: "Your Account has been Verified ✅",
-          });
-        } else {
-          res.status(400).send({
-            success: false,
-            message: "Your account is already verified",
-          });
-        }
+        );
+        console.log("isi updateStatus : ", updateStatus);
+        return res.status(200).send({
+          success: true,
+          message: "Your Account has been Verified ✅",
+        });
+      } else {
+        res.status(400).send({
+          success: false,
+          message: "Your account is already verified",
+        });
+      }
     } catch (error) {
       console.log(error);
       next(error);
@@ -476,15 +495,18 @@ module.exports = {
       let checkverifieduser = await model.users.findAll({
         where: {
           id: req.decrypt.id,
-        }
+        },
       });
       console.log("ini isi checkverifieduser :", checkverifieduser);
-      console.log("ini isi checkverifieduser isVerified :", checkverifieduser[0].dataValues.isVerified);
+      console.log(
+        "ini isi checkverifieduser isVerified :",
+        checkverifieduser[0].dataValues.isVerified
+      );
       //if user isnt verified yet, send verification email
-      if(!checkverifieduser[0].dataValues.isVerified){
-        let { id, roleId, name } = checkverifieduser[0].dataValues; 
-        // GENERATE TOKEN 
-        let token = createToken({ id, roleId }, "24h"); 
+      if (!checkverifieduser[0].dataValues.isVerified) {
+        let { id, roleId, name } = checkverifieduser[0].dataValues;
+        // GENERATE TOKEN
+        let token = createToken({ id, roleId }, "24h");
         // SEND VERIFICATION MAIL
         await transporter.sendMail({
           from: "Tracker admin",
@@ -505,13 +527,16 @@ module.exports = {
         });
         return res.status(200).send({
           success: true,
-          message: "You received an email to verify your account. Please check your email.",
+          message:
+            "You received an email to verify your account. Please check your email.",
         });
-      } else { 
+      } else {
         //message jgn dikeluarin (hidden?), continue lsg ke transaction page
-        res.status(400).send({ //what should it be? 
+        res.status(400).send({
+          //what should it be?
           success: false,
-          message: "Your account is already verified, you can continue to transaction page",
+          message:
+            "Your account is already verified, you can continue to transaction page",
         });
       }
     } catch (error) {
@@ -525,28 +550,64 @@ module.exports = {
     try {
       console.log("Decrypt token:", req.decrypt);
       const { name, email, birth, gender } = req.body;
-      if(name || email || birth || gender){
-        await model.users.update(
-          req.body ,
-          {
-            where: {
-              id: req.decrypt.id,
-            },
-          }
-          );
-          return res.status(200).send({
-            success: true,
-            message: "Edit profile success ✅",
-          });
-        } else {
-          res.status(400).send({
-            success: false,
-            message: "Error❌: Cannot change user data",
-          });
-        }
+      if (name || email || birth || gender) {
+        await model.users.update(req.body, {
+          where: {
+            id: req.decrypt.id,
+          },
+        });
+        return res.status(200).send({
+          success: true,
+          message: "Edit profile success ✅",
+        });
+      } else {
+        res.status(400).send({
+          success: false,
+          message: "Error❌: Cannot change user data",
+        });
+      }
     } catch (error) {
       console.log(error);
       next(error);
     }
-  }
+  },
+
+  //11. UPDATE PROFILE IMAGE
+  updateprofileimage: async (req, res, next) => {
+    try {
+      //1. get current profile image
+      let get = await model.users.findAll({
+        where: {
+          id: req.decrypt.id,
+        },
+        attributes: ["image_profile"],
+      });
+      console.log(
+        "ini isi dari get image_profile updateprofileimage: ",
+        get[0].dataValues.image_profile
+      );
+      //2. if old image exists, delete old replace with new 
+      if (fs.existsSync(`./src/public${get[0].dataValues.image_profile}`)) {
+        fs.unlinkSync(`./src/public${get[0].dataValues.image_profile}`);
+      }
+      await model.users.update(
+        {
+          image_profile: `/profileImage/${req.files[0]?.filename}`,
+        },
+        {
+          where: { id: req.decrypt.id },
+        }
+      );
+      res.status(200).send({
+        success: true,
+        message: "Profile photo changed ✅",
+        profileimage: `/profileImage/${req.files[0]?.filename}`, 
+      });
+    } catch (error) {
+      //delete image if encountered error
+      fs.unlinkSync(`./src/public/profileImage/${req.files[0].filename}`);
+      console.log(error);
+      next(error);
+    }
+  },
 };
