@@ -263,7 +263,7 @@ module.exports = {
   changepassword: async (req, res, next) => {
     try {
       //1. get old password from user yg login
-      let getData = await model.users_lama.findAll({
+      let getData = await model.user.findAll({
         where: {
           id: req.decrypt.id,
         },
@@ -291,7 +291,7 @@ module.exports = {
                 salt
               );
               //5. update the password field in the database with the value of req.body.newPassword & read token
-              await model.users_lama.update(
+              await model.user.update(
                 { password: req.body.newPassword },
                 {
                   where: {
