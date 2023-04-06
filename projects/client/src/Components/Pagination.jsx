@@ -38,15 +38,15 @@ export default function Pagination(props) {
         pageRangeDisplayed={3} // number of pages between breaklabel
         onPageChange={props.paginate} // function to call when number button is clicked
         // =======================================================================smua yang dibawah ini styling aja
-        containerClassName={"pagination"}
-        pageClassName={"page-item"}
-        pageLinkClassName={"page-link"}
-        previousClassName={"page-item"}
-        previousLinkClassName={"page-link"}
-        nextClassName={"page-item"}
-        nextLinkClassName={"page-link "}
-        breakClassName={"page-item"}
-        breakLinkClassName={"page-link"}
+        // containerClassName={"pagination"}
+        // pageClassName={"page-item"}
+        // pageLinkClassName={"page-link"}
+        // previousClassName={"page-item"}
+        // previousLinkClassName={"page-link"}
+        // nextClassName={"page-item"}
+        // nextLinkClassName={"page-link "}
+        // breakClassName={"page-item"}
+        // breakLinkClassName={"page-link"}
         activeClassName={"active"}
       />
     </Flex>

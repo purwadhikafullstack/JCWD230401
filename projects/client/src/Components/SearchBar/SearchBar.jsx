@@ -38,7 +38,7 @@ export default function SearchBar(props) {
                     <div>
                         <label>Check in</label>
                         <input
-                            type={props.inputCheckIn}
+                            type={'date'}
                             placeholder="Choose Date" onClick={props.OnBtnCheckIn}
                             onChange={(e) => props.setInputCheckIn(e.target.value)}
                             defaultValue={props.stateUseLocation.inputCheckIn}
@@ -47,7 +47,7 @@ export default function SearchBar(props) {
                     <div>
                         <label>Check out</label>
                         <input
-                            type={props.inputCheckOut}
+                            type={'date'}
                             placeholder="Choose Date" onClick={props.OnBtnCheckOut}
                             onChange={(e) => props.setInputCheckOut(e.target.value)}
                             defaultValue={props.stateUseLocation.inputCheckOut}
@@ -61,7 +61,7 @@ export default function SearchBar(props) {
                         onClick={() => {
                             props.setPage(0);
                             props.getAllProperty();
-                            props.setCity("")
+                            // props.setCity("")s
                         }}>
                         {/* <img src={Search} /> */}
                     </button>

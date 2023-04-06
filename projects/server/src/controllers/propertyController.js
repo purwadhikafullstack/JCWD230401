@@ -4,7 +4,7 @@ const { v4: uuidv4 } = require("uuid");
 const bcrypt = require("bcrypt");
 const { createToken } = require("../helper/jwt");
 const transporter = require("../helper/nodemailer");
-const con =  require('../helper/dbCon')
+const con = require('../helper/dbCon')
 
 
 module.exports = {
@@ -12,7 +12,10 @@ module.exports = {
         let get = await model.property.findAll({
             include: [
                 { model: model.picture_property },
-                { model: model.property_location, include: [{ model: model.province }] },
+                {
+                    model: model.property_location,
+                    include: [{ model: model.province }]
+                },
                 {
                     model: model.room,
                     order: [['price', 'DESC']] // belom kelar msh tunggu dri mas abdi
@@ -25,7 +28,7 @@ module.exports = {
     filterProperty: async (req, res, next) => {
         try {
             console.log("req.query", req.query)
-            let { page, size, name, sortby, order, category, city } = req.query;
+            let { page, size, name, sortby, order, category, city, start, end } = req.query;
             if (!page) {
                 page = 0;
             }
@@ -39,31 +42,28 @@ module.exports = {
                 order = 'ASC'
             }
 
+            if (!start) {
+                start = new Date().toISOString().split('T')[0];
+            }
+
+            if (!end) {
+                end = new Date()
+                let oneDayInMs = 24 * 60 * 60 * 1000; // 1 day in milliseconds
+                end = new Date(end.getTime() + oneDayInMs).toISOString().split('T')[0];
+                console.log("endd", end);
+            }
+
             let get = await model.property.findAndCountAll({
-                offset: parseInt(page * size),
-                limit: parseInt(size),
+                // offset: parseInt(page * size),
+                // limit: parseInt(size),
                 distinct: true,
                 where: { property: { [sequelize.Op.like]: `%${name}%` } },
                 include: [
                     {
-                        model: model.room, attributes: ['id', 'price'], required: true, order: [[model.room, 'price', 'asc']],
-                        include: [{
-                            model: model.order,
-                            required: false,
-                            where: {
-                                [sequelize.Op.or]: [
-                                   { id: {
-                                        [sequelize.Op.notIn]: [
-                                            sequelize.literal(`SELECT roomId FROM orders WHERE start_date >= '2023-04-03' AND end_date <= '2023-04-06' OR start_date is null and end_date is null`)
-                                        ]
-                                    }},
-                                    {
-                                        id: null
-                                    }
-
-                                ]
-                            },
-                        }]
+                        model: model.room,
+                        attributes: ['id', 'price'],
+                        required: true,
+                        order: [[model.room, 'price', 'asc']],
                     },
                     {
                         model: model.picture_property, required: true, attributes: ['picture']
@@ -77,70 +77,130 @@ module.exports = {
                 ],
                 order: sortby == 'property' ? [[sortby, order]] : [[model.room, sortby, order]]
             })
-            console.log("getttttt filter categoryyyy", get)
+
+            const query = `
+            Select r.*, o.start_date, o.end_date FROM rooms r left join orders o on r.id=o.roomId 
+            WHERE start_date is null OR start_date < '${start}' OR start_date > '${end}' OR end_date < '${start}' OR end_date > '${end}' order by r.propertyId;`
+            const getAvailable = await con.query(query, {
+                type: sequelize.QueryTypes.SELECT
+            })
+            let newData = [];
+            let plainObj = get.rows.map(e => e.get({ plain: true })); // merubah object sequelize to plain object javascript
+            plainObj.forEach((val, i) => {
+                let temp = [];
+                val.rooms.forEach((valData, idx) => {
+                    let check = getAvailable.filter((e) => {
+                        return valData.id == e.id
+                    })
+                    if (check.length) {
+                        temp.push(check[0])
+                    }
+                });
+                if (temp.length) {
+                    newData.push({
+                        ...val, rooms: temp
+                    })
+                };
+            });
+
+            // let filterData =  newData.slice((page - 1) * size, page * size )
+            let filterData =  newData.slice(page * size, page * size + size)
+            console.log("filter DATAA", filterData)
+
             return res.status(200).send({
-                data: get.rows,
-                datanum: get.count,
+                data: filterData,
+                datanum: newData.length
             })
         } catch (error) {
             console.log(error);
             next(error);
         }
     },
-    testing: async (req, res, next) => {
+    getRoomAvailable: async (req, res, next) => {
         try {
-            // let get = await model.room_category.findAll({
-            //     include: [{
-            //         model: model.room, where: {
-            //             // id: {
-            //             //     [sequelize.Op.notIn]: sequelize.literal(`
-            //             //     SELECT orders.roomId FROM orders JOIN transactions ON orders.transactionId = transactions.id WHERE transactions.transaction_statusId = 2`)
-            //             // }
-            //         }
-            //     }]
-            // })
-
-            // const con = new sequelize(
-            //     'tempatku_database',
-            //     'daniel',
-            //     '1234567890',
-            //     {
-            //         host: "localhost",
-            //         dialect: "mysql",
-            //         operatorsAliases: false,
-            //         pool: {
-            //             max: 5,
-            //             min: 0,
-            //             acquire: 30000,
-            //             idle: 10000
-            //         },
-            //     },
-            // );
-
-            // const query = `select * from room_categories join rooms on room_categories.id = rooms.room_categoryId join picture_rooms on rooms.id = picture_rooms.roomId where rooms.id not in (select roomId from orders join transactions on orders.transactionId = transactions.id where transaction_statusId in (1,2))`
-            // const query = `select * from room_categories join rooms on room_categories.id = rooms.room_categoryId where rooms.id not in (select roomId from orders join transactions on orders.transactionId = transactions.id where transaction_statusId in (1,2) and not (start_date >= '2023-04-04' and end_date <= '2023-04-05'));`
-
             // query get available room only !
             // const query = `select * from rooms where propertyId = 2 and rooms.id not in (select roomId from orders where start_date >= '2023-04-03' and end_date <= '2023-04-06')`
             // const get = await con.query(query, { type: sequelize.QueryTypes.SELECT })
             // console.log('ini gett queryyy', get)
             // res.status(200).send(get)
 
-            // GET ROOM DETAIL DONE !!!
+            if (!req.body.start) {
+                req.body.start = new Date().toISOString().split('T')[0];
+            }
+
+            if (!req.body.end) {
+                req.body.end = new Date()
+                let oneDayInMs = 24 * 60 * 60 * 1000; // 1 day in milliseconds
+                req.body.end = new Date(req.body.end.getTime() + oneDayInMs).toISOString().split('T')[0];
+                console.log("endd", req.body.end);
+            }
+
+            let getPropertyId = await model.property.findAll({
+                where: {
+                    uuid: req.body.uuid
+                }
+            });
+
             let get = await model.room.findAll({
                 where: {
-                    propertyId: 2,
+                    propertyId: getPropertyId[0].dataValues.id,
                     id: {
                         [sequelize.Op.notIn]: [
-                            sequelize.literal(`SELECT roomId FROM orders WHERE start_date >= '2023-04-05' AND end_date <= '2023-04-06'`)
+                            sequelize.literal(`SELECT roomId FROM orders WHERE start_date >= '${req.body.start}' AND end_date <= '${req.body.end}'`)
                         ]
                     }
-                }
+                },
+                include: [
+                    {model: model.room_category, attributes: ['name']},
+                    {model: model.picture_room, attributes: ['picture']},
+                ]
             });
             res.status(200).send(get)
         } catch (error) {
             console.log(error);
             next(error)
         }
+    },
+    getPropertyDetail: async (req, res, next) => {
+        let get = await model.property.findAll({
+            include: [
+                {
+                    model: model.room,
+                    attributes: ['price']
+                },
+                {
+                    model: model.property_location, include: [{ model: model.regency }]
+                },
+                {
+                    model: model.picture_property
+
+                },
+                {
+                    model: model.users, attributes: ['name']
+                },
+
+            ],
+            order: [[model.room, 'price', 'asc']],
+            where: {
+                uuid: req.body.uuid
+            },
+
+        });
+        res.status(200).send(get)
+    },
+    getPicturePropertyDetail: async (req,res,next) => {
+        let getProperty = await model.property.findAll({
+            where: {
+                uuid: req.body.uuid
+            }
+        });
+        let getPictureProperty = await model.picture_property.findAll({
+            where: {
+                propertyId : getProperty[0].dataValues.id
+            }
+        });
+
+        res.status(200).send(getPictureProperty)
+        console.log("getPictureProperty",getPictureProperty);
     }
 }
