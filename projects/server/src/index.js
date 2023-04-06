@@ -6,7 +6,7 @@ const cors = require("cors");
 const bearerToken = require('express-bearer-token')
 
 
-console.log("isi dari __dirname :" + __dirname); 
+// console.log("isi dari __dirname :" + __dirname); 
 const PORT = process.env.PORT || 8000;
 const app = express();
 app.use(express.json());

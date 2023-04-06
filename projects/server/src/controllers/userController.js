@@ -103,18 +103,21 @@ module.exports = {
   //2. LOGIN
   login: async (req, res, next) => {
     try {
-      //1. find email or phone from db  //bisa include lsg sama tabel user detail
-      let getuser = await model.users_lama.findAll({
+      //1. find email or phone from db  
+      let getuser = await model.user.findAll({
         where: sequelize.or(
           { email: req.body.email },
           { phone: req.body.phone }
         ),
+        include: [{ model: model.user_detail }]
       });
       console.log("ini getuser buat login :", getuser);
       console.log(
         "ini getuser[0].dataValues.attempts buat login :",
         getuser[0].dataValues.attempts
       );
+      console.log("ini name dari user_detail getuser: ", getuser[0].user_detail.name);
+      console.log("ini isi dari user_detail tabel getuser: ", getuser[0].user_detail);
       //2. if found compare hashed password with req.body.password
       if (getuser.length > 0) {
         let checkpw = bcrypt.compareSync(
@@ -124,7 +127,7 @@ module.exports = {
         //3. if isSuspended false 0 & checkpw true 1 ? reset pw attempts : pw attempts + 1
         if (checkpw && getuser[0].dataValues.isSuspended == 0) {
           //4. update the attempts field in the database with 0
-          await model.users_lama.update(
+          await model.user.update(
             { attempts: 0 },
             {
               where: {
@@ -135,16 +138,18 @@ module.exports = {
           let {
             id,
             uuid,
-            name,
             email,
             phone,
             roleId,
-            image_profile,
             isSuspended,
             attempts,
-            gender,
-            birth,
           } = getuser[0].dataValues;
+          let {
+            name,
+            birth,
+            gender,
+            image_profile,
+          } = getuser[0].user_detail
           // GENERATE TOKEN ---> 400h buat gampang aja developnya jgn lupa diganti!
           let token = createToken({ id, roleId, isSuspended }, "400h"); //24 jam
           // LOGIN SUCCESS
@@ -155,7 +160,7 @@ module.exports = {
             name,
             email,
             phone,
-            roleId, //---> kirim or not?
+            roleId, 
             attempts,
             image_profile,
             gender,
@@ -164,7 +169,7 @@ module.exports = {
         } else {
           //3. jika salah passwordnya attempt + 1 sampe 5 kali nanti suspended
           if (getuser[0].dataValues.attempts < 5) {
-            await model.users_lama.update(
+            await model.user.update(
               { attempts: getuser[0].dataValues.attempts + 1 },
               {
                 where: {
@@ -179,7 +184,7 @@ module.exports = {
               }`,
             });
           } else {
-            await model.users_lama.update(
+            await model.user.update(
               { isSuspended: 1 },
               {
                 where: {
@@ -199,15 +204,6 @@ module.exports = {
           message: "Account not found ❌",
         });
       }
-    } catch (error) {
-      console.log(error);
-      next(error);
-    }
-  },
-
-  //2.2 LOGIN UPDATED
-  login2: async (req, res, next) => {
-    try {
     } catch (error) {
       console.log(error);
       next(error);
