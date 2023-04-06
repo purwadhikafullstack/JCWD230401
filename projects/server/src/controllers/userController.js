@@ -387,7 +387,7 @@ module.exports = {
         //1. hash right before update
         req.body.newPassword = bcrypt.hashSync(req.body.newPassword, salt);
         //2. update the password & isSuspended
-        await model.users_lama.update(
+        await model.user.update(
           { password: req.body.newPassword, isSuspended: 0 },
           {
             //read token
