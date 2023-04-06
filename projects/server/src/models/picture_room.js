@@ -21,5 +21,8 @@ module.exports = (sequelize, DataTypes) => {
     sequelize,
     modelName: 'picture_room',
   });
+  picture_room.associate = (models) => {
+    picture_room.belongsTo(models.room, { foreignKey: 'roomId' });
+}
   return picture_room;
 };

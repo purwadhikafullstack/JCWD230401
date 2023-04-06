@@ -21,8 +21,8 @@ app.use("/", express.static(__dirname + "/public"));
 const userRouter = require('./routers/userRouter');
 app.use('/user', userRouter);
 
-const locationRouter = require('./routers/locationRouter');
-app.use('/location', locationRouter);
+// const locationRouter = require('./routers/locationRouter');
+// app.use('/location', locationRouter);
 // ===========================
 // NOTE : Add your routes here
 

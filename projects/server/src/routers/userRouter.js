@@ -8,7 +8,11 @@ const {
   resetpassword,
   registerastenant,
   verify,
-  sendverificationemail, editprofile, updateprofileimage
+  sendverificationemail, 
+  editprofile, 
+  updateprofileimage,
+  //sesuai erd untuk testing
+  login2,
 } = require("../controllers/userController");
 const { readToken } = require("../helper/jwt");
 const uploader = require("../helper/uploader");
@@ -29,6 +33,8 @@ route.post("/sendverificationemail", readToken, sendverificationemail);
 route.patch("/editprofile", readToken, checkUser, editprofile);
 route.patch("/updateprofileimage", readToken, uploader('/profileImage', 'PRF').array('image_profile', 1), updateprofileimage);
 
+//sesuai erd untuk testing
+route.post("/auth2", checkUser, login2);
 
 
 module.exports = route;

@@ -82,11 +82,11 @@ export default function EditProfile(props) {
             if (profileImage.size > 1000000) {
                 throw new Error("Image size should not exceed 1MB");
             }
-            // image has to be .jpg .png .gif (ganti .gif jd .jpeg in the mean time)
+            // image has to be .jpg .png .gif (.jpg = .jpeg)
             if (
-                !["image/jpg", "image/png", "image/jpeg"].includes(profileImage.type)
+                !["image/jpg", "image/png", "image/jpeg", "image/gif"].includes(profileImage.type)
             ) {
-                throw new Error("Only .jpg, .png, and .jpeg format allowed!");
+                throw new Error("Only .jpg, .png, .gif, and .jpeg format allowed!");
             }
             formData.append("image_profile", profileImage);
             console.log("ini isi dari formData", formData);
