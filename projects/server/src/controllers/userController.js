@@ -78,7 +78,8 @@ module.exports = {
             success: true,
             message:
               "register account success ✅ and you received an email to verify your account.",
-            data: regis, regisUserDetail,
+            data: regis,
+            regisUserDetail,
             token, //testing only
           });
         } else {
@@ -103,21 +104,27 @@ module.exports = {
   //2. LOGIN
   login: async (req, res, next) => {
     try {
-      //1. find email or phone from db  
+      //1. find email or phone from db
       let getuser = await model.user.findAll({
         where: sequelize.or(
           { email: req.body.email },
           { phone: req.body.phone }
         ),
-        include: [{ model: model.user_detail }]
+        include: [{ model: model.user_detail }],
       });
       console.log("ini getuser buat login :", getuser);
       console.log(
         "ini getuser[0].dataValues.attempts buat login :",
         getuser[0].dataValues.attempts
       );
-      console.log("ini name dari user_detail getuser: ", getuser[0].user_detail.name);
-      console.log("ini isi dari user_detail tabel getuser: ", getuser[0].user_detail);
+      console.log(
+        "ini name dari user_detail getuser: ",
+        getuser[0].user_detail.name
+      );
+      console.log(
+        "ini isi dari user_detail tabel getuser: ",
+        getuser[0].user_detail
+      );
       //2. if found compare hashed password with req.body.password
       if (getuser.length > 0) {
         let checkpw = bcrypt.compareSync(
@@ -145,12 +152,7 @@ module.exports = {
             attempts,
             isVerified,
           } = getuser[0].dataValues;
-          let {
-            name,
-            birth,
-            gender,
-            image_profile,
-          } = getuser[0].user_detail
+          let { name, birth, gender, image_profile } = getuser[0].user_detail;
           // GENERATE TOKEN ---> 400h buat gampang aja developnya jgn lupa diganti!
           let token = createToken({ id, roleId, isSuspended }, "400h"); //24 jam
           // LOGIN SUCCESS
@@ -161,7 +163,7 @@ module.exports = {
             name,
             email,
             phone,
-            roleId, 
+            roleId,
             attempts,
             isVerified,
             image_profile,
@@ -220,23 +222,11 @@ module.exports = {
         where: {
           id: req.decrypt.id,
         },
-        include: [{ model: model.user_detail }]
+        include: [{ model: model.user_detail }],
       });
-      let {
-        id,
-        uuid,
-        email,
-        phone,
-        roleId,
-        isSuspended,
-        isVerified,
-      } = getuser[0].dataValues;
-      let {
-        name,
-        birth,
-        gender,
-        image_profile,
-      } = getuser[0].user_detail
+      let { id, uuid, email, phone, roleId, isSuspended, isVerified } =
+        getuser[0].dataValues;
+      let { name, birth, gender, image_profile } = getuser[0].user_detail;
       // GENERATE TOKEN ---> 400h buat gampang aja developnya jgn lupa diganti!
       let token = createToken({ id, roleId, isSuspended }, "400h"); //24 jam
       // KEEP LOGIN SUCCESS
@@ -343,10 +333,13 @@ module.exports = {
         where: {
           email: req.body.email,
         },
-        include: [{ model: model.user_detail }]
+        include: [{ model: model.user_detail }],
       });
       console.log("ini getData buat forgot pw :", getData);
-      console.log("ini isi dari user_detail tabel getData: ", getData[0].user_detail);
+      console.log(
+        "ini isi dari user_detail tabel getData: ",
+        getData[0].user_detail
+      );
       //2. create token to send by email
       let { id, roleId, isSuspended } = getData[0].dataValues;
       let { name } = getData[0].user_detail;
@@ -415,10 +408,11 @@ module.exports = {
 
   //7. REGISTER AS TENANT
   registerastenant: async (req, res, next) => {
+    const ormTransaction = await model.sequelize.transaction();
     try {
       console.log("req.body : ", req.body);
       console.log("req.files  : ", req.files);
-      let checkExistingUser = await model.users_lama.findAll({
+      let checkExistingUser = await model.user.findAll({
         where: sequelize.or(
           { email: req.body.email },
           { phone: req.body.phone }
@@ -432,19 +426,35 @@ module.exports = {
             console.log("Check data after hash password :", req.body); //testing purposes
             const uuid = uuidv4();
             const { name, email, password, phone } = req.body;
-            let regis = await model.users_lama.create({
-              uuid,
-              name,
-              email,
-              phone,
-              image_ktp: `/imgIdCard/${req.files[0]?.filename}`,
-              password,
-              roleId: 2,
-            });
+            let regis = await model.user.create(
+              {
+                uuid,
+                email,
+                phone,
+                password,
+                roleId: 2,
+              },
+              {
+                transaction: ormTransaction,
+              }
+            );
+            console.log(`File path: ./public/imgIdCard/${req.files[0]?.filename}`);
+            let regisUserDetail = await model.user_detail.create(
+              {
+                uuid,
+                name,
+                image_ktp: `/imgIdCard/${req.files[0]?.filename}`,
+                userId: regis.id, // Set userId to the id of the newly created user
+              },
+              {
+                transaction: ormTransaction,
+              }
+            );
+            await ormTransaction.commit();
             return res.status(200).send({
               success: true,
               message: "register account success ✅",
-              data: regis,
+              data: regis, regisUserDetail
             });
           } else {
             res.status(400).send({
@@ -455,7 +465,7 @@ module.exports = {
         } else {
           res.status(400).send({
             success: false,
-            message: "Error❌: Image file is required",
+            message: "Error❌: Id card image file is required",
           });
         }
       } else {
@@ -465,6 +475,9 @@ module.exports = {
         });
       }
     } catch (error) {
+      await ormTransaction.rollback();
+       //delete image if encountered error ---> DOES NOT WORK
+       fs.unlinkSync(`./src/public/imgIdCard/${req.files[0].filename}`);
       console.log(error);
       next(error);
     }
