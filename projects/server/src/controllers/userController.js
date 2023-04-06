@@ -528,19 +528,25 @@ module.exports = {
     try {
       console.log("Decrypt token:", req.decrypt);
       //find user by read token from login
-      let checkverifieduser = await model.users_lama.findAll({
+      let checkverifieduser = await model.user.findAll({
         where: {
           id: req.decrypt.id,
         },
+        include: [{ model: model.user_detail }],
       });
       console.log("ini isi checkverifieduser :", checkverifieduser);
       console.log(
         "ini isi checkverifieduser isVerified :",
         checkverifieduser[0].dataValues.isVerified
       );
+      console.log(
+        "ini isi dari user_detail tabel checkverifieduser: ",
+        checkverifieduser[0].user_detail
+      );
       //if user isnt verified yet, send verification email
       if (!checkverifieduser[0].dataValues.isVerified) {
-        let { id, roleId, name } = checkverifieduser[0].dataValues;
+        let { id, roleId } = checkverifieduser[0].dataValues;
+        let { name } = checkverifieduser[0].user_detail;
         // GENERATE TOKEN
         let token = createToken({ id, roleId }, "24h");
         // SEND VERIFICATION MAIL
