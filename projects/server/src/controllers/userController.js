@@ -339,15 +339,18 @@ module.exports = {
   forgotpassword: async (req, res, next) => {
     try {
       //1. get user data by email
-      let getData = await model.users_lama.findAll({
+      let getData = await model.user.findAll({
         where: {
           email: req.body.email,
         },
+        include: [{ model: model.user_detail }]
       });
-      // console.log("ini getData buat forgot pw :", getData);
-      //2. create token to send by email ---> 400h buat gampang aja developnya
-      let { id, name, roleId, isSuspended } = getData[0].dataValues;
-      let token = createToken({ id, roleId, isSuspended }, "400h"); // apa aja yg jd token? //1 jam (forgot pw dan verifikasi)
+      console.log("ini getData buat forgot pw :", getData);
+      console.log("ini isi dari user_detail tabel getData: ", getData[0].user_detail);
+      //2. create token to send by email
+      let { id, roleId, isSuspended } = getData[0].dataValues;
+      let { name } = getData[0].user_detail;
+      let token = createToken({ id, roleId, isSuspended }, "1h"); // apa aja yg jd token? //1 jam (forgot pw dan verifikasi)
       //3. send reset pw email
       await transporter.sendMail({
         from: "Tracker admin",
