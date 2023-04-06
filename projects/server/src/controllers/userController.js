@@ -143,6 +143,7 @@ module.exports = {
             roleId,
             isSuspended,
             attempts,
+            isVerified,
           } = getuser[0].dataValues;
           let {
             name,
@@ -162,6 +163,7 @@ module.exports = {
             phone,
             roleId, 
             attempts,
+            isVerified,
             image_profile,
             gender,
             birth,
@@ -214,24 +216,27 @@ module.exports = {
   keeplogin: async (req, res, next) => {
     try {
       console.log("Decrypt token:", req.decrypt);
-      let getuser = await model.users_lama.findAll({
+      let getuser = await model.user.findAll({
         where: {
           id: req.decrypt.id,
         },
+        include: [{ model: model.user_detail }]
       });
       let {
         id,
         uuid,
-        name,
         email,
         phone,
         roleId,
-        image_profile,
         isSuspended,
         isVerified,
-        gender,
-        birth,
       } = getuser[0].dataValues;
+      let {
+        name,
+        birth,
+        gender,
+        image_profile,
+      } = getuser[0].user_detail
       // GENERATE TOKEN ---> 400h buat gampang aja developnya jgn lupa diganti!
       let token = createToken({ id, roleId, isSuspended }, "400h"); //24 jam
       // KEEP LOGIN SUCCESS
