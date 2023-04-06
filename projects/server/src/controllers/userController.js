@@ -487,7 +487,7 @@ module.exports = {
   verify: async (req, res, next) => {
     try {
       console.log("Decrypt token:", req.decrypt);
-      let checkverifieduser = await model.users_lama.findAll({
+      let checkverifieduser = await model.user.findAll({
         where: {
           id: req.decrypt.id,
         },
@@ -498,7 +498,7 @@ module.exports = {
         checkverifieduser[0].dataValues.isVerified
       );
       if (!checkverifieduser[0].dataValues.isVerified) {
-        let updateStatus = await model.users_lama.update(
+        let updateStatus = await model.user.update(
           { isVerified: 1 },
           {
             where: {
