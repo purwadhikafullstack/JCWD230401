@@ -46,38 +46,28 @@ export default function Landing() {
     // };
 
     //api to fetch search result
-    const onSearch = (searchTerm) => {
-        setInputLocation(searchTerm); //if suggestion clicked, it will be put inside the input field
-        console.log("Ini adalah search : ", searchTerm)
-    }
+    // const onSearch = (searchTerm) => {
+    //     setInputLocation(searchTerm); //if suggestion clicked, it will be put inside the input field
+    //     console.log("Ini adalah search : ", searchTerm)
+    // }
 
-    const getAllLocations = async () => {
-        try {
-            let response = await axios.get(`${API_URL}/location/list`, {
-                city: showLocation
-            })
-            // console.log("ini response.data dari getAllLocations 🪶 : ", response.data.data); 
-            setShowLocation(response.data.data)
-        } catch (error) {
-            console.log("ini error dari getAllLocations:", error);
-        }
-    }
+    // const getAllLocations = async () => {
+    //     try {
+    //         let response = await axios.get(`${API_URL}/location/list`, {
+    //             city: showLocation
+    //         })
+    //         // console.log("ini response.data dari getAllLocations 🪶 : ", response.data.data); 
+    //         setShowLocation(response.data.data)
+    //     } catch (error) {
+    //         console.log("ini error dari getAllLocations:", error);
+    //     }
+    // }
 
     // Jalanin fungsi getAllLocations
-    React.useEffect(() => {
-        getAllLocations()
-    }, [inputLocation]);
+    // React.useEffect(() => {
+    //     getAllLocations()
+    // }, [inputLocation]);
 
-    // Check In Check Out
-    // const [inputCheckIn, setInputCheckIn] = useState('');
-    // const [inputCheckOut, setInputCheckOut] = useState('');
-
-    // const OnBtnCheckIn = () => {
-    //     setInputCheckIn('date');
-    // };
-    // const OnBtnCheckOut = () => {
-    //     setInputCheckOut('date');
-    // };
 
     return (
         <>
@@ -93,11 +83,11 @@ export default function Landing() {
                             <div className="location-input">
                                 <label>Location</label>
                                 <input type="text" placeholder="Where are you going?"
-                                    onChange={(e) => setInputLocation(e.target.value)}
-                                    value={inputLocation}
+                                    // onChange={(e) => setInputLocation(e.target.value)}
+                                    // value={inputLocation}
                                 />
                                 <div className="dropdown">
-                                    {showLocation.filter(item => {
+                                    {/* {showLocation.filter(item => {
                                         const searchTerm = inputLocation.toLowerCase();
                                         const city = item.city.toLowerCase();
                                         return (searchTerm && city.startsWith(searchTerm) && city !== searchTerm);
@@ -108,7 +98,7 @@ export default function Landing() {
                                             onClick={() => onSearch(item.city)}
                                             className="dropdown-row"
                                             key={item.city}
-                                        >{item.city}</div>))}
+                                        >{item.city}</div>))} */}
                                 </div>
                             </div>
                             <div>

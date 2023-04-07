@@ -1,7 +1,7 @@
 const userController = require("./userController");
-const locationController = require("./locationController");
+// const locationController = require("./locationController");
 
 module.exports = {
     userController,
-    locationController,
+    // locationController,
 }

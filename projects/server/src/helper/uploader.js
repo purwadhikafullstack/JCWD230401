@@ -36,7 +36,7 @@ const uploader = (directory, filePreFix) => {
 
   //3. file filter config
   const fileFilter = (req, file, cb) => {
-    const extFilter = /\.(jpg|gif|png)/;
+    const extFilter = /\.(jpg|jpeg|gif|png)/;
     let checkExt = file.originalname.toLowerCase().match(extFilter);
     if (checkExt) {
       cb(null, true);
