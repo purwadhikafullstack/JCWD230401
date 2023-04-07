@@ -438,7 +438,9 @@ module.exports = {
                 transaction: ormTransaction,
               }
             );
-            console.log(`File path: ./public/imgIdCard/${req.files[0]?.filename}`);
+            console.log(
+              `File path: ./public/imgIdCard/${req.files[0]?.filename}`
+            );
             let regisUserDetail = await model.user_detail.create(
               {
                 uuid,
@@ -454,7 +456,8 @@ module.exports = {
             return res.status(200).send({
               success: true,
               message: "register account success ✅",
-              data: regis, regisUserDetail
+              data: regis,
+              regisUserDetail,
             });
           } else {
             res.status(400).send({
@@ -476,8 +479,8 @@ module.exports = {
       }
     } catch (error) {
       await ormTransaction.rollback();
-       //delete image if encountered error ---> DOES NOT WORK
-       fs.unlinkSync(`./src/public/imgIdCard/${req.files[0].filename}`);
+      //delete image if encountered error ---> DOES NOT WORK
+      fs.unlinkSync(`./src/public/imgIdCard/${req.files[0].filename}`);
       console.log(error);
       next(error);
     }
@@ -593,10 +596,15 @@ module.exports = {
       console.log("Decrypt token:", req.decrypt);
       const { name, email, birth, gender } = req.body;
       if (name || email || birth || gender) {
-        await model.users_lama.update(req.body, {
+        await model.user.update({email}, {
           where: {
             id: req.decrypt.id,
-          },
+          }
+        });
+        await model.user_detail.update({name, birth, gender}, {
+          where: {
+            userId: req.decrypt.id,
+          }
         });
         return res.status(200).send({
           success: true,

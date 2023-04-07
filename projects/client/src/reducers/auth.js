@@ -27,6 +27,7 @@ const authSlice = createSlice({
         console.log("Data image_profile dari reducer :", state.image_profile);
         console.log("Data birth dari reducer :", state.birth);
         console.log("Data gender dari reducer :", state.gender);
+        console.log("Data name dari reducer :", state.name);
     },
     logoutAction: (state) => {
         state.name = "";
