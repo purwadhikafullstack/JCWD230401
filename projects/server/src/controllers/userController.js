@@ -626,9 +626,9 @@ module.exports = {
   updateprofileimage: async (req, res, next) => {
     try {
       //1. get current profile image
-      let get = await model.users_lama.findAll({
+      let get = await model.user_detail.findAll({
         where: {
-          id: req.decrypt.id,
+          userId: req.decrypt.id,
         },
         attributes: ["image_profile"],
       });
@@ -640,12 +640,12 @@ module.exports = {
       if (fs.existsSync(`./src/public${get[0].dataValues.image_profile}`)) {
         fs.unlinkSync(`./src/public${get[0].dataValues.image_profile}`);
       }
-      await model.users_lama.update(
+      await model.user_detail.update(
         {
           image_profile: `/profileImage/${req.files[0]?.filename}`,
         },
         {
-          where: { id: req.decrypt.id },
+          where: { userId: req.decrypt.id },
         }
       );
       res.status(200).send({
