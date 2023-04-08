@@ -1,4 +1,5 @@
 {
-    "codegpt.apiKey": "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",
-    "codegpt.model": "text-davinci-003"
+  "codegpt.apiKey": "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",
+  "codegpt.model": "text-davinci-003",
+  "liveServer.settings.port": 5501
 }

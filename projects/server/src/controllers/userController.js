@@ -3,8 +3,9 @@ const model = require("../models");
 const { v4: uuidv4 } = require("uuid");
 const bcrypt = require("bcrypt");
 const { createToken } = require("../helper/jwt");
-const transporter = require("../helper/nodemailer");
 const fs = require("fs");
+const hbs = require("nodemailer-express-handlebars");
+const nodemailer = require("nodemailer");
 
 let salt = bcrypt.genSaltSync(10);
 
@@ -53,25 +54,39 @@ module.exports = {
           console.log("ini isi dari id regis :", regis.dataValues.id);
           console.log("ini isi dari regisUserDetail :", regisUserDetail);
           let { id, roleId } = regis.dataValues;
-          // GENERATE TOKEN --> Q: cukup dari tabel user saja?
-          let token = createToken({ id, roleId }, "24h");
-          // SEND VERIFICATION MAIL
+          //2. generate token --> Q: cukup dari tabel user saja?
+          let token = createToken({ id, roleId }, "1h");
+          // create transporter object and configure Handlebars template
+          const transporter = nodemailer.createTransport({
+            service: "gmail",
+            auth: {
+              user: "noreply.tempatku@gmail.com",
+              pass: "vjuuvolabsuuxqex",
+            },
+          });
+          transporter.use(
+            "compile",
+            hbs({
+              viewEngine: {
+                extname: ".html", // html extension
+                layoutsDir: "./src/helper", // location of handlebars templates
+                defaultLayout: "register-verification-email", // name of main template
+                partialsDir: "./src/helper", // location of your subtemplates aka. header, footer etc
+              },
+              viewPath: "./src/helper",
+              extName: ".html",
+            })
+          );
+          //3. send verification email
           await transporter.sendMail({
             from: "Tracker admin",
             to: req.body.email,
-            subject: "Account Verification",
-            html: `
-            <div>
-            <p>Hi ${name},</p>
-            <p>We're happy you signed up for tempatku.</p>
-            <p>Just click on the following link to verify and activate your account.</p>
-            <a href="http://localhost:3000/verifyaccount/${token}">Verify Now</a> 
-            <p>Please note this link will expire within 24 hours.</p>
-            <br>
-            <p>Welcome to tempatku!</p>
-            <p>tempatku team</p>
-            </div>
-            `,
+            subject: "Account Verification after Register",
+            template: "register-verification-email",
+            context: {
+              name: req.body.name,
+              link: `http://localhost:3000/verifyaccount/${token}`,
+            },
           });
           await ormTransaction.commit();
           return res.status(200).send({
@@ -325,7 +340,7 @@ module.exports = {
     }
   },
 
-  //5. FORGOT PASSWORD
+  //5. FORGOT PASSWORD 
   forgotpassword: async (req, res, next) => {
     try {
       //1. get user data by email
@@ -335,37 +350,59 @@ module.exports = {
         },
         include: [{ model: model.user_detail }],
       });
-      console.log("ini getData buat forgot pw :", getData);
-      console.log(
-        "ini isi dari user_detail tabel getData: ",
-        getData[0].user_detail
-      );
+      if(getData.length > 0){
+        console.log("ini getData buat forgot pw :", getData);
+        console.log(
+          "ini isi dari user_detail tabel getData: ",
+          getData[0].user_detail
+        );
       //2. create token to send by email
       let { id, roleId, isSuspended } = getData[0].dataValues;
       let { name } = getData[0].user_detail;
       let token = createToken({ id, roleId, isSuspended }, "1h"); // apa aja yg jd token? //1 jam (forgot pw dan verifikasi)
+      // create transporter object and configure Handlebars template
+      const transporter = nodemailer.createTransport({
+        service: "gmail",
+        auth: {
+          user: "noreply.tempatku@gmail.com",
+          pass: "vjuuvolabsuuxqex",
+        },
+      });
+      transporter.use(
+        "compile",
+        hbs({
+          viewEngine: {
+            extname: ".html", // html extension
+            layoutsDir: "./src/helper", // location of handlebars templates
+            defaultLayout: "reset-password-email", // name of main template
+            partialsDir: "./src/helper", // location of your subtemplates aka. header, footer etc
+          },
+          viewPath: "./src/helper",
+          extName: ".html",
+        })
+      );
       //3. send reset pw email
       await transporter.sendMail({
         from: "Tracker admin",
         to: req.body.email,
         subject: "Reset Password",
-        html: `
-        <div>
-        <p>Hi ${name},</p>
-        <p>We've received a request to reset your password.</p>
-        <p>To reset your password, click the following link</p>
-        <a href="http://localhost:3000/resetpassword/${token}">Reset your password</a> 
-        <br>
-        <p>Thanks,</p>
-        <p>tempatku team</p>
-        </div>
-        `,
+        template: "reset-password-email",
+        context: {
+          name: name,
+          link: `http://localhost:3000/resetpassword/${token}`,
+        },
       });
       res.status(200).send({
         success: true,
         message: "email to reset password has been delivered ✅",
         token,
       });
+    } else {
+      res.status(400).send({
+        success: false,
+        message: "Account with this email not found ❌",
+      });
+    }
     } catch (error) {
       console.log(error);
       next(error);
@@ -546,29 +583,43 @@ module.exports = {
         "ini isi dari user_detail tabel checkverifieduser: ",
         checkverifieduser[0].user_detail
       );
-      //if user isnt verified yet, send verification email
+      //1. if user isnt verified yet, send verification email
       if (!checkverifieduser[0].dataValues.isVerified) {
         let { id, roleId } = checkverifieduser[0].dataValues;
         let { name } = checkverifieduser[0].user_detail;
-        // GENERATE TOKEN
-        let token = createToken({ id, roleId }, "24h");
-        // SEND VERIFICATION MAIL
+        //2. generate token
+        let token = createToken({ id, roleId }, "1h");
+        // create transporter object and configure Handlebars template
+        const transporter = nodemailer.createTransport({
+          service: "gmail",
+          auth: {
+            user: "noreply.tempatku@gmail.com",
+            pass: "vjuuvolabsuuxqex",
+          },
+        });
+        transporter.use(
+          "compile",
+          hbs({
+            viewEngine: {
+              extname: ".html", // html extension
+              layoutsDir: "./src/helper", // location of handlebars templates
+              defaultLayout: "account-verification-email", // name of main template
+              partialsDir: "./src/helper", // location of your subtemplates aka. header, footer etc
+            },
+            viewPath: "./src/helper",
+            extName: ".html",
+          })
+        );
+        //3. send verification email
         await transporter.sendMail({
           from: "Tracker admin",
           to: checkverifieduser[0].dataValues.email,
           subject: "Account Verification",
-          html: `
-          <div>
-          <p>Hi ${name},</p>
-          <p>We noticed your account has not been verified.</p>
-          <p>Just click on the following link to verify and activate your account.</p>
-          <a href="http://localhost:3000/verifyaccount/${token}">Verify Now</a> 
-          <p>Please note this link will expire within 24 hours.</p>
-          <br>
-          <p>Thanks,</p>
-          <p>tempatku team</p>
-          </div>
-          `,
+          template: "account-verification-email",
+          context: {
+            name: name,
+            link: `http://localhost:3000/verifyaccount/${token}`,
+          },
         });
         return res.status(200).send({
           success: true,
@@ -596,16 +647,22 @@ module.exports = {
       console.log("Decrypt token:", req.decrypt);
       const { name, email, birth, gender } = req.body;
       if (name || email || birth || gender) {
-        await model.user.update({email}, {
-          where: {
-            id: req.decrypt.id,
+        await model.user.update(
+          { email },
+          {
+            where: {
+              id: req.decrypt.id,
+            },
           }
-        });
-        await model.user_detail.update({name, birth, gender}, {
-          where: {
-            userId: req.decrypt.id,
+        );
+        await model.user_detail.update(
+          { name, birth, gender },
+          {
+            where: {
+              userId: req.decrypt.id,
+            },
           }
-        });
+        );
         return res.status(200).send({
           success: true,
           message: "Edit profile success ✅",
