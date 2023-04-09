@@ -20,6 +20,7 @@ module.exports = (sequelize, DataTypes) => {
     phone: DataTypes.STRING,
     attempts: DataTypes.INTEGER,
     isSuspended: DataTypes.BOOLEAN,
+    otp: DataTypes.STRING,
     isVerified: DataTypes.BOOLEAN,
     isDeleted: DataTypes.BOOLEAN,
     roleId: DataTypes.INTEGER

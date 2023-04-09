@@ -1,3 +1,4 @@
+import React, { useState } from 'react';
 import { Center, Heading } from '@chakra-ui/react';
 import {
   Button,
@@ -16,14 +17,27 @@ import axios from 'axios';
 export default function Verification() {
   const params = useParams(); //to get token from email link for auth
   const navigate = useNavigate();
+  const [pin, setPin] = useState(''); //verification code
+  console.log("ini isi token dari params", params);
+
+  const handlePinChange = (e, index) => {
+    const newPin = [...pin];
+    newPin[index] = e.target.value;
+    setPin(newPin.join(''));
+    console.log("isi pin joined :", newPin.join(''));
+  }
 
   const onBtnVerify = async () => {
     try {
-      let response = await axios.patch(`${API_URL}/user/verifyaccount`, {}, {
-        headers: {
-          Authorization: `Bearer ${params.token}`
+      let response = await axios.patch(`${API_URL}/user/verifyaccount`,
+        {
+          otp: pin
         }
-      }
+        , {
+          headers: {
+            Authorization: `Bearer ${params.token}`
+          }
+        }
       );
       console.log("ini hasil response onbtnverify :", response); //testing purposes
       alert(response.data.message);
@@ -31,7 +45,6 @@ export default function Verification() {
     } catch (error) {
       console.log("ini error dari onBtnVerify :", error);
       alert(error.response.data.message);
-      navigate('/', { replace: true });
     }
   }
 
@@ -70,10 +83,10 @@ export default function Verification() {
           <Center>
             <HStack>
               <PinInput>
-                <PinInputField />
-                <PinInputField />
-                <PinInputField />
-                <PinInputField />
+                <PinInputField value={pin[0]} onChange={(e) => handlePinChange(e, 0)} />
+                <PinInputField value={pin[1]} onChange={(e) => handlePinChange(e, 1)} />
+                <PinInputField value={pin[2]} onChange={(e) => handlePinChange(e, 2)} />
+                <PinInputField value={pin[3]} onChange={(e) => handlePinChange(e, 3)} />
               </PinInput>
             </HStack>
           </Center>
@@ -82,7 +95,7 @@ export default function Verification() {
             fontWeight="thin"
             my={2}
           >
-            the code is valid for 24 hours
+            the code is valid for 1 hour
           </Center>
         </FormControl>
         <Stack spacing={2}>

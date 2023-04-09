@@ -15,8 +15,7 @@ const IMAGE =
 export default function PropertyCard() {
     return (
         <Center
-        // pt={6} 
-        // px='1'
+        p='1'
         >
             <Box
                 role={'group'}
@@ -28,7 +27,8 @@ export default function PropertyCard() {
                 boxShadow={'xs'}
                 rounded={'lg'}
                 pos={'relative'}
-                zIndex={0}>
+                zIndex={0}
+            >
                 <Box
                     rounded={'lg'}
                     pos={'relative'}
@@ -37,7 +37,7 @@ export default function PropertyCard() {
                     <Image
                         rounded={'lg'}
                         height={{ base: '300px', lg: '230px' }}
-                        width={{ base: '400px', lg: '250px' }}
+                        // width={{ base: '400px', lg: '250px' }}
                         objectFit={'cover'}
                         src={IMAGE}
                     />
@@ -50,7 +50,7 @@ export default function PropertyCard() {
                 >
                     <HStack justifyContent={'space-between'}>
                         <Text fontWeight={600} fontSize={'lg'} >
-                            Hotel Veranda
+                            Hotel Veranda Tanjung Duren Grogol Petamburan Jakarta Barat
                         </Text>
                         <Flex>
                             <BsStarFill />
