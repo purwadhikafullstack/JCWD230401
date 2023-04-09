@@ -27,6 +27,9 @@ module.exports = {
           console.log("Check data after hash password :", req.body); //testing purposes
           const uuid = uuidv4();
           const { name, email, password, phone } = req.body;
+          // create otp
+          const otp = Math.floor(1000 + Math.random() * 9000);
+          console.log("random numbers generated for otp :", otp);
           //1. Create data baru
           let regis = await model.user.create(
             {
@@ -35,6 +38,7 @@ module.exports = {
               phone,
               password,
               roleId: 1,
+              otp,
             },
             {
               transaction: ormTransaction,
@@ -86,6 +90,7 @@ module.exports = {
             context: {
               name: req.body.name,
               link: `http://localhost:3000/verifyaccount/${token}`,
+              otp: otp,
             },
           });
           await ormTransaction.commit();
@@ -340,7 +345,7 @@ module.exports = {
     }
   },
 
-  //5. FORGOT PASSWORD 
+  //5. FORGOT PASSWORD
   forgotpassword: async (req, res, next) => {
     try {
       //1. get user data by email
@@ -350,59 +355,59 @@ module.exports = {
         },
         include: [{ model: model.user_detail }],
       });
-      if(getData.length > 0){
+      if (getData.length > 0) {
         console.log("ini getData buat forgot pw :", getData);
         console.log(
           "ini isi dari user_detail tabel getData: ",
           getData[0].user_detail
         );
-      //2. create token to send by email
-      let { id, roleId, isSuspended } = getData[0].dataValues;
-      let { name } = getData[0].user_detail;
-      let token = createToken({ id, roleId, isSuspended }, "1h"); // apa aja yg jd token? //1 jam (forgot pw dan verifikasi)
-      // create transporter object and configure Handlebars template
-      const transporter = nodemailer.createTransport({
-        service: "gmail",
-        auth: {
-          user: "noreply.tempatku@gmail.com",
-          pass: "vjuuvolabsuuxqex",
-        },
-      });
-      transporter.use(
-        "compile",
-        hbs({
-          viewEngine: {
-            extname: ".html", // html extension
-            layoutsDir: "./src/helper", // location of handlebars templates
-            defaultLayout: "reset-password-email", // name of main template
-            partialsDir: "./src/helper", // location of your subtemplates aka. header, footer etc
+        //2. create token to send by email
+        let { id, roleId, isSuspended } = getData[0].dataValues;
+        let { name } = getData[0].user_detail;
+        let token = createToken({ id, roleId, isSuspended }, "1h"); // apa aja yg jd token? //1 jam (forgot pw dan verifikasi)
+        // create transporter object and configure Handlebars template
+        const transporter = nodemailer.createTransport({
+          service: "gmail",
+          auth: {
+            user: "noreply.tempatku@gmail.com",
+            pass: "vjuuvolabsuuxqex",
           },
-          viewPath: "./src/helper",
-          extName: ".html",
-        })
-      );
-      //3. send reset pw email
-      await transporter.sendMail({
-        from: "Tracker admin",
-        to: req.body.email,
-        subject: "Reset Password",
-        template: "reset-password-email",
-        context: {
-          name: name,
-          link: `http://localhost:3000/resetpassword/${token}`,
-        },
-      });
-      res.status(200).send({
-        success: true,
-        message: "email to reset password has been delivered ✅",
-        token,
-      });
-    } else {
-      res.status(400).send({
-        success: false,
-        message: "Account with this email not found ❌",
-      });
-    }
+        });
+        transporter.use(
+          "compile",
+          hbs({
+            viewEngine: {
+              extname: ".html", // html extension
+              layoutsDir: "./src/helper", // location of handlebars templates
+              defaultLayout: "reset-password-email", // name of main template
+              partialsDir: "./src/helper", // location of your subtemplates aka. header, footer etc
+            },
+            viewPath: "./src/helper",
+            extName: ".html",
+          })
+        );
+        //3. send reset pw email
+        await transporter.sendMail({
+          from: "Tracker admin",
+          to: req.body.email,
+          subject: "Reset Password",
+          template: "reset-password-email",
+          context: {
+            name: name,
+            link: `http://localhost:3000/resetpassword/${token}`,
+          },
+        });
+        res.status(200).send({
+          success: true,
+          message: "email to reset password has been delivered ✅",
+          token,
+        });
+      } else {
+        res.status(400).send({
+          success: false,
+          message: "Account with this email not found ❌",
+        });
+      }
     } catch (error) {
       console.log(error);
       next(error);
@@ -532,25 +537,54 @@ module.exports = {
           id: req.decrypt.id,
         },
       });
-      // console.log("ini isi checkverifieduser :", checkverifieduser);
+      console.log(
+        "ini isi dataValues checkverifieduser :",
+        checkverifieduser[0].dataValues
+      );
       console.log(
         "ini isi isVerified dari checkverifieduser :",
         checkverifieduser[0].dataValues.isVerified
       );
       if (!checkverifieduser[0].dataValues.isVerified) {
-        let updateStatus = await model.user.update(
-          { isVerified: 1 },
-          {
-            where: {
-              id: req.decrypt.id,
-            },
-          }
-        );
-        console.log("isi updateStatus : ", updateStatus);
-        return res.status(200).send({
-          success: true,
-          message: "Your Account has been Verified ✅",
+        // get otp from database
+        let getotp = await model.user.findAll({
+          where: {
+            id: req.decrypt.id,
+          },
+          attributes: ["otp"],
         });
+        console.log("ini isi otp dari getotp:", getotp[0].dataValues.otp);
+        const { otp } = req.body;
+        // if otp from req.body the same with otp from database account can be verified
+        if (otp == getotp[0].dataValues.otp) {
+          let updateStatus = await model.user.update(
+            { isVerified: 1 },
+            {
+              where: {
+                id: req.decrypt.id,
+              },
+            }
+          );
+          console.log("isi updateStatus : ", updateStatus);
+          // set otp back to null (only 1 time use)
+          await model.user.update(
+            { otp: null },
+            {
+              where: {
+                id: req.decrypt.id,
+              },
+            }
+          );
+          return res.status(200).send({
+            success: true,
+            message: "Your Account has been Verified ✅",
+          });
+        } else {
+          res.status(400).send({
+            success: false,
+            message: "Wrong verification code ❌",
+          });
+        }
       } else {
         res.status(400).send({
           success: false,
@@ -587,6 +621,18 @@ module.exports = {
       if (!checkverifieduser[0].dataValues.isVerified) {
         let { id, roleId } = checkverifieduser[0].dataValues;
         let { name } = checkverifieduser[0].user_detail;
+        // create otp
+        const otp = Math.floor(1000 + Math.random() * 9000);
+        console.log("random numbers generated for otp :", otp);
+        // patch old otp
+        await model.user.update(
+          { otp },
+          {
+            where: {
+              id: req.decrypt.id,
+            },
+          }
+        );
         //2. generate token
         let token = createToken({ id, roleId }, "1h");
         // create transporter object and configure Handlebars template
@@ -619,6 +665,7 @@ module.exports = {
           context: {
             name: name,
             link: `http://localhost:3000/verifyaccount/${token}`,
+            otp: otp,
           },
         });
         return res.status(200).send({
