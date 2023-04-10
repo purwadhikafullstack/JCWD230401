@@ -27,12 +27,9 @@
     "react-datepicker": "^4.11.0",
     "react-dom": "^18.2.0",
     "react-icons": "latest",
-<<<<<<< HEAD
     "react-iframe": "^1.8.5",
     "react-upload-in": "^0.1.0",
     "react-nice-dates": "^3.1.0",
-=======
->>>>>>> 640bdd3c81ebf4b0b081379df5791df8dcc3e58d
     "react-paginate": "^8.1.5",
     "react-redux": "latest",
     "react-router-dom": "latest",
