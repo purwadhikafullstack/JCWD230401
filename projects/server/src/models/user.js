@@ -28,8 +28,15 @@ module.exports = (sequelize, DataTypes) => {
     sequelize,
     modelName: 'user',
   });
+<<<<<<< HEAD:projects/server/src/models/user.js
   user.associate = (models) => {
     user.hasOne(models.user_detail, { foreignKey: 'userId' });
    }
   return user;
+=======
+  users.associate = (models) => {
+    users.hasMany(models.property, { foreignKey: 'userId' });
+  }
+  return users;
+>>>>>>> 640bdd3c81ebf4b0b081379df5791df8dcc3e58d:projects/server/src/models/users.js
 };

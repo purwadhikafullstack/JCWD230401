@@ -5,7 +5,11 @@ const { checkUser } = require('../helper/validator');
 
 route.get('/', propertyController.getAllProperty)
 route.post('/filter', propertyController.filterProperty)
-route.get('/testing', propertyController.testing)
+route.post('/getroomavailable', propertyController.getRoomAvailable)
+
+
+route.post('/getpropertydetail', propertyController.getPropertyDetail)
+route.post('/getpictureproperty', propertyController.getPicturePropertyDetail)
 
 
 module.exports = route;

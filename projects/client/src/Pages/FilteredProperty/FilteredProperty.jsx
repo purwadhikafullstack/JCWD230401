@@ -1,38 +1,25 @@
-import React, { useState, useEffect, Component } from 'react'
-import './FilteredProperty.css' // import css
-import axios from "axios";
-import { API_URL } from "../../helper";
 import {
-    Box, Menu,
-    MenuButton,
-    MenuList,
-    MenuItem,
-    MenuGroup,
-    MenuOptionGroup,
-    MenuDivider,
-    Button,
-    Flex,
-    Select
+    Box, Button,
+    Flex, Menu,
+    MenuButton, MenuDivider, MenuItem, MenuList, MenuOptionGroup, Select
 } from '@chakra-ui/react';
-import SearchBar from '../../Components/SearchBar/SearchBar';
-import PropertyCard from '../../Components/PropertyCard';
+import axios from "axios";
+import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import CardProperty from '../../Components/Card/CardProperty';
-import Pagination from '../../Components/Pagination';
 import Footer from '../../Components/Footer';
-import Slider from "react-slick";
-import Carousel from '../../Components/Carousel';
+import Pagination from '../../Components/Pagination';
+import PropertyCard from '../../Components/PropertyCard';
+import SearchBar from '../../Components/SearchBar/SearchBar';
+import { API_URL } from "../../helper";
+import './FilteredProperty.css'; // import css
 
 export default function FilteredProperty() {
-    const [inputTypeIn, setInputTypeIn] = useState('');
-    const [inputTypeOut, setInputTypeOut] = useState('');
-    const [allCategory, setAllCategory] = useState([]);
-    const [allProperty, setAllProperty] = useState([]);
+    const location = useLocation();
     const token = localStorage.getItem('tempatku_login')
     const [inputLocation, setInputLocation] = useState('');
     const [showLocation, setShowLocation] = useState([]);
-    const [inputCheckIn, setInputCheckIn] = useState('');
-    const [inputCheckOut, setInputCheckOut] = useState('');
+    const [inputCheckIn, setInputCheckIn] = useState(location.state.inputCheckIn);
+    const [inputCheckOut, setInputCheckOut] = useState(location.state.inputCheckOut);
 
     const onSearch = (searchTerm) => {
         setInputLocation(searchTerm); //if suggestion clicked, it will be put inside the input field
@@ -40,19 +27,18 @@ export default function FilteredProperty() {
     }
 
     const OnBtnCheckIn = () => {
-        setInputCheckIn('date');
+        setInputCheckIn('');
     };
 
     const OnBtnCheckOut = () => {
-        setInputCheckOut('date');
+        setInputCheckOut('');
     };
 
     // Get Property and Pagination
 
-    const location = useLocation();
     const [showProducts, setShowProducts] = useState([]);
     const [page, setPage] = useState(0);
-    const [size, setSize] = useState(1);
+    const [size, setSize] = useState(3);
     const [productName, setProductName] = useState("");
     const [totalData, setTotalData] = useState(0);
     const [currentPage, setCurrentPage] = useState(1);
@@ -66,7 +52,7 @@ export default function FilteredProperty() {
         try {
             let token = localStorage.getItem("tempatku_login");
             let res = await axios.post(
-                `${API_URL}/property/filter?page=${page}&size=${size}&name=${productName}&sortby=${sortBy}&order=${order}&category=${category}&city=${city}`,
+                `${API_URL}/property/filter?start=${inputCheckIn}&end=${inputCheckOut}&page=${page}&size=${size}&name=${productName}&sortby=${sortBy}&order=${order}&category=${category}&city=${city}`,
                 {},
                 {
                     headers: {
@@ -74,7 +60,7 @@ export default function FilteredProperty() {
                     },
                 }
             );
-            console.log("ress dari filter propertyyyy", res.data)
+            console.log("ress dari filter propertyyyy", res)
             setTotalData(res.data.datanum);
             setShowProducts(res.data.data);
         } catch (error) {
@@ -89,13 +75,13 @@ export default function FilteredProperty() {
 
     const printAllProperty = () => {
         return showProducts.map((val, idx) => {
-            // return <CardProperty property={val.property} price={val.rooms[0].price} />
-            return <PropertyCard property={val.property} price={val.rooms[0].price} picture={val.picture_properties[0].picture} />
+            return <PropertyCard property={val.property} price={val.rooms[0].price} picture={val.picture_properties[0].picture} uuid={val.uuid} inputCheckIn={inputCheckIn} inputCheckOut={inputCheckOut} />
         })
     }
 
     const paginate = (pageNumber) => {
         setPage(pageNumber.selected)
+        console.log(pageNumber.selected)
     }
 
     useEffect(() => {
@@ -155,16 +141,15 @@ export default function FilteredProperty() {
                 <div className='property-fp'>
                     {printAllProperty()}
                 </div>
-                <div>
-                    <h1>testt</h1>
-                    <Pagination
-                        size={size}
-                        totalData={totalData}
-                        paginate={paginate} />
-
-                </div>
             </Box>
-            {/* <Footer /> */}
+            <Flex justify={'center'}>
+                <Pagination
+                    size={size}
+                    totalData={totalData}
+                    paginate={paginate} />
+            </Flex>
+            <Footer />
+
         </Box>
     )
 }
