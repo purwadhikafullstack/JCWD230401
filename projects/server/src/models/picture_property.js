@@ -16,10 +16,16 @@ module.exports = (sequelize, DataTypes) => {
   picture_property.init({
     picture: DataTypes.STRING,
     isDeleted: DataTypes.BOOLEAN,
-    propertyId: DataTypes.INTEGER
+    propertyId: DataTypes.INTEGER,
+    category_picture_propertyId: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'picture_property',
   });
+
+  picture_property.associate = (models) => {
+    picture_property.belongsTo(models.property, { foreignKey: 'propertyId' });
+    picture_property.belongsTo(models.category_picture_property, { foreignKey: 'category_picture_propertyId' });
+}
   return picture_property;
 };

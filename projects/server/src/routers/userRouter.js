@@ -6,7 +6,11 @@ const {
   changepassword,
   forgotpassword,
   resetpassword,
-  registerastenant
+  registerastenant,
+  verify,
+  sendverificationemail, 
+  editprofile, 
+  updateprofileimage,
 } = require("../controllers/userController");
 const { readToken } = require("../helper/jwt");
 const uploader = require("../helper/uploader");
@@ -22,6 +26,12 @@ route.patch("/resetpw", readToken, checkUser, resetpassword);
 route.post("/registerastenant"
 // , checkUser
 ,uploader('/imgIdCard', 'IDC').array('image_ktp', 1), registerastenant);
+route.patch("/verifyaccount", readToken, verify);
+route.post("/sendverificationemail", readToken, sendverificationemail);
+route.patch("/editprofile", readToken, checkUser, editprofile);
+route.patch("/updateprofileimage", readToken, uploader('/profileImage', 'PRF').array('image_profile', 1), updateprofileimage);
+
+
 
 
 module.exports = route;

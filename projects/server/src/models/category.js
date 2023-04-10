@@ -16,11 +16,15 @@ module.exports = (sequelize, DataTypes) => {
   category.init({
     uuid: DataTypes.STRING,
     category: DataTypes.STRING,
-    picture: DataTypes.STRING,
     isDeleted: DataTypes.BOOLEAN,
+    picture: DataTypes.STRING,
   }, {
     sequelize,
     modelName: 'category',
   });
+
+  category.associate = (models) => {
+    category.hasMany(models.property, { foreignKey: 'categoryId' });
+}
   return category;
 };

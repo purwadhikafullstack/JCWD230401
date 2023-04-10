@@ -15,13 +15,17 @@ module.exports = (sequelize, DataTypes) => {
   }
   order.init({
     uuid: DataTypes.STRING,
+    start_date: DataTypes.DATEONLY,
+    end_date: DataTypes.DATEONLY,
     price: DataTypes.INTEGER,
-    quantity: DataTypes.INTEGER,
     transactionId: DataTypes.INTEGER,
     roomId: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'order',
   });
+  order.associate = (models) => {
+    order.belongsTo(models.room, { foreignKey: 'roomId' });
+  }
   return order;
 };

@@ -1,5 +1,4 @@
 import axios from "axios";
-import logo from "./logo.svg";
 import "./App.css";
 import { Route, Routes, useLocation } from "react-router-dom";
 import NavbarMobile from "./Components/NavbarMobile";
@@ -15,11 +14,19 @@ import ResetPassword from "./Pages/ResetPassword";
 import Landing from "./Pages/Landing/Landing";
 import TenantRegister from "./Pages/TenantRegister";
 import Dashboard from "./Pages/Dashboard/Dashboard";
+import NotFound from "./Pages/NotFound";
+import Verification from "./Pages/Verification";
+import ProductDetail from "./Pages/ProductDetail/ProductDetail";
+import TransactionPage from "./Pages/TransactionPage";
+import FilteredProperty from "./Pages/FilteredProperty/FilteredProperty";
+import PropertyDetail from "./Pages/PropertyDetail/PropertyDetail";
+import EditProfile from "./Pages/EditProfile";
 
 function App() {
   const location = useLocation();
   const dispatch = useDispatch();
-  // const roleId = useSelector((state) => state.authReducer.roleId);
+  const roleId = useSelector((state) => state.authReducer.roleId);
+  // console.log("ini isi roleId dari useSelector di App.js : ", roleId);
 
   const keeplogin = async () => {
     try {
@@ -45,18 +52,60 @@ function App() {
 
   return (
     <>
-      {/* blm dikasi boundaries login sesuai roleId bisa akses apa */}
-      {location.pathname === "/"  && <Navbar /> || "/dashboard" && <Navbar />}
-      <Routes>
-        {/* <Route path="/" element={<Landing />} /> */}
-        <Route path="/changepassword" element={<ChangePassword />} />
-        <Route path="/userregister" element={<UserRegister />} />
-        <Route path="/tenantregister" element={<TenantRegister />} />
-        <Route path="/forgotpassword" element={<ForgotPassword />} />
-        <Route path="/resetpassword/:token" element={<ResetPassword />} />
-        <Route path="/" element={<Landing />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-      </Routes>
+      {location.pathname === "/" && <Navbar />}
+      {location.pathname === "/editprofile" && <Navbar />}
+      {location.pathname === "/productdetail" && <Navbar />}
+      {location.pathname === "/dashboard" && roleId == 2 && <Navbar />}
+
+      {
+        // User
+        roleId == 1 ? (
+          <Routes>
+            <Route path="/changepassword" element={<ChangePassword />} />
+            <Route path="/userregister" element={<UserRegister />} />
+            <Route path="/tenantregister" element={<TenantRegister />} />
+            <Route path="/forgotpassword" element={<ForgotPassword />} />
+            <Route path="/resetpassword/:token" element={<ResetPassword />} />
+            <Route path="/verifyaccount/:token" element={<Verification />} />
+            <Route path="/" element={<Landing />} />
+            <Route path="*" element={<NotFound />} />
+            <Route path="/productdetail" element={<ProductDetail />} />
+            <Route path="/transactionpage" element={<TransactionPage />} />
+            <Route path="/editprofile" element={<EditProfile keeplogin={() => dispatch(keeplogin())} />} />
+            <Route path="/property" element={<FilteredProperty />} />
+            <Route path="/property/detail/:uuid" element={<PropertyDetail />} />
+          </Routes>
+        ) : // Tenant
+          roleId == 2 ? (
+            <Routes>
+              <Route path="/changepassword" element={<ChangePassword />} />
+              <Route path="/userregister" element={<UserRegister />} />
+              <Route path="/tenantregister" element={<TenantRegister />} />
+              <Route path="/forgotpassword" element={<ForgotPassword />} />
+              <Route path="/resetpassword/:token" element={<ResetPassword />} />
+              <Route path="/verifyaccount/:token" element={<Verification />} />
+              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/" element={<Landing />} />
+              <Route path="*" element={<NotFound />} />
+              <Route path="/productdetail" element={<ProductDetail />} />
+            </Routes>
+          ) : (
+            // Not logged in
+            <Routes>
+              <Route path="/changepassword" element={<ChangePassword />} />
+              <Route path="/userregister" element={<UserRegister />} />
+              <Route path="/tenantregister" element={<TenantRegister />} />
+              <Route path="/forgotpassword" element={<ForgotPassword />} />
+              <Route path="/resetpassword/:token" element={<ResetPassword />} />
+              <Route path="/verifyaccount/:token" element={<Verification />} />
+              <Route path="/" element={<Landing />} />
+              <Route path="*" element={<NotFound />} />
+              <Route path="/productdetail" element={<ProductDetail />} />
+              <Route path="/property" element={<FilteredProperty />} />
+              <Route path="/property/detail/:uuid" element={<PropertyDetail />} />
+            </Routes>
+          )
+      }
       {location.pathname === "/" && <NavbarMobile />}
     </>
   );

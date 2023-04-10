@@ -25,6 +25,7 @@ import Login from './Login';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { logoutAction } from '../reducers/auth';
+import { API_URL } from '../helper';
 
 
 export default function Navbar() {
@@ -48,7 +49,7 @@ export default function Navbar() {
         w='full' bg='white' zIndex={1}>
         <Box boxShadow={'xs'} px={{ base: '4', sm: '10' }}>
           <Flex h={16} alignItems={'center'} justifyContent={'space-between'}>
-            <HStack alignItems={'center'}>
+            <HStack alignItems={'center'} onClick={() => navigate('/')} cursor='pointer'>
               {/* Logo Tempatku */}
               <Icon fontSize="40px" as={TbHomeHeart}
                 color='#D3212D'
@@ -92,8 +93,8 @@ export default function Navbar() {
                     Become a Tenant
                   </Button>
                   :
+                  // Tenant
                   roleId == 2 ?
-                    // Tenant
                     <Button
                       variant={'ghost'}
                       size={'sm'}
@@ -133,16 +134,17 @@ export default function Navbar() {
                   <HamburgerIcon w={6} h={6} mx={2} my={1} color='black' />
                   <Avatar
                     size={'sm'}
-                  // src={imageprofile}
+                    src={imageprofile ? `${API_URL}${imageprofile}` : ""}
                   />
                 </MenuButton>
                 {
                   // User
                   roleId == 1 ?
                     <MenuList>
-                      <MenuItem>Profile</MenuItem>
+                      <MenuItem onClick={() => navigate('/')}>Home</MenuItem>
+                      <MenuItem onClick={() => navigate('/editprofile')}>Profile</MenuItem>
                       <MenuItem>Bookings</MenuItem>
-                      <MenuItem onClick={() => navigate('/changepassword')}>Change Password</MenuItem>
+                      <MenuItem onClick={() => navigate('/auth/changepassword')}>Change Password</MenuItem>
                       <MenuItem
                         onClick={onBtnLogout}
                       >Logout</MenuItem>
@@ -151,10 +153,11 @@ export default function Navbar() {
                     // Tenant
                     roleId == 2 ?
                       <MenuList>
+                        <MenuItem onClick={() => navigate('/dashboard')}>Dashboard</MenuItem>
                         <MenuItem>Profile</MenuItem>
                         <MenuItem>Property</MenuItem>
                         <MenuItem>Report</MenuItem>
-                        <MenuItem onClick={() => navigate('/changepassword')}>Change Password</MenuItem>
+                        <MenuItem onClick={() => navigate('/auth/changepassword')}>Change Password</MenuItem>
                         <MenuItem
                           onClick={onBtnLogout}
                         >Logout</MenuItem>
@@ -173,7 +176,7 @@ export default function Navbar() {
                           </Modal>
                         </MenuItem>
                         <MenuItem
-                          onClick={() => navigate('/userregister')}
+                          onClick={() => navigate('/auth/userregister')}
                         >Register</MenuItem>
                       </MenuList>
                 }

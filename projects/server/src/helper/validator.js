@@ -185,6 +185,46 @@ module.exports = {
           .notEmpty()
           .withMessage("Image file is required")
           .run(req);
+      } else if (req.path == "/editprofile") {
+        if (req.body.name) {
+          await check("name")
+            .notEmpty()
+            .isLength({ max: 255 })
+            .withMessage(
+              "Name must not be empty and must be less than or equal to 255 characters"
+            )
+            .matches(/^[a-zA-Z ]+$/)
+            .withMessage("Name must only contain letters and spaces")
+            .run(req);
+        }
+
+        if (req.body.email) {
+          await check("email")
+            .notEmpty()
+            .isEmail()
+            .withMessage("Invalid email address")
+            .run(req);
+        }
+
+        if (req.body.gender) {
+          await check("gender")
+            .notEmpty()
+            .isIn(["Male", "Female"])
+            .withMessage("Gender must not be empty")
+            .run(req);
+        }
+
+        if (req.body.birth) {
+          await check("birth")
+            .notEmpty()
+            .isISO8601()
+            .withMessage("Birthdate must be a valid date in ISO8601 format.")
+            .isBefore("2023-01-01")
+            .withMessage("Birthdate cannot exceed 2022-12-31.")
+            .isAfter("1899-12-31")
+            .withMessage("Birthdate cannot be lower than 1900-01-01.")
+            .run(req);
+        }
       }
 
       const validation = validationResult(req);
