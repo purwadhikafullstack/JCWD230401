@@ -18,6 +18,8 @@ import NotFound from "./Pages/NotFound";
 import Verification from "./Pages/Verification";
 import ProductDetail from "./Pages/ProductDetail/ProductDetail";
 import TransactionPage from "./Pages/TransactionPage";
+import FilteredProperty from "./Pages/FilteredProperty/FilteredProperty";
+import PropertyDetail from "./Pages/PropertyDetail/PropertyDetail";
 import EditProfile from "./Pages/EditProfile";
 
 function App() {
@@ -70,35 +72,39 @@ function App() {
             <Route path="/productdetail" element={<ProductDetail />} />
             <Route path="/transactionpage" element={<TransactionPage />} />
             <Route path="/editprofile" element={<EditProfile keeplogin={() => dispatch(keeplogin())} />} />
+            <Route path="/property" element={<FilteredProperty />} />
+            <Route path="/property/detail/:uuid" element={<PropertyDetail />} />
           </Routes>
         ) : // Tenant
-        roleId == 2 ? (
-          <Routes>
-            <Route path="/changepassword" element={<ChangePassword />} />
-            <Route path="/userregister" element={<UserRegister />} />
-            <Route path="/tenantregister" element={<TenantRegister />} />
-            <Route path="/forgotpassword" element={<ForgotPassword />} />
-            <Route path="/resetpassword/:token" element={<ResetPassword />} />
-            <Route path="/verifyaccount/:token" element={<Verification />} />
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/" element={<Landing />} />
-            <Route path="*" element={<NotFound />} />
-            <Route path="/productdetail" element={<ProductDetail />} />
-          </Routes>
-        ) : (
-          // Not logged in
-          <Routes>
-            <Route path="/changepassword" element={<ChangePassword />} />
-            <Route path="/userregister" element={<UserRegister />} />
-            <Route path="/tenantregister" element={<TenantRegister />} />
-            <Route path="/forgotpassword" element={<ForgotPassword />} />
-            <Route path="/resetpassword/:token" element={<ResetPassword />} />
-            <Route path="/verifyaccount/:token" element={<Verification />} />
-            <Route path="/" element={<Landing />} />
-            <Route path="*" element={<NotFound />} />
-            <Route path="/productdetail" element={<ProductDetail />} />
-          </Routes>
-        )
+          roleId == 2 ? (
+            <Routes>
+              <Route path="/changepassword" element={<ChangePassword />} />
+              <Route path="/userregister" element={<UserRegister />} />
+              <Route path="/tenantregister" element={<TenantRegister />} />
+              <Route path="/forgotpassword" element={<ForgotPassword />} />
+              <Route path="/resetpassword/:token" element={<ResetPassword />} />
+              <Route path="/verifyaccount/:token" element={<Verification />} />
+              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/" element={<Landing />} />
+              <Route path="*" element={<NotFound />} />
+              <Route path="/productdetail" element={<ProductDetail />} />
+            </Routes>
+          ) : (
+            // Not logged in
+            <Routes>
+              <Route path="/changepassword" element={<ChangePassword />} />
+              <Route path="/userregister" element={<UserRegister />} />
+              <Route path="/tenantregister" element={<TenantRegister />} />
+              <Route path="/forgotpassword" element={<ForgotPassword />} />
+              <Route path="/resetpassword/:token" element={<ResetPassword />} />
+              <Route path="/verifyaccount/:token" element={<Verification />} />
+              <Route path="/" element={<Landing />} />
+              <Route path="*" element={<NotFound />} />
+              <Route path="/productdetail" element={<ProductDetail />} />
+              <Route path="/property" element={<FilteredProperty />} />
+              <Route path="/property/detail/:uuid" element={<PropertyDetail />} />
+            </Routes>
+          )
       }
       {location.pathname === "/" && <NavbarMobile />}
     </>

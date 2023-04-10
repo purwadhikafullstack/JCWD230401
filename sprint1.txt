@@ -1,0 +1,70 @@
+user
+sequelize model:create --name users --attributes uuid:string,name:string,email:sSuccessfully created migrations folder at "C:\Ussequelize model:create --name users --attributes uuid:string,name:string,email:string,password:string,phone:string,birth:dateonly,gender:enum,image_profile:string,image_ktp:string,attempts:integer,isVerified:boolean,isDeleted:boolean,roleId:integer,statusId:integer
+
+role 
+sequelize model:create --name role --attributes role:string
+
+property
+sequelize model:create --name property --attributes uuid:string,property:string,description:string,isDeleted:boolean,categoryId:integer,picture_propertyId:integer,userId:integer
+
+category
+sequelize model:create --name category --attributes uuid:string,category:string
+
+picture_property
+sequelize model:create --name picture_property --attributes picture:string,isDeleted:boolean
+
+location
+sequelize model:create --name location --attributes uuid:string,address:string,city:string,province:string,zip:string,propertyId:integer
+
+zip itu pake string aja krn gaada yg perlu ditambahin (count) wlopun angka smua
+
+review
+sequelize model:create --name review --attributes uuid:string,review:string,roomId:integer,userId:integer
+
+room
+sequelize model:create --name room --attributes uuid:string,name:string,price:integer,description:string,quantity:integer,capacity:integer,booked:integer,isAvailable:boolean,isDeleted:boolean,picture_roomId:integer,propertyId:integer
+
+special_price
+sequelize model:create --name special_price --attributes uuid:string,startDate:dateonly,endDate:dateonly,priceOnDate:integer,isActive:boolean,roomId:integer
+
+picture_room
+sequelize model:create --name picture_room --attributes picture:string,isDeleted:boolean
+
+maintenance
+sequelize model:create --name maintenance --attributes startDate:dateonly,endDate:dateonly,remarks:string,isActive:boolean,roomId:integer
+(tambahin uuid manual lupa td)
+
+transaction
+sequelize model:create --name transaction --attributes uuid:string,startDate:string,endDate:string,discount:integer,image_payment:string,isConfirmed:boolean,transaction_statusId:integer,userId:integer
+
+order
+sequelize model:create --name order --attributes uuid:string,price:integer,quantity:integer,transactionId:integer,roomId:integer
+
+transaction_status
+sequelize model:create --name transaction_status --attributes status:string
+
+sequelize db:migrate
+
+
+seharusnya gabole di root coonfig.json nya krn rawan kalo di hack (root itu bisa akses semua database, database projek ini bisa kena hack")
+
+semua FK PK dibikin Not Null di mysql dan di folder migrations
+
+location
+maintenance
+order
+property
+review
+room
+special_price 
+transaction
+
+git commit -m "develop-2:setup sequelize"  
+
+git commit -m "TPK-2-1 : Prepare landing page"
+
+git push origin TPK-2
+
+git checkout -b TPK-4
+
+register
