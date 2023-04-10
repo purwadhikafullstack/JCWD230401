@@ -13,15 +13,13 @@ import {
     FormControl,
     FormLabel,
     useToast,
-    Image,
 } from "@chakra-ui/react";
 import { Select, useChakraSelectProps } from "chakra-react-select";
 import { BiHotel, BiHomeAlt } from "react-icons/bi";
 import { MdApartment } from "react-icons/md";
 import { HiTrash } from "react-icons/hi2";
 import { SlPicture } from "react-icons/sl";
-
-function AddProperty(props) {
+function ManageProperty() {
     const [category, setCategory] = useState(""); // useState category
 
     const [property, setProperty] = useState(""); // useState property
@@ -42,7 +40,6 @@ function AddProperty(props) {
         return overSize;
     };
 
-    // OnChange untuk upload file
     const onChangeFile = (event) => {
         const files = [...event.target.files];
         const overSize = checkFileSize(files);
@@ -56,10 +53,6 @@ function AddProperty(props) {
         }
     };
 
-    // const printChosenFiles = fileProperty.map((val,idx) =>{
-    //    return fileProperty[idx]
-    // })
-
     const [description, setDescription] = useState(""); // useState description
     const [descriptionLength, setDescriptionLength] = useState(0);
 
@@ -71,62 +64,6 @@ function AddProperty(props) {
     const [mapsUrl, setMapsUrl] = useState(""); // useState link maps
 
     const toast = useToast();
-
-    // Province Select
-    const [allProvince, setAllProvince] = useState([]);
-
-    const selectProvince = useChakraSelectProps({
-        isMulti: false,
-        value: province,
-        onChange: setProvince,
-    });
-
-    const getProvince = async () => {
-        try {
-            let get = await axios.get(`${API_URL}/property/getprovince`);
-            setAllProvince(get.data);
-            console.log("allprovince", get);
-        } catch (error) {
-            console.log(error);
-        }
-    };
-
-    const provinces = allProvince.map((val, idx) => {
-        return { value: val.id, label: val.name };
-    });
-
-    // Regency Select
-    const [allRegency, setAllRegency] = useState([]);
-
-    const selectRegency = useChakraSelectProps({
-        isMulti: false,
-        value: regency,
-        onChange: setRegency,
-    });
-
-    const getRegency = async () => {
-        try {
-            let get = await axios.post(`${API_URL}/property/getregency`, {
-                province_id: province.value,
-            });
-            setAllRegency(get.data);
-            console.log("allregency", get);
-        } catch (error) {
-            console.log(error);
-        }
-    };
-
-    const regencies = allRegency.map((val, idx) => {
-        return { value: val.id, label: val.name };
-    });
-
-    useEffect(() => {
-        getProvince();
-    }, []);
-
-    useEffect(() => {
-        getRegency();
-    }, [province]);
 
     const btnAddProperty = async () => {
         try {
@@ -181,12 +118,67 @@ function AddProperty(props) {
         }
     };
 
+    // Province Select
+    const [allProvince, setAllProvince] = useState([]);
+
+    const selectProvince = useChakraSelectProps({
+        isMulti: false,
+        value: province,
+        onChange: setProvince,
+    });
+
+    const getProvince = async () => {
+        try {
+            let get = await axios.get(`${API_URL}/property/getprovince`);
+            setAllProvince(get.data);
+            console.log("allprovince", get);
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    const provinces = allProvince.map((val, idx) => {
+        return { value: val.id, label: val.name };
+    });
+
+    // Regency Select
+    const [allRegency, setAllRegency] = useState([]);
+
+    const selectRegency = useChakraSelectProps({
+        isMulti: false,
+        value: regency,
+        onChange: setRegency,
+    });
+
+    const getRegency = async () => {
+        try {
+            let get = await axios.post(`${API_URL}/property/getregency`, {
+                province_id: province.value,
+            });
+            setAllRegency(get.data);
+            console.log("allregency", get);
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    const regencies = allRegency.map((val, idx) => {
+        return { value: val.id, label: val.name };
+    });
+
     console.log("regencies", regencies);
+
+    useEffect(() => {
+        getProvince();
+    }, []);
+
+    useEffect(() => {
+        getRegency();
+    }, [province]);
+
     console.log("description", description);
     console.log("fileProperty", fileProperty);
     console.log("province", province);
-    // console.log("printChosenFiles",printChosenFiles);
-
     return (
         <Container
             my={"4"}
@@ -209,7 +201,7 @@ function AddProperty(props) {
                     fontWeight="bold"
                     mt="10"
                 >
-                    <h1>Add Listing</h1>
+                    <h1>Edit Listing</h1>
                 </Box>
                 <Box mt={"10"}>
                     <Box textAlign="left" fontSize={"3xl"} fontWeight="bold">
@@ -221,7 +213,7 @@ function AddProperty(props) {
                             fontWeight="medium"
                             alignItems={"center"}
                         >
-                            <Text>Which category fits your place?</Text>
+                            <Text>Edit Category</Text>
                         </Flex>
                         <Box flex={3} display="flex" flexDir={"column"}>
                             <Box display={"flex"} flexDir={"row"}>
@@ -319,13 +311,12 @@ function AddProperty(props) {
                             fontWeight={"medium"}
                             alignItems={"center"}
                         >
-                            <Text>Let's give your place a name</Text>
+                            <Text>Edit Name</Text>
                         </Flex>
                         <Box flex={3}>
                             <Box mx="4" my="2">
                                 <InputGroup display={"flex"} size={"md"}>
                                     <Input
-                                        isRequired
                                         placeholder="Enter the name of your listing"
                                         type="text"
                                         justifyItems={"self-end"}
@@ -345,7 +336,7 @@ function AddProperty(props) {
                             fontWeight={"medium"}
                             alignItems={"center"}
                         >
-                            <Text>Upload Photos of your place</Text>
+                            <Text>Edit Pictures</Text>
                         </Flex>
                         <Box flex={3}>
                             <Box
@@ -402,41 +393,9 @@ function AddProperty(props) {
                                         {fileProperty ? (
                                             <>
                                                 <Text alignSelf={"center"}>
-                                                    Your file/files:
+                                                    Your file/files:{" "}
+                                                    {fileProperty?.name}
                                                 </Text>
-                                                <Box
-                                                    display={"flex"}
-                                                    justifyContent={"left"}
-                                                >
-                                                    {fileProperty ? (
-                                                        Array.from(
-                                                            fileProperty
-                                                        ).map((file, index) => (
-                                                            <Image
-                                                                key={index}
-                                                                src={URL.createObjectURL(
-                                                                    file
-                                                                )}
-                                                                style={{
-                                                                    maxWidth:
-                                                                        "75px",
-                                                                    maxHeight:
-                                                                        "75px",
-                                                                    margin: "3px",
-                                                                    aspectRatio:
-                                                                        "3/2",
-                                                                    objectFit:
-                                                                        "contain",
-                                                                }}
-                                                            />
-                                                        ))
-                                                    ) : (
-                                                        <Text>
-                                                            Choose a file to
-                                                            upload
-                                                        </Text>
-                                                    )}
-                                                </Box>
                                                 <Button
                                                     type="button"
                                                     display={"flex"}
@@ -471,12 +430,11 @@ function AddProperty(props) {
                             fontWeight={"medium"}
                             alignItems={"center"}
                         >
-                            <Text>Tell us a story about your place</Text>
+                            <Text>Edit Description</Text>
                         </Flex>
                         <Box flex={3}>
                             <Box mx="4" my="2">
                                 <Textarea
-                                    isRequired
                                     placeholder="Describe your property"
                                     size={"md"}
                                     resize={"none"}
@@ -502,7 +460,7 @@ function AddProperty(props) {
                 </Box>
                 <Box as={Flex} my="10">
                     <Flex flex={1} fontWeight="medium" alignItems={"center"}>
-                        Where is your place located?
+                       Edit Location
                     </Flex>
                     <Box flex={3} display="flex" flexDir={"column"}>
                         <Box display={"flex"} flexDir={"row"}>
@@ -639,4 +597,4 @@ function AddProperty(props) {
     );
 }
 
-export default AddProperty;
+export default ManageProperty;

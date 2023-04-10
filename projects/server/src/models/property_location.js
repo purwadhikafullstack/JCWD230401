@@ -17,7 +17,8 @@ module.exports = (sequelize, DataTypes) => {
             address: DataTypes.STRING,
             zip: DataTypes.STRING,
             country: DataTypes.STRING,
-            provinceId: DataTypes.STRING,
+            regencyId: DataTypes.INTEGER,
+            provinceId: DataTypes.INTEGER,
             propertyId: DataTypes.INTEGER,
         },
         {
@@ -25,5 +26,10 @@ module.exports = (sequelize, DataTypes) => {
             modelName: "property_location",
         }
     );
+    property_location.associate = (models) => {
+        property_location.belongsTo(models.category, {
+            foreignKey: "categoryId",
+        });
+    };
     return property_location;
 };

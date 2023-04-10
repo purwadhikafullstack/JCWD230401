@@ -14,8 +14,10 @@ import ForgotPassword from "./Pages/ForgotPassword";
 import ResetPassword from "./Pages/ResetPassword";
 import Landing from "./Pages/Landing/Landing";
 import AddProperty from "./Pages/Tenant/AddProperty";
+import ManageProperty from "./Pages/Tenant/ManageProperty";
 
-function App() {
+
+function App(props) {
     const location = useLocation();
     const dispatch = useDispatch();
     // const roleId = useSelector((state) => state.authReducer.roleId);
@@ -63,7 +65,8 @@ function App() {
                     element={<ResetPassword />}
                 />
                 <Route path="/" element={<Landing />} />
-                <Route path="/listings" element={<AddProperty />} />
+                <Route path="/listing" element={<AddProperty />} />
+                <Route path="/editlisting" element={<ManageProperty />} />
             </Routes>
             {location.pathname === "/" && <NavbarMobile />}
         </>

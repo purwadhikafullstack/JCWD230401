@@ -13,8 +13,8 @@ module.exports = (sequelize, DataTypes) => {
     }
     regency.init(
         {
+            province_id: DataTypes.INTEGER,
             name: DataTypes.STRING,
-            province_id: DataTypes.STRING,
             alt_name: DataTypes.STRING,
             latitude: DataTypes.DOUBLE,
             longitude: DataTypes.DOUBLE,
