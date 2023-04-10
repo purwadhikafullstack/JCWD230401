@@ -176,7 +176,7 @@ export default function Navbar() {
                           </Modal>
                         </MenuItem>
                         <MenuItem
-                          onClick={() => navigate('/auth/userregister')}
+                          onClick={() => navigate('/userregister')}
                         >Register</MenuItem>
                       </MenuList>
                 }
