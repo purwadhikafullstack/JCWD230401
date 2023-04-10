@@ -4,7 +4,7 @@ const { v4: uuidv4 } = require("uuid");
 const bcrypt = require("bcrypt");
 const { createToken } = require("../helper/jwt");
 const fs = require("fs");
-const hbs = require("nodemailer-express-handlebars");
+// const hbs = require("nodemailer-express-handlebars");
 const nodemailer = require("nodemailer");
 
 let salt = bcrypt.genSaltSync(10);

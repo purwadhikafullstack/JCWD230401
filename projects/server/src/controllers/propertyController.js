@@ -176,7 +176,7 @@ module.exports = {
 
                 },
                 {
-                    model: model.users, attributes: ['name']
+                    model: model.user, include: [{model: model.user_detail, attributes: ['name']}]
                 },
 
             ],
