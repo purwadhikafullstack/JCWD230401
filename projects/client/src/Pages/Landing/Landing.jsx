@@ -20,12 +20,11 @@ import Ubud1 from './images/ubud-1.jpg';
 import Bandung1 from './images/bandung-1.jpg';
 import Bali1 from './images/bali-1.png';
 import NusaPenida1 from './images/nusapenida-1.png';
-import axios from "axios";
-import { API_URL } from "../../helper";
-
-import { useNavigate } from 'react-router-dom';
-
-
+import axios from 'axios';
+import { API_URL } from '../../helper';
+import { useNavigate } from "react-router-dom";
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 
 export default function Landing() {
     const [inputTypeIn, setInputTypeIn] = useState('');
@@ -34,31 +33,27 @@ export default function Landing() {
     const [allProperty, setAllProperty] = useState([]);
     const token = localStorage.getItem('tempatku_login')
     const [inputLocation, setInputLocation] = useState('');
-    const [showLocation, setShowLocation] = useState([]); 
+
+    const [showLocation, setShowLocation] = useState([]);
+    const [checkInDate, setCheckInDate] = useState(null);
+    const [checkOutDate, setCheckOutDate] = useState(null);
     const [guest, setGuest] = useState(5)
-
+    // Get current date
+    const currentDate = new Date();
+    // Set the minDate prop to the current date to disable yesterday and earlier dates
+    const minDate = currentDate;
+    // const highlightDates = (date) => {
+    //     if (checkInDate && checkOutDate) {
+    //         return date >= checkInDate && date <= checkOutDate;
+    //     } else {
+    //         return false;
+    //     }
+    // };
     //api to fetch search result
-    const onSearch = (searchTerm) => {
-        setInputLocation(searchTerm); //if suggestion clicked, it will be put inside the input field
-        console.log("Ini adalah search : ", searchTerm)
-    }
-
-    const getAllLocations = async () => {
-        // try {
-        //     let response = await axios.get(`${API_URL}/location/list`, {
-        //         city: showLocation
-        //     })
-        //     // console.log("ini response.data dari getAllLocations 🪶 : ", response.data.data); 
-        //     setShowLocation(response.data.data)
-        // } catch (error) {
-        //     console.log("ini error dari getAllLocations:", error);
-        // }
-    }
-
-    // Jalanin fungsi getAllLocations
-    React.useEffect(()=>{
-        getAllLocations()
-    }, [inputLocation]);
+    // const onSearch = (searchTerm) => {
+    //     setInputLocation(searchTerm); //if suggestion clicked, it will be put inside the input field
+    //     console.log("Ini adalah search : ", searchTerm)
+    // }
 
     // Check In Check Out
     const [inputCheckIn, setInputCheckIn] = useState('');
@@ -140,47 +135,49 @@ export default function Landing() {
                         <form>
                             <div className="location-input">
                                 <label>Location</label>
-                                <input type="text" placeholder="Where are you going?" 
-                                onChange={(e)=>setInputLocation(e.target.value)}
-                                value={inputLocation}
+                                <input type="text" placeholder="Where are you going?"
+                                    // onChange={(e) => setInputLocation(e.target.value)}
+                                    // value={inputLocation}
                                 />
                                 <div className="dropdown">
-                                {showLocation.filter(item => {
-                                    const searchTerm = inputLocation.toLowerCase();
-                                    const city = item.city.toLowerCase(); 
-                                    return (searchTerm && city.startsWith(searchTerm) && city !== searchTerm);
-                                }
-                                ).slice(0,5) //will show only first 5 items di location input field
-                                .map((item)=>
-                                (<div 
-                                onClick={()=>onSearch(item.city)} 
-                                className="dropdown-row"
-                                key={item.city} 
-                                >{item.city}</div>))}
+                                    {/* {showLocation.filter(item => {
+                                        const searchTerm = inputLocation.toLowerCase();
+                                        const city = item.city.toLowerCase();
+                                        return (searchTerm && city.startsWith(searchTerm) && city !== searchTerm);
+                                    }
+                                    ).slice(0, 5) //will show only first 5 items di location input field
+                                        .map((item) =>
+                                        (<div
+                                            onClick={() => onSearch(item.city)}
+                                            className="dropdown-row"
+                                            key={item.city}
+                                        >{item.city}</div>))} */}
                                 </div>
                             </div>
                             <div>
                                 <label>Check in</label>
-                                <input 
-                                type={
-                                    'date'
-                                    // inputCheckIn
-                                } 
-                                placeholder="Choose Date" 
-                                // onClick={OnBtnCheckIn}
-                                onChange={(e) => setInputCheckIn(e.target.value)}
+                                <DatePicker
+                                    selected={checkInDate}
+                                    onChange={(date) => setCheckInDate(date)}
+                                    dateFormat="dd/MM/yyyy"
+                                    placeholderText="Choose Date"
+                                    minDate={minDate}
+                                    // highlightDates={highlightDates}
+                                    // calendarClassName="highlight"
+                                    shouldCloseOnSelect={false}
                                 />
                             </div>
                             <div>
                                 <label>Check out</label>
-                                <input 
-                                type={
-                                    'date'
-                                    // inputCheckOut
-                                } 
-                                placeholder="Choose Date" 
-                                // onClick={OnBtnCheckOut}
-                                onChange={(e) => setInputCheckOut(e.target.value)}
+                                <DatePicker
+                                    selected={checkOutDate}
+                                    onChange={(date) => setCheckOutDate(date)}
+                                    dateFormat="dd/MM/yyyy"
+                                    placeholderText="Choose Date"
+                                    minDate={checkInDate ? new Date(checkInDate.getTime() + 24 * 60 * 60 * 1000) : undefined}
+                                    // highlightDates={highlightDates}
+                                    // calendarClassName="highlight"
+                                    shouldCloseOnSelect={false}
                                 />
                             </div>
                             <div>
@@ -188,7 +185,7 @@ export default function Landing() {
                                 <input type="number" placeholder="Add Guest"
                                  onChange={(e) => setGuest(e.target.value)}/>
                             </div>
-                            <button type="button" onClick={handleSearch}>
+                            <button type="button" onClick={handleSearch} style={{ background: "#D3212D" }}>
                                 <img src={Search} />
                             </button>
                         </form>

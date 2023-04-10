@@ -28,14 +28,14 @@ export default function TenantRegister() {
     const [phone, setPhone] = React.useState('');
     const [email, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
-    const [fileImage, setFileImage] = useState(null); 
+    const [fileImage, setFileImage] = useState(null);  //state for idcard
     const inputFile = useRef(null);
     const [image, setImage] = useState("https://fakeimg.pl/350x200/");
 
     //untuk upload ktp
     const onChangeFile = (event) => {
-        console.log("ini isi dari onchangefile :", event.target.files);
-        setFileImage(event.target.files[0]); //change to setFileIdCardImage
+        console.log("ini isi dari event.target.files onchangefile :", event.target.files);
+        setFileImage(event.target.files[0]); //change to setFileImage
     };
 
     const onBtnRegister = async () => {

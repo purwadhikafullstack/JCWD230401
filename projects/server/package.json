@@ -22,6 +22,7 @@
     "multer": "latest",
     "mysql2": "latest",
     "nodemailer": "latest",
+    "nodemailer-express-handlebars": "^6.1.0",
     "redis": "latest",
     "sequelize": "latest",
     "uuid": "latest"

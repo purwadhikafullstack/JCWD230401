@@ -17,8 +17,7 @@ const IMAGE =
 export default function PropertyCard(props) {
     return (
         <Center
-        // pt={6} 
-        // px='1'
+        p='1'
         >
             <Box
                 role={'group'}
@@ -30,7 +29,8 @@ export default function PropertyCard(props) {
                 boxShadow={'xs'}
                 rounded={'lg'}
                 pos={'relative'}
-                zIndex={0}>
+                zIndex={0}
+            >
                 <Box
                     rounded={'lg'}
                     pos={'relative'}
@@ -39,7 +39,7 @@ export default function PropertyCard(props) {
                     <Image
                         rounded={'lg'}
                         height={{ base: '300px', lg: '230px' }}
-                        width={{ base: '400px', lg: '250px' }}
+                        // width={{ base: '400px', lg: '250px' }}
                         objectFit={'cover'}
                         src={`${API_URL}${props.picture}`}
                     />

@@ -6,14 +6,14 @@ const cors = require("cors");
 const bearerToken = require('express-bearer-token')
 
 
-// console.log(__dirname);
+// console.log("isi dari __dirname :" + __dirname); 
 const PORT = process.env.PORT || 8000;
 const app = express();
 app.use(express.json());
 app.use(cors());
 app.use(bearerToken());
 // #destination file storage(image/pdf/document)
-app.use("/", express.static(__dirname + "/src/public"));
+app.use("/", express.static(__dirname + "/public"));
 
 app.use("/", express.static(__dirname + "/public"));
 
@@ -29,8 +29,8 @@ app.use('/category', categoryRouter)
 app.use('/property', propertyRouter)
 
 
-const locationRouter = require('./routers/locationRouter');
-app.use('/location', locationRouter);
+// const locationRouter = require('./routers/locationRouter');
+// app.use('/location', locationRouter);
 // ===========================
 // NOTE : Add your routes here
 

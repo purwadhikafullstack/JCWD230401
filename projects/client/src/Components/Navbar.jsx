@@ -25,6 +25,7 @@ import Login from './Login';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { logoutAction } from '../reducers/auth';
+import { API_URL } from '../helper';
 
 
 export default function Navbar() {
@@ -133,14 +134,15 @@ export default function Navbar() {
                   <HamburgerIcon w={6} h={6} mx={2} my={1} color='black' />
                   <Avatar
                     size={'sm'}
-                  // src={imageprofile}
+                    src={imageprofile ? `${API_URL}${imageprofile}` : ""}
                   />
                 </MenuButton>
                 {
                   // User
                   roleId == 1 ?
                     <MenuList>
-                      <MenuItem>Profile</MenuItem>
+                      <MenuItem onClick={() => navigate('/')}>Home</MenuItem>
+                      <MenuItem onClick={() => navigate('/editprofile')}>Profile</MenuItem>
                       <MenuItem>Bookings</MenuItem>
                       <MenuItem onClick={() => navigate('/auth/changepassword')}>Change Password</MenuItem>
                       <MenuItem
@@ -151,6 +153,7 @@ export default function Navbar() {
                     // Tenant
                     roleId == 2 ?
                       <MenuList>
+                        <MenuItem onClick={() => navigate('/dashboard')}>Dashboard</MenuItem>
                         <MenuItem>Profile</MenuItem>
                         <MenuItem>Property</MenuItem>
                         <MenuItem>Report</MenuItem>

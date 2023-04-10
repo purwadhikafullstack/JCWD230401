@@ -7,7 +7,7 @@ module.exports = (sequelize, DataTypes) => {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
+     * The models/index file will call this method automatically.
      */
     static associate(models) {
       // define association here
@@ -19,7 +19,8 @@ module.exports = (sequelize, DataTypes) => {
     zip: DataTypes.STRING,
     country: DataTypes.STRING,
     provinceId: DataTypes.INTEGER,
-    propertyId: DataTypes.INTEGER
+    propertyId: DataTypes.INTEGER,
+    regency_id: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'property_location',
@@ -28,6 +29,7 @@ module.exports = (sequelize, DataTypes) => {
   property_location.associate = (models) => {
     property_location.belongsTo(models.property, { foreignKey: 'propertyId' });
     property_location.belongsTo(models.province, { foreignKey: 'provinceId' });
+    property_location.belongsTo(models.regency, { foreignKey: 'regency_id' });
 }
   return property_location;
 };

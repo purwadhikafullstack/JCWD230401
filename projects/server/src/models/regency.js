@@ -26,6 +26,7 @@ module.exports = (sequelize, DataTypes) => {
 
   regency.associate = (models) => {
     regency.belongsTo(models.province, { foreignKey: 'province_id' });
+    regency.hasMany(models.property_location, { foreignKey: 'regency_id' });
 }
   return regency;
 };
