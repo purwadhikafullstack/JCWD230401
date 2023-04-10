@@ -3,7 +3,7 @@ const model = require("../models");
 const { v4: uuidv4 } = require("uuid");
 const bcrypt = require("bcrypt");
 const { createToken } = require("../helper/jwt");
-const transporter = require("../helper/nodemailer");
+// const transporter = require("../helper/nodemailer");
 const con = require('../helper/dbCon')
 
 
@@ -176,7 +176,7 @@ module.exports = {
 
                 },
                 {
-                    model: model.users, attributes: ['name']
+                    model: model.user, include: [{model: model.user_detail, attributes: ['name']}]
                 },
 
             ],
