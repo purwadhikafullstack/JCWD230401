@@ -21,10 +21,12 @@ const transactionRouter = require('./routers/transactionRouter');
 const categoryRouter = require('./routers/categoryRouter');
 const userRouter = require('./routers/userRouter');
 const propertyRouter = require('./routers/propertyRouter');
+const orderRouter = require('./routers/orderRouter');
 app.use('/user', userRouter);
 app.use('/transaction', transactionRouter)
 app.use('/category', categoryRouter)
 app.use('/property', propertyRouter)
+app.use('/order', orderRouter)
 
 
 const locationRouter = require('./routers/locationRouter');

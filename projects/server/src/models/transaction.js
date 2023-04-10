@@ -21,10 +21,15 @@ module.exports = (sequelize, DataTypes) => {
     image_payment: DataTypes.STRING,
     isConfirmed: DataTypes.BOOLEAN,
     transaction_statusId: DataTypes.INTEGER,
-    userId: DataTypes.INTEGER
+    userId: DataTypes.INTEGER,
+    expiredAt: DataTypes.DATE
   }, {
     sequelize,
     modelName: 'transaction',
   });
+  transaction.associate = (models) => {
+    transaction.belongsTo(models.room, { foreignKey: 'roomId' });
+    transaction.hasMany(models.order, { foreignKey: 'transactionId' });
+  }
   return transaction;
 };

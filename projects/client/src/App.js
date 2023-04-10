@@ -15,6 +15,8 @@ import ResetPassword from "./Pages/ResetPassword";
 import Landing from "./Pages/Landing/Landing";
 import FilteredProperty from "./Pages/FilteredProperty/FilteredProperty";
 import PropertyDetail from "./Pages/PropertyDetail/PropertyDetail";
+import Payments from "./Pages/Payments/Payments";
+import PaymentDetail from "./Pages/PaymentDetail";
 
 function App() {
   const location = useLocation();
@@ -65,6 +67,8 @@ function App() {
         <Route path="/" element={<Landing />} />
         <Route path="/property" element={<FilteredProperty />} />
         <Route path="/property/detail/:uuid" element={<PropertyDetail />} />
+        <Route path="/payment" element={<Payments />} />
+        <Route path="/payment/detail" element={<PaymentDetail />} />
       </Routes>
       {/* {location.pathname === "/" && <NavbarMobile />} */}
     </>
