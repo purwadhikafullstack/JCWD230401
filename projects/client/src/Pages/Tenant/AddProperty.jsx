@@ -12,8 +12,8 @@ import {
     Textarea,
     FormControl,
     FormLabel,
-    useToast,
     Image,
+    useToast,
 } from "@chakra-ui/react";
 import { Select, useChakraSelectProps } from "chakra-react-select";
 import { BiHotel, BiHomeAlt } from "react-icons/bi";
@@ -68,9 +68,9 @@ function AddProperty(props) {
     const [province, setProvince] = useState(null); // useState province
     const [zipcode, setZipcode] = useState(""); // useState zip
     const [country, setCountry] = useState(""); // useState country
-    const [mapsUrl, setMapsUrl] = useState(""); // useState link maps
+    // const [mapsUrl, setMapsUrl] = useState(""); // useState link maps
 
-    const toast = useToast();
+    // const toast = useToast();
 
     // Province Select
     const [allProvince, setAllProvince] = useState([]);
@@ -145,6 +145,7 @@ function AddProperty(props) {
                     country: country,
                 })
             );
+            console.log("formData", formData);
 
             if (fileProperty != null) {
                 let temp = [...fileProperty];

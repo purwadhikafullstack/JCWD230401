@@ -12,7 +12,8 @@ route.post(
     uploader("/ImgProperty", "PTY").array("images", 5),
     propertyController.addProperty
 );
+route.get("/getpropertydata/:uuid", propertyController.getPropertyData);
+route.patch("/editproperty", uploader("/ImgProperty", "PTY").array("images", 5), propertyController.editProperty);
 route.patch("/deleteproperty", propertyController.deleteProperty);
-route.patch("/editproperty", propertyController.editProperty);
 
 module.exports = route;

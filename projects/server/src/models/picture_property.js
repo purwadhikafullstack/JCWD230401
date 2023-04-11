@@ -23,5 +23,10 @@ module.exports = (sequelize, DataTypes) => {
             modelName: "picture_property",
         }
     );
+    picture_property.associate = (models) => {
+        picture_property.belongsTo(models.property, {
+            foreignKey: "propertyId",
+        });
+    };
     return picture_property;
 };

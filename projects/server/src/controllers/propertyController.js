@@ -121,69 +121,131 @@ module.exports = {
             });
         } catch (error) {
             await ormTransaction.rollback();
+
+            console.log(error);
+            next(error);
+        }
+    },
+    // get property
+    getPropertyData: async (req, res, next) => {
+        try {
+            let get = await model.property.findAll({
+                where: { uuid: req.params.uuid },
+                include: [
+                    {
+                        model: model.category,
+                        attributes: ["category"],
+                    },
+                    {
+                        model: model.picture_property,
+                        attributes: ["picture"],
+                    },
+                    {
+                        model: model.property_location,
+                    },
+                ],
+            });
+            console.log("getPropertyData:", get[0].dataValues.property);
+            return res.status(200).send({
+                success: true,
+                data: get,
+            });
+        } catch (error) {
             console.log(error);
             next(error);
         }
     },
     // edit property
     editProperty: async (req, res, next) => {
+        const ormTransaction = await model.sequelize.transaction();
         try {
-            let get = await model.property.findAll({
-                where: { uuid: req.params.uuid },
-                attributes: ["picture"],
-            });
-            console.log("req.body.data", req.body.data);
-            console.log("req.files", req.files);
-            let { property, address, description, category, userId } =
-                JSON.parse(req.body.data);
-            if (req.files.length === 0) {
-                let edit = await model.property.update(
-                    {
-                        property,
-                        address,
-                        description,
-                        categoryId: category,
-                        userId: userId,
+            // console.log("req.body.data", req.body.data);
+            // console.log("req.decrypt", req.decrypt);
+            // console.log("req.files", req.files);
+            let {
+                uuidProperty,
+                category,
+                categoryId,
+                property_location_id,
+                property,
+                description,
+                address,
+                regencyId,
+                provinceId,
+                zipcode,
+                country,
+            } = JSON.parse(req.body.data);
+
+            console.log("req.body.data:", JSON.parse(req.body.data));
+            // console.log("test", uuidProperty)
+            let editCategory = await model.category.update(
+                {
+                    category: category,
+                },
+                {
+                    where: {
+                        id: categoryId,
                     },
-                    {
-                        where: {
-                            uuid: req.params.uuid,
-                        },
-                    }
-                );
-                console.log("Data edit:", edit);
-                return res.status(200).send({
-                    success: true,
-                    message: "Property updated",
+                },
+                { transaction: ormTransaction }
+            );
+
+            let editProperty = await model.property.update(
+                {
+                    property,
+                    description,
+                },
+                {
+                    where: {
+                        uuid: uuidProperty,
+                    },
+                },
+                { transaction: ormTransaction }
+            );
+            // console.log("Data Property:", addProperty);
+
+            if (req.files.length) {
+                // create new image
+                let newArr = req.files.map((val, idx) => {
+                    delete val.fieldname;
+                    delete val.originalname;
+                    delete val.encoding;
+                    delete val.mimetype;
+                    delete val.destination;
+                    delete val.path;
+                    delete val.size;
+                    val.picture = `/ImgProperty/${val.filename}`;
+                    delete val.filename;
+                    return { ...val, propertyId: editProperty.dataValues.id };
                 });
-            } else {
-                await model.property.update(
-                    {
-                        property,
-                        address,
-                        description,
-                        categoryId: category,
-                        userId: userId,
-                        picture: `/picProperty/${req.files[0]?.filename}`,
-                    },
-                    {
-                        where: {
-                            uuid: req.params.uuid,
-                        },
-                    }
-                );
-                if (
-                    fs.existsSync(`./src/public${get[0].dataValues.picture}`) &&
-                    !get[0].dataValues.picture.includes("default")
-                ) {
-                    fs.unlinkSync(`./src/public${get[0].dataValues.picture}`);
-                }
+                await model.picture_property.bulkCreate(newArr);
+                // console.log("newArr:", newArr);
             }
+            console.log("req.files:", req.files);
+            let editPropertyLocation = await model.property_location.update(
+                {
+                    address: address,
+                    zip: zipcode,
+                    country: country,
+                    regencyId: regencyId,
+                    provinceId: provinceId,
+                },
+                {
+                    where: {
+                        id: property_location_id,
+                    },
+                },
+                { transaction: ormTransaction }
+            );
+
+            await ormTransaction.commit();
+
             return res.status(200).send({
                 success: true,
-                message: "Edit Product Success",
+                message: "Added new property",
             });
         } catch (error) {
+            await ormTransaction.rollback();
             console.log(error);
             next(error);
         }
@@ -197,7 +259,7 @@ module.exports = {
                 },
                 {
                     where: {
-                        uuid: req.body.uuid,
+                        uuid: uuidProperty, //ulik broooooooooooooooo
                     },
                 }
             );

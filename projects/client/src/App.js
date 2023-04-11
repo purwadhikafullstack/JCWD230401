@@ -1,5 +1,4 @@
 import axios from "axios";
-import logo from "./logo.svg";
 import "./App.css";
 import { Route, Routes, useLocation } from "react-router-dom";
 import NavbarMobile from "./Components/NavbarMobile";
@@ -15,6 +14,8 @@ import ResetPassword from "./Pages/ResetPassword";
 import Landing from "./Pages/Landing/Landing";
 import AddProperty from "./Pages/Tenant/AddProperty";
 import ManageProperty from "./Pages/Tenant/ManageProperty";
+import AddRoom from "./Pages/Tenant/AddRoom";
+
 
 
 function App(props) {
@@ -66,7 +67,9 @@ function App(props) {
                 />
                 <Route path="/" element={<Landing />} />
                 <Route path="/listing" element={<AddProperty />} />
-                <Route path="/editlisting" element={<ManageProperty />} />
+                <Route path="/room" element={<AddRoom />} />
+                <Route path="/editlisting/:uuid" element={<ManageProperty />} />
+
             </Routes>
             {location.pathname === "/" && <NavbarMobile />}
         </>

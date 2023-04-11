@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
+import {useParams} from "react-router-dom"
 import axios from "axios";
 import { API_URL } from "../../helper";
 import {
@@ -13,15 +14,38 @@ import {
     FormControl,
     FormLabel,
     useToast,
+    Image,
 } from "@chakra-ui/react";
 import { Select, useChakraSelectProps } from "chakra-react-select";
 import { BiHotel, BiHomeAlt } from "react-icons/bi";
 import { MdApartment } from "react-icons/md";
 import { HiTrash } from "react-icons/hi2";
 import { SlPicture } from "react-icons/sl";
-function ManageProperty() {
-    const [category, setCategory] = useState(""); // useState category
+function ManageProperty(props) {
 
+    const params = useParams();
+
+    const [propertyData, setPropertyData] = useState([]);
+    
+    const getPropertyData = async () => {
+        try {
+            let token = localStorage.getItem("tempatku_login");
+            let get = await axios.get(
+                `${API_URL}/property/getpropertydata/${params.uuid}`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
+            setPropertyData(get.data.data[0]);
+        } catch (error) {
+            console.log(error);
+        }
+    };
+    console.log("propertyData", propertyData);
+
+    const [category, setCategory] = useState(""); // useState category
     const [property, setProperty] = useState(""); // useState property
 
     const inputFile = useRef(null);
@@ -65,7 +89,7 @@ function ManageProperty() {
 
     const toast = useToast();
 
-    const btnAddProperty = async () => {
+    const btnEditProperty = async () => {
         try {
             let token = localStorage.getItem("tempatku_login");
             let formData = new FormData();
@@ -73,6 +97,9 @@ function ManageProperty() {
                 "data",
                 JSON.stringify({
                     category: category,
+                    categoryId: propertyData.categoryId,
+                    uuidProperty: propertyData.uuid,
+                    property_location_id: propertyData.property_location.id,
                     property: property,
                     description: description,
                     address: address,
@@ -82,6 +109,17 @@ function ManageProperty() {
                     country: country,
                 })
             );
+            console.log("propertyData.categoryId", propertyData.categoryId);
+            console.log("category", category);
+            console.log("propertyData.uuid", propertyData.uuid);
+            console.log("propertyData.property_location.id", propertyData.property_location.id);
+            console.log("property", property);
+            console.log("description", description);
+            console.log("address", address);
+            console.log("regency.value", regency.value);
+            console.log("province.value", province.value);
+            console.log("zipcode", zipcode);
+            console.log("country", country);
 
             if (fileProperty != null) {
                 let temp = [...fileProperty];
@@ -90,8 +128,8 @@ function ManageProperty() {
                 });
             }
 
-            let add = await axios.post(
-                `${API_URL}/property/addproperty`,
+            let edit = await axios.patch(
+                `${API_URL}/property/editproperty`,
                 formData,
                 {
                     headers: {
@@ -99,7 +137,7 @@ function ManageProperty() {
                     },
                 }
             );
-            if (add.data.success) {
+            if (edit.data.success) {
                 setFileProperty(null);
                 setCategory("");
                 setProperty("");
@@ -110,7 +148,7 @@ function ManageProperty() {
                 setProvince("");
                 setZipcode("");
                 setCountry("");
-                alert("Property Added");
+                alert("Property Updated");
                 // ubah ke toast
             }
         } catch (error) {
@@ -170,6 +208,7 @@ function ManageProperty() {
 
     useEffect(() => {
         getProvince();
+        getPropertyData();
     }, []);
 
     useEffect(() => {
@@ -296,7 +335,10 @@ function ManageProperty() {
                                         type="text"
                                         justifyItems={"self-end"}
                                         h={"40px"}
-                                        value={category}
+                                        // value={category}
+                                        defaultValue={
+                                            propertyData?.category?.category
+                                        }
                                         onChange={(e) => {
                                             setCategory(e.target.value);
                                         }}
@@ -321,7 +363,8 @@ function ManageProperty() {
                                         type="text"
                                         justifyItems={"self-end"}
                                         h={"40px"}
-                                        value={property}
+                                        // value={property}
+                                        defaultValue={propertyData?.property}
                                         onChange={(e) =>
                                             setProperty(e.target.value)
                                         }
@@ -393,9 +436,41 @@ function ManageProperty() {
                                         {fileProperty ? (
                                             <>
                                                 <Text alignSelf={"center"}>
-                                                    Your file/files:{" "}
-                                                    {fileProperty?.name}
+                                                    Your file/files:
                                                 </Text>
+                                                <Box
+                                                    display={"flex"}
+                                                    justifyContent={"left"}
+                                                >
+                                                    {fileProperty ? (
+                                                        Array.from(
+                                                            fileProperty
+                                                        ).map((file, index) => (
+                                                            <Image
+                                                                key={index}
+                                                                src={URL.createObjectURL(
+                                                                    file
+                                                                )}
+                                                                style={{
+                                                                    maxWidth:
+                                                                        "75px",
+                                                                    maxHeight:
+                                                                        "75px",
+                                                                    margin: "3px",
+                                                                    aspectRatio:
+                                                                        "3/2",
+                                                                    objectFit:
+                                                                        "contain",
+                                                                }}
+                                                            />
+                                                        ))
+                                                    ) : (
+                                                        <Text>
+                                                            Choose a file to
+                                                            upload
+                                                        </Text>
+                                                    )}
+                                                </Box>
                                                 <Button
                                                     type="button"
                                                     display={"flex"}
@@ -440,7 +515,8 @@ function ManageProperty() {
                                     resize={"none"}
                                     h={"250px"}
                                     maxLength={250}
-                                    value={description}
+                                    // value={description}
+                                    defaultValue={propertyData?.description}
                                     onChange={(e) => {
                                         setDescription(e.target.value);
                                         setDescriptionLength(
@@ -460,7 +536,7 @@ function ManageProperty() {
                 </Box>
                 <Box as={Flex} my="10">
                     <Flex flex={1} fontWeight="medium" alignItems={"center"}>
-                       Edit Location
+                        Edit Location
                     </Flex>
                     <Box flex={3} display="flex" flexDir={"column"}>
                         <Box display={"flex"} flexDir={"row"}>
@@ -471,7 +547,10 @@ function ManageProperty() {
                                     type="text"
                                     placeholder="Enter street name, number and city"
                                     mb={"2"}
-                                    value={address}
+                                    // value={address}
+                                    defaultValue={
+                                        propertyData?.property_location?.address
+                                    }
                                     onChange={(e) => {
                                         setAddress(e.target.value);
                                     }}
@@ -519,7 +598,10 @@ function ManageProperty() {
                                     type="number"
                                     placeholder="Enter zip code"
                                     mb={"2"}
-                                    value={zipcode}
+                                    // value={zipcode}
+                                    defaultValue={
+                                        propertyData?.property_location?.zip
+                                    }
                                     onChange={(e) => {
                                         setZipcode(e.target.value);
                                     }}
@@ -532,7 +614,10 @@ function ManageProperty() {
                                     type="text"
                                     placeholder="Enter country"
                                     mb={"2"}
-                                    value={country}
+                                    // value={country}
+                                    defaultValue={
+                                        propertyData?.property_location?.country
+                                    }
                                     onChange={(e) => {
                                         setCountry(e.target.value);
                                     }}
@@ -587,7 +672,7 @@ function ManageProperty() {
                         ml={"4"}
                         rounded={"3xl"}
                         bgColor="#D3212D"
-                        onClick={btnAddProperty}
+                        onClick={btnEditProperty}
                     >
                         <Text color={"white"}>Save</Text>
                     </Button>

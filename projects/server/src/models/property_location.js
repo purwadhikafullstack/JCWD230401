@@ -27,9 +27,10 @@ module.exports = (sequelize, DataTypes) => {
         }
     );
     property_location.associate = (models) => {
-        property_location.belongsTo(models.category, {
-            foreignKey: "categoryId",
-        });
+        property_location.belongsTo(models.property, {
+            foreignKey: "propertyId"
+        })
     };
+
     return property_location;
 };
