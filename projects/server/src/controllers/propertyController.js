@@ -259,7 +259,7 @@ module.exports = {
                 },
                 {
                     where: {
-                        uuid: uuidProperty, //ulik broooooooooooooooo
+                        uuid: uuidProperty, // PIKIRIN COKKK
                     },
                 }
             );
