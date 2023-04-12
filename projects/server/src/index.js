@@ -1,12 +1,12 @@
 const { join } = require("path");
 require("dotenv/config");
-require("dotenv").config({path:join(__dirname, ".env")});
+require("dotenv").config({ path: join(__dirname, ".env") });
 const express = require("express");
 const cors = require("cors");
-const bearerToken = require('express-bearer-token')
+const bearerToken = require("express-bearer-token");
 
 
-// console.log("isi dari __dirname :" + __dirname); 
+// console.log("isi dari __dirname :" + __dirname);
 const PORT = process.env.PORT || 8000;
 const app = express();
 app.use(express.json());
@@ -18,11 +18,9 @@ app.use("/", express.static(__dirname + "/public"));
 
 //#region API ROUTES
 
-const userRouter = require('./routers/userRouter');
-app.use('/user', userRouter);
+const userRouter = require("./routers/userRouter");
+app.use("/api/user", userRouter);
 
-// const locationRouter = require('./routers/locationRouter');
-// app.use('/location', locationRouter);
 // ===========================
 // NOTE : Add your routes here
 
@@ -50,8 +48,8 @@ app.use((req, res, next) => {
 // error
 app.use((err, req, res, next) => {
   if (req.path.includes("/api/")) {
-    console.error("Error : ", err.stack);
-    res.status(500).send("Error !");
+    console.error("Error : ", err);
+    res.status(500).send(err);
   } else {
     next();
   }

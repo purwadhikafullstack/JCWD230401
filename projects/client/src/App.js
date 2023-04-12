@@ -3,7 +3,7 @@ import "./App.css";
 import { Route, Routes, useLocation } from "react-router-dom";
 import NavbarMobile from "./Components/NavbarMobile";
 import Navbar from "./Components/Navbar";
-import React from "react";
+import React, { useState } from "react";
 import UserRegister from "./Pages/UserRegister";
 import { useDispatch, useSelector } from "react-redux";
 import { loginAction } from "./reducers/auth";
@@ -53,6 +53,7 @@ function App() {
       {location.pathname === "/" && <Navbar />}
       {location.pathname === "/editprofile" && <Navbar />}
       {location.pathname === "/productdetail" && <Navbar />}
+      {location.pathname === "/transactionpage" && <Navbar />}
       {location.pathname === "/dashboard" && roleId == 2 && <Navbar />}
 
       {
@@ -84,6 +85,7 @@ function App() {
             <Route path="/" element={<Landing />} />
             <Route path="*" element={<NotFound />} />
             <Route path="/productdetail" element={<ProductDetail />} />
+            <Route path="/editprofile" element={<EditProfile keeplogin={() => dispatch(keeplogin())} />} />
           </Routes>
         ) : (
           // Not logged in

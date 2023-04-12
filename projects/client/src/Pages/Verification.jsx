@@ -48,6 +48,61 @@ export default function Verification() {
     }
   }
 
+  // count function to limit 5 resend otp by date 
+  const countDate = function() {
+    const currentDate = new Date();
+    const dateLocalStrg = localStorage.getItem("date");
+    let count = 0;
+    
+    if (dateLocalStrg) {
+    count = parseInt(localStorage.getItem("count"));
+    } else {
+    localStorage.setItem("date", currentDate.toISOString());
+    localStorage.setItem("count", count);
+    }
+    
+    count++;
+    console.log("udah kirim ke berapa kali nya hari ini:", count); 
+    localStorage.setItem("count", count);
+    localStorage.setItem("date", currentDate.setDate(currentDate.getDate() + count));
+    
+    console.log("Current date:", dateLocalStrg);
+    
+
+    if (count === 5) {
+      alert("account verification code can only be sent 5 times a day")
+    }
+    }
+
+  //resend otp
+  const onBtnSendVerifyEmail = async () => {
+    try {
+      const count = parseInt(localStorage.getItem("count"));
+      if (count < 5) {
+      let response = await axios.post(`${API_URL}/user/sendverificationemail`, {}, {
+        headers: {
+          Authorization: `Bearer ${params.token}`
+        }
+      }
+      );
+      console.log("ini hasil response onbtnSendVerifyEmail :", response); //testing purposes
+      alert(response.data.message);
+      // count the date up to 5 times
+      countDate();
+    } else {
+      alert("account verification email can only be sent 5 times a day");
+    }
+    } catch (error) {
+      // Check for token expiration
+      if (error.response && error.response.status === 401) {
+        alert("Your session has expired. Please log in again to get a new verification email.");
+        navigate('/'); // Redirect the user to the login page
+      } else {
+        navigate('/transactionpage');
+      }
+    }
+  }
+
   return (
     <Flex
       minH={'100vh'}
@@ -70,15 +125,11 @@ export default function Verification() {
         </Center>
         <Center
           fontSize={{ base: 'sm', sm: 'md' }}
+          align='center'
         >
-          We have sent code to your email
+          We have sent the verification code to your email
         </Center>
-        <Center
-          fontSize={{ base: 'sm', sm: 'md' }}
-          fontWeight="bold"
-        >
-          username@mail.com
-        </Center>
+
         <FormControl>
           <Center>
             <HStack>
@@ -95,7 +146,7 @@ export default function Verification() {
             fontWeight="thin"
             my={2}
           >
-            the code is valid for 1 hour
+            the code is valid for 24 hours
           </Center>
         </FormControl>
         <Stack spacing={2}>
@@ -118,6 +169,7 @@ export default function Verification() {
               color: '#D3212D',
             }}
             borderColor={'#D3212D'}
+            onClick={onBtnSendVerifyEmail}
           >
             Resend OTP
           </Button>
