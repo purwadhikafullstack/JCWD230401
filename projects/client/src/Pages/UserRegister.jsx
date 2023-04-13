@@ -32,12 +32,6 @@ export default function UserRegister() {
     const [passwordConfirmation, setPasswordConfirmation] = React.useState('');
     const { isOpen, onOpen, onClose } = useDisclosure();
 
-    const googleAuth = () => {
-        window.open(
-            `${API_URL}/auth/google/callback`,
-            "_self"
-        );
-    };
 
     const onBtnRegister = async () => {
         try {
@@ -166,7 +160,6 @@ export default function UserRegister() {
                         </Flex>
                         {/* Google */}
                         <Button
-                            onClick={googleAuth}
                             w={'full'} variant={'outline'} leftIcon={<FcGoogle />} borderColor='#d0d7de' _hover={'none'}>
                             <Center>
                                 <Text>Continue with Google</Text>

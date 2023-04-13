@@ -19,6 +19,7 @@ import Verification from "./Pages/Verification";
 import ProductDetail from "./Pages/ProductDetail/ProductDetail";
 import TransactionPage from "./Pages/TransactionPage";
 import EditProfile from "./Pages/EditProfile";
+import TenantCalendar from "./Pages/TenantCalendar";
 
 function App() {
   const location = useLocation();
@@ -55,6 +56,7 @@ function App() {
       {location.pathname === "/productdetail" && <Navbar />}
       {location.pathname === "/transactionpage" && <Navbar />}
       {location.pathname === "/dashboard" && roleId == 2 && <Navbar />}
+      {location.pathname === "/tenantcalendar" && roleId == 2 && <Navbar />}
 
       {
         // User
@@ -85,6 +87,7 @@ function App() {
             <Route path="/" element={<Landing />} />
             <Route path="*" element={<NotFound />} />
             <Route path="/productdetail" element={<ProductDetail />} />
+            <Route path="/tenantcalendar" element={<TenantCalendar />} />
             <Route path="/editprofile" element={<EditProfile keeplogin={() => dispatch(keeplogin())} />} />
           </Routes>
         ) : (

@@ -19,12 +19,6 @@ export default function Login() {
     const [emailOrPhone, setEmailOrPhone] = React.useState('');
     const [password, setPassword] = React.useState('');
 
-    const googleAuth = () => {
-		window.open(
-			`${API_URL}/auth/google/callback`
-		);
-	};
-
     const onBtnLogin = async () => {
         try {
             if (emailOrPhone == "" || password == "") {
@@ -146,7 +140,7 @@ export default function Login() {
                                     </Flex>
                                     {/* Google */}
                                     <Button 
-                                    onClick={googleAuth}
+                                   
                                     w={'full'} variant={'outline'} leftIcon={<FcGoogle />} borderColor='#d0d7de' _hover={'none'}>
                                         <Center>
                                             <Text>Continue with Google</Text>

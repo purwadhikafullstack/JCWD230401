@@ -20,7 +20,8 @@ app.use("/", express.static(__dirname + "/public"));
 
 const userRouter = require("./routers/userRouter");
 app.use("/api/user", userRouter);
-
+const calendarRouter = require("./routers/calendarRouter");
+app.use("/api/calendar", calendarRouter);
 // ===========================
 // NOTE : Add your routes here
 
