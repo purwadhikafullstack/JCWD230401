@@ -15,13 +15,22 @@ app.use(bearerToken());
 // #destination file storage(image/pdf/document)
 app.use("/", express.static(__dirname + "/public"));
 
+app.use("/", express.static(__dirname + "/public"));
 
 //#region API ROUTES
-
-const userRouter = require("./routers/userRouter");
-app.use("/api/user", userRouter);
+const transactionRouter = require('./routers/transactionRouter');
+const categoryRouter = require('./routers/categoryRouter');
+const userRouter = require('./routers/userRouter');
+const propertyRouter = require('./routers/propertyRouter');
 const calendarRouter = require("./routers/calendarRouter");
+app.use('/api/user', userRouter);
 app.use("/api/calendar", calendarRouter);
+app.use('/api/transaction', transactionRouter)
+app.use('/api/category', categoryRouter)
+app.use('/api/property', propertyRouter)
+
+// const locationRouter = require('./routers/locationRouter');
+// app.use('/location', locationRouter);
 // ===========================
 // NOTE : Add your routes here
 
@@ -34,6 +43,9 @@ app.get("/api/greetings", (req, res, next) => {
     message: "Hello, Student !",
   });
 });
+
+
+
 
 // ===========================
 
