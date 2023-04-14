@@ -23,9 +23,9 @@ import { TbHomeHeart } from "react-icons/tb";
 import { AiOutlineSearch } from "react-icons/ai";
 import Login from './Login';
 import { useNavigate } from 'react-router-dom';
-// import CategorySlider from './CategorySlider';
 import { useDispatch, useSelector } from 'react-redux';
 import { logoutAction } from '../reducers/auth';
+import { API_URL } from '../helper';
 
 
 export default function Navbar() {
@@ -78,16 +78,45 @@ export default function Navbar() {
             </HStack>
 
             <Flex alignItems={'center'}>
+
               {/* Become TENANT */}
-              <Button
-                variant={'ghost'}
-                size={'sm'}
-                mr={4}
-                // display={{ base: "none", sm: "none", md: "block" }}
-                _hover={'none'}
-              >
-                Become a Tenant
-              </Button>
+              {
+                // User
+                roleId == 1 ?
+                  <Button
+                    variant={'ghost'}
+                    size={'sm'}
+                    mr={4}
+                    _hover={'none'}
+                    onClick={() => navigate('/tenantregister')}
+                  >
+                    Become a Tenant
+                  </Button>
+                  :
+                  // Tenant
+                  roleId == 2 ?
+                    <Button
+                      variant={'ghost'}
+                      size={'sm'}
+                      mr={4}
+                      display={{ base: "none" }}
+                      _hover={'none'}
+                      onClick={() => navigate('/tenantregister')}
+                    >
+                      Become a Tenant
+                    </Button>
+                    :
+                    <Button
+                      variant={'ghost'}
+                      size={'sm'}
+                      mr={4}
+                      _hover={'none'}
+                      onClick={() => navigate('/tenantregister')}
+                    >
+                      Become a Tenant
+                    </Button>
+              }
+
               {/* Main Menu */}
               <Menu >
                 <MenuButton
@@ -105,14 +134,15 @@ export default function Navbar() {
                   <HamburgerIcon w={6} h={6} mx={2} my={1} color='black' />
                   <Avatar
                     size={'sm'}
-                  // src={imageprofile}
+                    src={imageprofile ? `${API_URL}${imageprofile}` : ""}
                   />
                 </MenuButton>
                 {
                   // User
                   roleId == 1 ?
                     <MenuList>
-                      <MenuItem>Profile</MenuItem>
+                      <MenuItem onClick={() => navigate('/')}>Home</MenuItem>
+                      <MenuItem onClick={() => navigate('/editprofile')}>Profile</MenuItem>
                       <MenuItem onClick={() => navigate('/order/list')}>Bookings</MenuItem>
                       <MenuItem onClick={() => navigate('/auth/changepassword')}>Change Password</MenuItem>
                       <MenuItem
@@ -123,7 +153,8 @@ export default function Navbar() {
                     // Tenant
                     roleId == 2 ?
                       <MenuList>
-                        <MenuItem>Profile</MenuItem>
+                        <MenuItem onClick={() => navigate('/dashboard')}>Dashboard</MenuItem>
+                        <MenuItem onClick={() => navigate('/editprofile')}>Profile</MenuItem>
                         <MenuItem>Property</MenuItem>
                         <MenuItem>Report</MenuItem>
                         <MenuItem onClick={() => navigate('/auth/changepassword')}>Change Password</MenuItem>
@@ -154,7 +185,6 @@ export default function Navbar() {
           </Flex>
         </Box>
         <Box>
-          {/* <CategorySlider /> */}
         </Box>
       </Box>
     </>

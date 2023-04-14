@@ -36,7 +36,7 @@ export default function ResetPassword() {
             alert(response.data.message);
             navigate('/', { replace: true });
         } catch (error) {
-            console.log("ini error dari onBtnResetPassword : ", error); 
+            console.log("ini error dari onBtnResetPassword : ", error);
             alert(error.response.data.message);
             alert(error.response.data.error[0].msg); //error msg validator new pw
             alert(error.response.data.error[1].msg); //error msg validator confirmation pw
@@ -89,7 +89,7 @@ export default function ResetPassword() {
                     <FormLabel>Confirm New Password</FormLabel>
                     <InputGroup>
                         <Input
-                            type={showPasswordConfirmation ? 'text' : 'password'} 
+                            type={showPasswordConfirmation ? 'text' : 'password'}
                             onChange={(e) => setPasswordConfirmation(e.target.value)}
                         />
                         <InputRightElement h={'full'}>

@@ -23,5 +23,8 @@ module.exports = (sequelize, DataTypes) => {
     sequelize,
     modelName: 'maintenance',
   });
+  maintenance.associate = (models) => {
+    maintenance.belongsTo(models.room, { foreignKey: 'roomId' })
+  }
   return maintenance;
 };

@@ -1,5 +1,5 @@
 import {
-    Box,
+    Avatar, Box,
     Center,
     useColorModeValue,
     Heading,

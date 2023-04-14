@@ -1,11 +1,11 @@
 import { Flex, Box, FormControl, Divider, Icon, Card, CardBody, FormLabel, Input, InputGroup, HStack, Center, InputRightElement, Stack, Button, Heading, Text, useColorModeValue, Link, } from '@chakra-ui/react';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
 import { FcGoogle } from 'react-icons/fc';
 import { FaFacebook, FaApple, FaPhoneAlt } from 'react-icons/fa';
 import { MdOutlineEmail } from 'react-icons/md';
 import { TbHomeHeart } from "react-icons/tb";
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { API_URL } from '../helper';
@@ -29,7 +29,8 @@ export default function Login() {
                     phone: !emailOrPhone.includes('@') ? emailOrPhone : "",
                     password: password
                 });
-                console.log("response . data : " ,response.data)
+                // console.log("response.data dari login : ", response.data)
+                // console.log("response.data dari login roleId : ", response.data.roleId)
                 if (response.data.length == 0) {
                     alert('Account not found ❌');
                 } else {
@@ -38,7 +39,13 @@ export default function Login() {
                     localStorage.setItem('tempatku_login', response.data.token);
                     //simpen response.data ke reducer
                     dispatch(loginAction(response.data))
-                    navigate('/', { replace: true })
+                    if (response.data.roleId == 1) {
+                        navigate('/', { replace: true });
+                    } else if (response.data.roleId == 2) {
+                        navigate('/dashboard', { replace: true });
+                    } else {
+                        navigate('/', { replace: true });
+                    }
                 }
             }
         } catch (error) {
@@ -87,7 +94,7 @@ export default function Login() {
                                     size='xs'
                                     color='#0969da'
                                     fontWeight='500'
-                                    onClick={()=> navigate('/forgotpassword')}
+                                    onClick={() => navigate('/forgotpassword')}
                                 >
                                     Forgot password?
                                 </Button>
@@ -132,7 +139,9 @@ export default function Login() {
                                         <Divider color="black" thickness="2px" />
                                     </Flex>
                                     {/* Google */}
-                                    <Button w={'full'} variant={'outline'} leftIcon={<FcGoogle />} borderColor='#d0d7de' _hover={'none'}>
+                                    <Button 
+                                   
+                                    w={'full'} variant={'outline'} leftIcon={<FcGoogle />} borderColor='#d0d7de' _hover={'none'}>
                                         <Center>
                                             <Text>Continue with Google</Text>
                                         </Center>
@@ -143,7 +152,7 @@ export default function Login() {
                                             <Text>Continue with Facebook</Text>
                                         </Center>
                                     </Button>
-                                    
+
                                     <Stack
                                         // pt='4' 
                                         pb='2'
