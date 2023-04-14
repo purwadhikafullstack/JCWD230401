@@ -1,5 +1,13 @@
-import { StarIcon } from '@chakra-ui/icons';
-import { Avatar, Box } from '@chakra-ui/react';
+import {
+    Avatar, Box,
+    Center,
+    useColorModeValue,
+    Heading,
+    Text,
+    Stack,
+    Image, Flex, HStack, Badge, Avatar, Icon
+} from '@chakra-ui/react';
+import { StarIcon, ChevronRightIcon } from '@chakra-ui/icons';
 
 export default function Review() {
     const property = {

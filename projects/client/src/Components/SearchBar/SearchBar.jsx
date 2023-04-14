@@ -32,7 +32,7 @@ export default function SearchBar(props) {
                         <label>Location</label>
                         <input type="text" placeholder="Location Name"
                             onChange={(e) => props.setCity(e.target.value)}
-                            defaultValue={props.stateUseLocation.inputLocation}
+                            defaultValue={props?.stateUseLocation?.inputLocation}
                         />
                     </div>
                     <div>
@@ -41,7 +41,7 @@ export default function SearchBar(props) {
                             type={'date'}
                             placeholder="Choose Date" onClick={props.OnBtnCheckIn}
                             onChange={(e) => props.setInputCheckIn(e.target.value)}
-                            defaultValue={props.stateUseLocation.inputCheckIn}
+                            defaultValue={props?.stateUseLocation?.inputCheckIn}
                         />
                     </div>
                     <div>
@@ -50,7 +50,7 @@ export default function SearchBar(props) {
                             type={'date'}
                             placeholder="Choose Date" onClick={props.OnBtnCheckOut}
                             onChange={(e) => props.setInputCheckOut(e.target.value)}
-                            defaultValue={props.stateUseLocation.inputCheckOut}
+                            defaultValue={props?.stateUseLocation?.inputCheckOut}
                         />
                     </div>
                     <div>

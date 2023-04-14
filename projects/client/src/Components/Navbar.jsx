@@ -143,7 +143,7 @@ export default function Navbar() {
                     <MenuList>
                       <MenuItem onClick={() => navigate('/')}>Home</MenuItem>
                       <MenuItem onClick={() => navigate('/editprofile')}>Profile</MenuItem>
-                      <MenuItem>Bookings</MenuItem>
+                      <MenuItem onClick={() => navigate('/order/list')}>Bookings</MenuItem>
                       <MenuItem onClick={() => navigate('/auth/changepassword')}>Change Password</MenuItem>
                       <MenuItem
                         onClick={onBtnLogout}

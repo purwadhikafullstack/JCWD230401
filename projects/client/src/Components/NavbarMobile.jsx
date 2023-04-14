@@ -23,7 +23,7 @@ export default function NavbarMobile() {
             display={{ base: 'block', sm: 'none' }}
             position="fixed"
             bottom="0"
-            bg={{base:'white', sm:'none'}}
+            bg={{ base: 'white', sm: 'none' }}
             w='full'
             zIndex={1}
         >

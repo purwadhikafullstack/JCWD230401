@@ -28,8 +28,12 @@ module.exports = (sequelize, DataTypes) => {
     sequelize,
     modelName: 'user',
   });
+
   user.associate = (models) => {
+    user.hasMany(models.property, { foreignKey: 'userId' });
     user.hasOne(models.user_detail, { foreignKey: 'userId' });
-   }
+    user.hasMany(models.transaction, { foreignKey: 'userId' });
+    user.hasOne(models.room_category, { foreignKey: 'user_id' });
+  }
   return user;
 };

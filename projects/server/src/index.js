@@ -22,15 +22,20 @@ const transactionRouter = require('./routers/transactionRouter');
 const categoryRouter = require('./routers/categoryRouter');
 const userRouter = require('./routers/userRouter');
 const propertyRouter = require('./routers/propertyRouter');
+const orderRouter = require('./routers/orderRouter');
+const roomRouter = require('./routers/roomRouter');
+const locationRouter = require('./routers/locationRouter');
 const calendarRouter = require("./routers/calendarRouter");
+
 app.use('/api/user', userRouter);
-app.use("/api/calendar", calendarRouter);
 app.use('/api/transaction', transactionRouter)
 app.use('/api/category', categoryRouter)
 app.use('/api/property', propertyRouter)
+app.use('/api/order', orderRouter)
+app.use('/api/room', roomRouter)
+app.use('/api/location', locationRouter);
+app.use("/api/calendar", calendarRouter);
 
-// const locationRouter = require('./routers/locationRouter');
-// app.use('/location', locationRouter);
 // ===========================
 // NOTE : Add your routes here
 

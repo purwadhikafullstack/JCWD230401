@@ -11,7 +11,7 @@ import "./SwiperCarousel.css";
 
 // import required modules
 import { FreeMode, Navigation, Thumbs } from "swiper";
-import { API_URL } from "../../helper";
+import { API_URL, API_URL_IMG } from "../../helper";
 
 
 
@@ -35,14 +35,14 @@ export default function SwiperCarousel(props) {
                 {
                     props?.pictureProperty?.map((val, idx) => {
                         return <SwiperSlide>
-                            <img src={`${API_URL}${val.picture}`} />
+                            <img src={`${API_URL_IMG}${val.picture}`} />
                         </SwiperSlide>
                     })
                 }
                 {
                     props?.pictureRoom?.map((val, idx) => {
                         return <SwiperSlide>
-                            <img src={`${API_URL}${val.picture}`} />
+                            <img src={`${API_URL_IMG}${val.picture}`} />
                         </SwiperSlide>
                     })
                 }
@@ -60,14 +60,14 @@ export default function SwiperCarousel(props) {
                 {
                     props?.pictureProperty?.map((val, idx) => {
                         return <SwiperSlide>
-                            <img src={`${API_URL}${val.picture}`} />
+                            <img src={`${API_URL_IMG}${val.picture}`} />
                         </SwiperSlide>
                     })
                 }
                 {
                     props?.pictureRoom?.map((val, idx) => {
                         return <SwiperSlide>
-                            <img src={`${API_URL}${val.picture}`} />
+                            <img src={`${API_URL_IMG}${val.picture}`} />
                         </SwiperSlide>
                     })
                 }

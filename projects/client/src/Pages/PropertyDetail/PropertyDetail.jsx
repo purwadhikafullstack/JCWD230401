@@ -16,13 +16,14 @@ import SwiperCarousel from '../../Components/SwiperCarousel/SwiperCarousel'
 
 import "./PropertyDetail.css";
 import { FaHome, FaPaintBrush, FaMapMarkerAlt, FaHeart, FaStar } from 'react-icons/fa';
-import { API_URL } from '../../helper';
+import { API_URL, API_URL_IMG } from '../../helper';
 import axios from 'axios';
-import { useParams, useLocation  } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import RoomCard from '../../Components/RoomCard/RoomCard';
 import Booking from '../../Components/Booking';
 import noimage from '../../assets/noimage.png';
+import Review from '../../Components/Review';
 
 
 export default function PropertyDetail() {
@@ -47,7 +48,6 @@ export default function PropertyDetail() {
 
     // MODAL
     const modalProperty = useDisclosure()
-    const modalRoom = useDisclosure()
 
     // Get Room Available
     const [inputCheckIn, setInputCheckIn] = useState(location.state.inputCheckIn)
@@ -65,11 +65,11 @@ export default function PropertyDetail() {
 
     const printRoomCard = () => {
         return roomAvailable.map((val, idx) => {
-            return <RoomCard name={val.room_category.name} description={val.description} price={val.price} capacity={val.capacity} picture={val.picture_rooms}/>
+            return <RoomCard name={val.room_category.name} description={val.description} price={val.price} capacity={val.capacity} picture={val.picture_rooms} uuid={val.uuid} inputCheckIn={inputCheckIn} inputCheckOut={inputCheckOut} />
         })
     }
 
-    const [pictureProperty, setPictureProperty] = useState()
+    const [pictureProperty, setPictureProperty] = useState([])
     const getPictureProperty = async () => {
         let get = await axios.post(`${API_URL}/property/getpictureproperty`, {
             uuid: params.uuid
@@ -77,11 +77,6 @@ export default function PropertyDetail() {
         setPictureProperty(get.data);
         console.log("picture property", get);
     }
-
-    
-
-
-
 
     useEffect(() => {
         getPropertyDetail();
@@ -113,19 +108,19 @@ export default function PropertyDetail() {
                 <Box onClick={modalProperty.onOpen} cursor='pointer'>
                     <div className="gallery">
                         <div className="gallery-img-1">
-                            <img src={!pictureProperty?.length ? noimage : `${API_URL}${pictureProperty[0]?.picture}`} />
+                            <img src={!pictureProperty[0] ? noimage : `${API_URL_IMG}${pictureProperty[0]?.picture}`} />
                         </div>
                         <div>
-                            <img src={!pictureProperty?.length <= 1 ? noimage : `${API_URL}${pictureProperty[1].picture}`} />
+                            <img src={!pictureProperty[1] ? noimage : `${API_URL_IMG}${pictureProperty[1]?.picture}`} />
                         </div>
                         <div>
-                            <img src={!pictureProperty?.length <= 2 ? noimage : `${API_URL}${pictureProperty[2].picture}`} />
+                            <img src={!pictureProperty[2] ? noimage : `${API_URL_IMG}${pictureProperty[2]?.picture}`} />
                         </div>
                         <div>
-                            <img src={!pictureProperty?.length <= 3 ? noimage : `${API_URL}${pictureProperty[3].picture}`} />
+                            <img src={!pictureProperty[3] ? noimage : `${API_URL_IMG}${pictureProperty[3]?.picture}`} />
                         </div>
                         <div>
-                            <img src={!pictureProperty?.length <= 4 ? noimage : `${API_URL}${pictureProperty[4].picture}`} />
+                            <img src={!pictureProperty[4] ? noimage : `${API_URL_IMG}${pictureProperty[4]?.picture}`} />
                         </div>
 
 
@@ -175,11 +170,11 @@ export default function PropertyDetail() {
                         <hr className="line" />
                     </Box>
                     <Box ml='4' mt='10' display={{ base: 'none', lg: 'block' }}>
-                        <Booking 
-                        inputCheckIn={inputCheckIn} 
-                        inputCheckOut={inputCheckOut} 
-                        setInputCheckIn={setInputCheckIn} 
-                        setInputCheckOut={setInputCheckOut}/>
+                        <Booking
+                            inputCheckIn={inputCheckIn}
+                            inputCheckOut={inputCheckOut}
+                            setInputCheckIn={setInputCheckIn}
+                            setInputCheckOut={setInputCheckOut} />
                     </Box>
                 </Flex>
                 <Box>
@@ -214,6 +209,23 @@ export default function PropertyDetail() {
                     </div>
                 </div>
                 <a href="#" className="contact-tenant">Contact Tenant</a>
+
+                <hr className="line" />
+
+                {/* REVIEW */}
+                <Box mb='20'>
+                    <Text fontSize={'23px'} fontWeight={500} mb='10'>
+                        Review
+                    </Text>
+                    <Flex gap='5' wrap={'wrap'}>
+                        <Review />
+                        <Review />
+                        <Review />
+                        <Review />
+                        <Review />
+                        <Review />
+                    </Flex>
+                </Box>
             </div>
         </>
     )

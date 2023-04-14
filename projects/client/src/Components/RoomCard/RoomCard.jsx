@@ -10,7 +10,8 @@ import "./RoomCard.css";
 import Swiper from "swiper";
 import SwiperCarousel from "../SwiperCarousel/SwiperCarousel";
 import noimage from '../../assets/noimage.png'
-import { API_URL } from "../../helper";
+import { API_URL, API_URL_IMG } from "../../helper";
+import { Link } from "react-router-dom";
 
 export default function RoomCard(props) {
     const { isOpen, onOpen, onClose } = useDisclosure()
@@ -19,7 +20,7 @@ export default function RoomCard(props) {
             <Box onClick={onOpen} cursor='pointer'>
                 <div class="house">
                     <div class="house-img">
-                        <img src={!props.picture?.length ? noimage : `${API_URL}${props?.picture[0].picture}`} />
+                        <img src={!props.picture?.length ? noimage : `${API_URL_IMG}${props?.picture[0].picture}`} />
                     </div>
                     <div class="house-info">
                         <p>Room Detail</p>
@@ -36,7 +37,9 @@ export default function RoomCard(props) {
                             <h4>{Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(props?.price || 0)}<span>/ day</span></h4>
                             <br />
                             {/* <p><BookingButton /></p> */}
-                            <Button colorScheme={'red'}>Book Now!</Button>
+                            <Link to={`/payment/${props.uuid}`} state={{ inputCheckIn: props.inputCheckIn, inputCheckOut: props.inputCheckOut }}>
+                                <Button colorScheme={'red'}>Book Now!</Button>
+                            </Link>
                         </div>
                     </div>
                 </div>
@@ -46,7 +49,7 @@ export default function RoomCard(props) {
                         <ModalCloseButton />
                         <ModalBody>
                             <Box>
-                                <SwiperCarousel pictureRoom={props.picture}/>
+                                <SwiperCarousel pictureRoom={props.picture} />
                             </Box>
                         </ModalBody>
                     </ModalContent>
