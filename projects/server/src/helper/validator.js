@@ -1,4 +1,5 @@
 const { check, validationResult } = require("express-validator");
+const multer = require('multer');
 
 module.exports = {
   checkUser: async (req, res, next) => {
@@ -145,6 +146,7 @@ module.exports = {
           )
           .run(req);
       } else if (req.path == "/registerastenant") {
+        // Modify the validation rules to match the form data field names
         await check("name")
           .notEmpty()
           .isLength({ max: 255 })
@@ -181,10 +183,6 @@ module.exports = {
           )
           .run(req);
 
-        await check("image_ktp")
-          .notEmpty()
-          .withMessage("Image file is required")
-          .run(req);
       } else if (req.path == "/editprofile") {
         if (req.body.name) {
           await check("name")
@@ -235,7 +233,7 @@ module.exports = {
       } else {
         return res.status(400).send({
           success: false,
-          message: "Validation invalid",
+          // message: "Validation invalid",
           error: validation.errors,
         });
       }
