@@ -59,6 +59,9 @@ export default function PaymentDetail() {
     const diff = new Date(endDate) - new Date(startDate)
     const days = (diff / 86400000);
 
+    const addTwoHours = new Date(expiredTime).getTime() + 7200000
+    console.log("addTwoHours", new Date(addTwoHours).toISOString())
+
 
     // BUAT API LAGI UNTUK CEK SAAT COMPLETED TRANSACTIONNYA UDAH DI BAYAR APA BELOM
     // KALO BELOM, EXECUTE API UNTUK UPDATE transaction_statusId di tabel transaction
@@ -84,7 +87,7 @@ export default function PaymentDetail() {
                         <Text fontSize={{ base: '2xl', md: '4xl' }} fontWeight={800}>
                             Transaction time has expired!
                         </Text>
-                        <Text fontSize={{ base: 'xl', md: '2xl' }}>{new Date(expiredTime).toString('en-US', { timeZone: 'Asia/Jakarta' }).split('G')[0]}</Text>
+                        <Text fontSize={{ base: 'xl', md: '2xl' }}>{new Date(addTwoHours).toString('en-US', { timeZone: 'Asia/Jakarta' }).split('G')[0]}</Text>
                     </Stack>
                 </Stack>
             )
@@ -118,7 +121,7 @@ export default function PaymentDetail() {
                         <Text fontSize={{ base: '4xl', md: '6xl' }} fontWeight={800}>
                             {zeroPad(hours, [2])}:{zeroPad(minutes, [2])}:{zeroPad(seconds, [2])}
                         </Text>
-                        <Text fontSize={{ base: 'xl', md: '2xl' }}>{new Date(expiredTime).toString('en-US', { timeZone: 'Asia/Jakarta' }).split('G')[0]}</Text>
+                        <Text fontSize={{ base: 'xl', md: '2xl' }}>{new Date(addTwoHours).toString('en-US', { timeZone: 'Asia/Jakarta' }).split('G')[0]}</Text>
                     </Stack>
                 </Stack>
             );

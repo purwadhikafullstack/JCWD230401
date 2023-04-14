@@ -105,5 +105,18 @@ module.exports = {
             message: 'Image Uploaded',
             // data: update
         })
+    },
+    cancelOrReject: async (req, res, next) => {
+        let update = await model.transaction.update({
+            transaction_statusId: req.query.statusid
+        }, {
+            where: {
+                uuid: req.query.uuid
+            }
+        });
+        res.status(200).send({
+            success: true,
+            message: "transaction status updated"
+        })
     }
 }
