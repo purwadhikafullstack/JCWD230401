@@ -15,14 +15,13 @@ module.exports = (sequelize, DataTypes) => {
   }
   transaction.init({
     uuid: DataTypes.STRING,
-    startDate: DataTypes.STRING,
-    endDate: DataTypes.STRING,
     discount: DataTypes.INTEGER,
     image_payment: DataTypes.STRING,
     isConfirmed: DataTypes.BOOLEAN,
     transaction_statusId: DataTypes.INTEGER,
     userId: DataTypes.INTEGER,
-    expiredAt: DataTypes.DATE
+    expiredAt: DataTypes.DATE,
+    invoice_number: DataTypes.STRING
   }, {
     sequelize,
     modelName: 'transaction',
@@ -30,6 +29,8 @@ module.exports = (sequelize, DataTypes) => {
   transaction.associate = (models) => {
     transaction.belongsTo(models.room, { foreignKey: 'roomId' });
     transaction.hasMany(models.order, { foreignKey: 'transactionId' });
+    transaction.belongsTo(models.user, { foreignKey: 'userId' });
+    transaction.belongsTo(models.transaction_status, { foreignKey: 'transaction_statusId' });
   }
   return transaction;
 };

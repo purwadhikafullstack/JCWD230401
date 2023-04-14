@@ -54,8 +54,6 @@ module.exports = {
             }
 
             let get = await model.property.findAndCountAll({
-                // offset: parseInt(page * size),
-                // limit: parseInt(size),
                 distinct: true,
                 where: { property: { [sequelize.Op.like]: `%${name}%` } },
                 include: [
@@ -79,8 +77,8 @@ module.exports = {
             })
 
             const query = `
-            Select r.*, o.start_date, o.end_date FROM rooms r left join orders o on r.id=o.roomId 
-            WHERE start_date is null OR start_date < '${start}' OR start_date > '${end}' OR end_date < '${start}' OR end_date > '${end}' order by r.propertyId;`
+            Select r.*, o.start_date, o.end_date, t.transaction_statusId FROM rooms r left join orders o on r.id=o.roomId 
+            left join transactions t on o.transactionId = t.id WHERE start_date is null OR start_date < '${start}' OR start_date > '${end}' OR end_date < '${start}' OR end_date > '${end}' OR t.transaction_statusId IN (4,5) order by r.propertyId;`
             const getAvailable = await con.query(query, {
                 type: sequelize.QueryTypes.SELECT
             })
@@ -104,7 +102,7 @@ module.exports = {
             });
 
             // let filterData =  newData.slice((page - 1) * size, page * size )
-            let filterData =  newData.slice(page * size, page * size + size)
+            let filterData = newData.slice(page * size, page * size + size)
             console.log("filter DATAA", filterData)
 
             return res.status(200).send({
@@ -146,13 +144,13 @@ module.exports = {
                     propertyId: getPropertyId[0].dataValues.id,
                     id: {
                         [sequelize.Op.notIn]: [
-                            sequelize.literal(`SELECT roomId FROM orders WHERE start_date >= '${req.body.start}' AND end_date <= '${req.body.end}'`)
+                            sequelize.literal(`SELECT roomId FROM orders join transactions on orders.transactionId = transactions.id WHERE start_date >= '${req.body.start}' AND end_date <= '${req.body.end}' AND transactions.transaction_statusId IN (1,2,3)`) // tambahin transaction_statusId
                         ]
                     }
                 },
                 include: [
-                    {model: model.room_category, attributes: ['name']},
-                    {model: model.picture_room, attributes: ['picture']},
+                    { model: model.room_category, attributes: ['name'] },
+                    { model: model.picture_room, attributes: ['picture'] },
                 ]
             });
             res.status(200).send(get)
@@ -176,7 +174,7 @@ module.exports = {
 
                 },
                 {
-                    model: model.user, include: [{model: model.user_detail, attributes: ['name']}]
+                    model: model.user, include: [{ model: model.user_detail, attributes: ['name'] }]
                 },
 
             ],
@@ -188,7 +186,7 @@ module.exports = {
         });
         res.status(200).send(get)
     },
-    getPicturePropertyDetail: async (req,res,next) => {
+    getPicturePropertyDetail: async (req, res, next) => {
         let getProperty = await model.property.findAll({
             where: {
                 uuid: req.body.uuid
@@ -196,11 +194,11 @@ module.exports = {
         });
         let getPictureProperty = await model.picture_property.findAll({
             where: {
-                propertyId : getProperty[0].dataValues.id
+                propertyId: getProperty[0].dataValues.id
             }
         });
 
         res.status(200).send(getPictureProperty)
-        console.log("getPictureProperty",getPictureProperty);
-    }
+        console.log("getPictureProperty", getPictureProperty);
+    },
 }

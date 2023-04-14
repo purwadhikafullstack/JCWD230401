@@ -21,7 +21,7 @@ import Bandung1 from './images/bandung-1.jpg';
 import Bali1 from './images/bali-1.png';
 import NusaPenida1 from './images/nusapenida-1.png';
 import axios from "axios";
-import { API_URL } from "../../helper";
+import { API_URL, API_URL_IMG } from "../../helper";
 
 import { useNavigate } from 'react-router-dom';
 
@@ -34,7 +34,7 @@ export default function Landing() {
     const [allProperty, setAllProperty] = useState([]);
     const token = localStorage.getItem('tempatku_login')
     const [inputLocation, setInputLocation] = useState('');
-    const [showLocation, setShowLocation] = useState([]); 
+    const [showLocation, setShowLocation] = useState([]);
     const [guest, setGuest] = useState(5)
 
     //api to fetch search result
@@ -56,7 +56,7 @@ export default function Landing() {
     }
 
     // Jalanin fungsi getAllLocations
-    React.useEffect(()=>{
+    React.useEffect(() => {
         getAllLocations()
     }, [inputLocation]);
 
@@ -85,10 +85,10 @@ export default function Landing() {
     }
 
     const printAllCategory = () => {
-        console.log("all categoryyyy",allCategory);
+        console.log("all categoryyyy", allCategory);
         return allCategory.map((val, idx) => {
             return <div>
-                <img src={`${API_URL}${val.picture}`} />
+                <img src={`${API_URL_IMG}${val.picture}`} />
                 <span>
                     <h3>{val.category}</h3>
                 </span>
@@ -98,14 +98,14 @@ export default function Landing() {
 
     const getAllProperty = async () => {
         let get = await axios.get(`${API_URL}/property`);
-        console.log("get all property",get)
+        console.log("get all property", get)
         setAllProperty(get.data)
     }
 
     const printAllProperty = () => {
-        return allProperty.map((val,idx) => {
+        return allProperty.map((val, idx) => {
             return <PropertyCard property={val.property} picture={val.picture_properties[0]?.picture}
-            location={val.property_location} price={val.rooms[0]?.price}/>
+                location={val.property_location} price={val.rooms[0]?.price} />
         })
     }
 
@@ -113,7 +113,7 @@ export default function Landing() {
 
     const handleSearch = () => {
         navigate('/property', {
-            state : {
+            state: {
                 inputLocation: inputLocation,
                 inputCheckIn: inputCheckIn,
                 inputCheckOut: inputCheckOut,
@@ -140,53 +140,53 @@ export default function Landing() {
                         <form>
                             <div className="location-input">
                                 <label>Location</label>
-                                <input type="text" placeholder="Where are you going?" 
-                                onChange={(e)=>setInputLocation(e.target.value)}
-                                value={inputLocation}
+                                <input type="text" placeholder="Where are you going?"
+                                    onChange={(e) => setInputLocation(e.target.value)}
+                                    value={inputLocation}
                                 />
                                 <div className="dropdown">
-                                {showLocation.filter(item => {
-                                    const searchTerm = inputLocation.toLowerCase();
-                                    const city = item.city.toLowerCase(); 
-                                    return (searchTerm && city.startsWith(searchTerm) && city !== searchTerm);
-                                }
-                                ).slice(0,5) //will show only first 5 items di location input field
-                                .map((item)=>
-                                (<div 
-                                onClick={()=>onSearch(item.city)} 
-                                className="dropdown-row"
-                                key={item.city} 
-                                >{item.city}</div>))}
+                                    {showLocation.filter(item => {
+                                        const searchTerm = inputLocation.toLowerCase();
+                                        const city = item.city.toLowerCase();
+                                        return (searchTerm && city.startsWith(searchTerm) && city !== searchTerm);
+                                    }
+                                    ).slice(0, 5) //will show only first 5 items di location input field
+                                        .map((item) =>
+                                        (<div
+                                            onClick={() => onSearch(item.city)}
+                                            className="dropdown-row"
+                                            key={item.city}
+                                        >{item.city}</div>))}
                                 </div>
                             </div>
                             <div>
                                 <label>Check in</label>
-                                <input 
-                                type={
-                                    'date'
-                                    // inputCheckIn
-                                } 
-                                placeholder="Choose Date" 
-                                // onClick={OnBtnCheckIn}
-                                onChange={(e) => setInputCheckIn(e.target.value)}
+                                <input
+                                    type={
+                                        'date'
+                                        // inputCheckIn
+                                    }
+                                    placeholder="Choose Date"
+                                    // onClick={OnBtnCheckIn}
+                                    onChange={(e) => setInputCheckIn(e.target.value)}
                                 />
                             </div>
                             <div>
                                 <label>Check out</label>
-                                <input 
-                                type={
-                                    'date'
-                                    // inputCheckOut
-                                } 
-                                placeholder="Choose Date" 
-                                // onClick={OnBtnCheckOut}
-                                onChange={(e) => setInputCheckOut(e.target.value)}
+                                <input
+                                    type={
+                                        'date'
+                                        // inputCheckOut
+                                    }
+                                    placeholder="Choose Date"
+                                    // onClick={OnBtnCheckOut}
+                                    onChange={(e) => setInputCheckOut(e.target.value)}
                                 />
                             </div>
                             <div>
                                 <label>Guest</label>
                                 <input type="number" placeholder="Add Guest"
-                                 onChange={(e) => setGuest(e.target.value)}/>
+                                    onChange={(e) => setGuest(e.target.value)} />
                             </div>
                             <button type="button" onClick={handleSearch}>
                                 <img src={Search} />

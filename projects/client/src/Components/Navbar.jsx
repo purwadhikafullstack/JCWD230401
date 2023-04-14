@@ -44,9 +44,9 @@ export default function Navbar() {
 
   return (
     <>
-      <Box 
-      // position="fixed"
-       w='full' bg='white' zIndex={1}>
+      <Box
+        // position="fixed"
+        w='full' bg='white' zIndex={1}>
         <Box boxShadow={'xs'} px={{ base: '4', sm: '10' }}>
           <Flex h={16} alignItems={'center'} justifyContent={'space-between'}>
             <HStack alignItems={'center'} onClick={() => navigate('/')} cursor='pointer'>
@@ -113,7 +113,7 @@ export default function Navbar() {
                   roleId == 1 ?
                     <MenuList>
                       <MenuItem>Profile</MenuItem>
-                      <MenuItem>Bookings</MenuItem>
+                      <MenuItem onClick={() => navigate('/order/list')}>Bookings</MenuItem>
                       <MenuItem onClick={() => navigate('/auth/changepassword')}>Change Password</MenuItem>
                       <MenuItem
                         onClick={onBtnLogout}

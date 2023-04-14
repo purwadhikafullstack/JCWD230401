@@ -6,31 +6,52 @@ const { createToken } = require("../helper/jwt");
 const transporter = require("../helper/nodemailer");
 
 module.exports = {
-    getAllOrder: async (req,res,next) => {
+    getAllOrder: async (req, res, next) => {
         let get = await model.order.findAndCountAll({
-            // offset: parseInt(),
-            // limit: parseInt(),
+            // offset: parseInt(req.query.page || 0 * req.query.size || 3 + 1),
+            offset: parseInt(((req.query.page || 1) - 1) * (req.query.size || 3)),
+            limit: parseInt(req.query.size || 3),
             where: {
                 start_date: {
-                    [sequelize.Op.gte]: '2023-04-04', // filter by date
+                    [sequelize.Op.gte]: req.query.start || '2000-01-01', // filter by date
                 },
                 end_date: {
-                    [sequelize.Op.lte]: '2023-04-05', // filter by date
-                },
-                id: { [sequelize.Op.like]: `%%` } // filter by order id
+                    [sequelize.Op.lte]: req.query.end || '2030-01-01', // filter by date
+                }
             },
             include: [
                 {
-                    model: model.transaction, 
-                    attributes: ['transaction_statusId'],
+                    model: model.transaction,
+                    attributes: ['transaction_statusId', 'invoice_number', 'uuid'],
                     where: {
-                        transaction_statusId: { [sequelize.Op.like]: `%%` }, // filter by transaction_status
-                        userId: 2
-                    }
+                        transaction_statusId: { [sequelize.Op.like]: `%${req.query.status}%` }, // filter by transaction_status
+                        userId: req.decrypt.id, //////////// req.decrypt.id
+                        invoice_number: { [sequelize.Op.like]: `%${req.query.invoice}%` } // filter by invoice number
+                    },
+                    include: [
+                        {
+                            model: model.transaction_status, attributes: ['status']
+                        }
+                    ]
+                },
+                {
+                    model: model.room, attributes: ['capacity'],
+                    include: [
+                        {
+                            model: model.room_category, attributes: ['name']
+                        },
+                        {
+                            model: model.property, attributes: ['property']
+                        },
+                        {
+                            model: model.picture_room, attributes: ['picture']
+                        }
+                    ]
                 }
             ],
-            order:  [['start_date', 'ASC']] // order by date or order id
+            order: [[req.query.sortby || 'start_date', req.query.order || 'DESC']] // order by date or order id
         });
+        console.log("data paginationnn", get.rows);
         res.status(200).send({
             data: get,
             datanum: get.count

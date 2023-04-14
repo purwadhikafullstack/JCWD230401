@@ -11,7 +11,7 @@ module.exports = {
   //1. REGISTER
   register: async (req, res, next) => {
     try {
-      let checkExistingUser = await model.users.findAll({
+      let checkExistingUser = await model.user.findAll({
         where: sequelize.or(
           { email: req.body.email },
           { phone: req.body.phone }
@@ -24,7 +24,7 @@ module.exports = {
           console.log("Check data after hash password :", req.body); //testing purposes
           const uuid = uuidv4();
           const { name, email, password, phone } = req.body;
-          let regis = await model.users.create({
+          let regis = await model.user.create({
             uuid,
             name,
             email,
@@ -59,7 +59,7 @@ module.exports = {
   login: async (req, res, next) => {
     try {
       //1. find email or phone from db
-      let getuser = await model.users.findAll({
+      let getuser = await model.user.findAll({
         where: sequelize.or(
           { email: req.body.email },
           { phone: req.body.phone }
@@ -79,7 +79,7 @@ module.exports = {
         //3. if isSuspended false 0 & checkpw true 1 ? reset pw attempts : pw attempts + 1
         if (checkpw && getuser[0].dataValues.isSuspended == 0) {
           //4. update the attempts field in the database with 0
-          await model.users.update(
+          await model.user.update(
             { attempts: 0 },
             {
               where: {
@@ -115,7 +115,7 @@ module.exports = {
         } else {
           //3. jika salah passwordnya attempt + 1 sampe 5 kali nanti suspended
           if (getuser[0].dataValues.attempts < 5) {
-            await model.users.update(
+            await model.user.update(
               { attempts: getuser[0].dataValues.attempts + 1 },
               {
                 where: {
@@ -130,7 +130,7 @@ module.exports = {
               }`,
             });
           } else {
-            await model.users.update(
+            await model.user.update(
               { isSuspended: 1 },
               {
                 where: {
@@ -161,7 +161,7 @@ module.exports = {
   keeplogin: async (req, res, next) => {
     try {
       console.log("Decrypt token:", req.decrypt);
-      let getuser = await model.users.findAll({
+      let getuser = await model.user.findAll({
         where: {
           id: req.decrypt.id,
         },
@@ -191,7 +191,7 @@ module.exports = {
   changepassword: async (req, res, next) => {
     try {
       //1. get old password from user yg login
-      let getData = await model.users.findAll({
+      let getData = await model.user.findAll({
         where: {
           id: req.decrypt.id,
         },
@@ -219,7 +219,7 @@ module.exports = {
                 salt
               );
               //5. update the password field in the database with the value of req.body.newPassword & read token
-              await model.users.update(
+              await model.user.update(
                 { password: req.body.newPassword },
                 {
                   where: {
@@ -267,7 +267,7 @@ module.exports = {
   forgotpassword: async (req, res, next) => {
     try {
       //1. get user data by email
-      let getData = await model.users.findAll({
+      let getData = await model.user.findAll({
         where: {
           email: req.body.email,
         },
@@ -312,7 +312,7 @@ module.exports = {
         //1. hash right before update
         req.body.newPassword = bcrypt.hashSync(req.body.newPassword, salt);
         //2. update the password & isSuspended 
-        await model.users.update(
+        await model.user.update(
           { password: req.body.newPassword, isSuspended: 0 },
           {
             //read token

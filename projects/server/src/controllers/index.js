@@ -4,6 +4,7 @@ const categoryController = require("./categoryController");
 const propertyController = require("./propertyController");
 const locationController = require("./locationController");
 const orderController = require("./orderController");
+const roomController = require("./roomController");
 
 
 module.exports = {
@@ -12,5 +13,6 @@ module.exports = {
     categoryController,
     propertyController,
     locationController,
-    orderController
+    orderController,
+    roomController
 }

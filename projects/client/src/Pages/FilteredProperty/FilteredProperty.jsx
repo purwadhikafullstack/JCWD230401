@@ -18,8 +18,8 @@ export default function FilteredProperty() {
     const token = localStorage.getItem('tempatku_login')
     const [inputLocation, setInputLocation] = useState('');
     const [showLocation, setShowLocation] = useState([]);
-    const [inputCheckIn, setInputCheckIn] = useState(location.state.inputCheckIn);
-    const [inputCheckOut, setInputCheckOut] = useState(location.state.inputCheckOut);
+    const [inputCheckIn, setInputCheckIn] = useState(location?.state?.inputCheckIn);
+    const [inputCheckOut, setInputCheckOut] = useState(location?.state?.inputCheckOut);
 
     const onSearch = (searchTerm) => {
         setInputLocation(searchTerm); //if suggestion clicked, it will be put inside the input field
@@ -52,7 +52,7 @@ export default function FilteredProperty() {
         try {
             let token = localStorage.getItem("tempatku_login");
             let res = await axios.post(
-                `${API_URL}/property/filter?start=${inputCheckIn}&end=${inputCheckOut}&page=${page}&size=${size}&name=${productName}&sortby=${sortBy}&order=${order}&category=${category}&city=${city}`,
+                `${API_URL}/property/filter?start=${inputCheckIn  || ''}&end=${inputCheckOut  || ''}&page=${page}&size=${size}&name=${productName}&sortby=${sortBy}&order=${order}&category=${category}&city=${city || ''}`,
                 {},
                 {
                     headers: {
@@ -75,7 +75,7 @@ export default function FilteredProperty() {
 
     const printAllProperty = () => {
         return showProducts.map((val, idx) => {
-            return <PropertyCard property={val.property} price={val.rooms[0].price} picture={val.picture_properties[0].picture} uuid={val.uuid} inputCheckIn={inputCheckIn} inputCheckOut={inputCheckOut} />
+            return <PropertyCard property={val.property} price={val.rooms[0].price} picture={val.picture_properties[0].picture} uuid={val.uuid} inputCheckIn={inputCheckIn} inputCheckOut={inputCheckOut} location={val.property_location}/>
         })
     }
 

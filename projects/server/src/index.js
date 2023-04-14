@@ -1,6 +1,6 @@
 const { join } = require("path");
 require("dotenv/config");
-require("dotenv").config({path:join(__dirname, ".env")});
+require("dotenv").config({ path: join(__dirname, ".env") });
 const express = require("express");
 const cors = require("cors");
 const bearerToken = require('express-bearer-token')
@@ -22,11 +22,13 @@ const categoryRouter = require('./routers/categoryRouter');
 const userRouter = require('./routers/userRouter');
 const propertyRouter = require('./routers/propertyRouter');
 const orderRouter = require('./routers/orderRouter');
-app.use('/user', userRouter);
-app.use('/transaction', transactionRouter)
-app.use('/category', categoryRouter)
-app.use('/property', propertyRouter)
-app.use('/order', orderRouter)
+const roomRouter = require('./routers/roomRouter');
+app.use('/api/user', userRouter);
+app.use('/api/transaction', transactionRouter)
+app.use('/api/category', categoryRouter)
+app.use('/api/property', propertyRouter)
+app.use('/api/order', orderRouter)
+app.use('/api/room', roomRouter)
 
 
 const locationRouter = require('./routers/locationRouter');
@@ -61,8 +63,8 @@ app.use((req, res, next) => {
 // error
 app.use((err, req, res, next) => {
   if (req.path.includes("/api/")) {
-    console.error("Error : ", err.stack);
-    res.status(500).send("Error !");
+    console.error("Error : ", err);
+    res.status(500).send(err);
   } else {
     next();
   }

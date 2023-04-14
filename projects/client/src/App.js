@@ -17,6 +17,7 @@ import FilteredProperty from "./Pages/FilteredProperty/FilteredProperty";
 import PropertyDetail from "./Pages/PropertyDetail/PropertyDetail";
 import Payments from "./Pages/Payments/Payments";
 import PaymentDetail from "./Pages/PaymentDetail";
+import OrderLists from "./Pages/OrderLists";
 
 function App() {
   const location = useLocation();
@@ -67,8 +68,9 @@ function App() {
         <Route path="/" element={<Landing />} />
         <Route path="/property" element={<FilteredProperty />} />
         <Route path="/property/detail/:uuid" element={<PropertyDetail />} />
-        <Route path="/payment" element={<Payments />} />
-        <Route path="/payment/detail" element={<PaymentDetail />} />
+        <Route path="/payment/:uuid" element={<Payments />} />
+        <Route path="/payment/detail/:uuid" element={<PaymentDetail />} />
+        <Route path="/order/list" element={<OrderLists />} />
       </Routes>
       {/* {location.pathname === "/" && <NavbarMobile />} */}
     </>

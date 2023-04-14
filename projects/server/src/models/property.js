@@ -30,7 +30,7 @@ module.exports = (sequelize, DataTypes) => {
     property.hasMany(models.room, { foreignKey: 'propertyId' }); 
     property.belongsTo(models.category, { foreignKey: 'categoryId' }); 
     property.hasOne(models.property_location, { foreignKey: 'propertyId' }); 
-    property.belongsTo(models.users, { foreignKey: 'userId' }); 
+    property.belongsTo(models.user, { foreignKey: 'userId' }); 
 }
   return property;
 };
