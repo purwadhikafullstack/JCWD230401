@@ -27,7 +27,7 @@ module.exports = {
                 uuid: uuidv4(),
                 start_date: req.body.start,
                 end_date: req.body.end,
-                price: req.body.price,
+                price: req.body.price,// kalo ada special price gimana ?
                 transactionId: transaksi.dataValues.id,
                 roomId: req.body.roomId
             },
@@ -91,7 +91,8 @@ module.exports = {
         console.log("get transs", get)
         console.log("req.files", req.files);
         let update = await model.transaction.update({
-            image_payment: `/ImgPayment/${req.files[0].filename}`
+            image_payment: `/ImgPayment/${req?.files[0]?.filename}`,
+            transaction_statusId: 2
         }, {
             where: {
                 uuid: req.params.uuid

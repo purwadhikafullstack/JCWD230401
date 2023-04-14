@@ -5,7 +5,7 @@ import {
     Heading,
     Text,
     Stack,
-    Image, Flex, HStack, Badge, Avatar, Icon
+    Image, Flex, HStack, Badge, Icon
 } from '@chakra-ui/react';
 import { StarIcon, ChevronRightIcon } from '@chakra-ui/icons';
 

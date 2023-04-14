@@ -137,8 +137,8 @@ export default function Landing() {
                             <div className="location-input">
                                 <label>Location</label>
                                 <input type="text" placeholder="Where are you going?"
-                                    // onChange={(e) => setInputLocation(e.target.value)}
-                                    // value={inputLocation}
+                                // onChange={(e) => setInputLocation(e.target.value)}
+                                // value={inputLocation}
                                 />
                                 <div className="dropdown">
                                     {/* {showLocation.filter(item => {

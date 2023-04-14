@@ -82,6 +82,9 @@ function App() {
             <Route path="/editprofile" element={<EditProfile keeplogin={() => dispatch(keeplogin())} />} />
             <Route path="/property" element={<FilteredProperty />} />
             <Route path="/property/detail/:uuid" element={<PropertyDetail />} />
+            <Route path="/payment/:uuid" element={<Payments />} />
+            <Route path="/payment/detail/:uuid" element={<PaymentDetail />} />
+            <Route path="/order/list" element={<OrderLists />} />
           </Routes>
         ) : // Tenant
           roleId == 2 ? (
@@ -112,14 +115,13 @@ function App() {
               <Route path="*" element={<NotFound />} />
               <Route path="/property" element={<FilteredProperty />} />
               <Route path="/property/detail/:uuid" element={<PropertyDetail />} />
-              <Route path="/payment/:uuid" element={<Payments />} />
-              <Route path="/payment/detail/:uuid" element={<PaymentDetail />} />
-              <Route path="/order/list" element={<OrderLists />} />
             </Routes>
           )
       }
       {/* {location.pathname === "/" && <NavbarMobile />} */}
+    </>
   );
 }
+
 
 export default App;

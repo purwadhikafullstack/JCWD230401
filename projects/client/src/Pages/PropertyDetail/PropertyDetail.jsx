@@ -65,7 +65,9 @@ export default function PropertyDetail() {
 
     const printRoomCard = () => {
         return roomAvailable.map((val, idx) => {
-            return <RoomCard name={val.room_category.name} description={val.description} price={val.price} capacity={val.capacity} picture={val.picture_rooms} uuid={val.uuid} inputCheckIn={inputCheckIn} inputCheckOut={inputCheckOut} />
+            return <RoomCard name={val.room_category.name} description={val.description} price={val.price} // kalo ada special price gimana ?
+                capacity={val.capacity} picture={val.picture_rooms} uuid={val.uuid}
+                inputCheckIn={inputCheckIn} inputCheckOut={inputCheckOut} />
         })
     }
 
