@@ -1,7 +1,8 @@
 const route = require("express").Router();
-const { getallroominfo } = require("../controllers/calendarController");
+const { getroomorders, getroommaintenance } = require("../controllers/calendarController");
 const { readToken } = require("../helper/jwt");
 
-route.post("/getallroominfo", getallroominfo);
+route.post("/getroomorders", readToken, getroomorders);
+route.post("/getroommaintenance", readToken, getroommaintenance);
 
 module.exports = route;

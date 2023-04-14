@@ -751,8 +751,8 @@ module.exports = {
         get[0].dataValues.image_profile
       );
       //2. if old image exists, delete old replace with new
-      if (fs.existsSync(`./src/public${get[0].dataValues.image_profile}`)) {
-        fs.unlinkSync(`./src/public${get[0].dataValues.image_profile}`);
+      if (fs.existsSync(`./src/public/api${get[0].dataValues.image_profile}`)) {
+        fs.unlinkSync(`./src/public/api${get[0].dataValues.image_profile}`);
       }
       await model.user_detail.update(
         {
