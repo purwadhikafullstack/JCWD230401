@@ -60,8 +60,11 @@ export default function TenantRegister() {
         } catch (error) {
             console.log("ini error dari onBtnRegister : ", error); //testing purposes
             alert(error.response.data.message);
-            alert(error.response.data.error[0].msg);
             alert(error.response.data.error[1].msg);
+            alert(error.response.data.error[3].msg);
+            alert(error.response.data.error[5].msg);
+            alert(error.response.data.error[7].msg);
+            alert(error.response.data.error[8].msg);
         }
     }
 

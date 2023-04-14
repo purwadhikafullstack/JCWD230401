@@ -154,7 +154,7 @@ export default function Navbar() {
                     roleId == 2 ?
                       <MenuList>
                         <MenuItem onClick={() => navigate('/dashboard')}>Dashboard</MenuItem>
-                        <MenuItem>Profile</MenuItem>
+                        <MenuItem onClick={() => navigate('/editprofile')}>Profile</MenuItem>
                         <MenuItem>Property</MenuItem>
                         <MenuItem>Report</MenuItem>
                         <MenuItem onClick={() => navigate('/auth/changepassword')}>Change Password</MenuItem>

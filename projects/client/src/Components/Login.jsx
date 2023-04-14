@@ -19,7 +19,6 @@ export default function Login() {
     const [emailOrPhone, setEmailOrPhone] = React.useState('');
     const [password, setPassword] = React.useState('');
 
-
     const onBtnLogin = async () => {
         try {
             if (emailOrPhone == "" || password == "") {
@@ -140,7 +139,9 @@ export default function Login() {
                                         <Divider color="black" thickness="2px" />
                                     </Flex>
                                     {/* Google */}
-                                    <Button w={'full'} variant={'outline'} leftIcon={<FcGoogle />} borderColor='#d0d7de' _hover={'none'}>
+                                    <Button 
+                                   
+                                    w={'full'} variant={'outline'} leftIcon={<FcGoogle />} borderColor='#d0d7de' _hover={'none'}>
                                         <Center>
                                             <Text>Continue with Google</Text>
                                         </Center>

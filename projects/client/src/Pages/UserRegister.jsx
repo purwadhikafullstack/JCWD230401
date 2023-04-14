@@ -16,7 +16,9 @@ import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { API_URL } from '../helper';
-import Userregisterbanner from '../assets/userregisterbanner.jpg'
+import Userregisterbanner from '../assets/userregisterbanner.jpg';
+import { FcGoogle } from 'react-icons/fc';
+
 
 
 export default function UserRegister() {
@@ -29,7 +31,6 @@ export default function UserRegister() {
     const [password, setPassword] = React.useState('');
     const [passwordConfirmation, setPasswordConfirmation] = React.useState('');
     const { isOpen, onOpen, onClose } = useDisclosure();
-
 
 
     const onBtnRegister = async () => {
@@ -151,6 +152,18 @@ export default function UserRegister() {
                             onClick={onBtnRegister}
                         >
                             Register
+                        </Button>
+                        <Flex alignItems="center" w='full' py='4'>
+                            <Divider color="black" thickness="2px" />
+                            <Text mx="2" fontSize="sm">or</Text>
+                            <Divider color="black" thickness="2px" />
+                        </Flex>
+                        {/* Google */}
+                        <Button
+                            w={'full'} variant={'outline'} leftIcon={<FcGoogle />} borderColor='#d0d7de' _hover={'none'}>
+                            <Center>
+                                <Text>Continue with Google</Text>
+                            </Center>
                         </Button>
                         {/* Login */}
                     </Stack>

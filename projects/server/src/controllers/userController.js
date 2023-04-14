@@ -59,7 +59,7 @@ module.exports = {
           console.log("ini isi dari regisUserDetail :", regisUserDetail);
           let { id, roleId } = regis.dataValues;
           //2. generate token --> Q: cukup dari tabel user saja?
-          let token = createToken({ id, roleId }, "1h");
+          let token = createToken({ id, roleId }, "24h");
           // create transporter object and configure Handlebars template
           const transporter = nodemailer.createTransport({
             service: "gmail",
@@ -483,24 +483,34 @@ module.exports = {
             console.log(
               `File path: ./public/imgIdCard/${req.files[0]?.filename}`
             );
-            let regisUserDetail = await model.user_detail.create(
-              {
-                uuid,
-                name,
-                image_ktp: `/imgIdCard/${req.files[0]?.filename}`,
-                userId: regis.id, // Set userId to the id of the newly created user
-              },
-              {
-                transaction: ormTransaction,
-              }
-            );
-            await ormTransaction.commit();
-            return res.status(200).send({
-              success: true,
-              message: "register account success ✅",
-              data: regis,
-              regisUserDetail,
-            });
+            const image_ktp = `/imgIdCard/${req.files[0]?.filename}`;
+            console.log("ini isi dari image_ktp :", image_ktp);
+            if (image_ktp.length > 0) {
+              let regisUserDetail = await model.user_detail.create(
+                {
+                  uuid,
+                  name,
+                  // image_ktp: `/imgIdCard/${req.files[0]?.filename}`,
+                  image_ktp,
+                  userId: regis.id, // Set userId to the id of the newly created user
+                },
+                {
+                  transaction: ormTransaction,
+                }
+              );
+              await ormTransaction.commit();
+              return res.status(200).send({
+                success: true,
+                message: "register account success ✅",
+                data: regis,
+                regisUserDetail,
+              });
+            } else {
+              return res.status(400).send({
+                success: false,
+                message: "ID card is required",
+              });
+            }
           } else {
             res.status(400).send({
               success: false,
@@ -521,8 +531,8 @@ module.exports = {
       }
     } catch (error) {
       await ormTransaction.rollback();
-      //delete image if encountered error ---> DOES NOT WORK
-      fs.unlinkSync(`./src/public/imgIdCard/${req.files[0].filename}`);
+      //delete image if encountered error --> masih error (kalau ada yg bermasalah sama file yang dikirim)
+      fs.unlinkSync(`./public/imgIdCard/${req.files[0].filename}`);
       console.log(error);
       next(error);
     }
@@ -634,7 +644,7 @@ module.exports = {
           }
         );
         //2. generate token
-        let token = createToken({ id, roleId }, "1h");
+        let token = createToken({ id, roleId }, "24h"); // ---> masukin email jg (gbole dimunculin di fe)
         // create transporter object and configure Handlebars template
         const transporter = nodemailer.createTransport({
           service: "gmail",
@@ -741,8 +751,8 @@ module.exports = {
         get[0].dataValues.image_profile
       );
       //2. if old image exists, delete old replace with new
-      if (fs.existsSync(`./src/public${get[0].dataValues.image_profile}`)) {
-        fs.unlinkSync(`./src/public${get[0].dataValues.image_profile}`);
+      if (fs.existsSync(`./src/public/api${get[0].dataValues.image_profile}`)) {
+        fs.unlinkSync(`./src/public/api${get[0].dataValues.image_profile}`);
       }
       await model.user_detail.update(
         {
@@ -764,4 +774,5 @@ module.exports = {
       next(error);
     }
   },
+  
 };

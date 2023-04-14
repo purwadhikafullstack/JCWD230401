@@ -3,7 +3,7 @@ import "./App.css";
 import { Route, Routes, useLocation } from "react-router-dom";
 import NavbarMobile from "./Components/NavbarMobile";
 import Navbar from "./Components/Navbar";
-import React from "react";
+import React, { useState } from "react";
 import UserRegister from "./Pages/UserRegister";
 import { useDispatch, useSelector } from "react-redux";
 import { loginAction } from "./reducers/auth";
@@ -21,6 +21,7 @@ import TransactionPage from "./Pages/TransactionPage";
 import FilteredProperty from "./Pages/FilteredProperty/FilteredProperty";
 import PropertyDetail from "./Pages/PropertyDetail/PropertyDetail";
 import EditProfile from "./Pages/EditProfile";
+import TenantCalendar from "./Pages/TenantCalendar";
 
 function App() {
   const location = useLocation();
@@ -55,7 +56,9 @@ function App() {
       {location.pathname === "/" && <Navbar />}
       {location.pathname === "/editprofile" && <Navbar />}
       {location.pathname === "/productdetail" && <Navbar />}
+      {location.pathname === "/transactionpage" && <Navbar />}
       {location.pathname === "/dashboard" && roleId == 2 && <Navbar />}
+      {location.pathname === "/tenantcalendar" && roleId == 2 && <Navbar />}
 
       {
         // User
@@ -87,7 +90,9 @@ function App() {
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/" element={<Landing />} />
               <Route path="*" element={<NotFound />} />
-              <Route path="/productdetail" element={<ProductDetail />} />
+              <Route path="/property/detail/:uuid" element={<PropertyDetail />} />
+              <Route path="/tenantcalendar" element={<TenantCalendar />} />
+              <Route path="/editprofile" element={<EditProfile keeplogin={() => dispatch(keeplogin())} />} />
             </Routes>
           ) : (
             // Not logged in
@@ -100,7 +105,6 @@ function App() {
               <Route path="/verifyaccount/:token" element={<Verification />} />
               <Route path="/" element={<Landing />} />
               <Route path="*" element={<NotFound />} />
-              <Route path="/productdetail" element={<ProductDetail />} />
               <Route path="/property" element={<FilteredProperty />} />
               <Route path="/property/detail/:uuid" element={<PropertyDetail />} />
             </Routes>
