@@ -25,7 +25,7 @@ import Login from './Login';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { logoutAction } from '../reducers/auth';
-import { API_URL } from '../helper';
+import { API_URL, API_URL_IMG } from '../helper';
 
 
 export default function Navbar() {
@@ -134,7 +134,7 @@ export default function Navbar() {
                   <HamburgerIcon w={6} h={6} mx={2} my={1} color='black' />
                   <Avatar
                     size={'sm'}
-                    src={imageprofile ? `${API_URL}${imageprofile}` : ""}
+                    src={imageprofile ? `${API_URL_IMG}${imageprofile}` : ""}
                   />
                 </MenuButton>
                 {

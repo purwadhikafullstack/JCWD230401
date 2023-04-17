@@ -25,7 +25,7 @@ route.patch("/resetpw", readToken, checkUser, resetpassword);
 route.post(
   "/registerastenant",
   // checkUser, //masih error
-  uploader("/api/imgIdCard", "IDC").array("image_ktp", 1),
+  uploader("/imgIdCard", "IDC").array("images", 1), //ini data sesuai yg param 1 form append
   registerastenant
 );
 route.patch("/verifyaccount", readToken, verify);
@@ -34,7 +34,7 @@ route.patch("/editprofile", readToken, checkUser, editprofile);
 route.patch(
   "/updateprofileimage",
   readToken,
-  uploader("/api/profileImage", "PRF").array("image_profile", 1),
+  uploader("/profileImage", "PRF").array("image_profile", 1),
   updateprofileimage
 );
 

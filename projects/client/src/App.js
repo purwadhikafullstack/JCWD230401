@@ -20,6 +20,7 @@ import ProductDetail from "./Pages/ProductDetail/ProductDetail";
 import TransactionPage from "./Pages/TransactionPage";
 import EditProfile from "./Pages/EditProfile";
 import TenantCalendar from "./Pages/TenantCalendar";
+import PaymentDetail from "./Pages/PaymentDetail"; //design testing
 
 function App() {
   const location = useLocation();
@@ -102,6 +103,7 @@ function App() {
             <Route path="/" element={<Landing />} />
             <Route path="*" element={<NotFound />} />
             <Route path="/productdetail" element={<ProductDetail />} />
+            <Route path="/paymentdetail" element={<PaymentDetail />} />
           </Routes>
         )
       }

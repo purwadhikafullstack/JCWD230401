@@ -452,87 +452,88 @@ module.exports = {
   registerastenant: async (req, res, next) => {
     const ormTransaction = await model.sequelize.transaction();
     try {
-      console.log("req.body : ", req.body);
+      console.log("req.body : ", req.body.data); //krn dlm bntk object jd data masuk req.body.data
+      // console.log("req.body json parse : ", JSON.parse(req.body.data)); //krn dlm bntk object jd data masuk req.body.data
       console.log("req.files  : ", req.files);
-      let checkExistingUser = await model.user.findAll({
-        where: sequelize.or(
-          { email: req.body.email },
-          { phone: req.body.phone }
-        ),
-      });
-      if (checkExistingUser == 0) {
-        if (req.files.length == 1) {
-          if (req.body.password == req.body.confirmationPassword) {
-            delete req.body.confirmationPassword;
-            req.body.password = bcrypt.hashSync(req.body.password, salt);
-            console.log("Check data after hash password :", req.body); //testing purposes
-            const uuid = uuidv4();
-            const { name, email, password, phone } = req.body;
-            let regis = await model.user.create(
-              {
-                uuid,
-                email,
-                phone,
-                password,
-                roleId: 2,
-              },
-              {
-                transaction: ormTransaction,
-              }
-            );
-            console.log(
-              `File path: ./public/imgIdCard/${req.files[0]?.filename}`
-            );
-            const image_ktp = `/imgIdCard/${req.files[0]?.filename}`;
-            console.log("ini isi dari image_ktp :", image_ktp);
-            if (image_ktp.length > 0) {
-              let regisUserDetail = await model.user_detail.create(
-                {
-                  uuid,
-                  name,
-                  // image_ktp: `/imgIdCard/${req.files[0]?.filename}`,
-                  image_ktp,
-                  userId: regis.id, // Set userId to the id of the newly created user
-                },
-                {
-                  transaction: ormTransaction,
-                }
-              );
-              await ormTransaction.commit();
-              return res.status(200).send({
-                success: true,
-                message: "register account success ✅",
-                data: regis,
-                regisUserDetail,
-              });
-            } else {
-              return res.status(400).send({
-                success: false,
-                message: "ID card is required",
-              });
-            }
-          } else {
-            res.status(400).send({
-              success: false,
-              message: "Error❌: Passwords do not match.",
-            });
-          }
-        } else {
-          res.status(400).send({
-            success: false,
-            message: "Error❌: Id card image file is required",
-          });
+      // let checkExistingUser = await model.user.findAll({
+      //   where: sequelize.or(
+      //     { email: req.body.email },
+      //     { phone: req.body.phone }
+      //   ),
+      // });
+      // if (checkExistingUser == 0) {
+      //   if (req.files.length == 1) {
+      //     if (req.body.password == req.body.confirmationPassword) {
+      //       delete req.body.confirmationPassword;
+      //       req.body.password = bcrypt.hashSync(req.body.password, salt);
+      //       console.log("Check data after hash password :", req.body); //testing purposes
+      const uuid = uuidv4();
+      const { name, email, password, phone } = JSON.parse(req.body.data);
+      let regis = await model.user.create(
+        {
+          uuid,
+          email,
+          phone,
+          password,
+          roleId: 2,
+        },
+        {
+          transaction: ormTransaction,
         }
-      } else {
-        res.status(400).send({
-          success: false,
-          message: "Error❌: Email or phone number exist.",
-        });
-      }
+      );
+      //       console.log(
+      //         `File path: ./public/imgIdCard/${req.files[0]?.filename}`
+      //       );
+      const image_ktp = `/imgIdCard/${req.files[0]?.filename}`;
+      //       console.log("ini isi dari image_ktp :", image_ktp);
+      //       if (image_ktp.length > 0) {
+      let regisUserDetail = await model.user_detail.create(
+        {
+          uuid,
+          name,
+          // image_ktp: `/imgIdCard/${req.files[0]?.filename}`,
+          image_ktp,
+          userId: regis.id, // Set userId to the id of the newly created user
+        },
+        {
+          transaction: ormTransaction,
+        }
+      );
+      await ormTransaction.commit();
+      return res.status(200).send({
+        success: true,
+        message: "register account success ✅",
+        data: regis,
+        regisUserDetail,
+      });
+      //       } else {
+      //         return res.status(400).send({
+      //           success: false,
+      //           message: "ID card is required",
+      //         });
+      //       }
+      //     } else {
+      //       res.status(400).send({
+      //         success: false,
+      //         message: "Error❌: Passwords do not match.",
+      //       });
+      //     }
+      //   } else {
+      //     res.status(400).send({
+      //       success: false,
+      //       message: "Error❌: Id card image file is required",
+      //     });
+      //   }
+      // } else {
+      //   res.status(400).send({
+      //     success: false,
+      //     message: "Error❌: Email or phone number exist.",
+      //   });
+      // }
     } catch (error) {
       await ormTransaction.rollback();
       //delete image if encountered error --> masih error (kalau ada yg bermasalah sama file yang dikirim)
-      fs.unlinkSync(`./public/imgIdCard/${req.files[0].filename}`);
+      // fs.unlinkSync(`./public/imgIdCard/${req.files[0].filename}`);
       console.log(error);
       next(error);
     }
@@ -774,5 +775,4 @@ module.exports = {
       next(error);
     }
   },
-  
 };

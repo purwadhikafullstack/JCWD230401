@@ -1,5 +1,5 @@
 const { check, validationResult } = require("express-validator");
-const multer = require('multer');
+const multer = require("multer");
 
 module.exports = {
   checkUser: async (req, res, next) => {
@@ -182,7 +182,6 @@ module.exports = {
             "Password must be at least 6 characters, includes a number, one uppercase letter, and one lowercase letter"
           )
           .run(req);
-
       } else if (req.path == "/editprofile") {
         if (req.body.name) {
           await check("name")

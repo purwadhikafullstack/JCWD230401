@@ -48,7 +48,7 @@ export default function UserRegister() {
             if (response.data.success) {
                 alert(response.data.message);
             }
-            navigate('/', { replace: true });
+            // navigate('/', { replace: true }); --> jangan ktnya bikin bug 
         } catch (error) {
             console.log("ini error dari onBtnRegister : ", error); //testing purposes
             alert(error.response.data.message);

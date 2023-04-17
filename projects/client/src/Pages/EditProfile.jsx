@@ -11,7 +11,7 @@ import {
     Center, Radio, RadioGroup, Box, useDisclosure, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter
 } from '@chakra-ui/react';
 import { useSelector } from 'react-redux';
-import { API_URL } from '../helper';
+import { API_URL, API_URL_IMG } from '../helper';
 import axios from 'axios';
 
 
@@ -135,7 +135,7 @@ export default function EditProfile(props) {
                         <Stack direction={['column', 'row']} spacing={6}>
                             <Center>
                                 <Avatar size="xl"
-                                    src={currentProfileImage ? `${API_URL}${currentProfileImage}` : ""}
+                                    src={currentProfileImage ? `${API_URL_IMG}${currentProfileImage}` : ""}
                                 >
                                 </Avatar>
                             </Center>

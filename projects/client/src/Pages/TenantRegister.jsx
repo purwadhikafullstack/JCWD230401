@@ -38,15 +38,25 @@ export default function TenantRegister() {
         setFileImage(event.target.files[0]); //change to setFileImage
     };
 
+    console.log("fileimage: ", fileImage);
     const onBtnRegister = async () => {
         try {
             let formData = new FormData();
-            formData.append("image_ktp", fileImage);
-            formData.append("name", name);
-            formData.append("email", email);
-            formData.append("phone", phone);
-            formData.append("password", password);
-            formData.append("confirmationPassword", passwordConfirmation);
+            formData.append(
+                "data",
+                JSON.stringify({
+                    //   image_ktp: fileImage, --> bkn disini 
+                    name: name,
+                    email: email,
+                    phone: phone,
+                    password: password,
+                    confirmationPassword: passwordConfirmation
+                })
+            );
+            formData.append(
+                "images",
+                fileImage
+            )
             console.log("ini isi dari formData", formData);
             let response = await axios.post(`${API_URL}/user/registerastenant`,
                 formData
@@ -56,7 +66,7 @@ export default function TenantRegister() {
             if (response.data.success) {
                 alert(response.data.message);
             }
-            navigate('/', { replace: true });
+            // navigate('/', { replace: true });
         } catch (error) {
             console.log("ini error dari onBtnRegister : ", error); //testing purposes
             alert(error.response.data.message);

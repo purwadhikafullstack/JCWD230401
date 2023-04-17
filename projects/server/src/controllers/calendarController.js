@@ -2,7 +2,7 @@ const sequelize = require("sequelize");
 const model = require("../models");
 
 module.exports = {
-  //1. GET BOOKED ROOMS
+  //1. GET MY BOOKED ROOMS
   getroomorders: async (req, res, next) => {
     let getdata = await model.order.findAll({
       attributes: ["start_date", "end_date"],
@@ -37,7 +37,7 @@ module.exports = {
       next(error);
     }
   },
-  //2. GET UNDER MAINTENANCE ROOMS
+  //2. GET MY UNDER MAINTENANCE ROOMS
   getroommaintenance: async (req, res, next) => {
     try {
       let getdata = await model.maintenance.findAll({
@@ -59,6 +59,37 @@ module.exports = {
         ],
       });
       console.log("ini isi dari getdata: ", getdata[0].dataValues);
+      res.status(200).send(getdata);
+    } catch (error) {
+      console.log(error);
+      next(error);
+    }
+  },
+  //3. GET MY AVAILABLE ROOMS (dah ga dipake lg)
+  getavailablerooms: async (req, res, next) => {
+    try {
+      let getdata = await model.room.findAll({
+        include: [
+          {
+            model: model.room_category,
+            where: {
+              user_id: req.decrypt.id,
+              isDeleted: 0,
+            },
+          },
+        ],
+        where: 
+          sequelize.literal(`
+          room.id NOT IN (
+            SELECT roomId FROM orders WHERE start_date <= '${req.body.date}' AND end_date >= '${req.body.date}'
+          ) AND
+          room.id NOT IN (
+            SELECT roomId FROM maintenances WHERE startDate <= '${req.body.date}' AND endDate >= '${req.body.date}'
+          ) AND
+          room.isDeleted = 0 
+        `),
+      });
+      console.log("ini isi dari getdata: ", getdata);
       res.status(200).send(getdata);
     } catch (error) {
       console.log(error);
