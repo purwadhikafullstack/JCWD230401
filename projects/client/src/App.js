@@ -27,99 +27,192 @@ import EditProfile from "./Pages/EditProfile";
 import TenantCalendar from "./Pages/TenantCalendar";
 
 function App() {
-  const location = useLocation();
-  const dispatch = useDispatch();
-  const roleId = useSelector((state) => state.authReducer.roleId);
-  // console.log("ini isi roleId dari useSelector di App.js : ", roleId);
+    const location = useLocation();
+    const dispatch = useDispatch();
+    const roleId = useSelector((state) => state.authReducer.roleId);
+    // console.log("ini isi roleId dari useSelector di App.js : ", roleId);
 
-  const keeplogin = async () => {
-    try {
-      let token = localStorage.getItem("tempatku_login");
-      if (token) {
-        let response = await axios.get(`${API_URL}/user/keeplogin`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        console.log("ini respon dari keeplogin :", response.data);
-        localStorage.setItem("tempatku_login", response.data.token);
-        dispatch(loginAction(response.data));
-      }
-    } catch (error) {
-      console.log("ini error dari keeplogin : ", error);
-    }
-  };
+    const keeplogin = async () => {
+        try {
+            let token = localStorage.getItem("tempatku_login");
+            if (token) {
+                let response = await axios.get(`${API_URL}/user/keeplogin`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+                console.log("ini respon dari keeplogin :", response.data);
+                localStorage.setItem("tempatku_login", response.data.token);
+                dispatch(loginAction(response.data));
+            }
+        } catch (error) {
+            console.log("ini error dari keeplogin : ", error);
+        }
+    };
 
-  React.useEffect(() => {
-    keeplogin();
-  }, []);
+    React.useEffect(() => {
+        keeplogin();
+    }, []);
 
-  return (
-    <>
-      {
-        !location.pathname.includes('auth') ?
-          <>
-            <Navbar />
-            <NavbarMobile />
-          </>
-          :
-          null
-      }
-      {
-        // User
-        roleId == 1 ? (
-          <Routes>
-            <Route path="/changepassword" element={<ChangePassword />} />
-            <Route path="/userregister" element={<UserRegister />} />
-            <Route path="/tenantregister" element={<TenantRegister />} />
-            <Route path="/forgotpassword" element={<ForgotPassword />} />
-            <Route path="/resetpassword/:token" element={<ResetPassword />} />
-            <Route path="/verifyaccount/:token" element={<Verification />} />
-            <Route path="/" element={<Landing />} />
-            <Route path="*" element={<NotFound />} />
-            <Route path="/productdetail" element={<ProductDetail />} />
-            <Route path="/transactionpage" element={<TransactionPage />} />
-            <Route path="/editprofile" element={<EditProfile keeplogin={() => dispatch(keeplogin())} />} />
-            <Route path="/property" element={<FilteredProperty />} />
-            <Route path="/property/detail/:uuid" element={<PropertyDetail />} />
-          </Routes>
-        ) : // Tenant
-          roleId == 2 ? (
-            <Routes>
-              <Route path="/changepassword" element={<ChangePassword />} />
-              <Route path="/userregister" element={<UserRegister />} />
-              <Route path="/tenantregister" element={<TenantRegister />} />
-              <Route path="/forgotpassword" element={<ForgotPassword />} />
-              <Route path="/resetpassword/:token" element={<ResetPassword />} />
-              <Route path="/verifyaccount/:token" element={<Verification />} />
-              <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/" element={<Landing />} />
-              <Route path="*" element={<NotFound />} />
-              <Route path="/property/detail/:uuid" element={<PropertyDetail />} />
-              <Route path="/tenantcalendar" element={<TenantCalendar />} />
-              <Route path="/editprofile" element={<EditProfile keeplogin={() => dispatch(keeplogin())} />} />
-            </Routes>
-          ) : (
-            // Not logged in
-            <Routes>
-              <Route path="/auth/changepassword" element={<ChangePassword />} />
-              <Route path="/auth/userregister" element={<UserRegister />} />
-              <Route path="/auth/forgotpassword" element={<ForgotPassword />} />
-              <Route path="/auth/resetpassword/:token" element={<ResetPassword />} />
-              <Route path="/tenantregister" element={<TenantRegister />} />
-              <Route path="/verifyaccount/:token" element={<Verification />} />
-              <Route path="/" element={<Landing />} />
-              <Route path="*" element={<NotFound />} />
-              <Route path="/property" element={<FilteredProperty />} />
-              <Route path="/property/detail/:uuid" element={<PropertyDetail />} />
-              <Route path="/payment/:uuid" element={<Payments />} />
-              <Route path="/payment/detail/:uuid" element={<PaymentDetail />} />
-              <Route path="/order/list" element={<OrderLists />} />
-            </Routes>
-          )
-      }
-      {/* {location.pathname === "/" && <NavbarMobile />} */}
-  );
+    return (
+        <>
+            {!location.pathname.includes("auth") ? (
+                <>
+                    <Navbar />
+                    <NavbarMobile />
+                </>
+            ) : null}
+            {
+                // User
+                roleId == 1 ? (
+                    <Routes>
+                        <Route
+                            path="/changepassword"
+                            element={<ChangePassword />}
+                        />
+                        <Route
+                            path="/userregister"
+                            element={<UserRegister />}
+                        />
+                        <Route
+                            path="/tenantregister"
+                            element={<TenantRegister />}
+                        />
+                        <Route
+                            path="/forgotpassword"
+                            element={<ForgotPassword />}
+                        />
+                        <Route
+                            path="/resetpassword/:token"
+                            element={<ResetPassword />}
+                        />
+                        <Route
+                            path="/verifyaccount/:token"
+                            element={<Verification />}
+                        />
+                        <Route path="/" element={<Landing />} />
+                        <Route path="*" element={<NotFound />} />
+                        <Route
+                            path="/productdetail"
+                            element={<ProductDetail />}
+                        />
+                        <Route
+                            path="/transactionpage"
+                            element={<TransactionPage />}
+                        />
+                        <Route
+                            path="/editprofile"
+                            element={
+                                <EditProfile
+                                    keeplogin={() => dispatch(keeplogin())}
+                                />
+                            }
+                        />
+                        <Route
+                            path="/property"
+                            element={<FilteredProperty />}
+                        />
+                        <Route
+                            path="/property/detail/:uuid"
+                            element={<PropertyDetail />}
+                        />
+                    </Routes>
+                ) : // Tenant
+                roleId == 2 ? (
+                    <Routes>
+                        <Route
+                            path="/changepassword"
+                            element={<ChangePassword />}
+                        />
+                        <Route
+                            path="/userregister"
+                            element={<UserRegister />}
+                        />
+                        <Route
+                            path="/tenantregister"
+                            element={<TenantRegister />}
+                        />
+                        <Route
+                            path="/forgotpassword"
+                            element={<ForgotPassword />}
+                        />
+                        <Route
+                            path="/resetpassword/:token"
+                            element={<ResetPassword />}
+                        />
+                        <Route
+                            path="/verifyaccount/:token"
+                            element={<Verification />}
+                        />
+                        <Route path="/dashboard" element={<Dashboard />} />
+                        <Route path="/" element={<Landing />} />
+                        <Route path="*" element={<NotFound />} />
+                        <Route
+                            path="/property/detail/:uuid"
+                            element={<PropertyDetail />}
+                        />
+                        <Route
+                            path="/tenantcalendar"
+                            element={<TenantCalendar />}
+                        />
+                        <Route
+                            path="/editprofile"
+                            element={
+                                <EditProfile
+                                    keeplogin={() => dispatch(keeplogin())}
+                                />
+                            }
+                        />
+                    </Routes>
+                ) : (
+                    // Not logged in
+                    <Routes>
+                        <Route
+                            path="/auth/changepassword"
+                            element={<ChangePassword />}
+                        />
+                        <Route
+                            path="/auth/userregister"
+                            element={<UserRegister />}
+                        />
+                        <Route
+                            path="/auth/forgotpassword"
+                            element={<ForgotPassword />}
+                        />
+                        <Route
+                            path="/auth/resetpassword/:token"
+                            element={<ResetPassword />}
+                        />
+                        <Route
+                            path="/tenantregister"
+                            element={<TenantRegister />}
+                        />
+                        <Route
+                            path="/verifyaccount/:token"
+                            element={<Verification />}
+                        />
+                        <Route path="/" element={<Landing />} />
+                        <Route path="*" element={<NotFound />} />
+                        <Route
+                            path="/property"
+                            element={<FilteredProperty />}
+                        />
+                        <Route
+                            path="/property/detail/:uuid"
+                            element={<PropertyDetail />}
+                        />
+                        <Route path="/payment/:uuid" element={<Payments />} />
+                        <Route
+                            path="/payment/detail/:uuid"
+                            element={<PaymentDetail />}
+                        />
+                        <Route path="/order/list" element={<OrderLists />} />
+                    </Routes>
+                )
+            }
+            {/* {location.pathname === "/" && <NavbarMobile />} */}
+        </>
+    );
 }
 
 export default App;
