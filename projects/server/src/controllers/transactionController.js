@@ -49,27 +49,35 @@ module.exports = {
     },
     getTransactionTimeAndBank: async (req, res, next) => {
         let getTransactionTime = await model.transaction.findAll({
-            attributes: ['createdAt'],
+            attributes: ['createdAt', 'transaction_statusId', "invoice_number"],
             where: {
-                uuid: req.body.uuid
+                uuid: req.query.uuid
             },
             include: [
                 {
                     model: model.order, attributes: ['start_date', 'end_date', 'price'],
                     include: [{
-                        model: model.room, attributes: ['room_categoryId'],
-                        include: [{
-                            model: model.room_category, attributes: ['user_id']
-                        }]
+                        model: model.room, attributes: ['uuid', 'room_categoryId'],
+                        include: [
+                            {
+                                model: model.room_category, attributes: ['user_id', 'name']
+                            }
+                        ]
                     }]
                 },
                 {
                     model: model.transaction_status, attributes: ['status']
+                },
+                {
+                    model: model.user, attributes: ['uuid'],
+                    include: [{
+                        model: model.user_detail, attributes: ['name'] // user
+                    }]
                 }
             ]
         });
         let getBank = await model.user.findAll({
-            include: [{ model: model.user_detail, attributes: ['name', 'account_number'] }],
+            include: [{ model: model.user_detail, attributes: ['name', 'account_number'] }], //  tenant
             attributes: ['uuid'],
             where: {
                 id: getTransactionTime[0].orders[0].room.room_category.user_id
@@ -109,10 +117,10 @@ module.exports = {
     },
     cancelOrReject: async (req, res, next) => {
         let update = await model.transaction.update({
-            transaction_statusId: req.query.statusid
+            transaction_statusId: req.body.transaction_statusId
         }, {
             where: {
-                uuid: req.query.uuid
+                uuid: req.body.uuid
             }
         });
         res.status(200).send({

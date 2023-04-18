@@ -46,8 +46,10 @@ export default function Payments() {
 
     const [details, setDetails] = useState([])
     const getDetails = async () => {
-        let get = await axios.post(`${API_URL}/room/roompayment`, {
-            uuid: params.uuid
+        let get = await axios.get(`${API_URL}/room/roompayment?uuid=${params.uuid}`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
         });
         setDetails(get.data[0]);
         console.log("payments get rooms detail transaction", get)
@@ -73,7 +75,7 @@ export default function Payments() {
             setLoadingConfirm(false);
             navigate(`/payment/detail/${addTransaction.data.data1.uuid}`)
 
-            console.log("add transactionnnn",addTransaction)
+            console.log("add transactionnnn", addTransaction)
         }
     }
     let now = new Date();
@@ -88,7 +90,7 @@ export default function Payments() {
             {
                 loadingConfirm ?
                     <Flex justifyContent={'center'} alignItems='center'>
-                        <Spinner color='red'/>
+                        <Spinner color='red' />
                     </Flex>
                     :
                     <Box>

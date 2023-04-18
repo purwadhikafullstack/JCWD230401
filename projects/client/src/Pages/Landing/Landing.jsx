@@ -101,7 +101,7 @@ export default function Landing() {
     const printAllProperty = () => {
         return allProperty.map((val, idx) => {
             return <PropertyCard property={val.property} picture={val.picture_properties[0]?.picture}
-                location={val.property_location} price={val.rooms[0]?.price} />
+                location={val.property_location} price={val.rooms[0]?.price} uuid={val.uuid} />
         })
     }
 

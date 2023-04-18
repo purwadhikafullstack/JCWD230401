@@ -8,13 +8,13 @@ module.exports = {
     getDetailRoomTransaction: async (req, res, next) => {
         let get = await model.room.findAll({
             where: {
-                uuid: req.body.uuid
+                uuid: req.query.uuid
             },
             include: [
                 {
                     model: model.property,
                     include: [{
-                        model: model.property_location, attributes: ['country'],
+                        model: model.property_location, attributes: ['country', 'address'],
                         include: [{ model: model.regency, attributes: ['name'] }]
                     }]
                 },

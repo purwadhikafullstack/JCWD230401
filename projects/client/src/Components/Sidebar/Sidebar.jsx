@@ -1,7 +1,7 @@
 import './Sidebar.css'
 import { Text } from '@chakra-ui/react';
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 import { API_URL } from '../../helper';
 
@@ -17,10 +17,12 @@ export default function Sidebar() {
                 <div className="sidebar-content">
                     <ul className="lists">
                         <li className="list">
-                            <a href="#" className="nav-link">
-                                <i className="bx bx-home-alt icon"></i>
-                                <span className="link">Dashboard</span>
-                            </a>
+                            <Link to={'/dashboard'}>
+                                <a className="nav-link">
+                                    <i className="bx bx-home-alt icon"></i>
+                                    <span className="link">Dashboard</span>
+                                </a>
+                            </Link>
                         </li>
                         <li className="list">
                             <a href="#" className="nav-link">
@@ -47,10 +49,12 @@ export default function Sidebar() {
                             </a>
                         </li>
                         <li className="list">
-                            <a href="/tenantcalendar" className="nav-link">
-                                <i className="bx bx-calendar icon"></i>
-                                <span className="link">Calendar</span>
-                            </a>
+                            <Link to={"/tenantcalendar"}>
+                                <a className="nav-link">
+                                    <i className="bx bx-calendar icon"></i>
+                                    <span className="link">Calendar</span>
+                                </a>
+                            </Link>
                         </li>
                     </ul>
 

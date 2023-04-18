@@ -4,8 +4,9 @@ const route = require('express').Router();
 const uploader = require('../helper/uploader');
 
 route.post('/', readToken, transactionController.newTransaction)
-route.post('/detail', transactionController.getTransactionTimeAndBank)
+route.get('/detail', transactionController.getTransactionTimeAndBank)
 route.post('/uploadimagepayment/:uuid', readToken, uploader('/ImgPayment', 'PAY').array('images', 1), transactionController.uploadImagePayment)
+route.patch('/cancelorreject', transactionController.cancelOrReject)
 
 
 

@@ -7,7 +7,6 @@ const { createToken } = require("../helper/jwt");
 module.exports = {
     getAllOrder: async (req, res, next) => {
         let get = await model.order.findAndCountAll({
-            // offset: parseInt(req.query.page || 0 * req.query.size || 3 + 1),
             offset: parseInt(((req.query.page || 1) - 1) * (req.query.size || 3)),
             limit: parseInt(req.query.size || 3),
             where: {
@@ -55,5 +54,57 @@ module.exports = {
             data: get,
             datanum: get.count
         })
+    },
+    getActionsNeededTenant: async (req, res, next) => {
+        let get = await model.transaction.findAndCountAll({
+            // offset: parseInt(((req.query.page || 1) - 1) * (req.query.size || 3)),
+            // limit: parseInt(req.query.size || 3),
+            where: {
+                transaction_statusId: 2,
+            },
+            include: [
+                {
+                    model: model.order, required: true,
+                    include: [
+                        {
+                            model: model.room, required: true,
+                            include: [
+                                {
+                                    model: model.room_category, required: true, attributes: ['name']
+                                },
+                                {
+                                    model: model.property, required: true, attributes: ['property'],
+                                    where: {
+                                        userId: 1  // tenant (req.decrypt.id)
+                                    },
+                                    include: [
+                                        {
+                                            model: model.property_location, required: true, attributes: ['country'],
+                                            include: [
+                                                {
+                                                    model: model.regency, required: true, attributes: ['name']
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    model: model.user, attributes: ['uuid'], // user
+                    include: [
+                        {
+                            model: model.user_detail, attributes: ['name', 'image_profile']
+                        }
+                    ]
+                }
+            ]
+        })
+        res.status(200).send(get)
+    },
+    getSummary: async (req, res, next) => {
+        // let get = await model.transaction
     }
 }

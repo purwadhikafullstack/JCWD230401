@@ -27,7 +27,7 @@ module.exports = (sequelize, DataTypes) => {
     modelName: 'transaction',
   });
   transaction.associate = (models) => {
-    transaction.belongsTo(models.room, { foreignKey: 'roomId' });
+    // transaction.belongsTo(models.room, { foreignKey: 'roomId' });
     transaction.hasMany(models.order, { foreignKey: 'transactionId' });
     transaction.belongsTo(models.user, { foreignKey: 'userId' });
     transaction.belongsTo(models.transaction_status, { foreignKey: 'transaction_statusId' });

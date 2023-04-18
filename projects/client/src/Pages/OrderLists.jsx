@@ -33,7 +33,7 @@ export default function OrderLists() {
 
     // PAGINATION
     const [page, setPage] = useState(1)
-    const [size, setSize] = useState(1)
+    const [size, setSize] = useState(3)
     const [transactionStatusId, setTransactionStatusId] = useState('')
     const [invoice, setInvoice] = useState('')
     const [sortBy, setSortBy] = useState('')

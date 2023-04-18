@@ -4,7 +4,7 @@ const { v4: uuidv4 } = require("uuid");
 const bcrypt = require("bcrypt");
 const { createToken } = require("../helper/jwt");
 const fs = require("fs");
-// const hbs = require("nodemailer-express-handlebars");
+const hbs = require("nodemailer-express-handlebars");
 const nodemailer = require("nodemailer");
 
 let salt = bcrypt.genSaltSync(10);
@@ -203,9 +203,8 @@ module.exports = {
             );
             res.status(400).send({
               success: false,
-              message: `Wrong password ❌ attempt number : ${
-                getuser[0].dataValues.attempts + 1
-              }`,
+              message: `Wrong password ❌ attempt number : ${getuser[0].dataValues.attempts + 1
+                }`,
             });
           } else {
             await model.user.update(
@@ -774,5 +773,5 @@ module.exports = {
       next(error);
     }
   },
-  
+
 };
