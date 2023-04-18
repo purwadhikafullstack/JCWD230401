@@ -3,7 +3,7 @@ import "./App.css";
 import { Route, Routes, useLocation } from "react-router-dom";
 import NavbarMobile from "./Components/NavbarMobile";
 import Navbar from "./Components/Navbar";
-import React from "react";
+import React, { useState } from "react";
 import UserRegister from "./Pages/UserRegister";
 import { useDispatch, useSelector } from "react-redux";
 import { loginAction } from "./reducers/auth";
@@ -20,7 +20,11 @@ import ProductDetail from "./Pages/ProductDetail/ProductDetail";
 import TransactionPage from "./Pages/TransactionPage";
 import FilteredProperty from "./Pages/FilteredProperty/FilteredProperty";
 import PropertyDetail from "./Pages/PropertyDetail/PropertyDetail";
+import Payments from "./Pages/Payments/Payments";
+import PaymentDetail from "./Pages/PaymentDetail";
+import OrderLists from "./Pages/OrderLists";
 import EditProfile from "./Pages/EditProfile";
+import TenantCalendar from "./Pages/TenantCalendar";
 
 function App() {
   const location = useLocation();
@@ -52,11 +56,15 @@ function App() {
 
   return (
     <>
-      {location.pathname === "/" && <Navbar />}
-      {location.pathname === "/editprofile" && <Navbar />}
-      {location.pathname === "/productdetail" && <Navbar />}
-      {location.pathname === "/dashboard" && roleId == 2 && <Navbar />}
-
+      {
+        !location.pathname.includes('auth') ?
+          <>
+            <Navbar />
+            <NavbarMobile />
+          </>
+          :
+          null
+      }
       {
         // User
         roleId == 1 ? (
@@ -87,27 +95,30 @@ function App() {
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/" element={<Landing />} />
               <Route path="*" element={<NotFound />} />
-              <Route path="/productdetail" element={<ProductDetail />} />
+              <Route path="/property/detail/:uuid" element={<PropertyDetail />} />
+              <Route path="/tenantcalendar" element={<TenantCalendar />} />
+              <Route path="/editprofile" element={<EditProfile keeplogin={() => dispatch(keeplogin())} />} />
             </Routes>
           ) : (
             // Not logged in
             <Routes>
-              <Route path="/changepassword" element={<ChangePassword />} />
-              <Route path="/userregister" element={<UserRegister />} />
+              <Route path="/auth/changepassword" element={<ChangePassword />} />
+              <Route path="/auth/userregister" element={<UserRegister />} />
+              <Route path="/auth/forgotpassword" element={<ForgotPassword />} />
+              <Route path="/auth/resetpassword/:token" element={<ResetPassword />} />
               <Route path="/tenantregister" element={<TenantRegister />} />
-              <Route path="/forgotpassword" element={<ForgotPassword />} />
-              <Route path="/resetpassword/:token" element={<ResetPassword />} />
               <Route path="/verifyaccount/:token" element={<Verification />} />
               <Route path="/" element={<Landing />} />
               <Route path="*" element={<NotFound />} />
-              <Route path="/productdetail" element={<ProductDetail />} />
               <Route path="/property" element={<FilteredProperty />} />
               <Route path="/property/detail/:uuid" element={<PropertyDetail />} />
+              <Route path="/payment/:uuid" element={<Payments />} />
+              <Route path="/payment/detail/:uuid" element={<PaymentDetail />} />
+              <Route path="/order/list" element={<OrderLists />} />
             </Routes>
           )
       }
-      {location.pathname === "/" && <NavbarMobile />}
-    </>
+      {/* {location.pathname === "/" && <NavbarMobile />} */}
   );
 }
 

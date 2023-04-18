@@ -4,7 +4,7 @@ const authSlice = createSlice({
   name: "auth",
 
   initialState: {
-    name: "", //hrs dijoin user tabel sama user detail
+    name: "", 
     email: "",
     roleId: "",
     isVerified: "",

@@ -4,7 +4,7 @@ const { v4: uuidv4 } = require("uuid");
 const bcrypt = require("bcrypt");
 const { createToken } = require("../helper/jwt");
 const fs = require("fs");
-const hbs = require("nodemailer-express-handlebars");
+// const hbs = require("nodemailer-express-handlebars");
 const nodemailer = require("nodemailer");
 
 let salt = bcrypt.genSaltSync(10);
@@ -65,7 +65,7 @@ module.exports = {
                     );
                     let { id, roleId } = regis.dataValues;
                     //2. generate token --> Q: cukup dari tabel user saja?
-                    let token = createToken({ id, roleId }, "1h");
+                    let token = createToken({ id, roleId }, "24h");
                     // create transporter object and configure Handlebars template
                     const transporter = nodemailer.createTransport({
                         service: "gmail",
@@ -377,37 +377,37 @@ module.exports = {
                 let { name } = getData[0].user_detail;
                 let token = createToken({ id, roleId, isSuspended }, "1h"); // apa aja yg jd token? //1 jam (forgot pw dan verifikasi)
                 // create transporter object and configure Handlebars template
-                // const transporter = nodemailer.createTransport({
-                //   service: "gmail",
-                //   auth: {
-                //     user: "noreply.tempatku@gmail.com",
-                //     pass: "vjuuvolabsuuxqex",
-                //   },
-                // });
-                // transporter.use(
-                //   "compile",
-                //   hbs({
-                //     viewEngine: {
-                //       extname: ".html", // html extension
-                //       layoutsDir: "./src/helper", // location of handlebars templates
-                //       defaultLayout: "reset-password-email", // name of main template
-                //       partialsDir: "./src/helper", // location of your subtemplates aka. header, footer etc
-                //     },
-                //     viewPath: "./src/helper",
-                //     extName: ".html",
-                //   })
-                // );
-                // //3. send reset pw email
-                // await transporter.sendMail({
-                //   from: "Tracker admin",
-                //   to: req.body.email,
-                //   subject: "Reset Password",
-                //   template: "reset-password-email",
-                //   context: {
-                //     name: name,
-                //     link: `http://localhost:3000/resetpassword/${token}`,
-                //   },
-                // });
+                const transporter = nodemailer.createTransport({
+                    service: "gmail",
+                    auth: {
+                        user: "noreply.tempatku@gmail.com",
+                        pass: "vjuuvolabsuuxqex",
+                    },
+                });
+                transporter.use(
+                    "compile",
+                    hbs({
+                        viewEngine: {
+                            extname: ".html", // html extension
+                            layoutsDir: "./src/helper", // location of handlebars templates
+                            defaultLayout: "reset-password-email", // name of main template
+                            partialsDir: "./src/helper", // location of your subtemplates aka. header, footer etc
+                        },
+                        viewPath: "./src/helper",
+                        extName: ".html",
+                    })
+                );
+                //3. send reset pw email
+                await transporter.sendMail({
+                    from: "Tracker admin",
+                    to: req.body.email,
+                    subject: "Reset Password",
+                    template: "reset-password-email",
+                    context: {
+                        name: name,
+                        link: `http://localhost:3000/resetpassword/${token}`,
+                    },
+                });
                 res.status(200).send({
                     success: true,
                     message: "email to reset password has been delivered ✅",
@@ -503,24 +503,35 @@ module.exports = {
                         console.log(
                             `File path: ./public/imgIdCard/${req.files[0]?.filename}`
                         );
-                        let regisUserDetail = await model.user_detail.create(
-                            {
-                                uuid,
-                                name,
-                                image_ktp: `/imgIdCard/${req.files[0]?.filename}`,
-                                userId: regis.id, // Set userId to the id of the newly created user
-                            },
-                            {
-                                transaction: ormTransaction,
-                            }
-                        );
-                        await ormTransaction.commit();
-                        return res.status(200).send({
-                            success: true,
-                            message: "register account success ✅",
-                            data: regis,
-                            regisUserDetail,
-                        });
+                        const image_ktp = `/imgIdCard/${req.files[0]?.filename}`;
+                        console.log("ini isi dari image_ktp :", image_ktp);
+                        if (image_ktp.length > 0) {
+                            let regisUserDetail =
+                                await model.user_detail.create(
+                                    {
+                                        uuid,
+                                        name,
+                                        // image_ktp: `/imgIdCard/${req.files[0]?.filename}`,
+                                        image_ktp,
+                                        userId: regis.id, // Set userId to the id of the newly created user
+                                    },
+                                    {
+                                        transaction: ormTransaction,
+                                    }
+                                );
+                            await ormTransaction.commit();
+                            return res.status(200).send({
+                                success: true,
+                                message: "register account success ✅",
+                                data: regis,
+                                regisUserDetail,
+                            });
+                        } else {
+                            return res.status(400).send({
+                                success: false,
+                                message: "ID card is required",
+                            });
+                        }
                     } else {
                         res.status(400).send({
                             success: false,
@@ -541,8 +552,8 @@ module.exports = {
             }
         } catch (error) {
             await ormTransaction.rollback();
-            //delete image if encountered error ---> DOES NOT WORK
-            fs.unlinkSync(`./src/public/imgIdCard/${req.files[0].filename}`);
+            //delete image if encountered error --> masih error (kalau ada yg bermasalah sama file yang dikirim)
+            fs.unlinkSync(`./public/imgIdCard/${req.files[0].filename}`);
             console.log(error);
             next(error);
         }
@@ -657,40 +668,40 @@ module.exports = {
                     }
                 );
                 //2. generate token
-                let token = createToken({ id, roleId }, "1h");
+                let token = createToken({ id, roleId }, "24h"); // ---> masukin email jg (gbole dimunculin di fe)
                 // create transporter object and configure Handlebars template
-                // const transporter = nodemailer.createTransport({
-                //   service: "gmail",
-                //   auth: {
-                //     user: "noreply.tempatku@gmail.com",
-                //     pass: "vjuuvolabsuuxqex",
-                //   },
-                // });
-                // transporter.use(
-                //   "compile",
-                //   hbs({
-                //     viewEngine: {
-                //       extname: ".html", // html extension
-                //       layoutsDir: "./src/helper", // location of handlebars templates
-                //       defaultLayout: "account-verification-email", // name of main template
-                //       partialsDir: "./src/helper", // location of your subtemplates aka. header, footer etc
-                //     },
-                //     viewPath: "./src/helper",
-                //     extName: ".html",
-                //   })
-                // );
-                // //3. send verification email
-                // await transporter.sendMail({
-                //   from: "Tracker admin",
-                //   to: checkverifieduser[0].dataValues.email,
-                //   subject: "Account Verification",
-                //   template: "account-verification-email",
-                //   context: {
-                //     name: name,
-                //     link: `http://localhost:3000/verifyaccount/${token}`,
-                //     otp: otp,
-                //   },
-                // });
+                const transporter = nodemailer.createTransport({
+                    service: "gmail",
+                    auth: {
+                        user: "noreply.tempatku@gmail.com",
+                        pass: "vjuuvolabsuuxqex",
+                    },
+                });
+                transporter.use(
+                    "compile",
+                    hbs({
+                        viewEngine: {
+                            extname: ".html", // html extension
+                            layoutsDir: "./src/helper", // location of handlebars templates
+                            defaultLayout: "account-verification-email", // name of main template
+                            partialsDir: "./src/helper", // location of your subtemplates aka. header, footer etc
+                        },
+                        viewPath: "./src/helper",
+                        extName: ".html",
+                    })
+                );
+                //3. send verification email
+                await transporter.sendMail({
+                    from: "Tracker admin",
+                    to: checkverifieduser[0].dataValues.email,
+                    subject: "Account Verification",
+                    template: "account-verification-email",
+                    context: {
+                        name: name,
+                        link: `http://localhost:3000/verifyaccount/${token}`,
+                        otp: otp,
+                    },
+                });
                 return res.status(200).send({
                     success: true,
                     message:
@@ -765,9 +776,13 @@ module.exports = {
             );
             //2. if old image exists, delete old replace with new
             if (
-                fs.existsSync(`./src/public${get[0].dataValues.image_profile}`)
+                fs.existsSync(
+                    `./src/public/api${get[0].dataValues.image_profile}`
+                )
             ) {
-                fs.unlinkSync(`./src/public${get[0].dataValues.image_profile}`);
+                fs.unlinkSync(
+                    `./src/public/api${get[0].dataValues.image_profile}`
+                );
             }
             await model.user_detail.update(
                 {

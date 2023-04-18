@@ -31,6 +31,7 @@ module.exports = (sequelize, DataTypes) => {
     room.belongsTo(models.room_category, { foreignKey: 'room_categoryId' });
     room.hasMany(models.order, { foreignKey: 'roomId' });
     room.hasMany(models.picture_room, { foreignKey: 'roomId' });
+    room.hasMany(models.maintenance, { foreignKey: 'roomId' });
   }
   return room;
 };

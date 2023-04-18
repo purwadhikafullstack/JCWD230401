@@ -15,7 +15,8 @@ module.exports = (sequelize, DataTypes) => {
   }
   room_category.init({
     name: DataTypes.STRING,
-    isDeleted: DataTypes.BOOLEAN
+    isDeleted: DataTypes.BOOLEAN,
+    user_id: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'room_category',
@@ -23,6 +24,7 @@ module.exports = (sequelize, DataTypes) => {
 
   room_category.associate = (models) => {
     room_category.hasMany(models.room, { foreignKey: 'room_categoryId' });
+    room_category.belongsTo(models.user, { foreignKey: 'user_id' });
   }
   return room_category;
 };

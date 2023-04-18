@@ -9,16 +9,17 @@ import {
 } from '@chakra-ui/react';
 import { BsStarFill } from "react-icons/bs";
 import { Link } from 'react-router-dom';
-import { API_URL } from '../helper';
+import { API_URL, API_URL_IMG } from '../helper';
 import Carousel from './Carousel';
 
 const IMAGE =
     'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1740&q=80';
 
 export default function PropertyCard(props) {
+    console.log("propsss location", props.location);
     return (
         <Center
-        p='1'
+            p='1'
         >
             {/* <Box
                 role={'group'}
@@ -54,7 +55,7 @@ export default function PropertyCard(props) {
                             height={{ base: '300px', lg: '230px' }}
                             // width={{ base: '400px', lg: '250px' }}
                             objectFit={'cover'}
-                            src={`${API_URL}${props.picture}`}
+                            src={`${API_URL_IMG}${props.picture}`}
                         />
                     </Box>
                     <Box
@@ -75,7 +76,7 @@ export default function PropertyCard(props) {
                             </Flex>
                         </HStack>
                         <Text fontWeight={'normal'} fontSize={'sm'} >
-                            {props.location?.province.name}, {props.location?.country}
+                            {props.location?.province?.name}, {props.location?.country}
                         </Text>
                         <Text fontWeight={600} fontSize={'md'} textAlign={'left'} display='flex'>
                             Rp {props.price}

@@ -20,9 +20,9 @@ import Ubud1 from './images/ubud-1.jpg';
 import Bandung1 from './images/bandung-1.jpg';
 import Bali1 from './images/bali-1.png';
 import NusaPenida1 from './images/nusapenida-1.png';
-import axios from 'axios';
-import { API_URL } from '../../helper';
-import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { API_URL, API_URL_IMG } from "../../helper";
+import { useNavigate } from 'react-router-dom';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 
@@ -50,6 +50,7 @@ export default function Landing() {
     //     }
     // };
     //api to fetch search result
+
     // const onSearch = (searchTerm) => {
     //     setInputLocation(searchTerm); //if suggestion clicked, it will be put inside the input field
     //     console.log("Ini adalah search : ", searchTerm)
@@ -80,10 +81,10 @@ export default function Landing() {
     }
 
     const printAllCategory = () => {
-        console.log("all categoryyyy",allCategory);
+        console.log("all categoryyyy", allCategory);
         return allCategory.map((val, idx) => {
             return <div>
-                <img src={`${API_URL}${val.picture}`} />
+                <img src={`${API_URL_IMG}${val.picture}`} />
                 <span>
                     <h3>{val.category}</h3>
                 </span>
@@ -93,14 +94,14 @@ export default function Landing() {
 
     const getAllProperty = async () => {
         let get = await axios.get(`${API_URL}/property`);
-        console.log("get all property",get)
+        console.log("get all property", get)
         setAllProperty(get.data)
     }
 
     const printAllProperty = () => {
-        return allProperty.map((val,idx) => {
+        return allProperty.map((val, idx) => {
             return <PropertyCard property={val.property} picture={val.picture_properties[0]?.picture}
-            location={val.property_location} price={val.rooms[0]?.price}/>
+                location={val.property_location} price={val.rooms[0]?.price} />
         })
     }
 
@@ -108,7 +109,7 @@ export default function Landing() {
 
     const handleSearch = () => {
         navigate('/property', {
-            state : {
+            state: {
                 inputLocation: inputLocation,
                 inputCheckIn: inputCheckIn,
                 inputCheckOut: inputCheckOut,
@@ -183,7 +184,7 @@ export default function Landing() {
                             <div>
                                 <label>Guest</label>
                                 <input type="number" placeholder="Add Guest"
-                                 onChange={(e) => setGuest(e.target.value)}/>
+                                    onChange={(e) => setGuest(e.target.value)} />
                             </div>
                             <button type="button" onClick={handleSearch} style={{ background: "#D3212D" }}>
                                 <img src={Search} />

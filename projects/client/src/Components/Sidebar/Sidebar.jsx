@@ -46,6 +46,12 @@ export default function Sidebar() {
                                 <span className="link">Report</span>
                             </a>
                         </li>
+                        <li className="list">
+                            <a href="/tenantcalendar" className="nav-link">
+                                <i className="bx bx-calendar icon"></i>
+                                <span className="link">Calendar</span>
+                            </a>
+                        </li>
                     </ul>
 
                     <div className="bottom-cotent">
