@@ -1,10 +1,9 @@
 const { join } = require("path");
 require("dotenv/config");
-require("dotenv").config({path:join(__dirname, ".env")});
+require("dotenv").config({ path: join(__dirname, ".env") });
 const express = require("express");
 const cors = require("cors");
-const bearerToken = require('express-bearer-token')
-
+const bearerToken = require("express-bearer-token");
 
 // console.log(__dirname);
 const PORT = process.env.PORT || 8000;
@@ -12,18 +11,24 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 app.use(bearerToken());
-
+app.use("/", express.static(__dirname + "/public"));
 
 //#region API ROUTES
 const categoryRouter = require("./routers/categoryRouter");
+app.use("/api/category", categoryRouter);
+
 const propertyRouter = require("./routers/propertyRouter");
+app.use("/api/property", propertyRouter);
 
-const userRouter = require('./routers/userRouter');
-app.use('/user', userRouter);
+const roomRouter = require("./routers/roomRouter");
+app.use("/api/room", roomRouter);
 
-const locationRouter = require('./routers/locationRouter');
-app.use('/location', locationRouter);
-// ===========================
+const userRouter = require("./routers/userRouter");
+app.use("/api/user", userRouter);
+
+const locationRouter = require("./routers/locationRouter");
+app.use("/api/location", locationRouter);
+// ==============================================
 // NOTE : Add your routes here
 app.get("/api", (req, res) => {
     res.send(`Hello, this is my API`);
@@ -34,9 +39,6 @@ app.get("/api/greetings", (req, res, next) => {
         message: "Hello, Student !",
     });
 });
-
-app.use("/category", categoryRouter);
-app.use("/property", propertyRouter);
 
 // ===========================
 
@@ -52,14 +54,12 @@ app.use((req, res, next) => {
 // error
 app.use((err, req, res, next) => {
     if (req.path.includes("/api/")) {
-        console.error("Error : ", err.stack);
-        res.status(500).send("Error !");
+        console.error("Error : ", err);
+        res.status(500).send(err);
     } else {
         next();
     }
 });
-
-//#endregion
 
 //#region CLIENT
 const clientPath = "../../client/build";

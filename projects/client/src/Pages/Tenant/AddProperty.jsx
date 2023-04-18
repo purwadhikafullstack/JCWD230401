@@ -22,12 +22,22 @@ import { HiTrash } from "react-icons/hi2";
 import { SlPicture } from "react-icons/sl";
 
 function AddProperty(props) {
-    const [category, setCategory] = useState(""); // useState category
-
-    const [property, setProperty] = useState(""); // useState property
-
     const inputFile = useRef(null);
+    const [category, setCategory] = useState(""); // useState category
+    const [property, setProperty] = useState(""); // useState property
+    const [description, setDescription] = useState(""); // useState description
+    const [descriptionLength, setDescriptionLength] = useState(0);
+    const [address, setAddress] = useState(""); // useState address
+    const [regency, setRegency] = useState(null); // useState regency
+    const [province, setProvince] = useState(null); // useState province
+    const [zipcode, setZipcode] = useState(""); // useState zip
+    const [country, setCountry] = useState(""); // useState country
+    // const [mapsUrl, setMapsUrl] = useState(""); // useState link maps
+    const [allProvince, setAllProvince] = useState([]);
+    const [allRegency, setAllRegency] = useState([]);
+    const [activeButton, setActiveButton] = useState(null);
     const [fileProperty, setFileProperty] = useState(null);
+    const toast = useToast();
 
     // For Each untuk check size per file (max 2mb)
     const checkFileSize = (files) => {
@@ -56,25 +66,7 @@ function AddProperty(props) {
         }
     };
 
-    // const printChosenFiles = fileProperty.map((val,idx) =>{
-    //    return fileProperty[idx]
-    // })
-
-    const [description, setDescription] = useState(""); // useState description
-    const [descriptionLength, setDescriptionLength] = useState(0);
-
-    const [address, setAddress] = useState(""); // useState address
-    const [regency, setRegency] = useState(null); // useState regency
-    const [province, setProvince] = useState(null); // useState province
-    const [zipcode, setZipcode] = useState(""); // useState zip
-    const [country, setCountry] = useState(""); // useState country
-    // const [mapsUrl, setMapsUrl] = useState(""); // useState link maps
-
-    // const toast = useToast();
-
     // Province Select
-    const [allProvince, setAllProvince] = useState([]);
-
     const selectProvince = useChakraSelectProps({
         isMulti: false,
         value: province,
@@ -85,108 +77,149 @@ function AddProperty(props) {
         try {
             let get = await axios.get(`${API_URL}/property/getprovince`);
             setAllProvince(get.data);
-            console.log("allprovince", get);
         } catch (error) {
             console.log(error);
         }
     };
 
     const provinces = allProvince.map((val, idx) => {
-        return { value: val.id, label: val.name };
+        return { value: val.value, label: val.label };
     });
 
     // Regency Select
-    const [allRegency, setAllRegency] = useState([]);
-
     const selectRegency = useChakraSelectProps({
         isMulti: false,
         value: regency,
         onChange: setRegency,
     });
 
-    const getRegency = async () => {
+    // const getRegency = async () => {
+    //     try {
+    //         let get = await axios.post(`${API_URL}/property/getregency`, {
+    //             province_id: province.value,
+    //         });
+    //         setAllRegency(get.data);
+    //     } catch (error) {
+    //         console.log(error);
+    //     }
+    // };
+
+    const getRegencyById = async () => {
         try {
-            let get = await axios.post(`${API_URL}/property/getregency`, {
+            let get = await axios.post(`${API_URL}/property/getregencybyid`, {
                 province_id: province.value,
             });
             setAllRegency(get.data);
-            console.log("allregency", get);
         } catch (error) {
             console.log(error);
         }
     };
 
     const regencies = allRegency.map((val, idx) => {
-        return { value: val.id, label: val.name };
+        return {
+            value: val.value,
+            label: val.label,
+            province_id: val.province_id,
+        };
     });
 
-    useEffect(() => {
-        getProvince();
-    }, []);
-
-    useEffect(() => {
-        getRegency();
-    }, [province]);
-
+    // Button Save + Create Property
     const btnAddProperty = async () => {
         try {
             let token = localStorage.getItem("tempatku_login");
-            let formData = new FormData();
-            formData.append(
-                "data",
-                JSON.stringify({
-                    category: category,
-                    property: property,
-                    description: description,
-                    address: address,
-                    regencyId: regency.value,
-                    provinceId: province.value,
-                    zipcode: zipcode,
-                    country: country,
-                })
-            );
-            console.log("formData", formData);
 
-            if (fileProperty != null) {
-                let temp = [...fileProperty];
-                temp.forEach((val, idx) => {
-                    formData.append("images", temp[idx]);
+            if (
+                category === "" ||
+                property === "" ||
+                description === "" ||
+                address === "" ||
+                regency === null ||
+                province === null ||
+                zipcode === "" ||
+                country === ""
+            ) {
+                toast({
+                    title: "Error occured",
+                    description:
+                        "Please fill all forms UWU :3",
+                    status: "error",
+                    duration: 3500,
+                    isClosable: true,
                 });
-            }
+            } else {
+                let formData = new FormData();
+                formData.append(
+                    "data",
+                    JSON.stringify({
+                        category: category,
+                        property: property,
+                        description: description,
+                        address: address,
+                        regencyId: regency.value,
+                        provinceId: province.value,
+                        zipcode: zipcode,
+                        country: country,
+                    })
+                );
+                console.log("formData", formData);
 
-            let add = await axios.post(
-                `${API_URL}/property/addproperty`,
-                formData,
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
+                if (fileProperty != null) {
+                    let temp = [...fileProperty];
+                    temp.forEach((val, idx) => {
+                        formData.append("images", temp[idx]);
+                    });
                 }
-            );
-            if (add.data.success) {
-                setFileProperty(null);
-                setCategory("");
-                setProperty("");
-                setDescription("");
-                setDescriptionLength(0);
-                setAddress("");
-                setRegency("");
-                setProvince("");
-                setZipcode("");
-                setCountry("");
-                alert("Property Added");
-                // ubah ke toast
+
+                let add = await axios.post(
+                    `${API_URL}/property/addproperty`,
+                    formData,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                        },
+                    }
+                );
+                if (add.data.success) {
+                    setFileProperty(null);
+                    setCategory("");
+                    setProperty("");
+                    setDescription("");
+                    setDescriptionLength(0);
+                    setAddress("");
+                    setRegency("");
+                    setProvince("");
+                    setZipcode("");
+                    setCountry("");
+                    alert("Property Added");
+                    // ubah ke toast
+                }
             }
         } catch (error) {
             console.log(error);
         }
     };
 
+    // Active Button
+    const handleButtonClick = (value) => {
+        setActiveButton(value === activeButton ? null : value);
+    };
+
+    useEffect(() => {
+        getProvince();
+    }, []);
+
+    useEffect(() => {
+        // console.log("UseEffect get regency");
+        getRegencyById();
+    }, [province]);
+
+    console.log("allProvince", allProvince);
+    console.log("allRegency", allRegency);
     console.log("regencies", regencies);
+    console.log("Province:", province);
+    console.log("Regency:", regency);
     console.log("description", description);
     console.log("fileProperty", fileProperty);
-    console.log("province", province);
-    // console.log("printChosenFiles",printChosenFiles);
 
     return (
         <Container
@@ -236,9 +269,22 @@ function AddProperty(props) {
                                     h={"120px"}
                                     textAlign="center"
                                     mx={"4"}
-                                    variant="outline"
+                                    variant={
+                                        activeButton === "Hotel"
+                                            ? "outline"
+                                            : "solid"
+                                    }
+                                    borderColor={
+                                        activeButton === "Hotel"
+                                            ? "red.500"
+                                            : "gray.200"
+                                    }
+                                    borderWidth={
+                                        activeButton === "Hotel" ? "2px" : "1px"
+                                    }
                                     value={"Hotel"}
                                     onClick={() => {
+                                        handleButtonClick("Hotel");
                                         setCategory("Hotel");
                                     }}
                                 >
@@ -260,9 +306,22 @@ function AddProperty(props) {
                                     h={"120px"}
                                     textAlign="center"
                                     mx={"4"}
-                                    variant="outline"
+                                    variant={
+                                        activeButton === "Villa"
+                                            ? "outline"
+                                            : "solid"
+                                    }
+                                    borderColor={
+                                        activeButton === "Villa"
+                                            ? "red.500"
+                                            : "gray.200"
+                                    }
+                                    borderWidth={
+                                        activeButton === "Villa" ? "2px" : "1px"
+                                    }
                                     value={"Villa"}
                                     onClick={() => {
+                                        handleButtonClick("Villa");
                                         setCategory("Villa");
                                     }}
                                 >
@@ -282,9 +341,24 @@ function AddProperty(props) {
                                     h={"120px"}
                                     textAlign="center"
                                     mx={"4"}
-                                    variant="outline"
+                                    variant={
+                                        activeButton === "Apartment"
+                                            ? "outline"
+                                            : "solid"
+                                    }
+                                    borderColor={
+                                        activeButton === "Apartment"
+                                            ? "red.500"
+                                            : "gray.200"
+                                    }
+                                    borderWidth={
+                                        activeButton === "Apartment"
+                                            ? "2px"
+                                            : "1px"
+                                    }
                                     value={"Apartment"}
                                     onClick={() => {
+                                        handleButtonClick("Apartment");
                                         setCategory("Apartment");
                                     }}
                                 >
@@ -373,6 +447,8 @@ function AddProperty(props) {
                                         my={"4"}
                                         mx={"4"}
                                         variant="outline"
+                                        _hover={""}
+                                        bgColor={"gray.100"}
                                         alignItems={"center"}
                                         onClick={() => {
                                             inputFile.current.click();
@@ -491,7 +567,7 @@ function AddProperty(props) {
                                         );
                                     }}
                                 />
-                                <Text textAlign={"right"} color={"gray.200"}>
+                                <Text textAlign={"right"} color={"gray.300"}>
                                     {descriptionLength}/250
                                 </Text>
                             </Box>
@@ -549,9 +625,16 @@ function AddProperty(props) {
                                             useBasicStyles
                                             name="regency"
                                             options={regencies}
-                                            placeholder="Select regency"
+                                            placeholder={
+                                                !allRegency.length
+                                                    ? "Select a province first"
+                                                    : "Select Regency"
+                                            }
                                             closeMenuOnSelect={true}
                                             {...selectRegency}
+                                            isDisabled={
+                                                allRegency.length ? false : true
+                                            }
                                         />
                                     </FormControl>
                                 </Box>

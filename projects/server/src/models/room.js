@@ -26,5 +26,11 @@ module.exports = (sequelize, DataTypes) => {
             modelName: "room",
         }
     );
+    room.associate = (models) => {
+        room.belongsTo(models.room_category, {
+            foreignKey: "room_categoryId",
+        });
+        room.hasMany(models.picture_room, { foreignKey: "roomId" });
+    };
     return room;
 };

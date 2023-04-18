@@ -14,6 +14,7 @@ import ResetPassword from "./Pages/ResetPassword";
 import Landing from "./Pages/Landing/Landing";
 import AddProperty from "./Pages/Tenant/AddProperty";
 import ManageProperty from "./Pages/Tenant/ManageProperty";
+import AddRoom from "./Pages/Tenant/AddRoom";
 
 function App(props) {
     const location = useLocation();
@@ -65,6 +66,7 @@ function App(props) {
                 <Route path="/" element={<Landing />} />
                 <Route path="/listing" element={<AddProperty />} />
                 <Route path="/editlisting/:uuid" element={<ManageProperty />} />
+                <Route path="/room" element={<AddRoom />} />
             </Routes>
             {location.pathname === "/" && <NavbarMobile />}
         </>

@@ -15,11 +15,17 @@ module.exports = (sequelize, DataTypes) => {
         {
             name: DataTypes.STRING,
             isDeleted: DataTypes.TINYINT,
+            user_id: DataTypes.INTEGER,
         },
         {
             sequelize,
             modelName: "room_category",
         }
     );
+    room_category.associate = (models) => {
+        room_category.hasMany(models.room, {
+            foreignKey: "room_categoryId",
+        });
+    };
     return room_category;
 };

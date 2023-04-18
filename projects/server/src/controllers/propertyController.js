@@ -26,7 +26,10 @@ module.exports = {
     getProvince: async (req, res, next) => {
         try {
             let get = await model.province.findAll({
-                attributes: ["id", "name"],
+                attributes: [
+                    ["id", "value"],
+                    ["name", "label"],
+                ],
             });
             return res.status(200).send(get);
         } catch (error) {
@@ -35,12 +38,34 @@ module.exports = {
         }
     },
     // get regency
-    getRegency: async (req, res, next) => {
+    // getRegency: async (req, res, next) => {
+    //     try {
+    //         console.log("province_id", req.body.province_id);
+    //         let get = await model.regency.findAll({
+    //             attributes: [
+    //                 ["id", "value"],
+    //                 ["name", "label"],
+    //                 ["province_id", "province_id"],
+    //             ],
+    //         });
+    //         return res.status(200).send(get);
+    //     } catch (error) {
+    //         console.log(error);
+    //         next(error);
+    //     }
+    // },
+    getRegencyByProvinceId: async (req, res, next) => {
         try {
+            console.log("province_id", req.body.province_id);
             let get = await model.regency.findAll({
                 where: {
                     province_id: req.body.province_id,
                 },
+                attributes: [
+                    ["id", "value"],
+                    ["name", "label"],
+                    ["province_id", "province_id"],
+                ],
             });
             return res.status(200).send(get);
         } catch (error) {
@@ -178,6 +203,12 @@ module.exports = {
 
             console.log("req.body.data:", JSON.parse(req.body.data));
             // console.log("test", uuidProperty)
+            let getPropertyId = await model.property.findAll({
+                where: {
+                    uuid: uuidProperty,
+                },
+            });
+            console.log(" INI getPropertyId:", getPropertyId);
             let editCategory = await model.category.update(
                 {
                     category: category,
@@ -202,7 +233,7 @@ module.exports = {
                 },
                 { transaction: ormTransaction }
             );
-            // console.log("Data Property:", addProperty);
+            // console.log("Data Property:", editProperty.dataValues.id);
 
             if (req.files.length) {
                 // create new image
@@ -216,7 +247,10 @@ module.exports = {
                     delete val.size;
                     val.picture = `/ImgProperty/${val.filename}`;
                     delete val.filename;
-                    return { ...val, propertyId: editProperty.dataValues.id };
+                    return {
+                        ...val,
+                        propertyId: getPropertyId[0].dataValues.id,
+                    };
                 });
                 await model.picture_property.bulkCreate(newArr);
                 // console.log("newArr:", newArr);
