@@ -55,56 +55,116 @@ module.exports = {
             datanum: get.count
         })
     },
+    testing: async (req, res, next) => {
+        // let get = await model.transaction.findAndCountAll({
+        //     // offset: parseInt(((req.query.page || 1) - 1) * (req.query.size || 5)),
+        //     // limit: parseInt(req.query.size || 5),
+        //     // distinct: true,
+        //     where: {
+        //         transaction_statusId: 2,
+        //     },
+        //     include: [
+        //         {
+        //             model: model.order, required: true,
+        //             include: [
+        //                 {
+        //                     model: model.room, required: true,
+        //                     include: [
+        //                         {
+        //                             model: model.room_category, attributes: ['name'],
+        //                         },
+        //                         {
+        //                             model: model.property, attributes: ['property'],
+        //                             where: {
+        //                                 userId: 2  // tenant (req.decrypt.id)
+        //                             },
+        //                             include: [
+        //                                 {
+        //                                     model: model.property_location, attributes: ['country'],
+        //                                     include: [
+        //                                         {
+        //                                             model: model.regency, attributes: ['name'],
+        //                                         }
+        //                                     ]
+        //                                 }
+        //                             ]
+        //                         }
+        //                     ]
+        //                 }
+        //             ]
+        //         },
+        //         {
+        //             model: model.user, attributes: ['uuid'], // user
+        //             include: [
+        //                 {
+        //                     model: model.user_detail, attributes: ['name', 'image_profile']
+        //                 }
+        //             ]
+        //         }
+        //     ],
+        //     order: [[req.query.sortby || 'id', req.query.order || 'desc']]
+        // })
+        // res.status(200).send(get)
+    },
     getActionsNeededTenant: async (req, res, next) => {
-        let get = await model.transaction.findAndCountAll({
-            // offset: parseInt(((req.query.page || 1) - 1) * (req.query.size || 3)),
-            // limit: parseInt(req.query.size || 3),
-            where: {
-                transaction_statusId: 2,
-            },
+        let get = await model.order.findAndCountAll({
+            offset: parseInt(((req.query.page || 1) - 1) * (req.query.size || 5)),
+            limit: parseInt(req.query.size || 1),
             include: [
                 {
-                    model: model.order, required: true,
+                    model: model.transaction, required: true, where: { transaction_statusId: 5 },
                     include: [
                         {
-                            model: model.room, required: true,
-                            include: [
-                                {
-                                    model: model.room_category, required: true, attributes: ['name']
-                                },
-                                {
-                                    model: model.property, required: true, attributes: ['property'],
-                                    where: {
-                                        userId: 1  // tenant (req.decrypt.id)
-                                    },
-                                    include: [
-                                        {
-                                            model: model.property_location, required: true, attributes: ['country'],
-                                            include: [
-                                                {
-                                                    model: model.regency, required: true, attributes: ['name']
-                                                }
-                                            ]
-                                        }
-                                    ]
-                                }
-                            ]
+                            model: model.user,
+                            include: [{ model: model.user_detail }]
                         }
                     ]
                 },
                 {
-                    model: model.user, attributes: ['uuid'], // user
+                    model: model.room, required: true,
                     include: [
                         {
-                            model: model.user_detail, attributes: ['name', 'image_profile']
+                            model: model.property, where: { userId: req.decrypt.id }, // req.decrypt.id
+                            include: [
+                                {
+                                    model: model.property_location, attributes: ['country'],
+                                    include: [{ model: model.regency, attributes: ['name'] }]
+                                }
+                            ]
+                        },
+                        {
+                            model: model.room_category, attributes: ['name']
                         }
                     ]
                 }
-            ]
-        })
+            ],
+            order: [[req.query.sortby || 'id', req.query.order || 'desc']]
+        });
         res.status(200).send(get)
     },
     getSummary: async (req, res, next) => {
-        // let get = await model.transaction
+        let get = await model.order.findAndCountAll({
+            offset: parseInt(((req.query.page || 1) - 1) * (req.query.size || 2)),
+            limit: parseInt(req.query.size || 2),
+            include: [
+                {
+                    model: model.transaction, required: true, // invoice number
+                    include: [
+                        { model: model.transaction_status, attributes: ['status'] }, // transaction_status
+                        { model: model.user, attributes: ['uuid'], include: [{ model: model.user_detail, attributes: ['name'] }] },
+
+                    ]
+                },
+                {
+                    model: model.room, attributes: ['uuid'], required: true,
+                    include: [
+                        { model: model.room_category, attributes: ['name'] }, // room name
+                        { model: model.property, attributes: ['property'], where: { userId: 9 } } // req.decrypt.id, property name
+                    ]
+                },
+            ],
+            order: [[req.query.sortby || 'id', req.query.order || 'desc']]
+        })
+        res.status(200).send(get)
     }
 }

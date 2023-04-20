@@ -204,6 +204,7 @@ export default function PaymentDetail() {
             }
         } else {
             if (transactionStatus === 'Canceled') {
+                // completed = true
                 return (
                     <Stack
                         textAlign={'center'}

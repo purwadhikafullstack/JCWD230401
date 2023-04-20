@@ -25,6 +25,7 @@ import PaymentDetail from "./Pages/PaymentDetail";
 import OrderLists from "./Pages/OrderLists";
 import EditProfile from "./Pages/EditProfile";
 import TenantCalendar from "./Pages/TenantCalendar";
+import OrderListTenant from "./Pages/TenantPages/OrderListTenant";
 
 function App() {
   const location = useLocation();
@@ -101,6 +102,9 @@ function App() {
               <Route path="/property/detail/:uuid" element={<PropertyDetail />} />
               <Route path="/tenantcalendar" element={<TenantCalendar />} />
               <Route path="/editprofile" element={<EditProfile keeplogin={() => dispatch(keeplogin())} />} />
+
+
+              <Route path="/tenantorderlist" element={<OrderListTenant />} />
             </Routes>
           ) : (
             // Not logged in

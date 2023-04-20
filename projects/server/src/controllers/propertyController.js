@@ -171,7 +171,6 @@ module.exports = {
                 },
                 {
                     model: model.picture_property
-
                 },
                 {
                     model: model.user, include: [{ model: model.user_detail, attributes: ['name'] }]

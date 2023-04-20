@@ -14,5 +14,4 @@ module.exports = {
     propertyController,
     orderController,
     roomController,
-    propertyController
 }
