@@ -1,5 +1,4 @@
 const { check, validationResult } = require("express-validator");
-const multer = require("multer");
 
 module.exports = {
   checkUser: async (req, res, next) => {

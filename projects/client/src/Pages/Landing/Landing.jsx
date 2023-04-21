@@ -5,7 +5,7 @@ import {
 } from '@chakra-ui/react';
 import Footer from "../../Components/Footer";
 import Search from './images/search.png';
-import PropertyCard from "../../Components/PropertyCard"
+import RecommendPropertyCard from "../../Components/RecommendPropertyCard"
 import Homestays1 from './images/image-s1.png';
 import Apartments1 from './images/image-s2.png';
 import Hotels1 from './images/image-s3.png';
@@ -83,8 +83,8 @@ export default function Landing() {
                             <div className="location-input">
                                 <label>Location</label>
                                 <input type="text" placeholder="Where are you going?"
-                                    // onChange={(e) => setInputLocation(e.target.value)}
-                                    // value={inputLocation}
+                                // onChange={(e) => setInputLocation(e.target.value)}
+                                // value={inputLocation}
                                 />
                                 <div className="dropdown">
                                     {/* {showLocation.filter(item => {
@@ -121,7 +121,7 @@ export default function Landing() {
                                     onChange={(date) => setCheckOutDate(date)}
                                     dateFormat="dd/MM/yyyy"
                                     placeholderText="Choose Date"
-                                    minDate={checkInDate ? new Date(checkInDate.getTime() + 24 * 60 * 60 * 1000) : undefined}
+                                    minDate={checkInDate ? new Date(checkInDate.getTime() + 24 * 60 * 60 * 1000) : minDate}
                                     // highlightDates={highlightDates}
                                     // calendarClassName="highlight"
                                     shouldCloseOnSelect={false}
@@ -146,11 +146,11 @@ export default function Landing() {
                     <p>Get the best prices on 20,000+ properties the best prices on.</p>
                     <a href="#" class="special-offers-btn">See Deals</a>
                 </div>
+                {/* PROPERTY TYPE */}
                 <Heading as='h2'>
                     Browse by property type
                 </Heading>
                 <br />
-                {/* PROPERTY TYPE */}
                 <div className="property-type">
                     <div>
                         <img src={Hotels1} />
@@ -243,18 +243,10 @@ export default function Landing() {
                 {/* PROPERTY RECOMMENDATIONS */}
                 <br />
                 <div className="recommendations">
-                    <PropertyCard />
-                    <PropertyCard />
-                    <PropertyCard />
-                    <PropertyCard />
-                    <PropertyCard />
-                    <PropertyCard />
-                    <PropertyCard />
-                    <PropertyCard />
-                    <PropertyCard />
-                    <PropertyCard />
-                    <PropertyCard />
-                    <PropertyCard />
+                    <RecommendPropertyCard />
+                    <RecommendPropertyCard />
+                    <RecommendPropertyCard />
+                    <RecommendPropertyCard />
                 </div>
                 <a href="#" className="see-more-btn">See more properties</a>
             </Box>

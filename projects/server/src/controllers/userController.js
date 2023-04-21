@@ -452,46 +452,40 @@ module.exports = {
   registerastenant: async (req, res, next) => {
     const ormTransaction = await model.sequelize.transaction();
     try {
-      console.log("req.body : ", req.body.data); //krn dlm bntk object jd data masuk req.body.data
+      console.log("req.body.data : ", req.body.data); //krn dlm bntk object jd data masuk req.body.data
       // console.log("req.body json parse : ", JSON.parse(req.body.data)); //krn dlm bntk object jd data masuk req.body.data
       console.log("req.files  : ", req.files);
-      // let checkExistingUser = await model.user.findAll({
-      //   where: sequelize.or(
-      //     { email: req.body.email },
-      //     { phone: req.body.phone }
-      //   ),
-      // });
-      // if (checkExistingUser == 0) {
-      //   if (req.files.length == 1) {
-      //     if (req.body.password == req.body.confirmationPassword) {
-      //       delete req.body.confirmationPassword;
-      //       req.body.password = bcrypt.hashSync(req.body.password, salt);
-      //       console.log("Check data after hash password :", req.body); //testing purposes
-      const uuid = uuidv4();
-      const { name, email, password, phone } = JSON.parse(req.body.data);
+      let checkExistingUser = await model.user.findAll({
+        where: sequelize.or(
+          { email: JSON.parse(req.body.data).email },
+          { phone: JSON.parse(req.body.data).phone }
+        ),
+      });
+      console.log("ini isi checkExistingUser:", checkExistingUser);
+      if (checkExistingUser == 0) {
+        if (req.files.length == 1) {
+          if (JSON.parse(req.body.data).password == JSON.parse(req.body.data).confirmationPassword) {
+            delete JSON.parse(req.body.data).confirmationPassword;
+            const uuid = uuidv4();
+            const { name, email, password, phone } = JSON.parse(req.body.data);
+            const hashedPassword = bcrypt.hashSync(password, salt);
       let regis = await model.user.create(
         {
           uuid,
           email,
           phone,
-          password,
+          password:hashedPassword,
           roleId: 2,
         },
         {
           transaction: ormTransaction,
         }
       );
-      //       console.log(
-      //         `File path: ./public/imgIdCard/${req.files[0]?.filename}`
-      //       );
       const image_ktp = `/imgIdCard/${req.files[0]?.filename}`;
-      //       console.log("ini isi dari image_ktp :", image_ktp);
-      //       if (image_ktp.length > 0) {
       let regisUserDetail = await model.user_detail.create(
         {
           uuid,
           name,
-          // image_ktp: `/imgIdCard/${req.files[0]?.filename}`,
           image_ktp,
           userId: regis.id, // Set userId to the id of the newly created user
         },
@@ -506,34 +500,28 @@ module.exports = {
         data: regis,
         regisUserDetail,
       });
-      //       } else {
-      //         return res.status(400).send({
-      //           success: false,
-      //           message: "ID card is required",
-      //         });
-      //       }
-      //     } else {
-      //       res.status(400).send({
-      //         success: false,
-      //         message: "Error❌: Passwords do not match.",
-      //       });
-      //     }
-      //   } else {
-      //     res.status(400).send({
-      //       success: false,
-      //       message: "Error❌: Id card image file is required",
-      //     });
-      //   }
-      // } else {
-      //   res.status(400).send({
-      //     success: false,
-      //     message: "Error❌: Email or phone number exist.",
-      //   });
-      // }
+          } else {
+            res.status(400).send({
+              success: false,
+              message: "Error❌: Passwords do not match.",
+            });
+          }
+        } else {
+          res.status(400).send({
+            success: false,
+            message: "Error❌: Id card image file is required",
+          });
+        }
+      } else {
+        res.status(400).send({
+          success: false,
+          message: "Error❌: Email or phone number exist.",
+        });
+      }
     } catch (error) {
       await ormTransaction.rollback();
-      //delete image if encountered error --> masih error (kalau ada yg bermasalah sama file yang dikirim)
-      // fs.unlinkSync(`./public/imgIdCard/${req.files[0].filename}`);
+      //delete image if encountered error 
+      fs.unlinkSync(`src\\public\\imgIdCard\\${req.files[0].filename}`);
       console.log(error);
       next(error);
     }
@@ -685,12 +673,10 @@ module.exports = {
             "You received an email to verify your account. Please check your email.",
         });
       } else {
-        //message jgn dikeluarin (hidden?), continue lsg ke transaction page
         res.status(400).send({
-          //what should it be?
           success: false,
           message:
-            "Your account is already verified, you can continue to transaction page",
+            "Your account is already verified",
         });
       }
     } catch (error) {
@@ -740,6 +726,7 @@ module.exports = {
   //11. UPDATE PROFILE IMAGE
   updateprofileimage: async (req, res, next) => {
     try {
+      console.log("req.files  : ", req.files);
       //1. get current profile image
       let get = await model.user_detail.findAll({
         where: {
@@ -752,8 +739,8 @@ module.exports = {
         get[0].dataValues.image_profile
       );
       //2. if old image exists, delete old replace with new
-      if (fs.existsSync(`./src/public/api${get[0].dataValues.image_profile}`)) {
-        fs.unlinkSync(`./src/public/api${get[0].dataValues.image_profile}`);
+      if (fs.existsSync(`./src/public/${get[0].dataValues.image_profile}`)) {
+        fs.unlinkSync(`./src/public/${get[0].dataValues.image_profile}`);
       }
       await model.user_detail.update(
         {
@@ -769,8 +756,8 @@ module.exports = {
         profileimage: `/profileImage/${req.files[0]?.filename}`,
       });
     } catch (error) {
-      //delete image if encountered error
-      fs.unlinkSync(`./src/public/profileImage/${req.files[0].filename}`);
+      //delete image if encountered error 
+      fs.unlinkSync(`src\\public\\profileImage\\${req.files[0].filename}`);
       console.log(error);
       next(error);
     }

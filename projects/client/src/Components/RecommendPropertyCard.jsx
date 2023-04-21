@@ -12,7 +12,7 @@ import { BsStarFill } from "react-icons/bs";
 const IMAGE =
     'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1740&q=80';
 
-export default function PropertyCard() {
+export default function RecommendPropertyCard() {
     return (
         <Center
         p='1'
@@ -50,7 +50,7 @@ export default function PropertyCard() {
                 >
                     <HStack justifyContent={'space-between'}>
                         <Text fontWeight={600} fontSize={'lg'} >
-                            Hotel Veranda Tanjung Duren Grogol Petamburan Jakarta Barat
+                            Hotel Veranda
                         </Text>
                         <Flex>
                             <BsStarFill />

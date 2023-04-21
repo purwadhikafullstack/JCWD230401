@@ -128,7 +128,7 @@ export default function Navbar() {
                   border='1px'
                   color='gray.300'
                   p='1'
-                  display={{ base: "none", sm: "none", md: "block" }}
+                  // display={{ base: "none", sm: "none", md: "block" }}
                   _active={'none'}
                 >
                   <HamburgerIcon w={6} h={6} mx={2} my={1} color='black' />
@@ -155,9 +155,11 @@ export default function Navbar() {
                       <MenuList>
                         <MenuItem onClick={() => navigate('/dashboard')}>Dashboard</MenuItem>
                         <MenuItem onClick={() => navigate('/editprofile')}>Profile</MenuItem>
-                        <MenuItem>Property</MenuItem>
-                        <MenuItem>Report</MenuItem>
                         <MenuItem onClick={() => navigate('/changepassword')}>Change Password</MenuItem>
+                        <MenuItem>Manage Property / Rooms</MenuItem>
+                        <MenuItem>Transaction</MenuItem>
+                        <MenuItem>Report</MenuItem>
+                        <MenuItem onClick={() => navigate('/tenantcalendar')}>Calendar</MenuItem>
                         <MenuItem
                           onClick={onBtnLogout}
                         >Logout</MenuItem>

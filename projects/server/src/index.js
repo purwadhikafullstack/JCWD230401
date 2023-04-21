@@ -22,6 +22,8 @@ const userRouter = require("./routers/userRouter");
 app.use("/api/user", userRouter);
 const calendarRouter = require("./routers/calendarRouter");
 app.use("/api/calendar", calendarRouter);
+const landingRouter = require("./routers/landingRouter");
+app.use("/api/landing", landingRouter);
 // ===========================
 // NOTE : Add your routes here
 

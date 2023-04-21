@@ -21,6 +21,8 @@ import TransactionPage from "./Pages/TransactionPage";
 import EditProfile from "./Pages/EditProfile";
 import TenantCalendar from "./Pages/TenantCalendar";
 import PaymentDetail from "./Pages/PaymentDetail"; //design testing
+import OrderList from "./Pages/OrderList"; //design testing
+import LandingNew from "./Pages/Landing/LandingNew"; // new landing
 
 function App() {
   const location = useLocation();
@@ -53,11 +55,13 @@ function App() {
   return (
     <>
       {location.pathname === "/" && <Navbar />}
+      {location.pathname === "/new" && <Navbar />}
       {location.pathname === "/editprofile" && <Navbar />}
       {location.pathname === "/productdetail" && <Navbar />}
       {location.pathname === "/transactionpage" && <Navbar />}
       {location.pathname === "/dashboard" && roleId == 2 && <Navbar />}
       {location.pathname === "/tenantcalendar" && roleId == 2 && <Navbar />}
+      {location.pathname === "/orderlist" && roleId == 2 && <Navbar />}
 
       {
         // User
@@ -89,6 +93,7 @@ function App() {
             <Route path="*" element={<NotFound />} />
             <Route path="/productdetail" element={<ProductDetail />} />
             <Route path="/tenantcalendar" element={<TenantCalendar />} />
+            <Route path="/orderlist" element={<OrderList />} />
             <Route path="/editprofile" element={<EditProfile keeplogin={() => dispatch(keeplogin())} />} />
           </Routes>
         ) : (
@@ -104,6 +109,7 @@ function App() {
             <Route path="*" element={<NotFound />} />
             <Route path="/productdetail" element={<ProductDetail />} />
             <Route path="/paymentdetail" element={<PaymentDetail />} />
+            <Route path="/new" element={<LandingNew />} />
           </Routes>
         )
       }

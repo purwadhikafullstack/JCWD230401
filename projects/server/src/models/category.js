@@ -17,7 +17,8 @@ module.exports = (sequelize, DataTypes) => {
     uuid: DataTypes.STRING,
     category: DataTypes.STRING,
     isDeleted: DataTypes.BOOLEAN,
-    picture: DataTypes.STRING,
+    propertyId: DataTypes.INTEGER,
+    userId: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'category',

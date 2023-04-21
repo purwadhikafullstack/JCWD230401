@@ -8,8 +8,8 @@ import {
   Stack,
   useColorModeValue,
   HStack,
+  FormLabel
 } from '@chakra-ui/react';
-import { PinInput, PinInputField } from '@chakra-ui/react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { API_URL } from '../helper';
 import axios from 'axios';
@@ -17,21 +17,63 @@ import axios from 'axios';
 export default function Verification() {
   const params = useParams(); //to get token from email link for auth
   const navigate = useNavigate();
-  const [pin, setPin] = useState(''); //verification code
-  console.log("ini isi token dari params", params);
+  const [verificationCode, setVerificationCode] = useState(''); //verification code
+  console.log("ini isi token dari params", params); //testing purposes
+  console.log("ini isi input field otp code :", verificationCode); //testing purposes
 
-  const handlePinChange = (e, index) => {
-    const newPin = [...pin];
-    newPin[index] = e.target.value;
-    setPin(newPin.join(''));
-    console.log("isi pin joined :", newPin.join(''));
+  //1. get current date and count from localStorage 
+  const currentDate = localStorage.getItem('currentDate');
+  const countSendOTP = parseInt(localStorage.getItem('countSendOTP'));
+  //2. get today's date
+  const today = new Date().toLocaleString("en-US", { timeZone: "Asia/Jakarta" }).slice(0, 10);
+  console.log("this is today :", today);
+  //3. reset count the next day
+  if (currentDate !== today) {
+    // if the current date is not today, reset the count to 0
+    localStorage.setItem('countSendOTP', '0');
+    localStorage.setItem('currentDate', today);
+  };
+  //4. count function to limit 5 resend otp by date // testing
+  const countDate = function () {
+    localStorage.setItem('countSendOTP', countSendOTP + 1);
   }
 
+  //Send Verification Email
+  const onBtnSendVerifyEmail = async () => {
+    try {
+      if (countSendOTP < 5) {
+        let response = await axios.post(`${API_URL}/user/sendverificationemail`, {}, {
+          headers: {
+            Authorization: `Bearer ${params.token}`
+          }
+        }
+        );
+        console.log("ini hasil response onbtnSendVerifyEmail :", response); 
+        alert(response.data.message);
+        countDate() 
+        window.location.reload(); // reloads the page
+      } else {
+        alert('You have reached the maximum limit of OTP resend requests for today.');
+        navigate('/', { replace: true });
+      }
+    } catch (error) {
+      console.log("ini error dari onBtnSendVerifyEmail :", error);
+      if (error.response && error.response.status === 401) {
+        alert('Your session has expired. Please log in again to resend email to verify your account.');
+        navigate('/', { replace: true });
+      } else {
+        alert(error.response.data.message);
+        navigate('/', { replace: true });
+      }
+    }
+  };
+
+  //Verify Account 
   const onBtnVerify = async () => {
     try {
       let response = await axios.patch(`${API_URL}/user/verifyaccount`,
         {
-          otp: pin
+          otp: verificationCode
         }
         , {
           headers: {
@@ -44,21 +86,27 @@ export default function Verification() {
       navigate('/', { replace: true });
     } catch (error) {
       console.log("ini error dari onBtnVerify :", error);
-      alert(error.response.data.message);
+      if (error.response && error.response.status === 401) {
+        alert('Your code has expired. Please log in again to resend email to verify your account.');
+        navigate('/', { replace: true });
+      } else {
+        alert(error.response.data.message);
+        navigate('/', { replace: true });
+      }
     }
-  }
+  };
 
   return (
     <Flex
       minH={'100vh'}
       align={'center'}
       justify={'center'}
-      bg={useColorModeValue('gray.50', 'gray.800')}>
+      bg={'gray.50'}>
       <Stack
         spacing={4}
         w={'full'}
         maxW={'sm'}
-        bg={useColorModeValue('white', 'gray.700')}
+        bg={'white'}
         rounded={'xl'}
         boxShadow={'lg'}
         p={6}
@@ -73,21 +121,16 @@ export default function Verification() {
         >
           We have sent code to your email
         </Center>
-        <Center
-          fontSize={{ base: 'sm', sm: 'md' }}
-          fontWeight="bold"
-        >
-          username@mail.com
-        </Center>
+
         <FormControl>
           <Center>
             <HStack>
-              <PinInput>
-                <PinInputField value={pin[0]} onChange={(e) => handlePinChange(e, 0)} />
-                <PinInputField value={pin[1]} onChange={(e) => handlePinChange(e, 1)} />
-                <PinInputField value={pin[2]} onChange={(e) => handlePinChange(e, 2)} />
-                <PinInputField value={pin[3]} onChange={(e) => handlePinChange(e, 3)} />
-              </PinInput>
+              <FormControl id="Name">
+                <FormLabel>Input your OTP code here :</FormLabel>
+                <Input type="text"
+                  onChange={(e) => setVerificationCode(e.target.value)}
+                />
+              </FormControl>
             </HStack>
           </Center>
           <Center
@@ -95,7 +138,7 @@ export default function Verification() {
             fontWeight="thin"
             my={2}
           >
-            the code is valid for 1 hour
+            the code is valid for 24 hours
           </Center>
         </FormControl>
         <Stack spacing={2}>
@@ -118,6 +161,8 @@ export default function Verification() {
               color: '#D3212D',
             }}
             borderColor={'#D3212D'}
+            onClick={onBtnSendVerifyEmail}
+            type='button'
           >
             Resend OTP
           </Button>

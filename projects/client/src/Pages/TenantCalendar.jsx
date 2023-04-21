@@ -4,7 +4,7 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import { Box, Flex, Stack, Text, UnorderedList, OrderedList, ListItem, Modal, Button, ModalOverlay, ModalContent, ModalHeader, ModalBody, ModalFooter } from "@chakra-ui/react";
-import Sidebar from "../Components/Sidebar/Sidebar";
+import Sidebar from "../Components/Sidebar";
 import { API_URL } from '../helper';
 import axios from 'axios';
 
@@ -193,12 +193,12 @@ function TenantCalendar() {
       minH={'100vh'}
       // align={'center'}
       // justify={'center'}
-      p={12}
+      // p={12}
     >
-      <Box flex='1'>
+      <Box>
         <Sidebar />
       </Box>
-      <Box w='full' flex='5' px='4'>
+      <Box w='full' flex='5' px='4' mt='10'>
         <Fullcalendar
           w='full'
           plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
