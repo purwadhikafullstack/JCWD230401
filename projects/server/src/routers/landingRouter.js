@@ -1,14 +1,14 @@
 const route = require("express").Router();
 const {
   //   topDestination,
-  //   roomRecommendation,
+  propertyRecommendation,
   propertyCategory,
   allLocation,
 } = require("../controllers/landingController");
 
-route.post("/property-category", propertyCategory);
-// route.post("/top-destination", topDestination);
-// route.post("/room-recommendation", roomRecommendation);
+route.get("/property-category", propertyCategory);
+// route.get("/top-destination", topDestination);
+route.get("/property-recommendation", propertyRecommendation);
 route.post("/all-location", allLocation);
 
 module.exports = route;

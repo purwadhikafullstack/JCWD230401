@@ -88,6 +88,7 @@ export default function Navbar() {
                     size={'sm'}
                     mr={4}
                     _hover={'none'}
+                    display={{ base: "none", sm: "none", md: "block" }}
                     onClick={() => navigate('/tenantregister')}
                   >
                     Become a Tenant
@@ -111,6 +112,7 @@ export default function Navbar() {
                       size={'sm'}
                       mr={4}
                       _hover={'none'}
+                      display={{ base: "none", sm: "none", md: "block" }}
                       onClick={() => navigate('/tenantregister')}
                     >
                       Become a Tenant
