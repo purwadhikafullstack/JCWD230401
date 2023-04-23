@@ -23,6 +23,8 @@
     "jsonwebtoken": "latest",
     "multer": "latest",
     "mysql2": "latest",
+    "node-cron": "^3.0.2",
+    "node-schedule": "^2.1.1",
     "nodemailer": "latest",
     "nodemailer-express-handlebars": "^6.1.0",
     "passport": "^0.6.0",

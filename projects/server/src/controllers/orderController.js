@@ -3,6 +3,7 @@ const model = require("../models");
 const { v4: uuidv4 } = require("uuid");
 const bcrypt = require("bcrypt");
 const { createToken } = require("../helper/jwt");
+const schedule = require('node-schedule');
 
 module.exports = {
     getAllOrder: async (req, res, next) => {
@@ -112,7 +113,7 @@ module.exports = {
             limit: parseInt(req.query.size || 1),
             include: [
                 {
-                    model: model.transaction, required: true, where: { transaction_statusId: 5 },
+                    model: model.transaction, required: true, where: { transaction_statusId: 2 },
                     include: [
                         {
                             model: model.user,
@@ -159,12 +160,68 @@ module.exports = {
                     model: model.room, attributes: ['uuid'], required: true,
                     include: [
                         { model: model.room_category, attributes: ['name'] }, // room name
-                        { model: model.property, attributes: ['property'], where: { userId: 9 } } // req.decrypt.id, property name
+                        { model: model.property, attributes: ['property'], where: { userId: req.decrypt.id } } // req.decrypt.id, property name
                     ]
                 },
             ],
             order: [[req.query.sortby || 'id', req.query.order || 'desc']]
         })
         res.status(200).send(get)
+    },
+    testCron: async (req, res, next) => {
+
+        let get = await model.transaction.findAll({
+            attributes: ['transaction_statusId'],
+            where: { uuid: "10819e8b-bb12-4d47-a350-fb9818e7598a" }
+        });
+        console.log("gett", get[0].dataValues.transaction_statusId)
+        res.send(get)
+        // console.log(new Date().toISOString());
+        // const checkinDate = new Date(`${2023 - 04 - 21}T04:00:00.147Z`); // req.body.start_date T 11.00AM WIB
+        // const today = new Date();
+
+        // // Calculate the difference in days between today and checkinDate
+        // const timeDiff = checkinDate.getTime() - today.getTime();
+        // const dayDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
+
+        // if (dayDiff <= 1) {
+        //     // Checkin date is today or tomorrow, so execute the function instantly
+        //     console.log('The world is going to end today.');
+        // } else if (dayDiff == 2) {
+        //     // Checkin date is 2 days in the future, so schedule the function to execute 1 day before the checkin date
+        //     const prevDay = new Date(checkinDate.getTime() - (24 * 60 * 60 * 1000));
+        //     const task = schedule.scheduleJob(prevDay, async function () {
+        //         let update = await model.transaction.update({transaction_statusId: 1}, {
+        //             where: {
+        //                 uuid: req.body.uuid
+        //             }
+        //         })
+        //     });
+        //     task.once('run', () => {
+        //         console.log('task ran once, cancelling schedule');
+        //         task.cancel();
+        //     });
+        // } else {
+        //     // Checkin date is more than 2 days in the future, so schedule the function to execute on the checkin date
+        //     const task = schedule.scheduleJob(checkinDate, function () {
+        //         console.log('The world is going to end on ' + checkinDate.toDateString());
+        //     });
+        //     task.once('run', () => {
+        //         console.log('task ran once, cancelling schedule');
+        //         task.cancel();
+        //     });
+        // }
+
+
+        // // const date = new Date("2023-04-21T19:37:00.147Z");
+
+        // // const job = schedule.scheduleJob(date, function () {
+        // //     console.log('The world is going to end today.');
+        // // });
+
+        // task.once('run', () => {
+        //     console.log('task ran once, cancelling schedule');
+        //     task.cancel();
+        // });
     }
 }

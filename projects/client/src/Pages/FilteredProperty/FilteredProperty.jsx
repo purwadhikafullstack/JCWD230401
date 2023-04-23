@@ -51,9 +51,8 @@ export default function FilteredProperty() {
     const getAllProperty = async () => {
         try {
             let token = localStorage.getItem("tempatku_login");
-            let res = await axios.post(
-                `${API_URL}/property/filter?start=${inputCheckIn  || ''}&end=${inputCheckOut  || ''}&page=${page}&size=${size}&name=${productName}&sortby=${sortBy}&order=${order}&category=${category}&city=${city || ''}`,
-                {},
+            let res = await axios.get(
+                `${API_URL}/property/filter?start=${inputCheckIn || ''}&end=${inputCheckOut || ''}&page=${page}&size=${size}&name=${productName}&sortby=${sortBy}&order=${order}&category=${category}&city=${city || ''}`,
                 {
                     headers: {
                         Authorization: `Bearer ${token}`,
@@ -75,7 +74,7 @@ export default function FilteredProperty() {
 
     const printAllProperty = () => {
         return showProducts.map((val, idx) => {
-            return <PropertyCard property={val.property} price={val.rooms[0].price} picture={val.picture_properties[0].picture} uuid={val.uuid} inputCheckIn={inputCheckIn} inputCheckOut={inputCheckOut} location={val.property_location}/>
+            return <PropertyCard property={val.property} price={val.rooms[0].price} picture={val.picture_properties[0].picture} uuid={val.uuid} inputCheckIn={inputCheckIn} inputCheckOut={inputCheckOut} location={val.property_location} />
         })
     }
 

@@ -25,6 +25,7 @@ const propertyRouter = require('./routers/propertyRouter');
 const orderRouter = require('./routers/orderRouter');
 const roomRouter = require('./routers/roomRouter');
 const calendarRouter = require("./routers/calendarRouter");
+const reviewRouter = require("./routers/reviewRouter");
 
 app.use('/api/user', userRouter);
 app.use('/api/transaction', transactionRouter)
@@ -33,6 +34,7 @@ app.use('/api/property', propertyRouter)
 app.use('/api/order', orderRouter)
 app.use('/api/room', roomRouter)
 app.use("/api/calendar", calendarRouter);
+app.use("/api/review", reviewRouter);
 
 // ===========================
 // NOTE : Add your routes here

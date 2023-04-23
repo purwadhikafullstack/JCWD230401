@@ -9,14 +9,152 @@ import {
     Link,
     Badge,
     useColorModeValue,
+    AlertDialog,
+    AlertDialogBody,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogContent,
+    AlertDialogOverlay,
+    useDisclosure,
+    Modal,
+    ModalOverlay,
+    ModalContent,
+    ModalHeader,
+    ModalFooter,
+    ModalBody,
+    ModalCloseButton,
+    Image
 } from '@chakra-ui/react';
 import React from 'react';
-import { capitalizeFirstWord, formatRupiah } from '../../helper';
+import { API_URL, API_URL_IMG, capitalizeFirstWord, formatRupiah } from '../../helper';
+import axios from 'axios'
 
 
 export default function OrderListCardTenant(props) {
+    let token = localStorage.getItem("tempatku_login");
     const diff = new Date(props.endDate) - new Date(props.startDate)
     const days = (diff / 86400000);
+
+    const updateTransactionStatus = async () => {
+        let update = await axios.patch(`${API_URL}/transaction/updatetransactionstatus`, {
+            transaction_statusId: 3,
+            uuid: props.uuidTransaction
+        }, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        })
+    }
+
+    const rejectTransaction = async () => {
+        let update = await axios.patch(`${API_URL}/transaction/rejecttransaction`, {
+            uuid: props.uuidTransaction
+        }, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        })
+    }
+
+    // ALERT DIALOG BUTTON CONFIRM
+    function AlertDialogButtonConfirm() {
+        const { isOpen, onOpen, onClose } = useDisclosure()
+        const cancelRef = React.useRef()
+        const handleConfirm = () => {
+            updateTransactionStatus();
+            props.getActionsNeeded()
+            props.getSummary();
+            onClose();
+        }
+        return (
+            <>
+                <Button
+                    onClick={onOpen}
+                    fontSize={'sm'}
+                    rounded={'full'}
+                    bg={'#D3212D'}
+                    color={'white'}
+                    _hover={{
+                        bg: '#D3212D',
+                    }}
+                    _focus={{
+                        bg: '#D3212D',
+                    }}>
+                    Confirm Order
+                </Button>
+
+                <AlertDialog
+                    isOpen={isOpen}
+                    leastDestructiveRef={cancelRef}
+                    onClose={onClose}
+                >
+                    <AlertDialogOverlay>
+                        <AlertDialogContent>
+                            <AlertDialogHeader fontSize='lg' fontWeight='bold'>
+                                Confirm Order
+                            </AlertDialogHeader>
+
+                            <AlertDialogBody>
+                                Are you sure? You can't undo this action afterwards.
+                            </AlertDialogBody>
+
+                            <AlertDialogFooter>
+                                <Button ref={cancelRef} onClick={onClose}>
+                                    Cancel
+                                </Button>
+                                <Button colorScheme='red' onClick={handleConfirm} ml={3}>
+                                    Confirm
+                                </Button>
+                            </AlertDialogFooter>
+                        </AlertDialogContent>
+                    </AlertDialogOverlay>
+                </AlertDialog>
+            </>
+        )
+    }
+
+    //MODAL CHECK DETAILS
+    function ModalCheckDetails() {
+        const { isOpen, onOpen, onClose } = useDisclosure()
+        const handleReject = () => {
+            rejectTransaction();
+            props.getActionsNeeded()
+            props.getSummary();
+            onClose();
+        }
+        return (
+            <>
+                <Button
+                    onClick={onOpen}
+                    fontSize={'sm'}
+                    rounded={'full'}
+                    _focus={{
+                        bg: 'gray.200',
+                    }}
+                    variant='outline'
+                >Check Details</Button>
+
+                <Modal isOpen={isOpen} onClose={onClose}>
+                    <ModalOverlay />
+                    <ModalContent>
+                        <ModalHeader>Details</ModalHeader>
+                        <ModalCloseButton />
+                        <ModalBody>
+                            <Image src={`${API_URL_IMG}${props.image_payment}`} w='full' h='full' />
+                        </ModalBody>
+
+                        <ModalFooter>
+                            <Button variant='outline' colorScheme='red' mr={3} onClick={onClose}>
+                                Close
+                            </Button>
+                            <Button variant='solid' colorScheme='red' onClick={handleReject}>Reject Payment</Button>
+                        </ModalFooter>
+                    </ModalContent>
+                </Modal>
+            </>
+        )
+    }
+
     return (
         <>
             <Box
@@ -73,31 +211,10 @@ export default function OrderListCardTenant(props) {
                 </Stack>
 
                 <Stack mt={4} direction={'row'}>
-                    <Button
-                        // flex={1}
-                        fontSize={'sm'}
-                        rounded={'full'}
-                        _focus={{
-                            bg: 'gray.200',
-                        }}
-                        variant='outline'
-                    >
-                        Check Details
-                    </Button>
-                    <Button
-                        // flex={1}
-                        fontSize={'sm'}
-                        rounded={'full'}
-                        bg={'#D3212D'}
-                        color={'white'}
-                        _hover={{
-                            bg: '#D3212D',
-                        }}
-                        _focus={{
-                            bg: '#D3212D',
-                        }}>
-                        Confirm Order
-                    </Button>
+                    {/* BUTTON CHECK DETAILS */}
+                    {ModalCheckDetails()}
+                    {/* BUTTON CONFIRM */}
+                    {AlertDialogButtonConfirm()}
                 </Stack>
             </Box>
         </>

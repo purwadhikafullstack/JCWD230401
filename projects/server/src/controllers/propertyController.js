@@ -78,7 +78,7 @@ module.exports = {
 
             const query = `
             Select r.*, o.start_date, o.end_date, t.transaction_statusId FROM rooms r left join orders o on r.id=o.roomId 
-            left join transactions t on o.transactionId = t.id WHERE start_date is null OR start_date < '${start}' OR start_date > '${end}' OR end_date < '${start}' OR end_date > '${end}' OR t.transaction_statusId IN (4,5) order by r.propertyId;`
+            left join transactions t on o.transactionId = t.id WHERE start_date is null OR start_date < '${start}' OR start_date > '${end}' OR end_date < '${start}' OR end_date > '${end}' OR t.transaction_statusId = 5 order by r.propertyId;`
             const getAvailable = await con.query(query, {
                 type: sequelize.QueryTypes.SELECT
             })
@@ -122,20 +122,20 @@ module.exports = {
             // console.log('ini gett queryyy', get)
             // res.status(200).send(get)
 
-            if (!req.body.start) {
-                req.body.start = new Date().toISOString().split('T')[0];
+            if (!req.query.start) {
+                req.query.start = new Date().toISOString().split('T')[0];
             }
 
-            if (!req.body.end) {
-                req.body.end = new Date()
+            if (!req.query.end) {
+                req.query.end = new Date()
                 let oneDayInMs = 24 * 60 * 60 * 1000; // 1 day in milliseconds
-                req.body.end = new Date(req.body.end.getTime() + oneDayInMs).toISOString().split('T')[0];
-                console.log("endd", req.body.end);
+                req.query.end = new Date(req.query.end.getTime() + oneDayInMs).toISOString().split('T')[0];
+                console.log("endd", req.query.end);
             }
 
             let getPropertyId = await model.property.findAll({
                 where: {
-                    uuid: req.body.uuid
+                    uuid: req.query.uuid
                 }
             });
 
@@ -144,7 +144,7 @@ module.exports = {
                     propertyId: getPropertyId[0].dataValues.id,
                     id: {
                         [sequelize.Op.notIn]: [
-                            sequelize.literal(`SELECT roomId FROM orders join transactions on orders.transactionId = transactions.id WHERE start_date >= '${req.body.start}' AND end_date <= '${req.body.end}' AND transactions.transaction_statusId IN (1,2,3)`) // tambahin transaction_statusId
+                            sequelize.literal(`SELECT roomId FROM orders join transactions on orders.transactionId = transactions.id WHERE start_date >= '${req.query.start}' AND end_date <= '${req.query.end}' AND transactions.transaction_statusId IN (1,2,3)`) // tambahin transaction_statusId
                         ]
                     }
                 },
@@ -179,7 +179,7 @@ module.exports = {
             ],
             order: [[model.room, 'price', 'asc']],
             where: {
-                uuid: req.body.uuid
+                uuid: req.query.uuid
             },
 
         });
@@ -188,7 +188,7 @@ module.exports = {
     getPicturePropertyDetail: async (req, res, next) => {
         let getProperty = await model.property.findAll({
             where: {
-                uuid: req.body.uuid
+                uuid: req.query.uuid
             }
         });
         let getPictureProperty = await model.picture_property.findAll({

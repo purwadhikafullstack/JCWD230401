@@ -2,6 +2,7 @@ import {
     Box, Container, Divider, Grid,
     GridItem, Text, VStack
 } from '@chakra-ui/react';
+import { formatRupiah } from '../helper';
 
 
 export default function BookingDetails(props) {
@@ -74,7 +75,7 @@ export default function BookingDetails(props) {
                 />
                 <Feature
                     heading={'Total:'}
-                    text={props.total}
+                    text={formatRupiah(props.total)}
                 />
                 <Feature
                     heading={'Status:'}

@@ -1,7 +1,14 @@
 import React, { useState, useEffect } from 'react'
 import {
     Flex, Text, Box, Heading, Link, Stack, useColorModeValue, Input, Button, FormControl, TableContainer, Table, TableCaption, Thead, Tr, Th, Tbody, Td, Tfoot,
-    Menu, MenuButton, MenuList, MenuOptionGroup, MenuItemOption, MenuDivider
+    Menu, MenuButton, MenuList, MenuOptionGroup, MenuItemOption, MenuDivider,
+    AlertDialog,
+    AlertDialogBody,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogContent,
+    AlertDialogOverlay,
+    useDisclosure
 } from '@chakra-ui/react';
 // import Sidebar from '../../Components/Sidebar/Sidebar'
 // import CardOrderListTenant from '../../Components/TenantComponents/CardOrderListTenant'
@@ -11,6 +18,7 @@ import Sidebar from '../../Components/Sidebar';
 import OrderListCardTenant from '../../Components/TenantComponents/OrderListCardTenant';
 import { FaFilter } from 'react-icons/fa';
 import Pagination from '../../Components/Pagination';
+import AlertDialogTenant from '../../Components/AlertDialogTenant';
 
 
 export default function OrderListTenant() {
@@ -43,7 +51,7 @@ export default function OrderListTenant() {
     const printCardOrderList = () => {
         return actionsNeeded.map((val, idx) => {
             return <Box p='2' key={idx}>
-                <OrderListCardTenant username={val.transaction.user.user_detail.name} userPicture={val.transaction.user.user_detail.image_profile} createdAtTransaction={val.transaction.createdAt} propertyName={val.room.property.property} roomName={val.room.room_category.name} regency={val.room.property.property_location.regency.name} country={val.room.property.property_location.country} startDate={val.start_date} endDate={val.end_date} roomPrice={val.price} />
+                <OrderListCardTenant username={val.transaction.user.user_detail.name} userPicture={val.transaction.user.user_detail.image_profile} createdAtTransaction={val.transaction.createdAt} propertyName={val.room.property.property} roomName={val.room.room_category.name} regency={val.room.property.property_location.regency.name} country={val.room.property.property_location.country} startDate={val.start_date} endDate={val.end_date} roomPrice={val.price} uuidTransaction={val.transaction.uuid} getActionsNeeded={getActionsNeeded} getSummary={getSummary} image_payment={val.transaction.image_payment} />
             </Box>
         })
     }
@@ -70,10 +78,11 @@ export default function OrderListTenant() {
     }
     console.log("SUMMARY", dataSummary);
 
+
     const printTableSummary = () => {
         return dataSummary.map((val, idx) => {
             return (
-                <Tr>
+                <Tr key={idx}>
                     <Td>{val.transaction.invoice_number}</Td>
                     <Td>{val.transaction.user.user_detail.name}</Td>
                     <Td>{val.room.property.property}</Td>
@@ -82,11 +91,13 @@ export default function OrderListTenant() {
                     <Td>{countDays(val.start_date, val.end_date)}</Td>
                     <Td>{formatRupiah(val.price * countDays(val.start_date, val.end_date))}</Td>
                     <Td>{val.transaction.transaction_status.status}</Td>
-                    <Td><Button variant={'outline'} colorScheme='red'>Cancel</Button></Td>
+                    <Td>{<AlertDialogTenant uuidTransaction={val.transaction.uuid} getActionsNeeded={getActionsNeeded} getSummary={getSummary} status={val.transaction.transaction_status.status} />}</Td>
                 </Tr>
             )
         })
     }
+
+
 
     useEffect(() => {
         getActionsNeeded();
@@ -162,9 +173,14 @@ export default function OrderListTenant() {
                                 {actionsNeeded.length ? printCardOrderList() : <Text>Takdee Orderann cekguu</Text>}
                             </Flex>
                             <Flex justify={'center'}>
-                                <Pagination size={size}
-                                    totalData={totalData}
-                                    paginate={paginate} />
+                                {
+                                    totalData === 0 ?
+                                        null
+                                        :
+                                        <Pagination size={size}
+                                            totalData={totalData}
+                                            paginate={paginate} />
+                                }
                             </Flex>
                         </Stack>
                     </Box>
@@ -237,10 +253,16 @@ export default function OrderListTenant() {
                                 </Table>
                             </TableContainer>
                             <Flex justify={'center'}>
-                                <Pagination
-                                    size={sizeSummary}
-                                    totalData={totalDataSummary}
-                                    paginate={paginateSummary} />
+                                {
+                                    totalDataSummary === 0 ?
+                                        null
+                                        :
+                                        <Pagination
+                                            size={sizeSummary}
+                                            totalData={totalDataSummary}
+                                            paginate={paginateSummary} />
+
+                                }
                             </Flex>
                         </Stack>
                     </Box>

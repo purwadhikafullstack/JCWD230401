@@ -27,6 +27,8 @@ import Review from '../../Components/Review';
 
 
 export default function PropertyDetail() {
+    let token = localStorage.getItem("tempatku_login");
+
     // const [startDate, setStartDate] = useState(new Date());
     // const [endDate, setEndDate] = useState(null);
     // const { isOpen, onToggle } = useDisclosure()
@@ -38,8 +40,10 @@ export default function PropertyDetail() {
 
     const [propertyDetail, setPropertyDetail] = useState(null);
     const getPropertyDetail = async () => {
-        let get = await axios.post(`${API_URL}/property/getpropertydetail`, {
-            uuid: params.uuid
+        let get = await axios.get(`${API_URL}/property/getpropertydetail?uuid=${params.uuid}`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
         });
         setPropertyDetail(get.data[0]);
     }
@@ -54,10 +58,10 @@ export default function PropertyDetail() {
     const [inputCheckOut, setInputCheckOut] = useState(location.state.inputCheckOut)
     const [roomAvailable, setRoomAvailable] = useState([])
     const getRoomAvailable = async () => {
-        let get = await axios.post(`${API_URL}/property/getroomavailable`, {
-            uuid: params.uuid,
-            start: inputCheckIn,
-            end: inputCheckOut
+        let get = await axios.get(`${API_URL}/property/getroomavailable?uuid=${params.uuid}&start=${inputCheckIn}&end=${inputCheckOut}`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
         });
         setRoomAvailable(get.data);
     }
@@ -73,8 +77,10 @@ export default function PropertyDetail() {
 
     const [pictureProperty, setPictureProperty] = useState([])
     const getPictureProperty = async () => {
-        let get = await axios.post(`${API_URL}/property/getpictureproperty`, {
-            uuid: params.uuid
+        let get = await axios.get(`${API_URL}/property/getpictureproperty?uuid=${params.uuid}`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
         })
         setPictureProperty(get.data);
         console.log("picture property", get);

@@ -21,7 +21,7 @@ import {
 import React, { useEffect, useState, useRef } from 'react'
 import Countdown, { zeroPad } from "react-countdown";
 import axios from 'axios';
-import { API_URL } from '../helper';
+import { API_URL, formatRupiah } from '../helper';
 import { Link, useParams } from 'react-router-dom';
 import { AiOutlineEye } from 'react-icons/ai';
 import { FiUpload } from 'react-icons/fi';
@@ -33,7 +33,8 @@ export default function PaymentDetail() {
     const params = useParams();
     let token = localStorage.getItem("tempatku_login");
     // const [data, setData] = useState([])
-    const [expiredTime, setExpiredTime] = useState(null)
+    const [expiredAt, setExpiredAt] = useState('')
+    const [createdAt, setCreatedAt] = useState(null)
     const [invoiceNumber, setInvoiceNumber] = useState('')
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
@@ -53,9 +54,10 @@ export default function PaymentDetail() {
             },
         });
         console.log("get time bank", get);
+        setExpiredAt(get.data.timeAndPrice[0].expiredAt)
         setRoomName(get.data.timeAndPrice[0].orders[0].room.room_category.name)
         setCustomer(get.data.timeAndPrice[0].user.user_detail.name)
-        setExpiredTime(get.data.timeAndPrice[0].createdAt)
+        setCreatedAt(get.data.timeAndPrice[0].createdAt)
         setInvoiceNumber(get.data.timeAndPrice[0].invoice_number)
         setStartDate(get.data.timeAndPrice[0].orders[0].start_date)
         setEndDate(get.data.timeAndPrice[0].orders[0].end_date)
@@ -81,7 +83,7 @@ export default function PaymentDetail() {
     const cancelRef = React.useRef()
     const [statusId, setStatusId] = useState(5)
     const cancelOrReject = async (req, res, next) => {
-        let update = await axios.patch(`${API_URL}/transaction/cancelorreject`, {
+        let update = await axios.patch(`${API_URL}/transaction/updatetransactionstatus`, {
             transaction_statusId: statusId,
             uuid: params.uuid
         }, {
@@ -96,7 +98,7 @@ export default function PaymentDetail() {
     const days = (diff / 86400000);
 
     // ADD 2 HOUR FOR COUNTDOWN
-    const addTwoHours = new Date(expiredTime).getTime() + 7200000
+    const addTwoHours = new Date(createdAt).getTime() + 7200000
 
     // COUNTDOWN
     const [countStop, setCountStop] = useState(true)
@@ -108,7 +110,7 @@ export default function PaymentDetail() {
             }
             console.log("transactionStatus", transactionStatus)
             if (transactionStatus === 'Waiting for payment') {
-                cancelOrReject();
+                // cancelOrReject();
                 return (
                     <Stack
                         textAlign={'center'}
@@ -150,12 +152,10 @@ export default function PaymentDetail() {
                             <Text fontSize={{ base: 'xl' }} fontWeight={800}>
                                 Payment confirm by tenant
                             </Text>
-                            {/* <Text fontSize={{ base: 'xl', md: '2xl' }}>{new Date(addTwoHours).toString('en-US', { timeZone: 'Asia/Jakarta' }).split('G')[0]}</Text> */}
                         </Stack>
                     </Stack>
                 )
             } else if (transactionStatus === 'Waiting for confirmation') {
-                cancelOrReject();
                 return (
                     <Stack
                         textAlign={'center'}
@@ -172,9 +172,32 @@ export default function PaymentDetail() {
                         </Text>
                         <Stack direction={'column'} align={'center'} justify={'center'}>
                             <Text fontSize={{ base: 'xl' }} fontWeight={800}>
-                                Canceled / Reject
+                                Waiting for confirmation
                             </Text>
-                            {/* <Text fontSize={{ base: 'xl', md: '2xl' }}>{new Date(addTwoHours).toString('en-US', { timeZone: 'Asia/Jakarta' }).split('G')[0]}</Text> */}
+                        </Stack>
+                    </Stack>
+                )
+            } else if (transactionStatus === 'Reject') {
+                return (
+                    <Stack
+                        textAlign={'center'}
+                        p={3}
+                        align={'center'}>
+                        <Text
+                            fontSize={'xs'}
+                            fontWeight={500}
+                            p={2}
+                            px={3}
+                            color={'green.500'}
+                            rounded={'full'}>
+                            Your Payment...
+                        </Text>
+                        <Stack direction={'column'} align={'center'} justify={'center'}>
+                            <Text fontSize={{ base: 'xl' }} fontWeight={800}>
+                                Rejected, please upload a new payment image.
+                            </Text>
+                            <Text fontSize={{ base: 'sm' }}>Will expire in :</Text>
+                            <Text fontSize={{ base: 'sm' }}>{new Date(expiredAt).toString('en-US', { timeZone: 'Asia/Jakarta' }).split('G')[0]}</Text>
                         </Stack>
                     </Stack>
                 )
@@ -195,9 +218,8 @@ export default function PaymentDetail() {
                         </Text>
                         <Stack direction={'column'} align={'center'} justify={'center'}>
                             <Text fontSize={{ base: 'xl' }} fontWeight={800}>
-                                Canceled / Reject
+                                Canceled
                             </Text>
-                            {/* <Text fontSize={{ base: 'xl', md: '2xl' }}>{new Date(addTwoHours).toString('en-US', { timeZone: 'Asia/Jakarta' }).split('G')[0]}</Text> */}
                         </Stack>
                     </Stack>
                 )
@@ -220,10 +242,78 @@ export default function PaymentDetail() {
                             Your Payment...
                         </Text>
                         <Stack direction={'column'} align={'center'} justify={'center'}>
-                            <Text fontSize={{ base: 'xl' }}>Order Canceled</Text>
+                            <Text fontSize={{ base: 'xl' }}>Canceled</Text>
                         </Stack>
                     </Stack>
                 );
+            } else if (transactionStatus === 'Waiting for confirmation') {
+                return (
+                    <Stack
+                        textAlign={'center'}
+                        p={3}
+                        align={'center'}>
+                        <Text
+                            fontSize={'xs'}
+                            fontWeight={500}
+                            p={2}
+                            px={3}
+                            color={'green.500'}
+                            rounded={'full'}>
+                            Your Payment...
+                        </Text>
+                        <Stack direction={'column'} align={'center'} justify={'center'}>
+                            <Text fontSize={{ base: 'xl' }} fontWeight={800}>
+                                Waiting for confirmation
+                            </Text>
+                        </Stack>
+                    </Stack>
+                )
+            } else if (transactionStatus === 'Paid') {
+                return (
+                    <Stack
+                        textAlign={'center'}
+                        p={3}
+                        align={'center'}>
+                        <Text
+                            fontSize={'xs'}
+                            fontWeight={500}
+                            p={2}
+                            px={3}
+                            color={'green.500'}
+                            rounded={'full'}>
+                            Your Payment...
+                        </Text>
+                        <Stack direction={'column'} align={'center'} justify={'center'}>
+                            <Text fontSize={{ base: 'xl' }} fontWeight={800}>
+                                Payment confirm by tenant
+                            </Text>
+                        </Stack>
+                    </Stack>
+                )
+            } else if (transactionStatus === 'Reject') {
+                return (
+                    <Stack
+                        textAlign={'center'}
+                        p={3}
+                        align={'center'}>
+                        <Text
+                            fontSize={'xs'}
+                            fontWeight={500}
+                            p={2}
+                            px={3}
+                            color={'green.500'}
+                            rounded={'full'}>
+                            Your Payment...
+                        </Text>
+                        <Stack direction={'column'} align={'center'} justify={'center'}>
+                            <Text fontSize={{ base: 'xl' }} fontWeight={800}>
+                                Rejected, please upload a new payment image.
+                            </Text>
+                            <Text fontSize={{ base: 'sm' }}>Will expire in :</Text>
+                            <Text fontSize={{ base: 'sm' }}>{new Date(expiredAt).toString('en-US', { timeZone: 'Asia/Jakarta' }).split('G')[0]}</Text>
+                        </Stack>
+                    </Stack>
+                )
             } else {
                 return (
                     <Stack
@@ -252,7 +342,7 @@ export default function PaymentDetail() {
         }
     };
     const CountDownWrapper = () => <Countdown
-        date={new Date(expiredTime).getTime() + 7200000}
+        date={new Date(createdAt).getTime() + 7200000}
         renderer={renderer}
         zeroPadDays={2}
     />
@@ -262,12 +352,13 @@ export default function PaymentDetail() {
     const inputImagePayment = useRef()
     const [fileImagePayment, setFileImagePayment] = useState(null)
     const [message, setMessage] = useState('')
-    const uploadImagePayment = async () => { // TANYA CARA GABUNGIN FUNGSI INI DI ONCLICK INPUT GMN ???
+    const uploadImagePayment = async () => {
         try {
             let formData = new FormData();
             formData.append('images', fileImagePayment)
+            console.log(formData)
 
-            let add = await axios.post(`${API_URL}/transaction/uploadimagepayment/${params.uuid}`, formData, {
+            let add = await axios.patch(`${API_URL}/transaction/uploadimagepayment/${params.uuid}`, formData, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -374,7 +465,7 @@ export default function PaymentDetail() {
                                             <Box>
                                                 <Text textAlign="center" fontWeight={'600'} fontSize="md">
                                                     <ListIcon as={MdContentCopy} color="green.400" fontSize={'2xl'} />
-                                                    IDR {days * price}
+                                                    {formatRupiah(days * price)}
                                                 </Text>
                                             </Box>
                                         </Box>
@@ -408,7 +499,7 @@ export default function PaymentDetail() {
                                 bg={'green.400'}
                                 color={'white'}
                                 // rounded={'xl'}
-                                isDisabled={transactionStatus === 'Waiting for payment' || transactionStatus === 'Waiting for confirmation' ? false : true}
+                                isDisabled={transactionStatus === 'Waiting for payment' || transactionStatus === 'Waiting for confirmation' || transactionStatus === 'Reject' ? false : true}
                                 _hover={{
                                     bg: 'green.500',
                                 }}
