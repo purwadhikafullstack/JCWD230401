@@ -100,7 +100,6 @@ module.exports = {
               "register account success ✅ and you received an email to verify your account.",
             data: regis,
             regisUserDetail,
-            token, //testing only
           });
         } else {
           res.status(400).send({
@@ -132,19 +131,7 @@ module.exports = {
         ),
         include: [{ model: model.user_detail }],
       });
-      console.log("ini getuser buat login :", getuser);
-      console.log(
-        "ini getuser[0].dataValues.attempts buat login :",
-        getuser[0].dataValues.attempts
-      );
-      console.log(
-        "ini name dari user_detail getuser: ",
-        getuser[0].user_detail.name
-      );
-      console.log(
-        "ini isi dari user_detail tabel getuser: ",
-        getuser[0].user_detail
-      );
+      console.log("ini getuser buat login :", getuser.length);
       //2. if found compare hashed password with req.body.password
       if (getuser.length > 0) {
         let checkpw = bcrypt.compareSync(
@@ -361,7 +348,19 @@ module.exports = {
           "ini isi dari user_detail tabel getData: ",
           getData[0].user_detail
         );
-        //2. create token to send by email
+        //2. create otp
+        const otp = Math.floor(1000 + Math.random() * 9000);
+        console.log("random numbers generated for otp :", otp);
+        //3. patch otp di database user
+        await model.user.update(
+          { otp: otp },
+          {
+            where: {
+              email: getData[0].dataValues.email,
+            },
+          }
+        );
+        //4. create token to send by email
         let { id, roleId, isSuspended } = getData[0].dataValues;
         let { name } = getData[0].user_detail;
         let token = createToken({ id, roleId, isSuspended }, "1h"); // apa aja yg jd token? //1 jam (forgot pw dan verifikasi)
@@ -386,7 +385,7 @@ module.exports = {
             extName: ".html",
           })
         );
-        //3. send reset pw email
+        //5. send reset pw email
         await transporter.sendMail({
           from: "Tracker admin",
           to: req.body.email,
@@ -395,6 +394,7 @@ module.exports = {
           context: {
             name: name,
             link: `http://localhost:3000/resetpassword/${token}`,
+            otp: otp,
           },
         });
         res.status(200).send({
@@ -419,27 +419,53 @@ module.exports = {
     try {
       if (req.body.newPassword == req.body.confirmationPassword) {
         console.log("Decrypt token : ", req.decrypt);
-        //1. hash right before update
-        req.body.newPassword = bcrypt.hashSync(req.body.newPassword, salt);
-        //2. update the password & isSuspended
-        await model.user.update(
-          { password: req.body.newPassword, isSuspended: 0 },
-          {
-            //read token
-            where: {
-              id: req.decrypt.id,
-            },
-          }
-        );
-        return res.status(200).send({
-          success: true,
-          message: "Reset password success ✅",
+        //1. get otp from database
+        let getotp = await model.user.findAll({
+          where: {
+            id: req.decrypt.id,
+          },
+          attributes: ["otp"],
         });
+        console.log("ini isi otp dari getotp:", getotp[0].dataValues.otp);
+        const { otp } = req.body;
+        //2. if otp from req.body the same with otp from database user can reset password
+        if (otp == getotp[0].dataValues.otp) {
+          //1. hash right before update
+          req.body.newPassword = bcrypt.hashSync(req.body.newPassword, salt);
+          //2. update the password & isSuspended
+          await model.user.update(
+            { password: req.body.newPassword, isSuspended: 0 },
+            {
+              //read token
+              where: {
+                id: req.decrypt.id,
+              },
+            }
+          );
+          // set otp back to null (only 1 time use)
+          await model.user.update(
+            { otp: null },
+            {
+              where: {
+                id: req.decrypt.id,
+              },
+            }
+          );
+          return res.status(200).send({
+            success: true,
+            message: "Reset password success ✅",
+          });
+        } else {
+          res.status(400).send({
+            success: false,
+            message:
+              "Error❌: New password and confirmation password do not match.",
+          });
+        }
       } else {
         res.status(400).send({
           success: false,
-          message:
-            "Error❌: New password and confirmation password do not match.",
+          message: "Wrong verification code ❌",
         });
       }
     } catch (error) {
@@ -464,42 +490,45 @@ module.exports = {
       console.log("ini isi checkExistingUser:", checkExistingUser);
       if (checkExistingUser == 0) {
         if (req.files.length == 1) {
-          if (JSON.parse(req.body.data).password == JSON.parse(req.body.data).confirmationPassword) {
+          if (
+            JSON.parse(req.body.data).password ==
+            JSON.parse(req.body.data).confirmationPassword
+          ) {
             delete JSON.parse(req.body.data).confirmationPassword;
             const uuid = uuidv4();
             const { name, email, password, phone } = JSON.parse(req.body.data);
             const hashedPassword = bcrypt.hashSync(password, salt);
-      let regis = await model.user.create(
-        {
-          uuid,
-          email,
-          phone,
-          password:hashedPassword,
-          roleId: 2,
-        },
-        {
-          transaction: ormTransaction,
-        }
-      );
-      const image_ktp = `/imgIdCard/${req.files[0]?.filename}`;
-      let regisUserDetail = await model.user_detail.create(
-        {
-          uuid,
-          name,
-          image_ktp,
-          userId: regis.id, // Set userId to the id of the newly created user
-        },
-        {
-          transaction: ormTransaction,
-        }
-      );
-      await ormTransaction.commit();
-      return res.status(200).send({
-        success: true,
-        message: "register account success ✅",
-        data: regis,
-        regisUserDetail,
-      });
+            let regis = await model.user.create(
+              {
+                uuid,
+                email,
+                phone,
+                password: hashedPassword,
+                roleId: 2,
+              },
+              {
+                transaction: ormTransaction,
+              }
+            );
+            const image_ktp = `/imgIdCard/${req.files[0]?.filename}`;
+            let regisUserDetail = await model.user_detail.create(
+              {
+                uuid,
+                name,
+                image_ktp,
+                userId: regis.id, // Set userId to the id of the newly created user
+              },
+              {
+                transaction: ormTransaction,
+              }
+            );
+            await ormTransaction.commit();
+            return res.status(200).send({
+              success: true,
+              message: "register account success ✅",
+              data: regis,
+              regisUserDetail,
+            });
           } else {
             res.status(400).send({
               success: false,
@@ -520,7 +549,7 @@ module.exports = {
       }
     } catch (error) {
       await ormTransaction.rollback();
-      //delete image if encountered error 
+      //delete image if encountered error
       fs.unlinkSync(`src\\public\\imgIdCard\\${req.files[0].filename}`);
       console.log(error);
       next(error);
@@ -675,8 +704,7 @@ module.exports = {
       } else {
         res.status(400).send({
           success: false,
-          message:
-            "Your account is already verified",
+          message: "Your account is already verified",
         });
       }
     } catch (error) {
@@ -756,7 +784,7 @@ module.exports = {
         profileimage: `/profileImage/${req.files[0]?.filename}`,
       });
     } catch (error) {
-      //delete image if encountered error 
+      //delete image if encountered error
       fs.unlinkSync(`src\\public\\profileImage\\${req.files[0].filename}`);
       console.log(error);
       next(error);

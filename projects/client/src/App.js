@@ -111,7 +111,7 @@ function App() {
           </Routes>
         )
       }
-      {location.pathname === "/" && <NavbarMobile />}
+      {/* {location.pathname === "/" && <NavbarMobile />} */}
     </>
   );
 }

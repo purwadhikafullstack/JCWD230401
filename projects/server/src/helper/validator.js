@@ -215,8 +215,8 @@ module.exports = {
             .notEmpty()
             .isISO8601()
             .withMessage("Birthdate must be a valid date in ISO8601 format.")
-            .isBefore("2023-01-01")
-            .withMessage("Birthdate cannot exceed 2022-12-31.")
+            .isBefore(new Date(Date.now() - 18 * 365 * 24 * 60 * 60 * 1000).toISOString())
+            .withMessage("You must be at least 18 years old.")
             .isAfter("1899-12-31")
             .withMessage("Birthdate cannot be lower than 1900-01-01.")
             .run(req);

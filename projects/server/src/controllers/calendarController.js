@@ -3,7 +3,7 @@ const model = require("../models");
 
 module.exports = {
   //1. GET MY BOOKED ROOMS
-  getroomorders: async (req, res, next) => {
+  roomOrders: async (req, res, next) => {
     let getdata = await model.order.findAll({
       attributes: ["start_date", "end_date"],
       include: [
@@ -25,6 +25,10 @@ module.exports = {
                 user_id: req.decrypt.id,
               },
             },
+            {
+              model: model.property,
+              attributes: ["property"],
+            },
           ],
         },
       ],
@@ -38,7 +42,7 @@ module.exports = {
     }
   },
   //2. GET MY UNDER MAINTENANCE ROOMS
-  getroommaintenance: async (req, res, next) => {
+  roomMaintenances: async (req, res, next) => {
     try {
       let getdata = await model.maintenance.findAll({
         attributes: ["startDate", "endDate"],
@@ -54,6 +58,10 @@ module.exports = {
                   user_id: req.decrypt.id,
                 },
               },
+              {
+                model: model.property,
+                attributes: ["property"],
+              },
             ],
           },
         ],
@@ -66,7 +74,7 @@ module.exports = {
     }
   },
   //3. GET MY AVAILABLE ROOMS (dah ga dipake lg)
-  getavailablerooms: async (req, res, next) => {
+  availableRooms: async (req, res, next) => {
     try {
       let getdata = await model.room.findAll({
         include: [
@@ -77,9 +85,12 @@ module.exports = {
               isDeleted: 0,
             },
           },
+          {
+            model: model.property,
+            attributes: ["property"],
+          },
         ],
-        where: 
-          sequelize.literal(`
+        where: sequelize.literal(`
           room.id NOT IN (
             SELECT roomId FROM orders WHERE start_date <= '${req.body.date}' AND end_date >= '${req.body.date}'
           ) AND

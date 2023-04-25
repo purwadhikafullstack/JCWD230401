@@ -10,6 +10,7 @@ import {
     Link,
     Stack,
     Image,
+    FormErrorMessage,
     Text, Icon, HStack, Box, Divider, Center, Card, CardBody, InputGroup, InputRightElement, useDisclosure
 } from '@chakra-ui/react';
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
@@ -17,7 +18,8 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { API_URL } from '../helper';
 import { FiUpload } from 'react-icons/fi';
-
+import { useFormik } from 'formik';
+import * as yup from "yup";
 
 export default function TenantRegister() {
     const [showPassword, setShowPassword] = useState(false);
@@ -32,30 +34,24 @@ export default function TenantRegister() {
     const inputFile = useRef(null);
     const [image, setImage] = useState("https://fakeimg.pl/350x200/");
 
-    //untuk upload ktp
-    const onChangeFile = (event) => {
-        console.log("ini isi dari event.target.files onchangefile :", event.target.files);
-        setFileImage(event.target.files[0]); //change to setFileImage
-    };
-
-    console.log("fileimage: ", fileImage);
+    console.log("isi fileimage: ", fileImage);
     const onBtnRegister = async () => {
         try {
+            await formik.validateForm();
             let formData = new FormData();
             formData.append(
                 "data",
                 JSON.stringify({
-                    //   image_ktp: fileImage, --> bkn disini 
-                    name: name,
-                    email: email,
-                    phone: phone,
-                    password: password,
-                    confirmationPassword: passwordConfirmation
+                    name: formik.values.name,
+                    email: formik.values.email,
+                    phone: formik.values.phone,
+                    password: formik.values.password,
+                    confirmationPassword: formik.values.passwordConfirmation
                 })
             );
             formData.append(
                 "images",
-                fileImage
+                formik.values.fileImage
             )
             console.log("ini isi dari formData", formData);
             let response = await axios.post(`${API_URL}/user/registerastenant`,
@@ -78,6 +74,70 @@ export default function TenantRegister() {
         }
     }
 
+    const formik = useFormik({
+        initialValues: {
+            name: "",
+            phone: "",
+            email: "",
+            password: "",
+            passwordConfirmation: "",
+            fileImage: ""
+        },
+        onSubmit: onBtnRegister,
+        validationSchema: yup.object().shape({
+            name: yup
+                .string()
+                .required("Name is a required field")
+                .matches(
+                    /^[a-zA-Z ]+$/,
+                    "Name must only contain letters and spaces"
+                ),
+            phone: yup
+                .string()
+                .required("Phone is a required field")
+                .matches(
+                    /^\+?[0-9]{8,14}$/,
+                    "Please enter a valid phone number"
+                ),
+            email: yup
+                .string()
+                .required("Email is a required field")
+                .matches(
+                    /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                    "Please enter a valid email address"
+                ),
+            password: yup
+                .string()
+                .required("Password is a required field")
+                .matches(
+                    /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{6,})/,
+                    "Password must be at least 6 characters includes 1 number, 1 uppercase, and 1 lowercase letter"
+                ),
+            passwordConfirmation: yup
+                .string()
+                .required("Confirmation password is a required field")
+                .matches(
+                    /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{6,})/,
+                    "Password must be at least 6 characters includes 1 number, 1 uppercase, and 1 lowercase letter"
+                )
+                .oneOf([yup.ref('password'), null], 'Passwords must match'), //check if the value matches "password" field
+            fileImage: yup
+                .string()
+                .required("KTP photo is a required field")
+        })
+    });
+
+    const handleForm = (event) => {
+        formik.setFieldValue(event.target.name, event.target.value);
+    };
+
+     //untuk upload ktp
+     const onChangeFile = (event) => {
+        console.log("ini isi dari event.target.files onchangefile :", event.target.files);
+        formik.setFieldValue(event.target.name, event.target.files[0]); //change to setFileImage
+    };
+
+
     return (
         <Stack minH={{ lg: '100vh' }}
             direction={{ base: 'column', md: 'column', lg: 'row' }}
@@ -96,38 +156,45 @@ export default function TenantRegister() {
                         <HStack>
                             <Box>
                                 {/* NAME */}
-                                <FormControl id="Name">
+                                <FormControl isInvalid={formik.errors.name}>
                                     <FormLabel>Name</FormLabel>
                                     <Input type="text"
-                                        onChange={(e) => setName(e.target.value)}
+                                        onChange={handleForm}
+                                        name="name"
                                     />
+                                    <FormErrorMessage fontSize='xs'>{formik.errors.name}</FormErrorMessage>
                                 </FormControl>
                             </Box>
                             <Box>
                                 {/* PHONE */}
-                                <FormControl id="phonenumber">
+                                <FormControl isInvalid={formik.errors.phone}>
                                     <FormLabel>Phone number</FormLabel>
                                     <Input type="text"
-                                        onChange={(e) => setPhone(e.target.value)}
+                                        onChange={handleForm}
+                                        name="phone"
                                     />
+                                    <FormErrorMessage fontSize='xs'>{formik.errors.phone}</FormErrorMessage>
                                 </FormControl>
                             </Box>
                         </HStack>
                         {/* EMAIL */}
-                        <FormControl id="email">
+                        <FormControl isInvalid={formik.errors.email}>
                             <FormLabel>Email address</FormLabel>
                             <Input type="email"
-                                onChange={(e) => setEmail(e.target.value)}
+                                onChange={handleForm}
+                                name="email"
                             />
+                            <FormErrorMessage fontSize='xs'>{formik.errors.email}</FormErrorMessage>
                         </FormControl>
                         {/* PASSWORD */}
-                        <FormControl id="password">
+                        <FormControl isInvalid={formik.errors.password}>
                             <FormLabel>Password</FormLabel>
                             <InputGroup>
                                 {/* Input Password */}
                                 <Input
                                     type={showPassword ? 'text' : 'password'}
-                                    onChange={(e) => setPassword(e.target.value)}
+                                    onChange={handleForm}
+                                    name="password"
                                 />
                                 <InputRightElement h={'full'}>
                                     <Button
@@ -141,12 +208,15 @@ export default function TenantRegister() {
                                     </Button>
                                 </InputRightElement>
                             </InputGroup>
+                            <FormErrorMessage fontSize='xs'>{formik.errors.password}</FormErrorMessage>
                         </FormControl>
-                        <FormControl id="confirmation_password">
+                        <FormControl isInvalid={formik.errors.passwordConfirmation}>
                             <FormLabel>Confirmation Password</FormLabel>
                             <InputGroup>
                                 <Input
-                                    type={showPasswordConfirmation ? 'text' : 'password'} onChange={(e) => setPasswordConfirmation(e.target.value)}
+                                    type={showPasswordConfirmation ? 'text' : 'password'}
+                                    onChange={handleForm}
+                                    name="passwordConfirmation"
                                 />
                                 <InputRightElement h={'full'}>
                                     <Button
@@ -160,16 +230,17 @@ export default function TenantRegister() {
                                     </Button>
                                 </InputRightElement>
                             </InputGroup>
+                            <FormErrorMessage fontSize='xs'>{formik.errors.passwordConfirmation}</FormErrorMessage>
                         </FormControl>
                         {/* UPLOAD ID CARD */}
-                        <FormControl id="upload-id-card">
-                            <FormLabel>Upload your id card</FormLabel>
+                        <FormControl isInvalid={formik.errors.fileImage}>
+                            <FormLabel>Upload a photo of your KTP</FormLabel>
                             <Image
                                 boxSize='200px'
                                 objectFit='cover'
-                                src={fileImage
+                                src={formik.values.fileImage
                                     ? URL.createObjectURL(
-                                        fileImage
+                                        formik.values.fileImage
                                     )
                                     : image}
                                 w='full'
@@ -192,8 +263,10 @@ export default function TenantRegister() {
                                     onChange={onChangeFile}
                                     accept="image/*"
                                     variant='unstyled'
+                                    name="fileImage"
                                 ></Input>
                             </Button>
+                            <FormErrorMessage fontSize='xs'>{formik.errors.fileImage}</FormErrorMessage>
                         </FormControl>
                     </Stack>
                     <Stack

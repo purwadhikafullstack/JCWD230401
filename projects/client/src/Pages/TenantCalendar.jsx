@@ -20,7 +20,7 @@ function TenantCalendar() {
   const getRoomOrders = async () => {
     try {
       let token = localStorage.getItem("tempatku_login");
-      let response = await axios.post(`${API_URL}/calendar/getroomorders`, {}, {
+      let response = await axios.post(`${API_URL}/calendar/room-orders`, {}, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -35,13 +35,13 @@ function TenantCalendar() {
   const getRoomMaintenances = async () => {
     try {
       let token = localStorage.getItem("tempatku_login");
-      let response = await axios.post(`${API_URL}/calendar/getroommaintenance`, {}, {
+      let response = await axios.post(`${API_URL}/calendar/room-maintenances`, {}, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
       setRoomMaintenances(response.data)
-      // console.log("response getRoomMaintenances :", response.data); //testing purposes
+      console.log("response getRoomMaintenances :", response.data); //testing purposes
     } catch (error) {
       console.log("ini error dari getRoomMaintenances :", error);
     }
@@ -55,15 +55,16 @@ function TenantCalendar() {
     getRoomMaintenances();
   }, []);
 
-  //3. Print room orders and under maintenances
+  //3. Print room orders and under maintenances for calendar
   const printRoomOrders = () => {
     let print = roomOrders.map((val, idx) => {
       const { start_date, end_date, room } = val;
       const name = room ? room.room_category.name : "Room not available";
+      const property = room && room.property ? room.property.property : "Property not available";
       if (!room) {
         return null;
       }
-      return { start_date, end_date, name: name };
+      return { start_date, end_date, name: name, property: property };
     });
     return print;
   };
@@ -71,10 +72,11 @@ function TenantCalendar() {
     let print = roomMaintenances.map((val, idx) => {
       const { startDate, endDate, room } = val;
       const name = room ? room.room_category.name : "Room not available";
+      const property = room && room.property ? room.property.property : "Property not available";
       if (!room) {
         return null;
       }
-      return { startDate, endDate, name: name };
+      return { startDate, endDate, name: name, property: property };
     });
     // console.log("printRoomMaintenances print: ", print);
     return print;
@@ -87,7 +89,7 @@ function TenantCalendar() {
     endDate.setDate(endDate.getDate() + 1);
 
     return {
-      title: `${val.name} booked`,
+      title: `${val.property}: ${val.name} booked`,
       start: startDate.toISOString().split('T')[0],
       end: endDate.toISOString().split('T')[0],
     }
@@ -99,7 +101,7 @@ function TenantCalendar() {
     endDate.setDate(endDate.getDate() + 1);
 
     return {
-      title: `${val.name} under maintenance`,
+      title: `${val.property}: ${val.name} under maintenance`,
       start: startDate.toISOString().split('T')[0],
       end: endDate.toISOString().split('T')[0],
     }
@@ -112,7 +114,7 @@ function TenantCalendar() {
   const onBtnAvailableRooms = async () => {
     try {
       let token = localStorage.getItem("tempatku_login");
-      let response = await axios.post(`${API_URL}/calendar/getavailablerooms`, {
+      let response = await axios.post(`${API_URL}/calendar/available-rooms`, {
         date: selectedDate
       }, {
         headers: {
@@ -131,9 +133,10 @@ function TenantCalendar() {
   const printAvailableRooms = () => {
     let print = availableRooms.map((val, idx) => {
       return { 
+        property: val.property.property,
         name: val.room_category.name,
         description: val.description,
-        price: val.price,
+        price: Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(val.price),
         capacity: val.capacity,
       };
     });
@@ -159,6 +162,7 @@ function TenantCalendar() {
     return roomOrders.map((val, idx) => {
       const { start_date, end_date, room } = val;
       const name = room ? room.room_category.name : "Room not available";
+      const property = room && room.property ? room.property.property : "Property not available";
       const startDate = new Date(start_date).toLocaleDateString('id-ID');
       const endDate = new Date(end_date).toLocaleDateString('id-ID');
       if (!room) {
@@ -166,7 +170,7 @@ function TenantCalendar() {
       }
       return (
         <ListItem key={idx} fontSize={'sm'}>
-          {name} ({startDate} to {endDate})
+          {name}, {property} ({startDate} to {endDate})
         </ListItem>
       );
     });
@@ -175,6 +179,7 @@ function TenantCalendar() {
     return roomMaintenances.map((val, idx) => {
       const { startDate, endDate, room } = val;
       const name = room ? room.room_category.name : "Room not available";
+      const property = room && room.property ? room.property.property : "Property not available";
       const startDateFormat = new Date(startDate).toLocaleDateString('id-ID');
       const endDateFormat = new Date(endDate).toLocaleDateString('id-ID');
       if (!room) {
@@ -182,7 +187,7 @@ function TenantCalendar() {
       }
       return (
         <ListItem key={idx} fontSize={'sm'}>
-          {name} ({startDateFormat} to {endDateFormat})
+          {name}, {property} ({startDateFormat} to {endDateFormat})
         </ListItem>
       );
     });
@@ -217,13 +222,13 @@ function TenantCalendar() {
         <Modal isOpen={modalIsOpen} onClose={() => setModalIsOpen(false)}>
           <ModalOverlay />
           <ModalContent>
-            <ModalHeader>Available rooms on {selectedDate} :</ModalHeader>
+            <ModalHeader>Available Properties & Rooms on {selectedDate} :</ModalHeader>
             <ModalBody>
               <OrderedList>
                 {printAvailableRooms().map((val, idx) => {
                   return (
                     <li key={idx}>
-                      {val.name}, IDR {val.price} , Max. {val.capacity} adults, {val.description}</li>
+                      {val.property}: {val.name}, {val.price}, {val.capacity} adults, {val.description}</li>
                   );
                 })}
               </OrderedList>

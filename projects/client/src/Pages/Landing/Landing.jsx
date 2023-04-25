@@ -136,7 +136,7 @@ export default function LandingNew() {
     //kirim via props ke recommendpropertycard
     const printRecommendProperty = () => {
         return recommendProperty.map((val, idx) => {
-            // capitalize first letter, lowercase the rest
+            // capitalize 1st letter, lowercase rest
             const regency = val.room.property.property_location.regency.name
                 .toLowerCase()
                 .replace(/(^|\s)\S/g, (letter) => letter.toUpperCase());
@@ -206,10 +206,12 @@ export default function LandingNew() {
                                                 ).slice(0, 4) //will show only first 4 items di location input field
                                                     .map((item) =>
                                                     (<ListItem py='2' px='6'
-                                                        onClick={() => onSearch(item.name)}
+                                                        onClick={() => onSearch(item.name
+                                                            .toLowerCase().replace(/(^|\s)\S/g, (letter) => letter.toUpperCase()))}
                                                         className="dropdown-row"
                                                         key={item.id} // so each drop down has an unique identifier
-                                                    >{item.name}</ListItem>))}
+                                                    >{item.name
+                                                        .toLowerCase().replace(/(^|\s)\S/g, (letter) => letter.toUpperCase())}</ListItem>))}
                                             </List>
                                         </Box>
                                     </Box>
@@ -267,6 +269,7 @@ export default function LandingNew() {
                     color="#fff"
                     padding="5%"
                     my={{ base: "40px", md: "80px" }}
+                    minH={'sm'}
                 >
                     <Box alignItems="center">
                         <Box
@@ -286,11 +289,11 @@ export default function LandingNew() {
                             lineHeight={{ base: "4xl", md: "5.3vw" }}
                             mt="10px"
                         >
-                            Special Offers
+                            Special Offers<br />For You
                         </Heading>
                     </Box>
                     <Text fontSize="18px" mt="10px">
-                        Get the best prices on properties and rooms.
+                        Get the best prices on properties and rooms here.
                     </Text>
                     <Button
                         bg="none"
@@ -311,7 +314,7 @@ export default function LandingNew() {
                 </Box>
                 {/* PROPERTY TYPE */}
                 <Heading fontSize={{ base: "2xl", md: "4xl" }}
-                    fontWeight="500"
+                    fontWeight="700"
                     align='center'
                     textDecoration='underline'
                     style={{ textUnderlineOffset: '0.35em' }}
@@ -319,14 +322,15 @@ export default function LandingNew() {
                     Browse by property type
                 </Heading>
                 <Box my={{ base: "40px", md: "80px" }} overflowX={'auto'}>
-                    <SimpleGrid columns={{ base: 3, md: 3 }} spacing={{ base: 5, lg: 8 }} >
+                    <SimpleGrid columns={{ base: 1, md: 3 }} spacing={{ base: 5, lg: 8 }} >
                         <Box position="relative" overflow="hidden" borderRadius="10px" fontSize="18px"
                             transition="opacity 0.3s"
                             _hover={{ opacity: 0.7 }}
+                            cursor='pointer'
                         >
                             <Image src={Hotels1}
                                 alt="Hotels" w="100%" borderRadius="10px" />
-                            <Text position="absolute" top="50%" left="50%" transform="translate(-50%,-50%)" textAlign="center" color="white" fontSize={{ base: "15px", md: "20px", lg: "26px" }}>
+                            <Text position="absolute" top="50%" left="50%" transform="translate(-50%,-50%)" textAlign="center" color="white" fontSize={{ base: "26px", md: "20px", lg: "26px" }}>
                                 Hotels
                             </Text>
                         </Box>
@@ -334,20 +338,22 @@ export default function LandingNew() {
                         <Box position="relative" overflow="hidden" borderRadius="10px" fontSize="18px"
                             transition="opacity 0.3s"
                             _hover={{ opacity: 0.7 }}
+                            cursor='pointer'
                         >
                             <Image src={Homestays1}
                                 alt="Hotels" w="100%" borderRadius="10px" />
-                            <Text position="absolute" top="50%" left="50%" transform="translate(-50%,-50%)" textAlign="center" color="white" fontSize={{ base: "15px", md: "20px", lg: "26px" }}>
+                            <Text position="absolute" top="50%" left="50%" transform="translate(-50%,-50%)" textAlign="center" color="white" fontSize={{ base: "26px", md: "20px", lg: "26px" }}>
                                 Apartments
                             </Text>
                         </Box>
                         <Box position="relative" overflow="hidden" borderRadius="10px" fontSize="18px"
                             transition="opacity 0.3s"
                             _hover={{ opacity: 0.7 }}
+                            cursor='pointer'
                         >
                             <Image src={GuestHouse1}
                                 alt="Hotels" w="100%" borderRadius="10px" />
-                            <Text position="absolute" top="50%" left="50%" transform="translate(-50%,-50%)" textAlign="center" color="white" fontSize={{ base: "15px", md: "20px", lg: "26px" }}>
+                            <Text position="absolute" top="50%" left="50%" transform="translate(-50%,-50%)" textAlign="center" color="white" fontSize={{ base: "26px", md: "20px", lg: "26px" }}>
                                 Villas
                             </Text>
                         </Box>
@@ -355,28 +361,28 @@ export default function LandingNew() {
                 </Box>
                 {/* TOP DESTINATIONS */}
                 <Heading fontSize={{ base: "2xl", md: "4xl" }}
-                    fontWeight="500"
+                    fontWeight="700"
                     align='center'
                     textDecoration='underline'
                     style={{ textUnderlineOffset: '0.35em' }}
                 >
-                    Top Destinations
+                    Popular Destinations
                 </Heading>
                 <Box my={{ base: "40px", md: "80px" }}>
-                    <SimpleGrid columns={{ base: 1, md: 3, lg: 4 }} spacing={{ base: 5, lg: 8 }} >
-                        <Box position="relative" textAlign="center" overflow="hidden" borderRadius="10px">
+                    <SimpleGrid columns={{ base: 1, md: 3, lg: 4 }} spacing={{ base: 5, lg: 8 }}>
+                        <Box position="relative" textAlign="center" overflow="hidden" borderRadius="10px" cursor='pointer'>
                             <Image src={Kuta1} borderRadius="10px" _hover={{ transform: 'scale(1.1)', transition: '.5s' }} />
                             <Text position="absolute" top="50%" left="50%" transform="translate(-50%,-50%)" color="#fff" fontSize={{ base: "26px", md: "20px", lg: "26px" }}>Kuta</Text>
                         </Box>
-                        <Box position="relative" textAlign="center" overflow="hidden" borderRadius="10px">
+                        <Box position="relative" textAlign="center" overflow="hidden" borderRadius="10px" cursor='pointer'>
                             <Image src={Jakarta1} borderRadius="10px" _hover={{ transform: 'scale(1.1)', transition: '.5s' }} />
                             <Text position="absolute" top="50%" left="50%" transform="translate(-50%,-50%)" color="#fff" fontSize={{ base: "26px", md: "20px", lg: "26px" }}>Jakarta</Text>
                         </Box>
-                        <Box position="relative" textAlign="center" overflow="hidden" borderRadius="10px">
+                        <Box position="relative" textAlign="center" overflow="hidden" borderRadius="10px" cursor='pointer'>
                             <Image src={Uluwatu1} borderRadius="10px" _hover={{ transform: 'scale(1.1)', transition: '.5s' }} />
                             <Text position="absolute" top="50%" left="50%" transform="translate(-50%,-50%)" color="#fff" fontSize={{ base: "26px", md: "20px", lg: "26px" }}>Uluwatu</Text>
                         </Box>
-                        <Box position="relative" textAlign="center" overflow="hidden" borderRadius="10px">
+                        <Box position="relative" textAlign="center" overflow="hidden" borderRadius="10px" cursor='pointer'>
                             <Image src={Ubud1} borderRadius="10px" _hover={{ transform: 'scale(1.1)', transition: '.5s' }} />
                             <Text position="absolute" top="50%" left="50%" transform="translate(-50%,-50%)" color="#fff" fontSize={{ base: "26px", md: "20px", lg: "26px" }}>Ubud</Text>
                         </Box>
@@ -391,6 +397,7 @@ export default function LandingNew() {
                     color="#fff"
                     padding="5%"
                     my={{ base: "40px", md: "80px" }}
+                    minH={'sm'}
                 >
                     <Box alignItems="center">
                         <Heading
@@ -423,7 +430,7 @@ export default function LandingNew() {
                 </Box>
                 {/* PROPERTY RECOMMENDATIONS */}
                 <Heading fontSize={{ base: "2xl", md: "4xl" }}
-                    fontWeight="500"
+                    fontWeight="700"
                     align='center'
                     textDecoration='underline'
                     style={{ textUnderlineOffset: '0.35em' }}

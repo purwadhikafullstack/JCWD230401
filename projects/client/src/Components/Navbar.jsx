@@ -142,7 +142,7 @@ export default function Navbar() {
                 {
                   // User
                   roleId == 1 ?
-                    <MenuList>
+                    <MenuList zIndex={9999}>
                       <MenuItem onClick={() => navigate('/')}>Home</MenuItem>
                       <MenuItem onClick={() => navigate('/editprofile')}>Profile</MenuItem>
                       <MenuItem>Bookings</MenuItem>
@@ -154,7 +154,7 @@ export default function Navbar() {
                     :
                     // Tenant
                     roleId == 2 ?
-                      <MenuList>
+                      <MenuList zIndex={9999}>
                         <MenuItem onClick={() => navigate('/dashboard')}>Dashboard</MenuItem>
                         <MenuItem onClick={() => navigate('/editprofile')}>Profile</MenuItem>
                         <MenuItem onClick={() => navigate('/changepassword')}>Change Password</MenuItem>
@@ -167,7 +167,7 @@ export default function Navbar() {
                         >Logout</MenuItem>
                       </MenuList>
                       :
-                      <MenuList>
+                      <MenuList zIndex={9999}>
                         <MenuItem onClick={onOpen} maxH={'100vh'}>Login
                           <Modal onClose={onClose} isOpen={isOpen} scrollBehavior={scrollBehavior} >
                             <ModalOverlay />

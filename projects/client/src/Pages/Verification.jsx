@@ -48,9 +48,9 @@ export default function Verification() {
           }
         }
         );
-        console.log("ini hasil response onbtnSendVerifyEmail :", response); 
+        console.log("ini hasil response onbtnSendVerifyEmail :", response);
         alert(response.data.message);
-        countDate() 
+        countDate()
         window.location.reload(); // reloads the page
       } else {
         alert('You have reached the maximum limit of OTP resend requests for today.');
@@ -125,7 +125,7 @@ export default function Verification() {
         <FormControl>
           <Center>
             <HStack>
-              <FormControl id="Name">
+              <FormControl>
                 <FormLabel>Input your OTP code here :</FormLabel>
                 <Input type="text"
                   onChange={(e) => setVerificationCode(e.target.value)}

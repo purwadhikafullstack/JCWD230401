@@ -28,6 +28,8 @@ export default function RecommendPropertyCard(props) {
                 maxW={{ base: '350px', md: '330px', lg: '330px' }}
                 w={'full'}
                 bg='white'
+                borderWidth={'1px'}
+                borderColor='gray.200'
                 boxShadow={'xs'}
                 rounded={'lg'}
                 pos={'relative'}
@@ -50,27 +52,26 @@ export default function RecommendPropertyCard(props) {
                 <Box
                     pt={{ base: '20', lg: '2' }}
                     px='2'
-                    pb='2'
                     align={'start'}
                 >
-                    <Text fontWeight={700} fontSize='md' isTruncated>
+                    <Text fontWeight={600} fontSize={{base:'lg', lg:'sm'}} isTruncated>
                         {props.property}
                     </Text>
-                    <Text fontWeight={'normal'} fontSize={'sm'} >
+                    <Text fontWeight={'normal'} fontSize={'sm'} color='gray.500'>
                         {props.regency}, {props.country}
                     </Text>
                     <Flex justifyContent={'space-between'}>
-                    <Text fontWeight={600} fontSize={'md'} textAlign={'left'} display='flex'>
+                    <Text fontWeight={600} fontSize={'sm'} textAlign={'left'} display='flex'>
                         {props.price}
-                        <Text fontWeight={'normal'} pl='1' fontSize={'sm'} mt='0.5'>
+                        <Text fontWeight={'normal'} pl='1' fontSize={'sm'}>
                             / night
                         </Text>
                     </Text> 
                     <Flex alignItems={'center'} justifyContent="center">
-                        <Box mb='1'>
-                            <StarIcon color={'yellow.500'} />
+                        <Box>
+                            <StarIcon color={'yellow.500'} fontSize={{base:'lg', lg:'sm'}} mb='1' />
                         </Box>
-                        <Text fontWeight={600} fontSize='md' textAlign='right' ml='1'>
+                        <Text fontWeight={600} fontSize={{base:'lg', lg:'sm'}} textAlign='right' ml='1'>
                             {props.rating}
                         </Text>
                     </Flex>

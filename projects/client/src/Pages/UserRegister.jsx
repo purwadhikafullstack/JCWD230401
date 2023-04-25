@@ -10,7 +10,7 @@ import {
     Link,
     Stack,
     Image,
-    Text, Icon, HStack, Box, Divider, Center, Card, CardBody, InputGroup, InputRightElement, useDisclosure
+    Text, Icon, HStack, Box, Divider, Center, Card, CardBody, InputGroup, InputRightElement, useDisclosure, FormErrorMessage
 } from '@chakra-ui/react';
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
 import { useNavigate } from 'react-router-dom';
@@ -18,6 +18,8 @@ import axios from 'axios';
 import { API_URL } from '../helper';
 import Userregisterbanner from '../assets/userregisterbanner.jpg';
 import { FcGoogle } from 'react-icons/fc';
+import { useFormik } from 'formik';
+import * as yup from "yup";
 
 
 
@@ -35,12 +37,13 @@ export default function UserRegister() {
 
     const onBtnRegister = async () => {
         try {
+            await formik.validateForm();
             let response = await axios.post(`${API_URL}/user/register`, {
-                name: name,
-                phone: phone,
-                email: email,
-                password: password,
-                confirmationPassword: passwordConfirmation
+                name: formik.values.name,
+                phone: formik.values.phone,
+                email: formik.values.email,
+                password: formik.values.password,
+                confirmationPassword: formik.values.passwordConfirmation
             }
             );
             console.log("ini hasil response onbtnregister :", response); //testing purposes
@@ -56,6 +59,59 @@ export default function UserRegister() {
             alert(error.response.data.error[1].msg);
         }
     }
+
+    const formik = useFormik({
+        initialValues: {
+            name: "",
+            phone: "",
+            email: "",
+            password: "",
+            passwordConfirmation: ""
+        },
+        onSubmit: onBtnRegister,
+        validationSchema: yup.object().shape({
+            name: yup
+                .string()
+                .required("Name is a required field")
+                .matches(
+                    /^[a-zA-Z ]+$/,
+                    "Name must only contain letters and spaces"
+                ),
+            phone: yup
+                .string()
+                .required("Phone is a required field")
+                .matches(
+                    /^\+?[0-9]{8,14}$/,
+                    "Please enter a valid phone number"
+                ),
+            email: yup
+                .string()
+                .required("Email is a required field")
+                .matches(
+                    /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                    "Please enter a valid email address"
+                ),
+            password: yup
+                .string()
+                .required("Password is a required field")
+                .matches(
+                    /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{6,})/,
+                    "Password must be at least 6 characters includes 1 number, 1 uppercase, and 1 lowercase letter"
+                ),
+            passwordConfirmation: yup
+                .string()
+                .required("Confirmation password is a required field")
+                .matches(
+                    /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{6,})/,
+                    "Password must be at least 6 characters includes 1 number, 1 uppercase, and 1 lowercase letter"
+                )
+                .oneOf([yup.ref('password'), null], 'Passwords must match'), //check if the value matches "password" field
+        })
+    });
+
+    const handleForm = (event) => {
+        formik.setFieldValue(event.target.name, event.target.value);
+    };
 
     return (
         <Stack minH={{ lg: '100vh' }}
@@ -75,38 +131,45 @@ export default function UserRegister() {
                         <HStack>
                             <Box>
                                 {/* NAME */}
-                                <FormControl id="Name">
+                                <FormControl id="name" isInvalid={formik.errors.name}>
                                     <FormLabel>Name</FormLabel>
                                     <Input type="text"
-                                        onChange={(e) => setName(e.target.value)}
+                                        onChange={handleForm}
+                                        name="name" 
                                     />
+                                     <FormErrorMessage fontSize='xs'>{formik.errors.name}</FormErrorMessage>
                                 </FormControl>
                             </Box>
                             <Box>
                                 {/* PHONE */}
-                                <FormControl id="phonenumber">
+                                <FormControl id="phone" isInvalid={formik.errors.phone}>
                                     <FormLabel>Phone number</FormLabel>
                                     <Input type="text"
-                                        onChange={(e) => setPhone(e.target.value)}
+                                        onChange={handleForm}
+                                        name="phone" 
                                     />
+                                     <FormErrorMessage fontSize='xs'>{formik.errors.phone}</FormErrorMessage>
                                 </FormControl>
                             </Box>
                         </HStack>
                         {/* EMAIL */}
-                        <FormControl id="email">
+                        <FormControl id="email" isInvalid={formik.errors.email}>
                             <FormLabel>Email address</FormLabel>
                             <Input type="email"
-                                onChange={(e) => setEmail(e.target.value)}
+                                onChange={handleForm}
+                                name="email"
                             />
+                             <FormErrorMessage fontSize='xs'>{formik.errors.email}</FormErrorMessage>
                         </FormControl>
                         {/* PASSWORD */}
-                        <FormControl id="password">
+                        <FormControl id="password" isInvalid={formik.errors.password}>
                             <FormLabel>Password</FormLabel>
                             <InputGroup>
                                 {/* Input Password */}
                                 <Input
                                     type={showPassword ? 'text' : 'password'}
-                                    onChange={(e) => setPassword(e.target.value)}
+                                    onChange={handleForm}
+                                    name="password" 
                                 />
                                 <InputRightElement h={'full'}>
                                     <Button
@@ -120,13 +183,16 @@ export default function UserRegister() {
                                     </Button>
                                 </InputRightElement>
                             </InputGroup>
+                            <FormErrorMessage fontSize='xs'>{formik.errors.password}</FormErrorMessage>
                         </FormControl>
-                        <FormControl id="confirmation_password">
+                        <FormControl id="confirmation_password" isInvalid={formik.errors.passwordConfirmation}>
                             <FormLabel>Confirmation Password</FormLabel>
                             <InputGroup>
                                 {/* Input Password Confirmation*/}
                                 <Input
-                                    type={showPasswordConfirmation ? 'text' : 'password'} onChange={(e) => setPasswordConfirmation(e.target.value)}
+                                    type={showPasswordConfirmation ? 'text' : 'password'}
+                                    onChange={handleForm}
+                                    name="passwordConfirmation"
                                 />
                                 <InputRightElement h={'full'}>
                                     <Button
@@ -140,6 +206,7 @@ export default function UserRegister() {
                                     </Button>
                                 </InputRightElement>
                             </InputGroup>
+                            <FormErrorMessage fontSize='xs'>{formik.errors.passwordConfirmation}</FormErrorMessage>
                         </FormControl>
                     </Stack>
                     <Stack
@@ -153,11 +220,7 @@ export default function UserRegister() {
                         >
                             Register
                         </Button>
-                        <Flex alignItems="center" w='full' py='4'>
-                            <Divider color="black" thickness="2px" />
-                            <Text mx="2" fontSize="sm">or</Text>
-                            <Divider color="black" thickness="2px" />
-                        </Flex>
+
                         {/* Google */}
                         <Button
                             w={'full'} variant={'outline'} leftIcon={<FcGoogle />} borderColor='#d0d7de' _hover={'none'}>

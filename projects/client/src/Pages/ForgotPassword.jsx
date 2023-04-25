@@ -7,19 +7,21 @@ import {
     Input,
     Stack,
     Text,
-    useColorModeValue,
+    FormErrorMessage
 } from '@chakra-ui/react';
 import axios from 'axios';
 import { API_URL } from '../helper';
-
+import { useFormik } from 'formik';
+import * as yup from "yup";
 
 export default function ForgotPassword() {
     const [email, setEmail] = React.useState('');
 
     const onBtnForgotPassword = async () => {
         try {
+            await formik.validateForm();
             let response = await axios.post(`${API_URL}/user/forgotpw`, {
-                email: email
+                email: formik.values.email
             });
             console.log("ini hasil response onBtnForgotPassword :", response); //testing purposes
             alert(response.data.message);
@@ -29,17 +31,38 @@ export default function ForgotPassword() {
             alert(error.response.data.error[0].msg);
         }
     }
+
+    const formik = useFormik({
+        initialValues: {
+            email: "",
+        },
+        onSubmit: onBtnForgotPassword,
+        validationSchema: yup.object().shape({
+            email: yup
+                .string()
+                .required("Email is a required field")
+                .matches(
+                    /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                    "Please enter a valid email address"
+                ),
+        })
+    });
+
+    const handleForm = (event) => {
+        formik.setFieldValue(event.target.name, event.target.value);
+    };
+
     return (
         <Flex
             minH={'100vh'}
             align={'center'}
             justify={'center'}
-            bg={useColorModeValue('gray.50', 'gray.800')}>
+            bg={'gray.50'}>
             <Stack
                 spacing={4}
                 w={'full'}
                 maxW={'md'}
-                bg={useColorModeValue('white', 'gray.700')}
+                bg={'white'}
                 rounded={'xl'}
                 boxShadow={'lg'}
                 p={6}
@@ -49,16 +72,18 @@ export default function ForgotPassword() {
                 </Heading>
                 <Text
                     fontSize={{ base: 'sm', sm: 'md' }}
-                    color={useColorModeValue('gray.800', 'gray.400')}>
+                    color={'gray.800'}>
                     You&apos;ll get an email with a reset link
                 </Text>
-                <FormControl id="email">
+                <FormControl id="email" isInvalid={formik.errors.email}>
                     <Input
                         placeholder="your-email@example.com"
                         _placeholder={{ color: 'gray.500' }}
                         type="email"
-                        onChange = {(e)=> setEmail(e.target.value)}
+                        onChange={handleForm}
+                        name="email"
                     />
+                    <FormErrorMessage fontSize='xs'>{formik.errors.email}</FormErrorMessage>
                 </FormControl>
                 <Stack spacing={6}>
                     <Button
