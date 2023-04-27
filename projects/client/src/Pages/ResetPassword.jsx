@@ -28,6 +28,9 @@ export default function ResetPassword() {
     const onBtnResetPassword = async () => {
         try {
             await formik.validateForm();
+            if (!formik.isValid) {
+                return; 
+            }
             let response = await axios.patch(`${API_URL}/user/resetpw`, {
                 newPassword: formik.values.newPassword,
                 confirmationPassword: formik.values.passwordConfirmation,

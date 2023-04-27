@@ -28,8 +28,11 @@ export default function ChangePassword() {
 
     const onBtnChangePassword = async () => {
         try {
-            await formik.validateForm();
             let token = localStorage.getItem("tempatku_login");
+            await formik.validateForm(); 
+            if (!formik.isValid) {
+                return; 
+            }
             let response = await axios.patch(`${API_URL}/user/changepw`,
                 {
                     password: formik.values.oldPassword,

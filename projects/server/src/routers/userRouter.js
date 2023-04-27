@@ -22,20 +22,10 @@ route.get("/keeplogin", readToken, keeplogin);
 route.patch("/changepw", readToken, checkUser, changepassword);
 route.post("/forgotpw", checkUser, forgotpassword);
 route.patch("/resetpw", readToken, checkUser, resetpassword);
-route.post(
-  "/registerastenant",
-  // checkUser, //masih error
-  uploader("/imgIdCard", "IDC").array("images", 1), //ini data sesuai yg param 1 form append
-  registerastenant
-);
+route.post("/registerastenant", uploader("/imgIdCard", "IDC").array("images", 1), registerastenant);
 route.patch("/verifyaccount", readToken, verify);
 route.post("/sendverificationemail", readToken, sendverificationemail);
 route.patch("/editprofile", readToken, checkUser, editprofile);
-route.patch(
-  "/updateprofileimage",
-  readToken,
-  uploader("/profileImage", "PRF").array("image_profile", 1),
-  updateprofileimage
-);
+route.patch("/updateprofileimage", readToken, uploader("/profileImage", "PRF").array("image_profile", 1), updateprofileimage);
 
 module.exports = route;

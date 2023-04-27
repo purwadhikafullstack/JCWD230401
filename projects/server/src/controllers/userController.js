@@ -2,10 +2,11 @@ const sequelize = require("sequelize");
 const model = require("../models");
 const { v4: uuidv4 } = require("uuid");
 const bcrypt = require("bcrypt");
-const { createToken } = require("../helper/jwt");
+const { createToken, createTokenForKTP } = require("../helper/jwt");
 const fs = require("fs");
 const hbs = require("nodemailer-express-handlebars");
 const nodemailer = require("nodemailer");
+
 
 let salt = bcrypt.genSaltSync(10);
 
@@ -479,8 +480,15 @@ module.exports = {
     const ormTransaction = await model.sequelize.transaction();
     try {
       console.log("req.body.data : ", req.body.data); //krn dlm bntk object jd data masuk req.body.data
-      // console.log("req.body json parse : ", JSON.parse(req.body.data)); //krn dlm bntk object jd data masuk req.body.data
       console.log("req.files  : ", req.files);
+      const base64Data = req.body.images.replace(
+        /^data:image\/\w+;base64,/,
+        ""
+      );
+      console.log(
+        "ini base64Data :",
+        base64Data
+      );
       let checkExistingUser = await model.user.findAll({
         where: sequelize.or(
           { email: JSON.parse(req.body.data).email },
@@ -489,7 +497,7 @@ module.exports = {
       });
       console.log("ini isi checkExistingUser:", checkExistingUser);
       if (checkExistingUser == 0) {
-        if (req.files.length == 1) {
+        if (req.body.images.length > 0) {
           if (
             JSON.parse(req.body.data).password ==
             JSON.parse(req.body.data).confirmationPassword
@@ -510,7 +518,9 @@ module.exports = {
                 transaction: ormTransaction,
               }
             );
-            const image_ktp = `/imgIdCard/${req.files[0]?.filename}`;
+            //encrypt into token 
+            let image_ktp = createTokenForKTP(base64Data);
+            console.log("ini isi imagektp dijadiin token abis di jadiin base64:", image_ktp);
             let regisUserDetail = await model.user_detail.create(
               {
                 uuid,
@@ -549,8 +559,6 @@ module.exports = {
       }
     } catch (error) {
       await ormTransaction.rollback();
-      //delete image if encountered error
-      fs.unlinkSync(`src\\public\\imgIdCard\\${req.files[0].filename}`);
       console.log(error);
       next(error);
     }

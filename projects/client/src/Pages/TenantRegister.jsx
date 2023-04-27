@@ -49,11 +49,25 @@ export default function TenantRegister() {
                     confirmationPassword: formik.values.passwordConfirmation
                 })
             );
-            formData.append(
-                "images",
-                formik.values.fileImage
-            )
+            // formData.append(
+            //     "images",
+            //     formik.values.fileImage
+            // )
+            //1. function that will read the file image and return a Promise that resolves with the base64 data:
+             const toBase64 = (file) =>
+                new Promise((resolve, reject) => {
+                    //FileReader API which allows you to read the contents of files asynchronously.
+                    const reader = new FileReader();
+                    reader.readAsDataURL(file);
+                    reader.onload = () => resolve(reader.result);
+                    reader.onerror = (error) => reject(error);
+                });
+            const fileBase64 = await toBase64(formik.values.fileImage);
+            formData.append("images", fileBase64);
             console.log("ini isi dari formData", formData);
+            if (!formik.isValid) {
+                return;  //gak jalan axios kalo formiknya blom bener tp keluar yup messagenya
+            }
             let response = await axios.post(`${API_URL}/user/registerastenant`,
                 formData
             );
@@ -66,11 +80,6 @@ export default function TenantRegister() {
         } catch (error) {
             console.log("ini error dari onBtnRegister : ", error); //testing purposes
             alert(error.response.data.message);
-            alert(error.response.data.error[1].msg);
-            alert(error.response.data.error[3].msg);
-            alert(error.response.data.error[5].msg);
-            alert(error.response.data.error[7].msg);
-            alert(error.response.data.error[8].msg);
         }
     }
 
@@ -83,7 +92,7 @@ export default function TenantRegister() {
             passwordConfirmation: "",
             fileImage: ""
         },
-        onSubmit: onBtnRegister,
+        onSubmit: onBtnRegister, // ini paling terakhir (gk jadi) krn dia synchronous
         validationSchema: yup.object().shape({
             name: yup
                 .string()
@@ -120,19 +129,31 @@ export default function TenantRegister() {
                     /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{6,})/,
                     "Password must be at least 6 characters includes 1 number, 1 uppercase, and 1 lowercase letter"
                 )
-                .oneOf([yup.ref('password'), null], 'Passwords must match'), //check if the value matches "password" field
+                .oneOf([yup.ref('password'), null], 'Passwords must match'),
             fileImage: yup
-                .string()
+                .mixed()
                 .required("KTP photo is a required field")
-        })
+                .test(
+                    'fileSize',
+                    'File size must be less than 1MB',
+                    (value) => value && value.size <= 1000000
+                )
+                .test(
+                    'fileFormat',
+                    'Only jpg, jpeg, and png formats are allowed',
+                    (value) =>
+                        value && ['image/jpeg', 'image/jpg', 'image/png'].includes(value.type)
+                )
+        }),
+
     });
 
     const handleForm = (event) => {
         formik.setFieldValue(event.target.name, event.target.value);
     };
 
-     //untuk upload ktp
-     const onChangeFile = (event) => {
+    //untuk upload ktp
+    const onChangeFile = (event) => {
         console.log("ini isi dari event.target.files onchangefile :", event.target.files);
         formik.setFieldValue(event.target.name, event.target.files[0]); //change to setFileImage
     };
@@ -234,7 +255,10 @@ export default function TenantRegister() {
                         </FormControl>
                         {/* UPLOAD ID CARD */}
                         <FormControl isInvalid={formik.errors.fileImage}>
-                            <FormLabel>Upload a photo of your KTP</FormLabel>
+                            <FormLabel>Upload a photo of your KTP
+
+                            <Text fontSize='xs'>( Image size: max. 1 MB , Image format: .jpg, .jpeg, .png )</Text>
+                            </FormLabel>
                             <Image
                                 boxSize='200px'
                                 objectFit='cover'

@@ -17,5 +17,6 @@ module.exports = {
             req.decrypt = decrypt; 
             next(); 
         })
-    }
+    },
+    createTokenForKTP: (payload) => jwt.sign(payload, 'TEMPATKU')
 }

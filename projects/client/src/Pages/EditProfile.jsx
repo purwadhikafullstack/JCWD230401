@@ -54,6 +54,9 @@ export default function EditProfile(props) {
                 formik.setErrors({ email: "Email is a required field" });
                 return;
             }
+            if (!formik.isValid) {
+                return; 
+            }
             let response = await axios.patch(`${API_URL}/user/editprofile`,
                 {
                     name: formik.values.name,

@@ -26,6 +26,9 @@ export default function Login() {
     const onBtnLogin = async () => {
         try {
             await formik.validateForm(); // trigger form validation
+            if (!formik.isValid) {
+                return; 
+            }
             let response = await axios.post(`${API_URL}/user/auth`, {
                 email: formik.values.emailOrPhone,
                 phone: formik.values.emailOrPhone,

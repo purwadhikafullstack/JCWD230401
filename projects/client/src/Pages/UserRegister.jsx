@@ -1,16 +1,14 @@
 import React, { useState } from 'react';
 import {
     Button,
-    Checkbox,
     Flex,
     FormControl,
     FormLabel,
     Heading,
     Input,
-    Link,
     Stack,
     Image,
-    Text, Icon, HStack, Box, Divider, Center, Card, CardBody, InputGroup, InputRightElement, useDisclosure, FormErrorMessage
+    Text, HStack, Box, Center, Card, CardBody, InputGroup, InputRightElement, useDisclosure, FormErrorMessage
 } from '@chakra-ui/react';
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
 import { useNavigate } from 'react-router-dom';
@@ -38,6 +36,9 @@ export default function UserRegister() {
     const onBtnRegister = async () => {
         try {
             await formik.validateForm();
+            if (!formik.isValid) {
+                return; 
+            }
             let response = await axios.post(`${API_URL}/user/register`, {
                 name: formik.values.name,
                 phone: formik.values.phone,
