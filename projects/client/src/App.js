@@ -76,7 +76,10 @@ function App() {
             <Route path="*" element={<NotFound />} />
             <Route path="/productdetail" element={<ProductDetail />} />
             <Route path="/transactionpage" element={<TransactionPage />} />
-            <Route path="/editprofile" element={<EditProfile keeplogin={() => dispatch(keeplogin())} />} />
+            <Route
+              path="/editprofile"
+              element={<EditProfile keeplogin={() => dispatch(keeplogin())} />}
+            />
           </Routes>
         ) : // Tenant
         roleId == 2 ? (
@@ -93,7 +96,10 @@ function App() {
             <Route path="/productdetail" element={<ProductDetail />} />
             <Route path="/tenantcalendar" element={<TenantCalendar />} />
             <Route path="/orderlist" element={<OrderList />} />
-            <Route path="/editprofile" element={<EditProfile keeplogin={() => dispatch(keeplogin())} />} />
+            <Route
+              path="/editprofile"
+              element={<EditProfile keeplogin={() => dispatch(keeplogin())} />}
+            />
           </Routes>
         ) : (
           // Not logged in

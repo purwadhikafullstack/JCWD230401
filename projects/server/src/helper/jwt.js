@@ -18,5 +18,6 @@ module.exports = {
             next(); 
         })
     },
-    createTokenForKTP: (payload) => jwt.sign(payload, 'TEMPATKU')
+    createTokenForKTP: (payload) => jwt.sign(payload, 'TEMPATKU'),
+    decryptImage: (payload) => jwt.verify(payload, 'TEMPATKU')
 }

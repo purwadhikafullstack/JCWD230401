@@ -23,6 +23,7 @@ export default function EditProfile(props) {
     const currentGender = useSelector((state) => state.authReducer.gender);
     const currentBirth = useSelector((state) => state.authReducer.birth);
     const currentProfileImage = useSelector((state) => state.authReducer.image_profile);
+    const roleId = useSelector((state) => state.authReducer.roleId);
     const [name, setName] = useState(currentName);
     const [email, setEmail] = useState(currentEmail);
     const [gender, setGender] = useState(currentGender);
@@ -30,7 +31,8 @@ export default function EditProfile(props) {
     const modalProfileImage = useDisclosure()
     const [profileImage, setProfileImage] = useState(null);
     const inputFile = useRef(null);
-
+    console.log("ini isi dari roleId edit profile:", roleId); //testing
+   
 
     const handleGenderChange = (value) => {
         setGender(value);
@@ -55,7 +57,7 @@ export default function EditProfile(props) {
                 return;
             }
             if (!formik.isValid) {
-                return; 
+                return;
             }
             let response = await axios.patch(`${API_URL}/user/editprofile`,
                 {
@@ -149,8 +151,42 @@ export default function EditProfile(props) {
             console.log("ini error dari onBtnEditProfileImage : ", error);
             alert(error.message);
         }
-    }
+    };
 
+    const onBtnShowKTP = async () => {
+        try {
+            let token = localStorage.getItem("tempatku_login");
+            let response = await axios.get(`${API_URL}/user/showktp`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
+            console.log("response onbtnshowktp :", response.data);
+            
+            //1. Decode Base64 string into binary data
+            const binaryData = atob(response.data);
+
+            //2. Convert the binary data into an array
+            const array = [];
+            for (let i = 0; i < binaryData.length; i++) {
+                array.push(binaryData.charCodeAt(i));
+            }
+
+            //3. Create Blob object from the array
+            const blob = new Blob([new Uint8Array(array)], { type: "image/png" });
+
+            //4. Create URL for the Blob object
+            const imageUrl = URL.createObjectURL(blob);
+
+            // Open the image in a new tab
+            window.open(imageUrl, "_blank");
+        } catch (error) {
+            console.log("ini error dari onBtnShowKTP : ", error);
+            alert(error.message)
+        }
+    };
 
     return (
         <>
@@ -170,7 +206,7 @@ export default function EditProfile(props) {
                     p={6}
                     my={12}>
                     <Heading lineHeight={1.1} fontSize={{ base: '2xl', sm: '3xl' }}>
-                        User Profile Edit
+                        Profile Page
                     </Heading>
                     <FormControl id="userName">
                         {/* <FormLabel>User Icon</FormLabel> */}
@@ -274,20 +310,54 @@ export default function EditProfile(props) {
                             onChange={handleBirthChange}
                         />
                     </FormControl>
-                    <Stack spacing={6} direction={['column', 'row']}>
-                        <Button
-                            bg={'#D3212D'}
-                            color={'white'}
-                            _hover={{
-                                bg: '#D3212D',
-                            }}
-                            type='button'
-                            w='full'
-                            onClick={onBtnEditProfile}
-                        >
-                            Save
-                        </Button>
-                    </Stack>
+                    {
+                        // Tenant
+                        roleId == 2 ? (
+                            <Stack spacing={3} direction={['column']}>
+                                <Button
+                                    bg={'#D3212D'}
+                                    color={'white'}
+                                    _hover={{
+                                        bg: '#D3212D',
+                                    }}
+                                    type='button'
+                                    w='full'
+                                    onClick={onBtnEditProfile}
+                                >
+                                    Save
+                                </Button>
+                                <Button
+                                    variant={'outline'}
+                                    color={'#D3212D'}
+                                    _hover={{
+                                        bg: 'gray.200',
+                                    }}
+                                    type='button'
+                                    w='full'
+                                    borderColor='#D3212D'
+                                    onClick={onBtnShowKTP}
+                                >
+                                    Show KTP Photo
+                                </Button>
+                            </Stack>
+                        ) : (
+                            // User
+                            <Stack spacing={3} direction={['column']}>
+                                <Button
+                                    bg={'#D3212D'}
+                                    color={'white'}
+                                    _hover={{
+                                        bg: '#D3212D',
+                                    }}
+                                    type='button'
+                                    w='full'
+                                    onClick={onBtnEditProfile}
+                                >
+                                    Save
+                                </Button>
+                            </Stack>
+                        )
+                    }
                 </Stack>
             </Flex>
         </>

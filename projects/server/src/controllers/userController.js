@@ -2,7 +2,7 @@ const sequelize = require("sequelize");
 const model = require("../models");
 const { v4: uuidv4 } = require("uuid");
 const bcrypt = require("bcrypt");
-const { createToken, createTokenForKTP } = require("../helper/jwt");
+const { createToken, createTokenForKTP, decryptImage } = require("../helper/jwt");
 const fs = require("fs");
 const hbs = require("nodemailer-express-handlebars");
 const nodemailer = require("nodemailer");
@@ -798,4 +798,33 @@ module.exports = {
       next(error);
     }
   },
+
+  //12. SHOW KTP PHOTO 
+  showktp: async (req, res, next) => {
+    try {
+      //1. get current ktp photo
+      let get = await model.user_detail.findAll({
+        where: {
+          userId: req.decrypt.id,
+        },
+        attributes: ["image_ktp"],
+      });
+      //output from db: binary data of the image
+      console.log(
+        "ini isi dari get image_ktp: ", 
+        get[0].dataValues.image_ktp
+      );
+      // convert binary data to base64 encoded string
+      let imageData = get[0].dataValues.image_ktp.toString("utf8");
+      console.log("ini dijadiin text data:", imageData);
+      //2. decrypt base64 
+      let decryptbase64 =  decryptImage(imageData);
+      console.log("ini imagektp base64 di decrypt:", decryptbase64);
+      //i think di front end diubah balik nya jd image decode? or bisa di backend?
+      res.status(200).send(decryptbase64);
+    } catch (error) {
+      console.log(error);
+      next(error);
+    }
+  }
 };
