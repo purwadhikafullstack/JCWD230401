@@ -34,7 +34,7 @@ export default function Navbar() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const imageprofile = useSelector((state) => state.authReducer.image_profile);
-  const roleId = useSelector((state) => state.authReducer.roleId);
+  const role = useSelector((state) => state.authReducer.role);
 
   const onBtnLogout = () => {
     localStorage.removeItem('tempatku_login');
@@ -82,7 +82,7 @@ export default function Navbar() {
               {/* Become TENANT */}
               {
                 // User
-                roleId == 1 ?
+                role == "User" ?
                   <Button
                     variant={'ghost'}
                     size={'sm'}
@@ -95,7 +95,7 @@ export default function Navbar() {
                   </Button>
                   :
                   // Tenant
-                  roleId == 2 ?
+                  role == "Tenant" ?
                     <Button
                       variant={'ghost'}
                       size={'sm'}
@@ -141,7 +141,7 @@ export default function Navbar() {
                 </MenuButton>
                 {
                   // User
-                  roleId == 1 ?
+                  role == "User" ?
                     <MenuList zIndex={9999}>
                       <MenuItem onClick={() => navigate('/')}>Home</MenuItem>
                       <MenuItem onClick={() => navigate('/editprofile')}>Profile</MenuItem>
@@ -153,7 +153,7 @@ export default function Navbar() {
                     </MenuList>
                     :
                     // Tenant
-                    roleId == 2 ?
+                    role == "Tenant" ?
                       <MenuList zIndex={9999}>
                         <MenuItem onClick={() => navigate('/dashboard')}>Dashboard</MenuItem>
                         <MenuItem onClick={() => navigate('/editprofile')}>Profile</MenuItem>

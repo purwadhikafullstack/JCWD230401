@@ -1,4 +1,4 @@
-import { Flex, Box, FormControl, Divider, Icon, Card, CardBody, FormLabel, Input, InputGroup, HStack, Center, InputRightElement, Stack, Button, Heading, Text, useColorModeValue, Link, FormErrorMessage } from '@chakra-ui/react';
+import { Flex, Box, FormControl, Divider, Icon, Card, CardBody, FormLabel, Input, InputGroup, HStack, Center, InputRightElement, Stack, Button, Heading, Text, Link, FormErrorMessage } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
 import { FcGoogle } from 'react-icons/fc';
@@ -37,7 +37,7 @@ export default function Login() {
                 password: formik.values.password
             });
             console.log("response.data dari login : ", response.data)
-            // console.log("response.data dari login roleId : ", response.data.roleId)
+            // console.log("response.data dari login role : ", response.data.role)
             if (response.data.length == 0) {
                 alert('Account not found ❌');
             } else {
@@ -46,9 +46,9 @@ export default function Login() {
                 localStorage.setItem('tempatku_login', response.data.token);
                 //simpen response.data ke reducer
                 dispatch(loginAction(response.data))
-                if (response.data.roleId == 1) {
+                if (response.data.role == "User") {
                     navigate('/', { replace: true });
-                } else if (response.data.roleId == 2) {
+                } else if (response.data.role == "Tenant") {
                     navigate('/dashboard', { replace: true });
                 } else {
                     navigate('/', { replace: true });
@@ -99,7 +99,7 @@ export default function Login() {
                 <Stack mx={'auto'} minW={{ base: 'sm', md: 'md' }} px={6}>
                     <Box
                         rounded={'lg'}
-                        bg={useColorModeValue('white', 'gray.700')}
+                        bg={'white'}
                         // boxShadow={'xs'}
                         px={4}
                     >
@@ -116,7 +116,6 @@ export default function Login() {
                                 <FormLabel size='sm'>Email or Phone Number</FormLabel>
                                 {/* Input Email or Phone Number */}
                                 <Input type="text" borderColor='#d0d7de'
-                                    // onChange={(e) => setEmailOrPhone(e.target.value)}
                                     onChange={handleForm}
                                     name="emailOrPhone" //identifier formik
                                 />
@@ -139,7 +138,6 @@ export default function Login() {
                                 <InputGroup borderColor='#d0d7de'>
                                     {/* Input Password */}
                                     <Input type={showPassword ? 'text' : 'password'}
-                                        // onChange={(e) => setPassword(e.target.value)}
                                         onChange={handleForm}
                                         name="password" //identifier formik
                                     />
@@ -184,7 +182,6 @@ export default function Login() {
                                         </Button>
 
                                         <Stack
-                                            // pt='4' 
                                             pb='2'
 
                                         >

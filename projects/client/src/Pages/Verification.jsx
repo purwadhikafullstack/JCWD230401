@@ -154,7 +154,6 @@ const handleForm = (event) => {
               <FormControl isInvalid={formik.errors.verificationCode}>
                 <FormLabel>Input your OTP code here :</FormLabel>
                 <Input type="text"
-                  // onChange={(e) => setVerificationCode(e.target.value)}
                   onChange={handleForm}
                   name="verificationCode"
                 />

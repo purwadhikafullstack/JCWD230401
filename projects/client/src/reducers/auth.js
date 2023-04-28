@@ -6,9 +6,9 @@ const authSlice = createSlice({
   initialState: {
     name: "", 
     email: "",
-    roleId: "",
+    role: "",
     isVerified: "",
-    image_profile: "https://ionicframework.com/docs/img/demos/avatar.svg",
+    image_profile: "",
     birth: "",
     gender: "",
   },
@@ -17,12 +17,12 @@ const authSlice = createSlice({
     loginAction: (state, action) => {
         state.name = action.payload.name;
         state.email = action.payload.email;
-        state.roleId = action.payload.roleId;
+        state.role = action.payload.role;
         state.isVerified = action.payload.isVerified;
         state.image_profile = action.payload.image_profile;
         state.birth = action.payload.birth;
         state.gender = action.payload.gender;
-        console.log("Data roleId dari reducer :", state.roleId);
+        console.log("Data role dari reducer :", state.role);
         console.log("Data isVerified dari reducer :", state.isVerified);
         console.log("Data image_profile dari reducer :", state.image_profile);
         console.log("Data birth dari reducer :", state.birth);
@@ -32,9 +32,9 @@ const authSlice = createSlice({
     logoutAction: (state) => {
         state.name = "";
         state.email = "";
-        state.roleId = "";
-        state.image_profile = "https://ionicframework.com/docs/img/demos/avatar.svg";
-        console.log("Data roleId dari reducer logoutaction :", state.roleId);
+        state.role = "";
+        state.image_profile = "";
+        console.log("Data role dari reducer logoutaction :", state.role);
         console.log("Data image_profile dari reducer logoutaction :", state.image_profile);
     },
   },

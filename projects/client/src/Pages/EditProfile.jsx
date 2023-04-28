@@ -23,7 +23,7 @@ export default function EditProfile(props) {
     const currentGender = useSelector((state) => state.authReducer.gender);
     const currentBirth = useSelector((state) => state.authReducer.birth);
     const currentProfileImage = useSelector((state) => state.authReducer.image_profile);
-    const roleId = useSelector((state) => state.authReducer.roleId);
+    const role = useSelector((state) => state.authReducer.role);
     const [name, setName] = useState(currentName);
     const [email, setEmail] = useState(currentEmail);
     const [gender, setGender] = useState(currentGender);
@@ -34,7 +34,7 @@ export default function EditProfile(props) {
     const [loading1, setLoading1] = useState(false);
     const [loading2, setLoading2] = useState(false);
     
-    console.log("ini isi dari roleId edit profile:", roleId); //testing
+    console.log("ini isi dari role edit profile:", role); //testing
 
     const handleGenderChange = (value) => {
         setGender(value);
@@ -66,7 +66,6 @@ export default function EditProfile(props) {
                 {
                     name: formik.values.name,
                     email: formik.values.email,
-                    // data,
                     gender: gender,
                     birth: birth,
                 }, {
@@ -323,7 +322,7 @@ export default function EditProfile(props) {
                     </FormControl>
                     {
                         // Tenant
-                        roleId == 2 ? (
+                        role == "Tenant" ? (
                             <Stack spacing={3} direction={['column']}>
                                 <Button
                                     bg={'#D3212D'}

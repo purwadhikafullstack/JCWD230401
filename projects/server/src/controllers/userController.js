@@ -2,11 +2,14 @@ const sequelize = require("sequelize");
 const model = require("../models");
 const { v4: uuidv4 } = require("uuid");
 const bcrypt = require("bcrypt");
-const { createToken, createTokenForKTP, decryptImage } = require("../helper/jwt");
+const {
+  createToken,
+  createTokenForKTP,
+  decryptImage,
+} = require("../helper/jwt");
 const fs = require("fs");
 const hbs = require("nodemailer-express-handlebars");
 const nodemailer = require("nodemailer");
-
 
 let salt = bcrypt.genSaltSync(10);
 
@@ -130,9 +133,16 @@ module.exports = {
           { email: req.body.email },
           { phone: req.body.phone }
         ),
-        include: [{ model: model.user_detail }],
+        include: [
+          { model: model.user_detail },
+          { model: model.role, attributes: ["role"] },
+        ],
       });
-      console.log("ini getuser buat login :", getuser.length);
+      // console.log("ini getuser buat login :", getuser.length);
+      // console.log(
+      //   "ini getuser role buat login :",
+      //   getuser[0].dataValues.role.role
+      // );
       //2. if found compare hashed password with req.body.password
       if (getuser.length > 0) {
         let checkpw = bcrypt.compareSync(
@@ -150,19 +160,13 @@ module.exports = {
               },
             }
           );
-          let {
-            id,
-            uuid,
-            email,
-            phone,
-            roleId,
-            isSuspended,
-            attempts,
-            isVerified,
-          } = getuser[0].dataValues;
+          let { id, uuid, email, phone, isSuspended, attempts, isVerified } =
+            getuser[0].dataValues;
           let { name, birth, gender, image_profile } = getuser[0].user_detail;
+          let role = getuser[0].dataValues.role.role;
+          // console.log("cek role keluar gak:", role);
           // GENERATE TOKEN ---> 400h buat gampang aja developnya jgn lupa diganti!
-          let token = createToken({ id, roleId, isSuspended }, "400h"); //24 jam
+          let token = createToken({ id, role, isSuspended }, "400h"); //24 jam
           // LOGIN SUCCESS
           return res.status(200).send({
             success: true,
@@ -171,7 +175,7 @@ module.exports = {
             name,
             email,
             phone,
-            roleId,
+            role,
             attempts,
             isVerified,
             image_profile,
@@ -230,13 +234,17 @@ module.exports = {
         where: {
           id: req.decrypt.id,
         },
-        include: [{ model: model.user_detail }],
+        include: [
+          { model: model.user_detail },
+          { model: model.role, attributes: ["role"] },
+        ],
       });
-      let { id, uuid, email, phone, roleId, isSuspended, isVerified } =
+      let { id, uuid, email, phone, isSuspended, isVerified } =
         getuser[0].dataValues;
       let { name, birth, gender, image_profile } = getuser[0].user_detail;
+      let role = getuser[0].dataValues.role.role;
       // GENERATE TOKEN ---> 400h buat gampang aja developnya jgn lupa diganti!
-      let token = createToken({ id, roleId, isSuspended }, "400h"); //24 jam
+      let token = createToken({ id, role, isSuspended }, "400h"); //24 jam
       // KEEP LOGIN SUCCESS
       return res.status(200).send({
         success: true,
@@ -245,7 +253,7 @@ module.exports = {
         name,
         email,
         phone,
-        roleId,
+        role,
         isVerified,
         image_profile,
         gender,
@@ -485,10 +493,7 @@ module.exports = {
         /^data:image\/\w+;base64,/,
         ""
       );
-      console.log(
-        "ini base64Data :",
-        base64Data
-      );
+      console.log("ini base64Data :", base64Data);
       let checkExistingUser = await model.user.findAll({
         where: sequelize.or(
           { email: JSON.parse(req.body.data).email },
@@ -518,9 +523,12 @@ module.exports = {
                 transaction: ormTransaction,
               }
             );
-            //encrypt into token 
+            //encrypt into token
             let image_ktp = createTokenForKTP(base64Data);
-            console.log("ini isi imagektp dijadiin token abis di jadiin base64:", image_ktp);
+            console.log(
+              "ini isi imagektp dijadiin token abis di jadiin base64:",
+              image_ktp
+            );
             let regisUserDetail = await model.user_detail.create(
               {
                 uuid,
@@ -799,7 +807,7 @@ module.exports = {
     }
   },
 
-  //12. SHOW KTP PHOTO 
+  //12. SHOW KTP PHOTO
   showktp: async (req, res, next) => {
     try {
       //1. get current ktp photo
@@ -810,20 +818,17 @@ module.exports = {
         attributes: ["image_ktp"],
       });
       //output from db: binary data of the image
-      console.log(
-        "ini isi dari get image_ktp: ", 
-        get[0].dataValues.image_ktp
-      );
+      console.log("ini isi dari get image_ktp: ", get[0].dataValues.image_ktp);
       // convert binary data to base64 encoded string
       let imageData = get[0].dataValues.image_ktp.toString("utf8");
       console.log("ini dijadiin text data:", imageData);
-      //2. decrypt base64 
-      let decryptbase64 =  decryptImage(imageData);
+      //2. decrypt base64
+      let decryptbase64 = decryptImage(imageData);
       console.log("ini imagektp base64 di decrypt:", decryptbase64);
       res.status(200).send(decryptbase64);
     } catch (error) {
       console.log(error);
       next(error);
     }
-  }
+  },
 };

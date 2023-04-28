@@ -26,8 +26,8 @@ import OrderList from "./Pages/OrderList"; //design testing
 function App() {
   const location = useLocation();
   const dispatch = useDispatch();
-  const roleId = useSelector((state) => state.authReducer.roleId);
-  // console.log("ini isi roleId dari useSelector di App.js : ", roleId);
+  const role = useSelector((state) => state.authReducer.role);
+  console.log("ini isi role dari useSelector di App.js : ", role);
 
   const keeplogin = async () => {
     try {
@@ -58,13 +58,13 @@ function App() {
       {location.pathname === "/editprofile" && <Navbar />}
       {location.pathname === "/productdetail" && <Navbar />}
       {location.pathname === "/transactionpage" && <Navbar />}
-      {location.pathname === "/dashboard" && roleId == 2 && <Navbar />}
-      {location.pathname === "/tenantcalendar" && roleId == 2 && <Navbar />}
-      {location.pathname === "/orderlist" && roleId == 2 && <Navbar />}
+      {location.pathname === "/dashboard" && role == "Tenant" && <Navbar />}
+      {location.pathname === "/tenantcalendar" && role == "Tenant" && <Navbar />}
+      {location.pathname === "/orderlist" && role == "Tenant" && <Navbar />}
 
       {
         // User
-        roleId == 1 ? (
+        role == "User" ? (
           <Routes>
             <Route path="/changepassword" element={<ChangePassword />} />
             <Route path="/userregister" element={<UserRegister />} />
@@ -82,7 +82,7 @@ function App() {
             />
           </Routes>
         ) : // Tenant
-        roleId == 2 ? (
+        role == "Tenant" ? (
           <Routes>
             <Route path="/changepassword" element={<ChangePassword />} />
             <Route path="/userregister" element={<UserRegister />} />
