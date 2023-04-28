@@ -31,10 +31,12 @@ export default function UserRegister() {
     const [password, setPassword] = React.useState('');
     const [passwordConfirmation, setPasswordConfirmation] = React.useState('');
     const { isOpen, onOpen, onClose } = useDisclosure();
+    const [loading, setLoading] = React.useState(false);
 
 
     const onBtnRegister = async () => {
         try {
+            setLoading(true);
             await formik.validateForm();
             if (!formik.isValid) {
                 return; 
@@ -58,6 +60,8 @@ export default function UserRegister() {
             alert(error.response.data.message);
             alert(error.response.data.error[0].msg);
             alert(error.response.data.error[1].msg);
+        } finally {
+            setLoading(false); //after call is complete
         }
     }
 
@@ -218,6 +222,7 @@ export default function UserRegister() {
                                 bg: '#D3212D',
                             }}
                             onClick={onBtnRegister}
+                            isLoading={loading}
                         >
                             Register
                         </Button>

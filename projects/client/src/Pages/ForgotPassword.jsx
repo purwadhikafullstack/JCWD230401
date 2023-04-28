@@ -16,9 +16,11 @@ import * as yup from "yup";
 
 export default function ForgotPassword() {
     const [email, setEmail] = React.useState('');
+    const [loading, setLoading] = React.useState(false);
 
     const onBtnForgotPassword = async () => {
         try {
+            setLoading(true); //before making the api call
             await formik.validateForm();
             if (!formik.isValid) {
                 return; 
@@ -32,6 +34,8 @@ export default function ForgotPassword() {
             console.log("ini error dari onBtnForgotPassword : ", error); //testing purposes
             alert(error.response.data.message);
             alert(error.response.data.error[0].msg);
+        } finally {
+            setLoading(false); //after call is complete
         }
     }
 
@@ -96,6 +100,7 @@ export default function ForgotPassword() {
                             bg: '#D3212D',
                         }}
                         onClick={onBtnForgotPassword}
+                        isLoading={loading}
                     >
                         Request Reset Password
                     </Button>

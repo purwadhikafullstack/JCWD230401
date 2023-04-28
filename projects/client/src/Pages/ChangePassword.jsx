@@ -7,7 +7,7 @@ import {
     Heading,
     Input,
     Stack,
-    useColorModeValue, InputGroup, InputRightElement, FormErrorMessage
+    InputGroup, InputRightElement, FormErrorMessage
 } from '@chakra-ui/react';
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
 import axios from 'axios';
@@ -24,10 +24,11 @@ export default function ChangePassword() {
     const [showPasswordConfirmation, setShowPasswordConfirmation] = useState(false);
     const [passwordConfirmation, setPasswordConfirmation] = React.useState('');
     const navigate = useNavigate();
-
+    const [loading, setLoading] = React.useState(false);
 
     const onBtnChangePassword = async () => {
         try {
+            setLoading(true);
             let token = localStorage.getItem("tempatku_login");
             await formik.validateForm(); 
             if (!formik.isValid) {
@@ -52,6 +53,8 @@ export default function ChangePassword() {
             console.log("ini error dari onBtnChangePassword : ", error); //testing purposes
             alert(error.response.data.message);
             alert(error.response.data.error[0].msg);
+        } finally {
+            setLoading(false); 
         }
     }
 
@@ -104,12 +107,12 @@ export default function ChangePassword() {
             minH={'100vh'}
             align={'center'}
             justify={'center'}
-            bg={useColorModeValue('gray.50', 'gray.800')}>
+            bg={'gray.50'}>
             <Stack
                 spacing={4}
                 w={'full'}
                 maxW={'md'}
-                bg={useColorModeValue('white', 'gray.700')}
+                bg={'white'}
                 rounded={'xl'}
                 boxShadow={'lg'}
                 p={6}
@@ -194,6 +197,7 @@ export default function ChangePassword() {
                             bg: '#D3212D',
                         }}
                         onClick={onBtnChangePassword}
+                        isLoading={loading}
                     >
                         Change Password
                     </Button>

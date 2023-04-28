@@ -1,11 +1,12 @@
+import "./TenantCalendar.css";
 import React, { useState } from "react";
 import Fullcalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import { Box, Flex, Stack, Text, UnorderedList, OrderedList, ListItem, Modal, Button, ModalOverlay, ModalContent, ModalHeader, ModalBody, ModalFooter } from "@chakra-ui/react";
-import Sidebar from "../Components/Sidebar";
-import { API_URL } from '../helper';
+import Sidebar from "../../Components/Sidebar";
+import { API_URL } from '../../helper';
 import axios from 'axios';
 
 function TenantCalendar() {
@@ -132,7 +133,7 @@ function TenantCalendar() {
   console.log("ini isi dari availableRooms :", availableRooms); // testing for map 
   const printAvailableRooms = () => {
     let print = availableRooms.map((val, idx) => {
-      return { 
+      return {
         property: val.property.property,
         name: val.room_category.name,
         description: val.description,
@@ -158,54 +159,55 @@ function TenantCalendar() {
   };
 
   //right side bar info
-  const printThisMonthsBookings = () => {
-    return roomOrders.map((val, idx) => {
-      const { start_date, end_date, room } = val;
-      const name = room ? room.room_category.name : "Room not available";
-      const property = room && room.property ? room.property.property : "Property not available";
-      const startDate = new Date(start_date).toLocaleDateString('id-ID');
-      const endDate = new Date(end_date).toLocaleDateString('id-ID');
-      if (!room) {
-        return;
-      }
-      return (
-        <ListItem key={idx} fontSize={'sm'}>
-          {name}, {property} ({startDate} to {endDate})
-        </ListItem>
-      );
-    });
-  };
-  const printThisMonthsMaintenances = () => {
-    return roomMaintenances.map((val, idx) => {
-      const { startDate, endDate, room } = val;
-      const name = room ? room.room_category.name : "Room not available";
-      const property = room && room.property ? room.property.property : "Property not available";
-      const startDateFormat = new Date(startDate).toLocaleDateString('id-ID');
-      const endDateFormat = new Date(endDate).toLocaleDateString('id-ID');
-      if (!room) {
-        return;
-      }
-      return (
-        <ListItem key={idx} fontSize={'sm'}>
-          {name}, {property} ({startDateFormat} to {endDateFormat})
-        </ListItem>
-      );
-    });
-  };
+  // const printThisMonthsBookings = () => {
+  //   return roomOrders.map((val, idx) => {
+  //     const { start_date, end_date, room } = val;
+  //     const name = room ? room.room_category.name : "Room not available";
+  //     const property = room && room.property ? room.property.property : "Property not available";
+  //     const startDate = new Date(start_date).toLocaleDateString('id-ID');
+  //     const endDate = new Date(end_date).toLocaleDateString('id-ID');
+  //     if (!room) {
+  //       return;
+  //     }
+  //     return (
+  //       <ListItem key={idx} fontSize={'sm'}>
+  //         {name}, {property} ({startDate} to {endDate})
+  //       </ListItem>
+  //     );
+  //   });
+  // };
+  // const printThisMonthsMaintenances = () => {
+  //   return roomMaintenances.map((val, idx) => {
+  //     const { startDate, endDate, room } = val;
+  //     const name = room ? room.room_category.name : "Room not available";
+  //     const property = room && room.property ? room.property.property : "Property not available";
+  //     const startDateFormat = new Date(startDate).toLocaleDateString('id-ID');
+  //     const endDateFormat = new Date(endDate).toLocaleDateString('id-ID');
+  //     if (!room) {
+  //       return;
+  //     }
+  //     return (
+  //       <ListItem key={idx} fontSize={'sm'}>
+  //         {name}, {property} ({startDateFormat} to {endDateFormat})
+  //       </ListItem>
+  //     );
+  //   });
+  // };
 
   return (
     <Flex
       minH={'100vh'}
-      // align={'center'}
-      // justify={'center'}
-      // p={12}
+    // align={'center'}
+    // justify={'center'}
+    // p={12}
     >
       <Box>
         <Sidebar />
       </Box>
-      <Box w='full' flex='5' px='4' mt='10'>
+      <Box w='full' flex='5' px={{ base: '2', sm: '10' }} mt='10'>
         <Fullcalendar
-          w='full'
+          className="my-calendar"
+          // w='full'
           plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
           initialView={"dayGridMonth"}
           headerToolbar={{
@@ -219,7 +221,7 @@ function TenantCalendar() {
           dayMaxEvents={2} // set the max number of events displayed per day to 1
           dateClick={dateClick}
         />
-        <Modal isOpen={modalIsOpen} onClose={() => setModalIsOpen(false)}>
+        <Modal isOpen={modalIsOpen} onClose={() => setModalIsOpen(false)} scrollBehavior={'inside'}>
           <ModalOverlay />
           <ModalContent>
             <ModalHeader>Available Properties & Rooms on {selectedDate} :</ModalHeader>
@@ -248,7 +250,8 @@ function TenantCalendar() {
         </Modal>
 
       </Box>
-      <Box p={12} flex='1' >
+      {/* RIGHT CONTENT */}
+      {/* <Box p={12} flex='1' >
         <Stack spacing={12} align={'start'} mb={5}>
           <Box>
             <Text fontWeight={'semibold'}>Bookings:</Text>
@@ -267,7 +270,7 @@ function TenantCalendar() {
             </Box>
           </Box>
         </Stack>
-      </Box>
+      </Box> */}
     </Flex>
   );
 }

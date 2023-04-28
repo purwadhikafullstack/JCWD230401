@@ -19,7 +19,7 @@ import Verification from "./Pages/Verification";
 import ProductDetail from "./Pages/ProductDetail/ProductDetail";
 import TransactionPage from "./Pages/TransactionPage";
 import EditProfile from "./Pages/EditProfile";
-import TenantCalendar from "./Pages/TenantCalendar";
+import TenantCalendar from "./Pages/TenantCalendar/TenantCalendar";
 import PaymentDetail from "./Pages/PaymentDetail"; //design testing
 import OrderList from "./Pages/OrderList"; //design testing
 

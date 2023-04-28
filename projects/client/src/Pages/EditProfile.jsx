@@ -31,8 +31,10 @@ export default function EditProfile(props) {
     const modalProfileImage = useDisclosure()
     const [profileImage, setProfileImage] = useState(null);
     const inputFile = useRef(null);
+    const [loading1, setLoading1] = useState(false);
+    const [loading2, setLoading2] = useState(false);
+    
     console.log("ini isi dari roleId edit profile:", roleId); //testing
-   
 
     const handleGenderChange = (value) => {
         setGender(value);
@@ -46,6 +48,7 @@ export default function EditProfile(props) {
 
     const onBtnEditProfile = async () => {
         try {
+            setLoading1(true);
             await formik.validateForm();
             let token = localStorage.getItem("tempatku_login");
             if (formik.values.name.trim() === "") {
@@ -80,6 +83,8 @@ export default function EditProfile(props) {
             console.log("ini error dari onBtnEditProfile : ", error); //testing purposes
             // alert(error.response.data.message);
             alert(error.response.data.error[0].msg);
+        } finally {
+            setLoading1(false); 
         }
     }
 
@@ -120,6 +125,7 @@ export default function EditProfile(props) {
 
     const onBtnEditProfileImage = async () => {
         try {
+            setLoading2(true);
             let token = localStorage.getItem("tempatku_login");
             let formData = new FormData();
             // image max size is 1 MB
@@ -150,7 +156,9 @@ export default function EditProfile(props) {
         } catch (error) {
             console.log("ini error dari onBtnEditProfileImage : ", error);
             alert(error.message);
-        }
+        } finally {
+            setLoading2(false); 
+        } 
     };
 
     const onBtnShowKTP = async () => {
@@ -259,7 +267,12 @@ export default function EditProfile(props) {
                                     }} variant='solid'>
                                         Cancel
                                     </Button>
-                                    <Button onClick={onBtnEditProfileImage} colorScheme='green' variant='outline'>Save</Button>
+                                    <Button 
+                                    onClick={onBtnEditProfileImage}
+                                    isLoading={loading2} 
+                                    colorScheme='green' 
+                                    variant='outline'
+                                    >Save</Button>
                                 </ModalFooter>
                             </ModalContent>
                         </Modal>
@@ -271,7 +284,6 @@ export default function EditProfile(props) {
                             placeholder={currentName}
                             _placeholder={{ color: 'black' }}
                             type="text"
-                            // onChange={(e) => setName(e.target.value)}
                             onChange={handleForm}
                             name="name"
                         />
@@ -283,7 +295,6 @@ export default function EditProfile(props) {
                             placeholder={currentEmail}
                             _placeholder={{ color: 'black' }}
                             type="email"
-                            // onChange={(e) => setEmail(e.target.value)}
                             onChange={handleForm}
                             name="email"
                         />
@@ -323,6 +334,7 @@ export default function EditProfile(props) {
                                     type='button'
                                     w='full'
                                     onClick={onBtnEditProfile}
+                                    isLoading={loading1}
                                 >
                                     Save
                                 </Button>
@@ -352,6 +364,7 @@ export default function EditProfile(props) {
                                     type='button'
                                     w='full'
                                     onClick={onBtnEditProfile}
+                                    isLoading={loading1}
                                 >
                                     Save
                                 </Button>

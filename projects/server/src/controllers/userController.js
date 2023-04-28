@@ -820,7 +820,6 @@ module.exports = {
       //2. decrypt base64 
       let decryptbase64 =  decryptImage(imageData);
       console.log("ini imagektp base64 di decrypt:", decryptbase64);
-      //i think di front end diubah balik nya jd image decode? or bisa di backend?
       res.status(200).send(decryptbase64);
     } catch (error) {
       console.log(error);

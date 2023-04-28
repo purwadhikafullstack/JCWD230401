@@ -20,11 +20,13 @@ export default function Login() {
     const dispatch = useDispatch();
     const [emailOrPhone, setEmailOrPhone] = React.useState('');
     const [password, setPassword] = React.useState('');
+    const [loading, setLoading] = React.useState(false);
 
 
 
     const onBtnLogin = async () => {
         try {
+            setLoading(true);
             await formik.validateForm(); // trigger form validation
             if (!formik.isValid) {
                 return; 
@@ -57,8 +59,10 @@ export default function Login() {
             alert(error.response.data.message);
             alert(error.response.data.error[0].msg);
             alert(error.response.data.error[2].msg);
+        } finally {
+            setLoading(false); 
         }
-    }
+    };
 
     const formik = useFormik({
         initialValues: {
@@ -159,7 +163,6 @@ export default function Login() {
                                 <Center>
                                     <Stack spacing={2} align={'center'} maxW={'md'} w={'full'}>
                                         <Button
-                                            loadingText="Submitting"
                                             type='button'
                                             w={'full'}
                                             bg={'#D3212D'}
@@ -168,6 +171,7 @@ export default function Login() {
                                                 bg: '#D3212D',
                                             }}
                                             onClick={onBtnLogin}
+                                            isLoading={loading}
                                         >
                                             Login
                                         </Button>

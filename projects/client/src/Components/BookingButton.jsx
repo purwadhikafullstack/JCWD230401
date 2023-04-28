@@ -34,7 +34,7 @@ export default function BookingButton() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const navigate = useNavigate();
   const isVerified = useSelector((state) => state.authReducer.isVerified);
-
+  const [loading, setLoading] = React.useState(false);
 
    //1. get current date and count from localStorage 
   const countSendOTP = parseInt(localStorage.getItem('countSendOTP')); 
@@ -59,6 +59,7 @@ export default function BookingButton() {
   //inside modal alert cannot continue to transaction page
   const onBtnSendVerifyEmail = async () => {
     try {
+      setLoading(true);
       if (countSendOTP < 5) {
         let token = localStorage.getItem("tempatku_login");
         let response = await axios.post(`${API_URL}/user/sendverificationemail`, {}, {
@@ -77,8 +78,11 @@ export default function BookingButton() {
     } catch (error) {
       console.log("ini error dari onBtnSendVerifyEmail :", error);
       navigate('/transactionpage');
-    }
+    } finally {
+      setLoading(false); 
   }
+  };
+  
   return (
     <>
       {
@@ -107,7 +111,6 @@ export default function BookingButton() {
                     Click the button below an we will send you an email to verify your account</p>
                   <br />
                   <Button
-                    loadingText="Submitting"
                     bg={'#D3212D'}
                     color={'white'}
                     _hover={{
@@ -115,6 +118,7 @@ export default function BookingButton() {
                     }}
                     type='button'
                     onClick={onBtnSendVerifyEmail}
+                    isLoading={loading}
                     w='full'
                   >
                     Send Verification Email

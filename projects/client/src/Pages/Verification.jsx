@@ -7,16 +7,20 @@ import {
   Input,
   Stack,
   HStack,
-  FormLabel
+  FormLabel, FormErrorMessage
 } from '@chakra-ui/react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { API_URL } from '../helper';
 import axios from 'axios';
+import { useFormik } from 'formik';
+import * as yup from "yup";
 
 export default function Verification() {
   const params = useParams(); //to get token from email link for auth
   const navigate = useNavigate();
   const [verificationCode, setVerificationCode] = useState(''); //verification code
+  const [loading1, setLoading1] = React.useState(false);
+  const [loading2, setLoading2] = React.useState(false);
   console.log("ini isi token dari params", params); //testing purposes
   console.log("ini isi input field otp code :", verificationCode); //testing purposes
 
@@ -40,6 +44,7 @@ export default function Verification() {
   //Send Verification Email
   const onBtnSendVerifyEmail = async () => {
     try {
+      setLoading2(true);
       if (countSendOTP < 5) {
         let response = await axios.post(`${API_URL}/user/sendverificationemail`, {}, {
           headers: {
@@ -62,17 +67,23 @@ export default function Verification() {
         navigate('/', { replace: true });
       } else {
         alert(error.response.data.message);
-        navigate('/', { replace: true });
       }
+    } finally {
+      setLoading2(false);
     }
   };
 
   //Verify Account 
   const onBtnVerify = async () => {
     try {
+      setLoading1(true);
+      await formik.validateForm();
+            if (!formik.isValid) {
+                return;
+            }
       let response = await axios.patch(`${API_URL}/user/verifyaccount`,
         {
-          otp: verificationCode
+          otp: formik.values.verificationCode
         }
         , {
           headers: {
@@ -90,10 +101,26 @@ export default function Verification() {
         navigate('/', { replace: true });
       } else {
         alert(error.response.data.message);
-        navigate('/', { replace: true });
       }
-    }
+    } finally {
+      setLoading1(false); 
+  }
   };
+
+  const formik = useFormik({
+    initialValues: {
+        verificationCode: ""
+    },
+    onSubmit: onBtnVerify,
+    validationSchema: yup.object().shape({
+        verificationCode: yup.string()
+            .required("OTP code is a required field")
+    })
+});
+
+const handleForm = (event) => {
+    formik.setFieldValue(event.target.name, event.target.value);
+};
 
   return (
     <Flex
@@ -124,11 +151,14 @@ export default function Verification() {
         <FormControl>
           <Center>
             <HStack>
-              <FormControl>
+              <FormControl isInvalid={formik.errors.verificationCode}>
                 <FormLabel>Input your OTP code here :</FormLabel>
                 <Input type="text"
-                  onChange={(e) => setVerificationCode(e.target.value)}
+                  // onChange={(e) => setVerificationCode(e.target.value)}
+                  onChange={handleForm}
+                  name="verificationCode"
                 />
+                 <FormErrorMessage fontSize='xs'>{formik.errors.verificationCode}</FormErrorMessage>
               </FormControl>
             </HStack>
           </Center>
@@ -149,6 +179,7 @@ export default function Verification() {
             }}
             type='button'
             onClick={onBtnVerify}
+            isLoading={loading1}
           >
             Verify
           </Button>
@@ -162,6 +193,7 @@ export default function Verification() {
             borderColor={'#D3212D'}
             onClick={onBtnSendVerifyEmail}
             type='button'
+            isLoading={loading2}
           >
             Resend OTP
           </Button>

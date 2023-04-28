@@ -33,10 +33,12 @@ export default function TenantRegister() {
     const [fileImage, setFileImage] = useState(null);  //state for idcard
     const inputFile = useRef(null);
     const [image, setImage] = useState("https://fakeimg.pl/350x200/");
+    const [loading, setLoading] = React.useState(false);
 
     console.log("isi fileimage: ", fileImage);
     const onBtnRegister = async () => {
         try {
+             setLoading(true);
             await formik.validateForm();
             let formData = new FormData();
             formData.append(
@@ -49,10 +51,6 @@ export default function TenantRegister() {
                     confirmationPassword: formik.values.passwordConfirmation
                 })
             );
-            // formData.append(
-            //     "images",
-            //     formik.values.fileImage
-            // )
             //1. function that will read the file image and return a Promise that resolves with the base64 data:
              const toBase64 = (file) =>
                 new Promise((resolve, reject) => {
@@ -76,10 +74,11 @@ export default function TenantRegister() {
             if (response.data.success) {
                 alert(response.data.message);
             }
-            // navigate('/', { replace: true });
         } catch (error) {
             console.log("ini error dari onBtnRegister : ", error); //testing purposes
             alert(error.response.data.message);
+        } finally {
+            setLoading(false);
         }
     }
 
@@ -301,6 +300,7 @@ export default function TenantRegister() {
                                 bg: '#D3212D',
                             }}
                             onClick={onBtnRegister}
+                            isLoading={loading}
                         >
                             Register
                         </Button>

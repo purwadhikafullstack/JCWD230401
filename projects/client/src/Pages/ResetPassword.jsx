@@ -24,17 +24,20 @@ export default function ResetPassword() {
     const [verificationCode, setVerificationCode] = useState('');
     const navigate = useNavigate();
     const params = useParams(); //data token di params
+    const [loading, setLoading] = React.useState(false);
+
 
     const onBtnResetPassword = async () => {
         try {
+            setLoading(true);
             await formik.validateForm();
             if (!formik.isValid) {
-                return; 
+                return;
             }
             let response = await axios.patch(`${API_URL}/user/resetpw`, {
                 newPassword: formik.values.newPassword,
                 confirmationPassword: formik.values.passwordConfirmation,
-                otp: verificationCode
+                otp: formik.values.verificationCode
             }, {
                 headers: {
                     Authorization: `Bearer ${params.token}`
@@ -46,8 +49,10 @@ export default function ResetPassword() {
         } catch (error) {
             console.log("ini error dari onBtnResetPassword : ", error);
             alert(error.response.data.message);
-            alert(error.response.data.error[0].msg); //error msg validator new pw
-            alert(error.response.data.error[1].msg); //error msg validator confirmation pw
+            // alert(error.response.data.error[0].msg); //error msg validator new pw
+            // alert(error.response.data.error[1].msg); //error msg validator confirmation pw
+        } finally {
+            setLoading(false);
         }
     }
 
@@ -56,7 +61,8 @@ export default function ResetPassword() {
     const formik = useFormik({
         initialValues: {
             newPassword: "",
-            passwordConfirmation: ""
+            passwordConfirmation: "",
+            verificationCode: ""
         },
         onSubmit: onBtnResetPassword,
         validationSchema: yup.object().shape({
@@ -66,13 +72,6 @@ export default function ResetPassword() {
                 .matches(
                     /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{6,})/,
                     "Password must be at least 6 characters includes 1 number, 1 uppercase, and 1 lowercase letter"
-                )
-                .test(
-                    "different from old password",
-                    "New password must be different from old password",
-                    function (value) {
-                        return value !== this.parent.oldPassword;
-                    }
                 ),
             passwordConfirmation: yup
                 .string()
@@ -82,6 +81,8 @@ export default function ResetPassword() {
                     "Password must be at least 6 characters includes 1 number, 1 uppercase, and 1 lowercase letter"
                 )
                 .oneOf([yup.ref('newPassword'), null], 'Passwords must match'), //check if the value matches "password" field
+            verificationCode: yup.string()
+                .required("OTP code is a required field")
         })
     });
 
@@ -153,12 +154,14 @@ export default function ResetPassword() {
                     </InputGroup>
                     <FormErrorMessage fontSize='xs'>{formik.errors.passwordConfirmation}</FormErrorMessage>
                 </FormControl>
-                <FormControl>
-                <FormLabel>To complete your password reset, please enter the OTP code sent to your email below :</FormLabel>
-                <Input type="text"
-                  onChange={(e) => setVerificationCode(e.target.value)}
-                />
-              </FormControl>
+                <FormControl isInvalid={formik.errors.verificationCode}>
+                    <FormLabel>To complete your password reset, please enter the OTP code sent to your email below :</FormLabel>
+                    <Input type="text"
+                        onChange={handleForm}
+                        name="verificationCode"
+                    />
+                    <FormErrorMessage fontSize='xs'>{formik.errors.verificationCode}</FormErrorMessage>
+                </FormControl>
                 <Stack spacing={6}>
                     <Button
                         bg={'#D3212D'}
@@ -168,6 +171,7 @@ export default function ResetPassword() {
                         }}
                         type='button'
                         onClick={onBtnResetPassword}
+                        isLoading={loading}
                     >
                         Reset Password
                     </Button>
