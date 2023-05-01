@@ -1,12 +1,12 @@
 import {
-    Flex, Text, Box, Heading, Link, Stack, Button, VStack, useBreakpointValue,
+    Flex, Text, Box, Heading, Stack, Button, VStack, useBreakpointValue,
     InputGroup, InputLeftElement, Image, Input, Menu, MenuButton, MenuList, MenuItem, SimpleGrid, Select,
     Grid, GridItem, Divider, List, ListItem
 } from '@chakra-ui/react';
 import React, { useState, useEffect } from 'react';
 import Footer from '../../Components/Footer';
 import { SearchIcon } from "@chakra-ui/icons";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import axios from 'axios';
 import { API_URL } from '../../helper';
 import BannerImage from "./images/banner.png"
@@ -28,6 +28,10 @@ import Bandung1 from './images/bandung-1.jpg';
 import Bali1 from './images/bali-1.png';
 import NusaPenida1 from './images/nusapenida-1.png';
 import RecommendPropertyCard from "../../Components/RecommendPropertyCard";
+import Slider from "react-slick";
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
+import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 
 
 export default function LandingNew() {
@@ -45,6 +49,8 @@ export default function LandingNew() {
     const [inputLocation, setInputLocation] = useState('');
     const [showLocation, setShowLocation] = useState([]);
     const [recommendProperty, setRecommendProperty] = useState([]);
+    const [category, setCategory] = useState('');
+
 
     //API to fetch search result (Location Search Bar)
     const onSearch = (searchTerm) => {
@@ -102,25 +108,6 @@ export default function LandingNew() {
         })
     };
 
-    // const getAllProperty = async () => {
-    //     let get = await axios.get(`${API_URL}/property`);
-    //     console.log("get all property", get)
-    //     setAllProperty(get.data)
-    // };
-
-    // const printAllProperty = () => {
-    //     return allProperty.map((val, idx) => {
-    //         return <PropertyCard property={val.property} picture={val.picture_properties[0]?.picture}
-    //             location={val.property_location} price={val.rooms[0]?.price} />
-    //     })
-    // };
-
-    // useEffect(() => {
-    //     getAllProperty()
-    // }, []);
-
-
-
     const getRecommendProperty = async () => {
         try {
             let response = await axios.get(`${API_URL}/landing/property-recommendation`);
@@ -130,7 +117,6 @@ export default function LandingNew() {
             console.log("ini error dari getRecommendProperty:", error);
         }
     };
-
     console.log("ini isi RecommendProperty:", recommendProperty);
 
     //kirim via props ke recommendpropertycard
@@ -156,6 +142,114 @@ export default function LandingNew() {
     useEffect(() => {
         getRecommendProperty()
     }, []);
+
+    //react-slick slider category
+    const settingsCategory = {
+        infinite: true,
+        slidesToShow: 3,
+        slidesToScroll: 2,
+        initialSlide: 0,
+        responsive: [
+            {
+                breakpoint: 1024,
+                settings: {
+                    slidesToShow: 3,
+                    slidesToScroll: 1,
+                    infinite: true,
+                },
+            },
+            {
+                breakpoint: 600,
+                settings: {
+                    slidesToShow: 1,
+                    slidesToScroll: 1,
+                    infinite: true,
+                },
+            },
+            {
+                breakpoint: 480,
+                settings: {
+                    slidesToShow: 1,
+                    slidesToScroll: 1,
+                    infinite: true,
+                    prevArrow: false,
+                    nextArrow: false
+                },
+            },
+        ],
+    };
+
+    //react-slick slider destinations
+    const settingsDestinations = {
+        infinite: true,
+        slidesToShow: 4,
+        slidesToScroll: 2,
+        initialSlide: 0,
+        responsive: [
+            {
+                breakpoint: 1024,
+                settings: {
+                    slidesToShow: 3,
+                    slidesToScroll: 1,
+                    infinite: true,
+                },
+            },
+            {
+                breakpoint: 600,
+                settings: {
+                    slidesToShow: 1,
+                    slidesToScroll: 1,
+                    infinite: true,
+                },
+            },
+            {
+                breakpoint: 480,
+                settings: {
+                    slidesToShow: 1,
+                    slidesToScroll: 1,
+                    infinite: true,
+                    prevArrow: false,
+                    nextArrow: false
+                },
+            },
+        ],
+    };
+
+    //react-slick slider property recommendation
+    const settingsRecommendation = {
+        infinite: true,
+        slidesToShow: 4,
+        slidesToScroll: 2,
+        initialSlide: 0,
+        responsive: [
+            {
+                breakpoint: 1024,
+                settings: {
+                    slidesToShow: 2,
+                    slidesToScroll: 1,
+                    infinite: true,
+                },
+            },
+            {
+                breakpoint: 600,
+                settings: {
+                    slidesToShow: 1,
+                    slidesToScroll: 1,
+                    infinite: true,
+                },
+            },
+            {
+                breakpoint: 480,
+                settings: {
+                    slidesToShow: 1,
+                    slidesToScroll: 1,
+                    infinite: true,
+                    prevArrow: false,
+                    nextArrow: false
+                },
+            },
+        ],
+    };
 
 
     return (
@@ -321,43 +415,83 @@ export default function LandingNew() {
                 >
                     Browse by property type
                 </Heading>
-                <Box my={{ base: "40px", md: "80px" }} overflowX={'auto'}>
-                    <SimpleGrid columns={{ base: 1, md: 3 }} spacing={{ base: 5, lg: 8 }} >
-                        <Box position="relative" overflow="hidden" borderRadius="10px" fontSize="18px"
-                            transition="opacity 0.3s"
-                            _hover={{ opacity: 0.7 }}
-                            cursor='pointer'
-                        >
-                            <Image src={Hotels1}
-                                alt="Hotels" w="100%" borderRadius="10px" />
-                            <Text position="absolute" top="50%" left="50%" transform="translate(-50%,-50%)" textAlign="center" color="white" fontSize={{ base: "26px", md: "20px", lg: "26px" }}>
-                                Hotels
-                            </Text>
+                <Box my={{ base: "40px", md: "80px" }}>
+                    {/* <SimpleGrid columns={{ base: 1, md: 3 }} spacing={{ base: 5, lg: 8 }} > */}
+                    <Slider {...settingsCategory} prevArrow={<FaChevronLeft color="#E2E8F0" />} nextArrow={<FaChevronRight color="#E2E8F0" />}>
+                        <Box p='2'>
+                            <Link to={{
+                                pathname: "/property/filter",
+                                state: { category: "Hotel" }
+                            }} >
+                                <Box position="relative" overflow="hidden" borderRadius="10px" fontSize="18px"
+                                    transition="opacity 0.3s"
+                                    _hover={{ opacity: 0.7 }}
+                                    cursor='pointer'
+                                >
+                                    <Image src={Hotels1}
+                                        alt="Hotels" w="100%" borderRadius="10px" />
+                                    <Text position="absolute" top="50%" left="50%" transform="translate(-50%,-50%)" textAlign="center" color="white" fontSize={{ base: "26px", md: "20px", lg: "26px" }}>
+                                        Hotels
+                                    </Text>
+                                </Box>
+                            </Link>
                         </Box>
-
-                        <Box position="relative" overflow="hidden" borderRadius="10px" fontSize="18px"
-                            transition="opacity 0.3s"
-                            _hover={{ opacity: 0.7 }}
-                            cursor='pointer'
-                        >
-                            <Image src={Homestays1}
-                                alt="Hotels" w="100%" borderRadius="10px" />
-                            <Text position="absolute" top="50%" left="50%" transform="translate(-50%,-50%)" textAlign="center" color="white" fontSize={{ base: "26px", md: "20px", lg: "26px" }}>
-                                Apartments
-                            </Text>
+                        <Box p='2'>
+                            <Link to={{
+                                pathname: "/property/filter",
+                                state: { category: "Apartment" }
+                            }} >
+                                <Box position="relative" overflow="hidden" borderRadius="10px" fontSize="18px"
+                                    transition="opacity 0.3s"
+                                    _hover={{ opacity: 0.7 }}
+                                    cursor='pointer'
+                                >
+                                    <Image src={Homestays1}
+                                        alt="Hotels" w="100%" borderRadius="10px" />
+                                    <Text position="absolute" top="50%" left="50%" transform="translate(-50%,-50%)" textAlign="center" color="white" fontSize={{ base: "26px", md: "20px", lg: "26px" }}>
+                                        Apartments
+                                    </Text>
+                                </Box>
+                            </Link>
                         </Box>
-                        <Box position="relative" overflow="hidden" borderRadius="10px" fontSize="18px"
-                            transition="opacity 0.3s"
-                            _hover={{ opacity: 0.7 }}
-                            cursor='pointer'
-                        >
-                            <Image src={GuestHouse1}
-                                alt="Hotels" w="100%" borderRadius="10px" />
-                            <Text position="absolute" top="50%" left="50%" transform="translate(-50%,-50%)" textAlign="center" color="white" fontSize={{ base: "26px", md: "20px", lg: "26px" }}>
-                                Villas
-                            </Text>
+                        <Box p='2'>
+                            <Link to={{
+                                pathname: "/property/filter",
+                                state: { category: "Villa" }
+                            }} >
+                                <Box position="relative" overflow="hidden" borderRadius="10px" fontSize="18px"
+                                    transition="opacity 0.3s"
+                                    _hover={{ opacity: 0.7 }}
+                                    cursor='pointer'
+                                >
+                                    <Image src={Villas1}
+                                        alt="Hotels" w="100%" borderRadius="10px" />
+                                    <Text position="absolute" top="50%" left="50%" transform="translate(-50%,-50%)" textAlign="center" color="white" fontSize={{ base: "26px", md: "20px", lg: "26px" }}>
+                                        Villas
+                                    </Text>
+                                </Box>
+                            </Link>
                         </Box>
-                    </SimpleGrid>
+                        <Box p='2'>
+                            <Link to={{
+                                pathname: "/property/filter",
+                                state: { category: "GuestHouse" }
+                            }} >
+                                <Box position="relative" overflow="hidden" borderRadius="10px" fontSize="18px"
+                                    transition="opacity 0.3s"
+                                    _hover={{ opacity: 0.7 }}
+                                    cursor='pointer'
+                                >
+                                    <Image src={GuestHouse1}
+                                        alt="Hotels" w="100%" borderRadius="10px" />
+                                    <Text position="absolute" top="50%" left="50%" transform="translate(-50%,-50%)" textAlign="center" color="white" fontSize={{ base: "26px", md: "20px", lg: "26px" }}>
+                                        Guest House
+                                    </Text>
+                                </Box>
+                            </Link>
+                        </Box>
+                    </Slider>
+                    {/* </SimpleGrid> */}
                 </Box>
                 {/* TOP DESTINATIONS */}
                 <Heading fontSize={{ base: "2xl", md: "4xl" }}
@@ -366,27 +500,58 @@ export default function LandingNew() {
                     textDecoration='underline'
                     style={{ textUnderlineOffset: '0.35em' }}
                 >
-                    Popular Destinations
+                    Top Destinations
                 </Heading>
+                <Text fontWeight="700" align='center' mt="14px">Discover our properties in big cities of Indonesia</Text>
                 <Box my={{ base: "40px", md: "80px" }}>
-                    <SimpleGrid columns={{ base: 1, md: 3, lg: 4 }} spacing={{ base: 5, lg: 8 }}>
-                        <Box position="relative" textAlign="center" overflow="hidden" borderRadius="10px" cursor='pointer'>
-                            <Image src={Kuta1} borderRadius="10px" _hover={{ transform: 'scale(1.1)', transition: '.5s' }} />
-                            <Text position="absolute" top="50%" left="50%" transform="translate(-50%,-50%)" color="#fff" fontSize={{ base: "26px", md: "20px", lg: "26px" }}>Kuta</Text>
+                    {/* <SimpleGrid columns={{ base: 1, md: 3, lg: 4 }} spacing={{ base: 5, lg: 8 }}> */}
+                    <Slider {...settingsDestinations} prevArrow={<FaChevronLeft color="#E2E8F0" />} nextArrow={<FaChevronRight color="#E2E8F0" />}>
+                        <Box p='2'>
+                            <Link to={{
+                                pathname: "/property/filter",
+                                state: { inputLocation: "KOTA DENPASAR" }
+                            }} >
+                                <Box position="relative" textAlign="center" overflow="hidden" borderRadius="10px" cursor='pointer' boxShadow={'xs'}>
+                                    <Image src={Kuta1} borderRadius="10px" _hover={{ transform: 'scale(1.1)', transition: '.5s' }} />
+                                    <Text position="absolute" top="50%" left="50%" transform="translate(-50%,-50%)" color="#fff" fontSize={{ base: "26px", md: "20px", lg: "26px" }}>Denpasar</Text>
+                                </Box>
+                            </Link>
                         </Box>
-                        <Box position="relative" textAlign="center" overflow="hidden" borderRadius="10px" cursor='pointer'>
-                            <Image src={Jakarta1} borderRadius="10px" _hover={{ transform: 'scale(1.1)', transition: '.5s' }} />
-                            <Text position="absolute" top="50%" left="50%" transform="translate(-50%,-50%)" color="#fff" fontSize={{ base: "26px", md: "20px", lg: "26px" }}>Jakarta</Text>
+                        <Box p='2'>
+                            <Link to={{
+                                pathname: "/property/filter",
+                                state: { inputLocation: "KOTA JAKARTA" }
+                            }} >
+                                <Box position="relative" textAlign="center" overflow="hidden" borderRadius="10px" cursor='pointer' boxShadow={'xs'}>
+                                    <Image src={Jakarta1} borderRadius="10px" _hover={{ transform: 'scale(1.1)', transition: '.5s' }} />
+                                    <Text position="absolute" top="50%" left="50%" transform="translate(-50%,-50%)" color="#fff" fontSize={{ base: "26px", md: "20px", lg: "26px" }}>Jakarta</Text>
+                                </Box>
+                            </Link>
                         </Box>
-                        <Box position="relative" textAlign="center" overflow="hidden" borderRadius="10px" cursor='pointer'>
-                            <Image src={Uluwatu1} borderRadius="10px" _hover={{ transform: 'scale(1.1)', transition: '.5s' }} />
-                            <Text position="absolute" top="50%" left="50%" transform="translate(-50%,-50%)" color="#fff" fontSize={{ base: "26px", md: "20px", lg: "26px" }}>Uluwatu</Text>
+                        <Box p='2'>
+                            <Link to={{
+                                pathname: "/property/filter",
+                                state: { inputLocation: "KOTA BOGOR" }
+                            }} >
+                                <Box position="relative" textAlign="center" overflow="hidden" borderRadius="10px" cursor='pointer' boxShadow={'xs'}>
+                                    <Image src={Uluwatu1} borderRadius="10px" _hover={{ transform: 'scale(1.1)', transition: '.5s' }} />
+                                    <Text position="absolute" top="50%" left="50%" transform="translate(-50%,-50%)" color="#fff" fontSize={{ base: "26px", md: "20px", lg: "26px" }}>Bogor</Text>
+                                </Box>
+                            </Link>
                         </Box>
-                        <Box position="relative" textAlign="center" overflow="hidden" borderRadius="10px" cursor='pointer'>
-                            <Image src={Ubud1} borderRadius="10px" _hover={{ transform: 'scale(1.1)', transition: '.5s' }} />
-                            <Text position="absolute" top="50%" left="50%" transform="translate(-50%,-50%)" color="#fff" fontSize={{ base: "26px", md: "20px", lg: "26px" }}>Ubud</Text>
+                        <Box p='2'>
+                            <Link to={{
+                                pathname: "/property/filter",
+                                state: { inputLocation: "KOTA BANDUNG" }
+                            }} >
+                                <Box position="relative" textAlign="center" overflow="hidden" borderRadius="10px" cursor='pointer' boxShadow={'xs'}>
+                                    <Image src={Ubud1} borderRadius="10px" _hover={{ transform: 'scale(1.1)', transition: '.5s' }} />
+                                    <Text position="absolute" top="50%" left="50%" transform="translate(-50%,-50%)" color="#fff" fontSize={{ base: "26px", md: "20px", lg: "26px" }}>Bandung</Text>
+                                </Box>
+                            </Link>
                         </Box>
-                    </SimpleGrid>
+                    </Slider>
+                    {/* </SimpleGrid> */}
                 </Box>
                 {/* TENANT REGISTER BANNER */}
                 <Box
@@ -438,30 +603,32 @@ export default function LandingNew() {
                     Recommended for you
                 </Heading>
                 <Box my={{ base: "40px", md: "80px" }}>
-                    <SimpleGrid columns={{ base: 1, sm: 2, lg: 4 }} spacing={{ base: 5, md: 1, lg: 1 }} >
+                    {/* <SimpleGrid columns={{ base: 1, sm: 2, lg: 4 }} spacing={{ base: 5, md: 1, lg: 1 }} > */}
+                    <Slider {...settingsRecommendation} prevArrow={<FaChevronLeft color="#E2E8F0" />} nextArrow={<FaChevronRight color="#E2E8F0" />}>
                         {printRecommendProperty()}
-                    </SimpleGrid>
-                <Box align='center'>
-                    <Button
-                        bg="#D3212D"
-                        borderRadius="8px"
-                        bgColor="white"
-                        fontSize="18px"
-                        marginTop="30px"
-                        variant='outline'
-                        borderWidth="1px"
-                        color="#D3212D"
-                        borderColor="#D3212D"
-                        _hover={{ bg: "#D3212D", color: "white" }}
-                        p='6'
-                        textAlign='center'
-                        onClick={() => navigate('/property')}
-                    >
-                        <Text>
-                            See more properties
-                        </Text>
-                    </Button>
-                </Box>
+                    </Slider>
+                    {/* </SimpleGrid> */}
+                    <Box align='center'>
+                        <Button
+                            bg="#D3212D"
+                            borderRadius="8px"
+                            bgColor="white"
+                            fontSize="18px"
+                            marginTop="30px"
+                            variant='outline'
+                            borderWidth="1px"
+                            color="#D3212D"
+                            borderColor="#D3212D"
+                            _hover={{ bg: "#D3212D", color: "white" }}
+                            p='6'
+                            textAlign='center'
+                            onClick={() => navigate('/property')}
+                        >
+                            <Text>
+                                See more properties
+                            </Text>
+                        </Button>
+                    </Box>
                 </Box>
             </Box>
             {/* FOOTER */}

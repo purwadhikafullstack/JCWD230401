@@ -107,4 +107,60 @@ module.exports = {
       next(error);
     }
   },
+  //4. GET ALL MY PROPERTY
+  myProperty: async (req, res, next) => {
+    try {
+      let getdata = await model.property.findAll({
+        where: {
+          userId: req.decrypt.id,
+          isDeleted: 0,
+        },
+        include: [
+          {
+            model: model.room,
+            include: [
+              {
+                model: model.review,
+                attributes: [
+                  [sequelize.fn("avg", sequelize.col("rating")), "average_rating"],
+                ],
+              },
+            ],
+            where: {
+              [sequelize.Op.or]: [
+                sequelize.literal(
+                  `(SELECT COUNT(*) FROM reviews WHERE reviews.roomId = rooms.id) > 0`
+                ),
+                sequelize.literal(
+                    `(SELECT COUNT(*) FROM reviews WHERE reviews.roomId = rooms.id) = 0`
+                  ),
+              ]
+            },
+          },
+          {
+            model: model.picture_property
+          },
+          {
+            model: model.property_location,
+            include: [
+              {
+                model: model.province,
+                attributes: ["name"],
+              },
+              {
+                model: model.regency,
+                attributes: ["name"],
+              },
+            ],
+          },
+        ],
+        group: ["property.id"],
+      });
+      console.log("ini isi dari getdata: ", getdata);
+      res.status(200).send(getdata);
+    } catch (error) {
+      console.log(error);
+      next(error);
+    }
+  }
 };

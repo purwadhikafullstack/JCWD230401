@@ -84,13 +84,13 @@ export default function Sidebar() {
                             </Text>
                         </Button>
                     </Box>
-                    <Box h='40px' onClick={() => navigate('/tenantcalendar')}>
+                    {/* <Box h='40px' onClick={() => navigate('/tenantcalendar')}>
                         <Button leftIcon={<FiCalendar size={20} />} variant='none' size="md">
                             <Text ml="2" fontWeight="medium" display={{base:'none', lg:'block'}}>
                                 Calendar
                             </Text>
                         </Button>
-                    </Box>
+                    </Box> */}
                 </VStack>
             </Flex>
 

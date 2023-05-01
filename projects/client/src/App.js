@@ -13,15 +13,12 @@ import ForgotPassword from "./Pages/ForgotPassword";
 import ResetPassword from "./Pages/ResetPassword";
 import Landing from "./Pages/Landing/Landing";
 import TenantRegister from "./Pages/TenantRegister";
-import Dashboard from "./Pages/Dashboard/Dashboard";
+import TenantDashboard from "./Pages/TenantDashboard/TenantDashboard";
 import NotFound from "./Pages/NotFound";
 import Verification from "./Pages/Verification";
 import ProductDetail from "./Pages/ProductDetail/ProductDetail";
 import TransactionPage from "./Pages/TransactionPage";
 import EditProfile from "./Pages/EditProfile";
-import TenantCalendar from "./Pages/TenantCalendar/TenantCalendar";
-import PaymentDetail from "./Pages/PaymentDetail"; //design testing
-import OrderList from "./Pages/OrderList"; //design testing
 
 function App() {
   const location = useLocation();
@@ -60,7 +57,6 @@ function App() {
       {location.pathname === "/transactionpage" && <Navbar />}
       {location.pathname === "/dashboard" && role == "Tenant" && <Navbar />}
       {location.pathname === "/tenantcalendar" && role == "Tenant" && <Navbar />}
-      {location.pathname === "/orderlist" && role == "Tenant" && <Navbar />}
 
       {
         // User
@@ -90,12 +86,10 @@ function App() {
             <Route path="/forgotpassword" element={<ForgotPassword />} />
             <Route path="/resetpassword/:token" element={<ResetPassword />} />
             <Route path="/verifyaccount/:token" element={<Verification />} />
-            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/dashboard" element={<TenantDashboard />} />
             <Route path="/" element={<Landing />} />
             <Route path="*" element={<NotFound />} />
             <Route path="/productdetail" element={<ProductDetail />} />
-            <Route path="/tenantcalendar" element={<TenantCalendar />} />
-            <Route path="/orderlist" element={<OrderList />} />
             <Route
               path="/editprofile"
               element={<EditProfile keeplogin={() => dispatch(keeplogin())} />}
@@ -113,7 +107,6 @@ function App() {
             <Route path="/" element={<Landing />} />
             <Route path="*" element={<NotFound />} />
             <Route path="/productdetail" element={<ProductDetail />} />
-            <Route path="/paymentdetail" element={<PaymentDetail />} />
           </Routes>
         )
       }

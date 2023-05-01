@@ -175,16 +175,16 @@ export default function EditProfile(props) {
             //1. Decode Base64 string into binary data
             const binaryData = atob(response.data);
 
-            //2. Convert the binary data into an array
+            //2. Convert the binary data into an array of numeric values
             const array = [];
             for (let i = 0; i < binaryData.length; i++) {
                 array.push(binaryData.charCodeAt(i));
             }
 
-            //3. Create Blob object from the array
+            //3. Create Blob object from the num val array, with specified MIME type
             const blob = new Blob([new Uint8Array(array)], { type: "image/png" });
 
-            //4. Create URL for the Blob object
+            //4. Create a URL from the Blob object
             const imageUrl = URL.createObjectURL(blob);
 
             // Open the image in a new tab

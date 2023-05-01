@@ -1,0 +1,331 @@
+import "./TenantDashboard.css";
+import React, { useState } from "react";
+import Fullcalendar from "@fullcalendar/react";
+import dayGridPlugin from "@fullcalendar/daygrid";
+import timeGridPlugin from "@fullcalendar/timegrid";
+import interactionPlugin from "@fullcalendar/interaction";
+import { Box, Flex, Stack, Text, UnorderedList, OrderedList, ListItem, Heading, Modal, Button, ModalOverlay, ModalContent, ModalHeader, ModalBody, ModalFooter } from "@chakra-ui/react";
+import Sidebar from "../../Components/Sidebar";
+import { API_URL } from '../../helper';
+import axios from 'axios';
+import { useSelector } from 'react-redux';
+import Slider from "react-slick";
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
+import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
+import CalendarPropertyCard from "../../Components/CalendarPropertyCard";
+
+function TenantDashboard() {
+  const name = useSelector((state) => state.authReducer.name);
+  const [roomOrders, setRoomOrders] = useState([]);
+  const [roomMaintenances, setRoomMaintenances] = useState([]);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [date, setDate] = useState('');
+  const [availableRooms, setAvailableRooms] = useState([]);
+  const [propertyListing, setPropertyListing] = useState([]);
+
+
+  //1. axios booked and under maintenance
+  const getRoomOrders = async () => {
+    try {
+      let token = localStorage.getItem("tempatku_login");
+      let response = await axios.post(`${API_URL}/calendar/room-orders`, {}, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setRoomOrders(response.data)
+      // console.log("response getRoomOrders :", response.data); //testing purposes
+    } catch (error) {
+      console.log("ini error dari getRoomOrders :", error);
+    }
+  };
+
+  const getRoomMaintenances = async () => {
+    try {
+      let token = localStorage.getItem("tempatku_login");
+      let response = await axios.post(`${API_URL}/calendar/room-maintenances`, {}, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setRoomMaintenances(response.data)
+      // console.log("response getRoomMaintenances :", response.data); //testing purposes
+    } catch (error) {
+      console.log("ini error dari getRoomMaintenances :", error);
+    }
+  };
+
+  //2. Jalani fungsi api
+  React.useEffect(() => {
+    getRoomOrders();
+  }, []);
+  React.useEffect(() => {
+    getRoomMaintenances();
+  }, []);
+
+  //3. Print room orders and under maintenances for calendar
+  const printRoomOrders = () => {
+    let print = roomOrders.map((val, idx) => {
+      const { start_date, end_date, room } = val;
+      const name = room ? room.room_category.name : "Room not available";
+      const property = room && room.property ? room.property.property : "Property not available";
+      if (!room) {
+        return null;
+      }
+      return { start_date, end_date, name: name, property: property };
+    });
+    return print;
+  };
+  const printRoomMaintenances = () => {
+    let print = roomMaintenances.map((val, idx) => {
+      const { startDate, endDate, room } = val;
+      const name = room ? room.room_category.name : "Room not available";
+      const property = room && room.property ? room.property.property : "Property not available";
+      if (!room) {
+        return null;
+      }
+      return { startDate, endDate, name: name, property: property };
+    });
+    // console.log("printRoomMaintenances print: ", print);
+    return print;
+  };
+
+  //4. Format calendar
+  const roomEvents1 = printRoomOrders().filter(val => val !== null).map((val) => {
+    const startDate = new Date(val.start_date);
+    const endDate = new Date(val.end_date);
+    endDate.setDate(endDate.getDate() + 1);
+
+    return {
+      title: `${val.property}: ${val.name} booked`,
+      start: startDate.toISOString().split('T')[0],
+      end: endDate.toISOString().split('T')[0],
+    }
+  });
+
+  const roomEvents2 = printRoomMaintenances().filter(val => val !== null).map((val) => {
+    const startDate = new Date(val.startDate);
+    const endDate = new Date(val.endDate);
+    endDate.setDate(endDate.getDate() + 1);
+
+    return {
+      title: `${val.property}: ${val.name} under maintenance`,
+      start: startDate.toISOString().split('T')[0],
+      end: endDate.toISOString().split('T')[0],
+    }
+  });
+
+  const roomEvents = [...roomEvents1, ...roomEvents2];
+
+
+  //1. axios available rooms
+  const onBtnAvailableRooms = async () => {
+    try {
+      let token = localStorage.getItem("tempatku_login");
+      let response = await axios.post(`${API_URL}/calendar/available-rooms`, {
+        date: selectedDate
+      }, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      // console.log("response.data onBtnAvailableRooms :", response.data); //testing purposes
+      setAvailableRooms(response.data);
+    } catch (error) {
+      console.log("ini error dari onBtnAvailableRooms :", error);
+    }
+  };
+
+  //2. print available rooms
+  // console.log("ini isi dari availableRooms :", availableRooms); // testing for map 
+  const printAvailableRooms = () => {
+    let print = availableRooms.map((val, idx) => {
+      return {
+        property: val.property.property,
+        name: val.room_category.name,
+        description: val.description,
+        price: Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(val.price),
+        capacity: val.capacity,
+      };
+    });
+    // console.log("printAvailableRooms print: ", print);
+    return print;
+  }
+
+  //3. Date Click calendar 
+  const openModal = () => {
+    setModalIsOpen(true);
+  };
+
+  const dateClick = async (e) => {
+    const selectedDate = e.dateStr;
+    setSelectedDate(selectedDate);
+    onBtnAvailableRooms(selectedDate); //get the available rooms data from the server
+    openModal();
+    // console.log("ini isi selectedDate: ", selectedDate);
+  };
+
+  //1. axios get my property listings
+  const getMyProperty = async () => {
+    try {
+      let token = localStorage.getItem("tempatku_login");
+      let response = await axios.get(`${API_URL}/calendar/my-property`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      console.log("ini response getmyproperty :", response.data);
+      setPropertyListing(response.data);
+    } catch (error) {
+      console.log("ini error dari getmyproperty:", error);
+    }
+  };
+
+  //2. print listings and send ke props
+  const printMyProperty = () => {
+    return propertyListing.map((val, idx) => {
+      const regency = val.property_location?.regency.name
+        .toLowerCase()
+        .replace(/(^|\s)\S/g, (letter) => letter.toUpperCase());
+      const rating = parseFloat(val.rooms[0]?.reviews[0]?.average_rating);
+      const averageRating = isNaN(rating) ? "No Ratings" : rating.toFixed(2);
+      return <CalendarPropertyCard
+        uuid={val.uuid}
+        property={val.property}
+        picture={val.picture_properties[0]?.picture}
+        regency={regency}
+        country={val.property_location?.country}
+        price={Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(val.rooms[0]?.price)}
+        rating={averageRating}
+      />
+    })
+  };
+
+  //3. jalani fungsi api 
+  React.useEffect(() => {
+    getMyProperty();
+  }, []);
+
+  //react-slick slider my property
+  const numberOfProperties = propertyListing.length;
+  let slidesToShowValue = 3;
+  if (numberOfProperties === 1) {
+    slidesToShowValue = 1;
+  } else if (numberOfProperties === 2) {
+    slidesToShowValue = 2;
+  };
+  const settingsMyProperty = {
+    infinite: true,
+    slidesToShow: slidesToShowValue,
+    slidesToScroll: 1,
+    initialSlide: 0,
+    responsive: [
+      {
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 1,
+          infinite: true,
+        },
+      },
+      {
+        breakpoint: 600,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+          infinite: true,
+        },
+      },
+      {
+        breakpoint: 480,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+          infinite: true,
+          prevArrow: false,
+          nextArrow: false
+        },
+      },
+    ],
+  };
+
+  return (
+    <Flex
+      minH={'100vh'}
+    // align={'center'}
+    // justify={'center'}
+    // p={12}
+    >
+      <Box>
+        <Sidebar />
+      </Box>
+      <Box w='50vw' flex='5' px={{ base: '4', sm: '10' }} bg={'gray.50'} >
+        <br />
+          <Heading mb={{ base: '2', sm: '10' }}>
+          Welcome, {name} 👋
+          </Heading>
+        <Box p={{base:'2', sm:'10'}} bg={'white'} rounded={'xl'} boxShadow={'lg'}>
+          {/* MY PROPERTY */}
+          <Box>
+            <Text fontSize={{ base: '20', sm: '28' }} fontWeight={'semibold'} mb={{ base: '8', sm: '10' }} textAlign={{ base: 'center', sm: 'left' }}>Your Property Listings :</Text>
+            <Slider {...settingsMyProperty} prevArrow={<FaChevronLeft color="#E2E8F0" />} nextArrow={<FaChevronRight color="#E2E8F0" />}>
+              {printMyProperty()}
+            </Slider>
+          </Box>
+        </Box>
+        <br />
+        <Box p={{base:'2', sm:'10'}} bg={'white'} rounded={'xl'} boxShadow={'lg'}>
+          <Text fontSize={{ base: '20', sm: '28' }} fontWeight={'semibold'} mb={{ base: '8', sm: '10' }} textAlign={{ base: 'center', sm: 'left' }}>See Availability by Calendar Date :</Text>
+          <Fullcalendar
+            className="my-calendar"
+            // w='full'
+            plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+            initialView={"dayGridMonth"}
+            headerToolbar={{
+              start: "today prev,next",
+              center: "title",
+              end: "dayGridMonth,timeGridWeek,timeGridDay",
+            }}
+            height={"90vh"}
+            events=
+            {roomEvents}
+            dayMaxEvents={2} // set the max number of events displayed per day to 1
+            dateClick={dateClick}
+          />
+          <Modal isOpen={modalIsOpen} onClose={() => setModalIsOpen(false)} scrollBehavior={'inside'}>
+            <ModalOverlay />
+            <ModalContent>
+              <ModalHeader>Available Properties & Rooms on {selectedDate} :</ModalHeader>
+              <ModalBody>
+                <OrderedList>
+                  {printAvailableRooms().map((val, idx) => {
+                    return (
+                      <li key={idx}>
+                        {val.property}: {val.name}, {val.price}, {val.capacity} adults, {val.description}</li>
+                    );
+                  })}
+                </OrderedList>
+              </ModalBody>
+              <ModalFooter>
+                <Button color='white' bg='blue.500'
+                  _hover={{
+                    bg: 'blue.600',
+                  }}
+                  onClick={() => {
+                    setModalIsOpen(false);
+                  }} variant='solid'>
+                  Close
+                </Button>
+              </ModalFooter>
+            </ModalContent>
+          </Modal>
+        </Box>
+        <br/>
+      </Box>
+    </Flex>
+  );
+}
+
+export default TenantDashboard;

@@ -33,16 +33,7 @@ module.exports = {
       next(error);
     }
   },
-  //3. TOP DESTINATIONS
-  //   topDestination: async (req, res, next) => {
-  //     try {
-  // dari tabel order include property_location
-  //     } catch (error) {
-  //       console.log(error);
-  //       next(error);
-  //     }
-  //   },
-  //4. PROPERTY RECOMMENDATIONS
+  //3. PROPERTY RECOMMENDATIONS
   propertyRecommendation: async (req, res, next) => {
     try {
       // 1. get top rating roomId minimum average rating is 4.00
@@ -54,10 +45,10 @@ module.exports = {
         where: sequelize.literal(
           `roomId NOT IN (SELECT id FROM rooms WHERE isDeleted = 1)`
         ),
-        group: ["roomId"],
+        group: ["propertyId"],
         having: sequelize.literal("AVG(rating) >= 4.00"),
         order: [[sequelize.literal("average_rating"), "DESC"]],
-        limit: 4,
+        limit: 20,
         include: [
           {
             model: model.room,
