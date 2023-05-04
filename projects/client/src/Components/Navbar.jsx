@@ -26,7 +26,7 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { logoutAction } from '../reducers/auth';
 import { API_URL, API_URL_IMG } from '../helper';
-
+import axios from 'axios';
 
 export default function Navbar() {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -35,11 +35,25 @@ export default function Navbar() {
   const dispatch = useDispatch();
   const imageprofile = useSelector((state) => state.authReducer.image_profile);
   const role = useSelector((state) => state.authReducer.role);
+  const password = useSelector((state) => state.authReducer.password);
+
+  console.log("ini isi password useSelector buat google:", password);
 
   const onBtnLogout = () => {
     localStorage.removeItem('tempatku_login');
     dispatch(logoutAction());
     navigate('/', { replace: true });
+  }
+
+  const onBtnLogoutGoogle = async () => {
+    try {
+      let response = await axios.get(`${API_URL}/auth/logout`);
+      dispatch(logoutAction());
+      navigate('/', { replace: true });
+      // console.log("ini respon dari googlelogout :", response);
+    } catch (error) {
+      console.log("ini error dari onBtnGoogleLogout : ", error);
+    }
   }
 
   return (
@@ -120,7 +134,7 @@ export default function Navbar() {
               }
 
               {/* Main Menu */}
-              <Menu >
+              <Menu>
                 <MenuButton
                   as={Button}
                   rounded={'full'}
@@ -146,10 +160,22 @@ export default function Navbar() {
                       <MenuItem onClick={() => navigate('/')}>Home</MenuItem>
                       <MenuItem onClick={() => navigate('/editprofile')}>Profile</MenuItem>
                       <MenuItem>Bookings</MenuItem>
-                      <MenuItem onClick={() => navigate('/changepassword')}>Change Password</MenuItem>
-                      <MenuItem
+                      
+                      {password === "NULL" ? (
+                        <div>
+                        <MenuItem
+                        onClick={onBtnLogoutGoogle}
+                        >Logout</MenuItem>
+                        </div>
+                      ) : (
+                        <div>
+                           
+                        <MenuItem onClick={() => navigate('/changepassword')}>Change Password</MenuItem>
+                        <MenuItem
                         onClick={onBtnLogout}
-                      >Logout</MenuItem>
+                        >Logout</MenuItem>
+                        </div>
+                      )}
                     </MenuList>
                     :
                     // Tenant
@@ -161,7 +187,6 @@ export default function Navbar() {
                         <MenuItem>Manage Property / Rooms</MenuItem>
                         <MenuItem>Transaction</MenuItem>
                         <MenuItem>Report</MenuItem>
-                        <MenuItem onClick={() => navigate('/tenantcalendar')}>Calendar</MenuItem>
                         <MenuItem
                           onClick={onBtnLogout}
                         >Logout</MenuItem>

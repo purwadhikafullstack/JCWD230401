@@ -73,7 +73,7 @@ module.exports = {
       next(error);
     }
   },
-  //3. GET MY AVAILABLE ROOMS (dah ga dipake lg)
+  //3. GET MY AVAILABLE ROOMS 
   availableRooms: async (req, res, next) => {
     try {
       let getdata = await model.room.findAll({

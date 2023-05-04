@@ -55,7 +55,7 @@ export default function LandingNew() {
     //API to fetch search result (Location Search Bar)
     const onSearch = (searchTerm) => {
         setInputLocation(searchTerm); //if suggestion clicked, it will be put inside the input field
-        console.log("Ini adalah search : ", searchTerm);
+        // console.log("Ini adalah search : ", searchTerm);
     };
 
     const getAllLocations = async () => {
@@ -111,13 +111,13 @@ export default function LandingNew() {
     const getRecommendProperty = async () => {
         try {
             let response = await axios.get(`${API_URL}/landing/property-recommendation`);
-            console.log("ini response dari getRecommendProperty :", response.data);
+            // console.log("ini response dari getRecommendProperty :", response.data);
             setRecommendProperty(response.data);
         } catch (error) {
             console.log("ini error dari getRecommendProperty:", error);
         }
     };
-    console.log("ini isi RecommendProperty:", recommendProperty);
+    // console.log("ini isi RecommendProperty:", recommendProperty);
 
     //kirim via props ke recommendpropertycard
     const printRecommendProperty = () => {

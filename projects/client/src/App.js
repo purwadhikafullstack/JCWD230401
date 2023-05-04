@@ -6,7 +6,7 @@ import Navbar from "./Components/Navbar";
 import React, { useState } from "react";
 import UserRegister from "./Pages/UserRegister";
 import { useDispatch, useSelector } from "react-redux";
-import { loginAction } from "./reducers/auth";
+import { loginAction, loginActionGoogle } from "./reducers/auth";
 import { API_URL } from "./helper";
 import ChangePassword from "./Pages/ChangePassword";
 import ForgotPassword from "./Pages/ForgotPassword";
@@ -25,6 +25,10 @@ function App() {
   const dispatch = useDispatch();
   const role = useSelector((state) => state.authReducer.role);
   console.log("ini isi role dari useSelector di App.js : ", role);
+  const [user, setUser] = useState(null); //testing
+  const [userDetails, setUserDetails] = useState(null); //testing
+
+  console.log("isi dari user :", user);
 
   const keeplogin = async () => {
     try {
@@ -36,7 +40,7 @@ function App() {
           },
         });
         console.log("ini respon dari keeplogin :", response.data);
-        localStorage.setItem("tempatku_login", response.data.token);
+        // localStorage.setItem("tempatku_login", response.data.token);
         dispatch(loginAction(response.data));
       }
     } catch (error) {
@@ -48,6 +52,24 @@ function App() {
     keeplogin();
   }, []);
 
+
+  const googlelogin = async () => {
+    try {
+      let response = await axios.get(`${API_URL}/auth/login/success`, {
+        withCredentials: true,
+      });
+      // console.log("ini respon.data.user dari googlelogin :", response.data.getuser[0]);
+      dispatch(loginActionGoogle(response.data));
+    } catch (error) {
+      console.log("ini error dari googlelogin : ", error);
+    }
+  };
+
+  React.useEffect(() => {
+    googlelogin();
+  }, []);
+
+
   return (
     <>
       {location.pathname === "/" && <Navbar />}
@@ -56,7 +78,9 @@ function App() {
       {location.pathname === "/productdetail" && <Navbar />}
       {location.pathname === "/transactionpage" && <Navbar />}
       {location.pathname === "/dashboard" && role == "Tenant" && <Navbar />}
-      {location.pathname === "/tenantcalendar" && role == "Tenant" && <Navbar />}
+      {location.pathname === "/tenantcalendar" && role == "Tenant" && (
+        <Navbar />
+      )}
 
       {
         // User

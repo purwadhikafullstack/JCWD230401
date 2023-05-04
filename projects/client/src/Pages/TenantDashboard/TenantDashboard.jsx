@@ -4,7 +4,7 @@ import Fullcalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
-import { Box, Flex, Stack, Text, UnorderedList, OrderedList, ListItem, Heading, Modal, Button, ModalOverlay, ModalContent, ModalHeader, ModalBody, ModalFooter } from "@chakra-ui/react";
+import { Box, Flex, Stack, Text, UnorderedList, OrderedList, ListItem, Heading, Modal, Button, ModalOverlay, ModalContent, Card, CardHeader, CardBody, CardFooter, ModalHeader, ModalBody, ModalFooter, StackDivider } from "@chakra-ui/react";
 import Sidebar from "../../Components/Sidebar";
 import { API_URL } from '../../helper';
 import axios from 'axios';
@@ -22,6 +22,7 @@ function TenantDashboard() {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
   const [date, setDate] = useState('');
+  const [formatSelectedDate, setFormatSelectedDate] = useState('');
   const [availableRooms, setAvailableRooms] = useState([]);
   const [propertyListing, setPropertyListing] = useState([]);
 
@@ -161,10 +162,13 @@ function TenantDashboard() {
 
   const dateClick = async (e) => {
     const selectedDate = e.dateStr;
+    const date = new Date(selectedDate); 
+    const formatSelectedDate = `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`; //DD-MM-YYYY
+    setFormatSelectedDate(formatSelectedDate);
     setSelectedDate(selectedDate);
     onBtnAvailableRooms(selectedDate); //get the available rooms data from the server
     openModal();
-    // console.log("ini isi selectedDate: ", selectedDate);
+    // console.log("ini isi selectedDate: ", selectedDate); // YYYY-MM-DD
   };
 
   //1. axios get my property listings
@@ -263,10 +267,10 @@ function TenantDashboard() {
       </Box>
       <Box w='50vw' flex='5' px={{ base: '4', sm: '10' }} bg={'gray.50'} >
         <br />
-          <Heading mb={{ base: '2', sm: '10' }}>
+        <Heading mb={{ base: '2', sm: '10' }}>
           Welcome, {name} 👋
-          </Heading>
-        <Box p={{base:'2', sm:'10'}} bg={'white'} rounded={'xl'} boxShadow={'lg'}>
+        </Heading>
+        <Box p={{ base: '2', sm: '10' }} bg={'white'} rounded={'xl'} boxShadow={'lg'}>
           {/* MY PROPERTY */}
           <Box>
             <Text fontSize={{ base: '20', sm: '28' }} fontWeight={'semibold'} mb={{ base: '8', sm: '10' }} textAlign={{ base: 'center', sm: 'left' }}>Your Property Listings :</Text>
@@ -276,7 +280,7 @@ function TenantDashboard() {
           </Box>
         </Box>
         <br />
-        <Box p={{base:'2', sm:'10'}} bg={'white'} rounded={'xl'} boxShadow={'lg'}>
+        <Box p={{ base: '2', sm: '10' }} bg={'white'} rounded={'xl'} boxShadow={'lg'}>
           <Text fontSize={{ base: '20', sm: '28' }} fontWeight={'semibold'} mb={{ base: '8', sm: '10' }} textAlign={{ base: 'center', sm: 'left' }}>See Availability by Calendar Date :</Text>
           <Fullcalendar
             className="my-calendar"
@@ -297,21 +301,67 @@ function TenantDashboard() {
           <Modal isOpen={modalIsOpen} onClose={() => setModalIsOpen(false)} scrollBehavior={'inside'}>
             <ModalOverlay />
             <ModalContent>
-              <ModalHeader>Available Properties & Rooms on {selectedDate} :</ModalHeader>
+              <ModalHeader fontWeight={'semibold'}>
+                <Text fontSize={'2xl'} px='4' pt='4'>
+                  Available Properties & Rooms on
+                </Text>
+                <Text fontSize={'2xl'} px='4'>
+                  {formatSelectedDate} :
+                </Text>
+              </ModalHeader>
               <ModalBody>
-                <OrderedList>
+                <OrderedList p='4' m='auto'>
                   {printAvailableRooms().map((val, idx) => {
                     return (
-                      <li key={idx}>
-                        {val.property}: {val.name}, {val.price}, {val.capacity} adults, {val.description}</li>
+                      <Card mb='2'>
+                        <CardHeader>
+                          <Heading size='md'>{val.property}</Heading>
+                        </CardHeader>
+                        <CardBody>
+                          <Stack divider={<StackDivider />} spacing='4'>
+                            <Box>
+                              <Heading size='xs' textTransform='uppercase'>
+                                Room Name
+                              </Heading>
+                              <Text pt='2' fontSize='sm'>
+                                {val.name}
+                              </Text>
+                            </Box>
+                            <Box>
+                              <Heading size='xs' textTransform='uppercase'>
+                                Price
+                              </Heading>
+                              <Text pt='2' fontSize='sm'>
+                                {val.price}
+                              </Text>
+                            </Box>
+                            <Box>
+                              <Heading size='xs' textTransform='uppercase'>
+                                Capacity
+                              </Heading>
+                              <Text pt='2' fontSize='sm'>
+                                {val.capacity} adults
+                              </Text>
+                            </Box>
+                            <Box>
+                              <Heading size='xs' textTransform='uppercase'>
+                                Description
+                              </Heading>
+                              <Text pt='2' fontSize='sm'>
+                                {val.description}
+                              </Text>
+                            </Box>
+                          </Stack>
+                        </CardBody>
+                      </Card>
                     );
                   })}
                 </OrderedList>
               </ModalBody>
               <ModalFooter>
-                <Button color='white' bg='blue.500'
+                <Button color='white' bg='#D3212D'
                   _hover={{
-                    bg: 'blue.600',
+                    bg: '#D3212D',
                   }}
                   onClick={() => {
                     setModalIsOpen(false);
@@ -322,7 +372,7 @@ function TenantDashboard() {
             </ModalContent>
           </Modal>
         </Box>
-        <br/>
+        <br />
       </Box>
     </Flex>
   );

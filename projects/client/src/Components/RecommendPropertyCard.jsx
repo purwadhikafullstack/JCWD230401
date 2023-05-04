@@ -12,9 +12,9 @@ import noimage from "../assets/noimage.png";
 import { Link } from 'react-router-dom';
 
 export default function RecommendPropertyCard(props) {
-    console.log("props property :", props.property);
-    console.log("props picture :", props.picture);
-    console.log("props uuid :", props.uuid);
+    // console.log("props property :", props.property);
+    // console.log("props picture :", props.picture);
+    // console.log("props uuid :", props.uuid);
 
     return (
         <Center

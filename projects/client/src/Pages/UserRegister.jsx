@@ -39,7 +39,7 @@ export default function UserRegister() {
             setLoading(true);
             await formik.validateForm();
             if (!formik.isValid) {
-                return; 
+                return;
             }
             let response = await axios.post(`${API_URL}/user/register`, {
                 name: formik.values.name,
@@ -118,6 +118,10 @@ export default function UserRegister() {
         formik.setFieldValue(event.target.name, event.target.value);
     };
 
+    const signInWithGoogle = () => {
+        window.open(`${API_URL}/auth/google`, "_self", 'toolbar=no, scrollbars=yes, resizable=no, width=1000, height=auto')
+    };
+
     return (
         <Stack minH={{ lg: '100vh' }}
             direction={{ base: 'column', md: 'column', lg: 'row' }}
@@ -140,9 +144,9 @@ export default function UserRegister() {
                                     <FormLabel>Name</FormLabel>
                                     <Input type="text"
                                         onChange={handleForm}
-                                        name="name" 
+                                        name="name"
                                     />
-                                     <FormErrorMessage fontSize='xs'>{formik.errors.name}</FormErrorMessage>
+                                    <FormErrorMessage fontSize='xs'>{formik.errors.name}</FormErrorMessage>
                                 </FormControl>
                             </Box>
                             <Box>
@@ -151,9 +155,9 @@ export default function UserRegister() {
                                     <FormLabel>Phone number</FormLabel>
                                     <Input type="text"
                                         onChange={handleForm}
-                                        name="phone" 
+                                        name="phone"
                                     />
-                                     <FormErrorMessage fontSize='xs'>{formik.errors.phone}</FormErrorMessage>
+                                    <FormErrorMessage fontSize='xs'>{formik.errors.phone}</FormErrorMessage>
                                 </FormControl>
                             </Box>
                         </HStack>
@@ -164,7 +168,7 @@ export default function UserRegister() {
                                 onChange={handleForm}
                                 name="email"
                             />
-                             <FormErrorMessage fontSize='xs'>{formik.errors.email}</FormErrorMessage>
+                            <FormErrorMessage fontSize='xs'>{formik.errors.email}</FormErrorMessage>
                         </FormControl>
                         {/* PASSWORD */}
                         <FormControl id="password" isInvalid={formik.errors.password}>
@@ -174,7 +178,7 @@ export default function UserRegister() {
                                 <Input
                                     type={showPassword ? 'text' : 'password'}
                                     onChange={handleForm}
-                                    name="password" 
+                                    name="password"
                                 />
                                 <InputRightElement h={'full'}>
                                     <Button
@@ -229,6 +233,7 @@ export default function UserRegister() {
 
                         {/* Google */}
                         <Button
+                        onClick={signInWithGoogle}
                             w={'full'} variant={'outline'} leftIcon={<FcGoogle />} borderColor='#d0d7de' _hover={'none'}>
                             <Center>
                                 <Text>Continue with Google</Text>

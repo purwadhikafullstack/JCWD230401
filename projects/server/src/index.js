@@ -4,7 +4,9 @@ require("dotenv").config({ path: join(__dirname, ".env") });
 const express = require("express");
 const cors = require("cors");
 const bearerToken = require("express-bearer-token");
-
+const cookieSession = require("cookie-session");
+const passport = require("passport");
+var cookieParser = require('cookie-parser');
 
 // console.log("isi dari __dirname :" + __dirname);
 const PORT = process.env.PORT || 8000;
@@ -14,6 +16,18 @@ app.use(cors());
 app.use(bearerToken());
 // #destination file storage(image/pdf/document)
 app.use("/", express.static(__dirname + "/public"));
+app.use(cookieParser())
+
+// required middlewares google auth
+app.use(
+  cookieSession({
+    name: "authSession",
+    keys: ["askduhakdnkbiygvhbad7a6s*&^*S^D8asdbk"],
+    maxAge: 24 * 60 * 60 * 1000,
+  })
+);
+app.use(passport.initialize());
+app.use(passport.session());
 
 
 //#region API ROUTES
@@ -24,6 +38,8 @@ const calendarRouter = require("./routers/calendarRouter");
 app.use("/api/calendar", calendarRouter);
 const landingRouter = require("./routers/landingRouter");
 app.use("/api/landing", landingRouter);
+const passportRouter = require("./routers/passportRouter");
+app.use('/api/auth', passportRouter);
 // ===========================
 // NOTE : Add your routes here
 

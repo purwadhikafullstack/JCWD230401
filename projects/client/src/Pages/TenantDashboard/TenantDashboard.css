@@ -5,6 +5,19 @@
 .fc .fc-button-primary {
 font-size: 1rem;
 }
+
+.fc-h-event{
+  background-color: goldenrod;
+  border: 1px solid goldenrod;
+}
+
+.fc-event-title-container{
+  background-color: goldenrod;
+}
+
+.fc-event-title {
+  background-color: goldenrod;
+}
   
   @media (max-width: 768px) {
     .fc .fc-view-harness{

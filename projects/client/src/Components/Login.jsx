@@ -22,14 +22,12 @@ export default function Login() {
     const [password, setPassword] = React.useState('');
     const [loading, setLoading] = React.useState(false);
 
-
-
     const onBtnLogin = async () => {
         try {
             setLoading(true);
             await formik.validateForm(); // trigger form validation
             if (!formik.isValid) {
-                return; 
+                return;
             }
             let response = await axios.post(`${API_URL}/user/auth`, {
                 email: formik.values.emailOrPhone,
@@ -60,7 +58,7 @@ export default function Login() {
             alert(error.response.data.error[0].msg);
             alert(error.response.data.error[2].msg);
         } finally {
-            setLoading(false); 
+            setLoading(false);
         }
     };
 
@@ -87,7 +85,11 @@ export default function Login() {
     });
 
     const handleForm = (event) => {
-        formik.setFieldValue(event.target.name, event.target.value); 
+        formik.setFieldValue(event.target.name, event.target.value);
+    };
+
+    const signInWithGoogle = () => {
+        window.open(`${API_URL}/auth/google`, "_self", 'toolbar=no, scrollbars=yes, resizable=no, width=1000, height=auto')
     };
 
     return (
@@ -153,7 +155,7 @@ export default function Login() {
                                         </Button>
                                     </InputRightElement>
                                 </InputGroup>
-                                    <FormErrorMessage fontSize='xs'>{formik.errors.password}</FormErrorMessage>
+                                <FormErrorMessage fontSize='xs'>{formik.errors.password}</FormErrorMessage>
                             </FormControl>
                             <Stack spacing={0}>
                             </Stack>
@@ -174,7 +176,7 @@ export default function Login() {
                                             Login
                                         </Button>
                                         <Button
-
+                                            onClick={signInWithGoogle}
                                             w={'full'} variant={'outline'} leftIcon={<FcGoogle />} borderColor='#d0d7de' _hover={'none'}>
                                             <Center>
                                                 <Text>Continue with Google</Text>
@@ -183,7 +185,6 @@ export default function Login() {
 
                                         <Stack
                                             pb='2'
-
                                         >
                                             <Card
                                                 variant='none'
