@@ -222,7 +222,7 @@ export default function EditProfile(props) {
                         >
                             <Center>
                                 <Avatar size="xl"
-                                    src={currentProfileImage ? `${API_URL_IMG}${currentProfileImage}` : ""}
+                                    src={currentProfileImage && currentProfileImage.includes('http') ? currentProfileImage : `${API_URL_IMG}${currentProfileImage}` ? `${API_URL_IMG}${currentProfileImage}` : ""}
                                 >
                                 </Avatar>
                             </Center>

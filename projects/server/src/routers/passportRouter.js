@@ -57,7 +57,7 @@ passport.use(
             {
               uuid,
               name: profile.displayName,
-              userId: newUser.id, 
+              userId: newUser.id,
               image_profile: profile.photos[0].value,
             },
             {
@@ -93,9 +93,9 @@ route.get(
   "/google/callback",
   passport.authenticate("google", { session: false }),
   (req, res) => {
-    //If user exist...
+    //If user exist
     if (req.user) {
-      console.log("ini isi req.user :", req.user[0]); 
+      console.log("ini isi req.user :", req.user[0]);
       const googleAuthToken = jwt.sign(
         { googleAuthToken: req.user },
         "tempatku",
@@ -103,7 +103,9 @@ route.get(
       );
       res.cookie("googleAuthToken", googleAuthToken, {
         expires: new Date(Date.now() + 86400 * 1000),
-        httpOnly: true,
+        // httpOnly: true,
+        sameSite: "None",
+        secure: true,
       });
       res.redirect("http://localhost:3000");
     }
@@ -125,7 +127,7 @@ route.get("/login/success", async (req, res, next) => {
           { model: model.role, attributes: ["role"] },
         ],
       });
-       // resolve cors blocked
+      // resolve cors blocked
       res.header("Access-Control-Allow-Origin", "http://localhost:3000");
       res.header("Access-Control-Allow-Credentials", true);
       res.status(200).json({
@@ -153,6 +155,5 @@ route.get("/logout", (req, res) => {
   res.clearCookie("googleAuthToken");
   res.redirect("http://localhost:3000");
 });
-
 
 module.exports = route;

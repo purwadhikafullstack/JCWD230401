@@ -24,6 +24,8 @@ app.use(
     name: "authSession",
     keys: ["askduhakdnkbiygvhbad7a6s*&^*S^D8asdbk"],
     maxAge: 24 * 60 * 60 * 1000,
+    sameSite: "None",
+    secure: true,
   })
 );
 app.use(passport.initialize());

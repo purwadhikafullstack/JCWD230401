@@ -1,7 +1,7 @@
 import {
     Flex, Text, Box, Heading, Stack, Button, VStack, useBreakpointValue,
-    InputGroup, InputLeftElement, Image, Input, Menu, MenuButton, MenuList, MenuItem, SimpleGrid, Select,
-    Grid, GridItem, Divider, List, ListItem
+    Image, Input,
+    List, ListItem
 } from '@chakra-ui/react';
 import React, { useState, useEffect } from 'react';
 import Footer from '../../Components/Footer';
@@ -32,6 +32,8 @@ import Slider from "react-slick";
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
+import { useDispatch } from "react-redux";
+import { loginActionGoogle } from "../../reducers/auth";
 
 
 export default function LandingNew() {
@@ -49,7 +51,7 @@ export default function LandingNew() {
     const [inputLocation, setInputLocation] = useState('');
     const [showLocation, setShowLocation] = useState([]);
     const [recommendProperty, setRecommendProperty] = useState([]);
-    const [category, setCategory] = useState('');
+    const dispatch = useDispatch();
 
 
     //API to fetch search result (Location Search Bar)
@@ -74,7 +76,7 @@ export default function LandingNew() {
     // Jalanin fungsi getAllLocations
     React.useEffect(() => {
         getAllLocations()
-    }, [inputLocation]);
+    }, []);
 
     // Get duration from check out - check in 
     useEffect(() => {
@@ -147,7 +149,7 @@ export default function LandingNew() {
     const settingsCategory = {
         infinite: true,
         slidesToShow: 3,
-        slidesToScroll: 2,
+        slidesToScroll: 1,
         initialSlide: 0,
         responsive: [
             {
@@ -183,7 +185,7 @@ export default function LandingNew() {
     const settingsDestinations = {
         infinite: true,
         slidesToShow: 4,
-        slidesToScroll: 2,
+        slidesToScroll: 1,
         initialSlide: 0,
         responsive: [
             {
@@ -219,7 +221,7 @@ export default function LandingNew() {
     const settingsRecommendation = {
         infinite: true,
         slidesToShow: 4,
-        slidesToScroll: 2,
+        slidesToScroll: 1,
         initialSlide: 0,
         responsive: [
             {
@@ -251,6 +253,21 @@ export default function LandingNew() {
         ],
     };
 
+    const googlelogin = async () => {
+        try {
+            let response = await axios.get(`${API_URL}/auth/login/success`, {
+                withCredentials: true,
+            });
+            // console.log("ini respon.data.user dari googlelogin :", response.data.getuser[0]);
+            dispatch(loginActionGoogle(response.data));
+        } catch (error) {
+            console.log("error googlelogin (not loggedin google) : ", error);
+        }
+    };
+
+    React.useEffect(() => {
+        googlelogin();
+    }, []);
 
     return (
         <>

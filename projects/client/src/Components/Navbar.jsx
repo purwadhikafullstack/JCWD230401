@@ -37,24 +37,34 @@ export default function Navbar() {
   const role = useSelector((state) => state.authReducer.role);
   const password = useSelector((state) => state.authReducer.password);
 
-  console.log("ini isi password useSelector buat google:", password);
+  // console.log("ini isi password useSelector buat google:", password);
+  // console.log("ini isi imageprofile useSelector buat google:", imageprofile);
+  // console.log("tipe data imageprofile", typeof imageprofile);
 
   const onBtnLogout = () => {
     localStorage.removeItem('tempatku_login');
     dispatch(logoutAction());
     navigate('/', { replace: true });
-  }
+  };
 
   const onBtnLogoutGoogle = async () => {
     try {
-      let response = await axios.get(`${API_URL}/auth/logout`);
+      const cookieValue = document.cookie;
+      console.log("ini isi dari cookieValue :", cookieValue);
+      console.log("tipe data cookieValue :", typeof cookieValue);
+      let response = await axios.get(`${API_URL}/auth/logout`, {
+        headers: {
+          Cookie : cookieValue,
+        }
+      });  
+      document.cookie = "googleAuthToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
       dispatch(logoutAction());
       navigate('/', { replace: true });
       // console.log("ini respon dari googlelogout :", response);
     } catch (error) {
       console.log("ini error dari onBtnGoogleLogout : ", error);
     }
-  }
+  };
 
   return (
     <>
@@ -68,9 +78,7 @@ export default function Navbar() {
               <Icon fontSize="40px" as={TbHomeHeart}
                 color='#D3212D'
                 display={{
-
                   // base: "none", sm: "none", md: "block" 
-
                 }}
               />
               <Text
@@ -150,7 +158,7 @@ export default function Navbar() {
                   <HamburgerIcon w={6} h={6} mx={2} my={1} color='black' />
                   <Avatar
                     size={'sm'}
-                    src={imageprofile ? `${API_URL_IMG}${imageprofile}` : ""}
+                    src={imageprofile && imageprofile.includes('http') ? imageprofile : `${API_URL_IMG}${imageprofile}` ? `${API_URL_IMG}${imageprofile}` : ""}
                   />
                 </MenuButton>
                 {
@@ -160,20 +168,20 @@ export default function Navbar() {
                       <MenuItem onClick={() => navigate('/')}>Home</MenuItem>
                       <MenuItem onClick={() => navigate('/editprofile')}>Profile</MenuItem>
                       <MenuItem>Bookings</MenuItem>
-                      
+
                       {password === "NULL" ? (
                         <div>
-                        <MenuItem
-                        onClick={onBtnLogoutGoogle}
-                        >Logout</MenuItem>
+                          <MenuItem
+                            onClick={onBtnLogoutGoogle}
+                          >Logout</MenuItem>
                         </div>
                       ) : (
                         <div>
-                           
-                        <MenuItem onClick={() => navigate('/changepassword')}>Change Password</MenuItem>
-                        <MenuItem
-                        onClick={onBtnLogout}
-                        >Logout</MenuItem>
+
+                          <MenuItem onClick={() => navigate('/changepassword')}>Change Password</MenuItem>
+                          <MenuItem
+                            onClick={onBtnLogout}
+                          >Logout</MenuItem>
                         </div>
                       )}
                     </MenuList>

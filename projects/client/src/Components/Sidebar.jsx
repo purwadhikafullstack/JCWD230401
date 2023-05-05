@@ -32,7 +32,7 @@ export default function Sidebar() {
             flexDir="column"
             justifyContent="space-between"
             px={{base:"3", lg:"6"}}
-            borderRight='1px'
+            // borderRight='1px'
             borderColor='gray.300'
             display={{base:'none', sm:'flex'}}
         >
@@ -84,13 +84,6 @@ export default function Sidebar() {
                             </Text>
                         </Button>
                     </Box>
-                    {/* <Box h='40px' onClick={() => navigate('/tenantcalendar')}>
-                        <Button leftIcon={<FiCalendar size={20} />} variant='none' size="md">
-                            <Text ml="2" fontWeight="medium" display={{base:'none', lg:'block'}}>
-                                Calendar
-                            </Text>
-                        </Button>
-                    </Box> */}
                 </VStack>
             </Flex>
 
