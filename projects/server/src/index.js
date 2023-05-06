@@ -6,7 +6,7 @@ const cors = require("cors");
 const bearerToken = require("express-bearer-token");
 const cookieSession = require("cookie-session");
 const passport = require("passport");
-var cookieParser = require('cookie-parser');
+const cookieParser = require('cookie-parser');
 
 // console.log("isi dari __dirname :" + __dirname);
 const PORT = process.env.PORT || 8000;

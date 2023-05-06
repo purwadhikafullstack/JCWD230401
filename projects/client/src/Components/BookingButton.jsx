@@ -23,53 +23,28 @@ export default function BookingButton() {
   const isVerified = useSelector((state) => state.authReducer.isVerified);
   const [loading, setLoading] = React.useState(false);
 
-   //1. get current date and count from localStorage 
-  const countSendOTP = parseInt(localStorage.getItem('countSendOTP')); 
-  const currentDate = localStorage.getItem('currentDate'); 
-
-   //2. get today's date
-   const today = new Date().toLocaleString("en-US", {timeZone: "Asia/Jakarta"}).slice(0, 10);
-   console.log("this is today :", today);
-
-   //3. reset count the next day
-   if (currentDate !== today) {
-     // if the current date is not today, reset the count to 0
-     localStorage.setItem('countSendOTP', '0');
-     localStorage.setItem('currentDate', today);
-   }; 
-
-  //4. count function to limit 5 resend otp by date 
-  const countDate = function () {
-    localStorage.setItem('countSendOTP', countSendOTP + 1);
-  }
 
   //inside modal alert cannot continue to transaction page
   const onBtnSendVerifyEmail = async () => {
     try {
       setLoading(true);
-      if (countSendOTP < 5) {
-        let token = localStorage.getItem("tempatku_login");
-        let response = await axios.post(`${API_URL}/user/sendverificationemail`, {}, {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
+      let token = localStorage.getItem("tempatku_login");
+      let response = await axios.post(`${API_URL}/user/sendverificationemail`, {}, {
+        headers: {
+          Authorization: `Bearer ${token}`
         }
-        );
-        console.log("ini hasil response onbtnSendVerifyEmail :", response); 
-        alert(response.data.message);
-        countDate() 
-      } else {
-        alert('You have reached the maximum limit of OTP resend requests for today.');
-        navigate('/', { replace: true });
       }
+      );
+      console.log("ini hasil response onbtnSendVerifyEmail :", response);
+      alert(response.data.message);
     } catch (error) {
       console.log("ini error dari onBtnSendVerifyEmail :", error);
       navigate('/transactionpage');
     } finally {
-      setLoading(false); 
-  }
+      setLoading(false);
+    }
   };
-  
+
   return (
     <>
       {

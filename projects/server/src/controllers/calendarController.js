@@ -73,7 +73,7 @@ module.exports = {
       next(error);
     }
   },
-  //3. GET MY AVAILABLE ROOMS 
+  //3. GET MY AVAILABLE ROOMS
   availableRooms: async (req, res, next) => {
     try {
       let getdata = await model.room.findAll({
@@ -122,7 +122,10 @@ module.exports = {
               {
                 model: model.review,
                 attributes: [
-                  [sequelize.fn("avg", sequelize.col("rating")), "average_rating"],
+                  [
+                    sequelize.fn("avg", sequelize.col("rating")),
+                    "average_rating",
+                  ],
                 ],
               },
             ],
@@ -132,13 +135,13 @@ module.exports = {
                   `(SELECT COUNT(*) FROM reviews WHERE reviews.roomId = rooms.id) > 0`
                 ),
                 sequelize.literal(
-                    `(SELECT COUNT(*) FROM reviews WHERE reviews.roomId = rooms.id) = 0`
-                  ),
-              ]
+                  `(SELECT COUNT(*) FROM reviews WHERE reviews.roomId = rooms.id) = 0`
+                ),
+              ],
             },
           },
           {
-            model: model.picture_property
+            model: model.picture_property,
           },
           {
             model: model.property_location,
@@ -162,5 +165,5 @@ module.exports = {
       console.log(error);
       next(error);
     }
-  }
+  },
 };

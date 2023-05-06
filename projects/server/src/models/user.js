@@ -19,6 +19,8 @@ module.exports = (sequelize, DataTypes) => {
       phone: DataTypes.STRING,
       attempts: DataTypes.INTEGER,
       isSuspended: DataTypes.BOOLEAN,
+      otpCount: DataTypes.INTEGER,
+      otpCountDate: DataTypes.DATEONLY,
       otp: DataTypes.STRING,
       isVerified: DataTypes.BOOLEAN,
       isDeleted: DataTypes.BOOLEAN,

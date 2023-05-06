@@ -10,6 +10,7 @@ const {
 const fs = require("fs");
 const hbs = require("nodemailer-express-handlebars");
 const nodemailer = require("nodemailer");
+const moment = require('moment');
 
 let salt = bcrypt.genSaltSync(10);
 
@@ -589,6 +590,8 @@ module.exports = {
         "ini isi isVerified dari checkverifieduser :",
         checkverifieduser[0].dataValues.isVerified
       );
+      let { otpCount, otpCountDate } =
+          checkverifieduser[0].dataValues;
       if (!checkverifieduser[0].dataValues.isVerified) {
         // get otp from database
         let getotp = await model.user.findAll({
@@ -602,7 +605,7 @@ module.exports = {
         // if otp from req.body the same with otp from database account can be verified
         if (otp == getotp[0].dataValues.otp) {
           let updateStatus = await model.user.update(
-            { isVerified: 1 },
+            { isVerified: 1, otpCount: 0, otpCountDate: null },
             {
               where: {
                 id: req.decrypt.id,
@@ -663,60 +666,86 @@ module.exports = {
       );
       //1. if user isnt verified yet, send verification email
       if (!checkverifieduser[0].dataValues.isVerified) {
-        let { id, roleId } = checkverifieduser[0].dataValues;
+        let { id, roleId, otpCount, otpCountDate } =
+          checkverifieduser[0].dataValues;
         let { name } = checkverifieduser[0].user_detail;
-        // create otp
-        const otp = Math.floor(1000 + Math.random() * 9000);
-        console.log("random numbers generated for otp :", otp);
-        // patch old otp
+        // get last time otpCount is updated (send otp email)
+        const lastUpdateDate = moment(otpCountDate);
+        console.log("ini isi lastUpdateDate :", lastUpdateDate);
+        // if last update date is not 'today' otpCount reset to zero
+        if (!moment().isSame(lastUpdateDate, "day")) {
+          otpCount = 0;
+        }
+        console.log(!moment().isSame(lastUpdateDate, "day"));
+        // if otpCount is 5 for the day, cannot send anymore verification email
+        if (otpCount < 5) {
+          // create otp
+          const otp = Math.floor(1000 + Math.random() * 9000);
+          console.log("random numbers generated for otp :", otp);
+        // patch old otp & otpCount + 1 & otpCountDate
         await model.user.update(
-          { otp },
+          {
+            otp: otp,
+            otpCount: otpCount + 1,
+            otpCountDate: moment().format("YYYY-MM-DD"),
+          },
           {
             where: {
               id: req.decrypt.id,
             },
           }
         );
-        //2. generate token
-        let token = createToken({ id, roleId }, "24h"); // ---> masukin email jg (gbole dimunculin di fe)
-        // create transporter object and configure Handlebars template
-        const transporter = nodemailer.createTransport({
-          service: "gmail",
-          auth: {
-            user: "noreply.tempatku@gmail.com",
-            pass: "vjuuvolabsuuxqex",
-          },
-        });
-        transporter.use(
-          "compile",
-          hbs({
-            viewEngine: {
-              extname: ".html", // html extension
-              layoutsDir: "./src/helper", // location of handlebars templates
-              defaultLayout: "account-verification-email", // name of main template
-              partialsDir: "./src/helper", // location of your subtemplates aka. header, footer etc
+          //2. generate token
+          let token = createToken({ id, roleId }, "24h"); // ---> masukin email jg (gbole dimunculin di fe)
+          // create transporter object and configure Handlebars template
+          const transporter = nodemailer.createTransport({
+            service: "gmail",
+            auth: {
+              user: "noreply.tempatku@gmail.com",
+              pass: "vjuuvolabsuuxqex",
             },
-            viewPath: "./src/helper",
-            extName: ".html",
-          })
-        );
-        //3. send verification email
-        await transporter.sendMail({
-          from: "Tracker admin",
-          to: checkverifieduser[0].dataValues.email,
-          subject: "Account Verification",
-          template: "account-verification-email",
-          context: {
-            name: name,
-            link: `http://localhost:3000/verifyaccount/${token}`,
-            otp: otp,
-          },
-        });
-        return res.status(200).send({
-          success: true,
-          message:
-            "You received an email to verify your account. Please check your email.",
-        });
+          });
+          transporter.use(
+            "compile",
+            hbs({
+              viewEngine: {
+                extname: ".html", // html extension
+                layoutsDir: "./src/helper", // location of handlebars templates
+                defaultLayout: "account-verification-email", // name of main template
+                partialsDir: "./src/helper", // location of your subtemplates aka. header, footer etc
+              },
+              viewPath: "./src/helper",
+              extName: ".html",
+            })
+          );
+          //3. send verification email
+          await transporter.sendMail({
+            from: "Tracker admin",
+            to: checkverifieduser[0].dataValues.email,
+            subject: "Account Verification",
+            template: "account-verification-email",
+            context: {
+              name: name,
+              link: `http://localhost:3000/verifyaccount/${token}`,
+              otp: otp,
+            },
+          });
+          return res.status(200).send({
+            success: true,
+            message:
+              `You received an email to verify your account. Please check your email.
+              otp sent today : ${otpCount + 1}
+              today's data : ${otpCountDate}
+              `,
+            checkverifieduser, //for testing
+          });
+        } else {
+          res.status(400).send({
+            success: false,
+            message:
+              "You have reached the maximum limit of OTP resend requests for today.",
+          });
+        }
       } else {
         res.status(400).send({
           success: false,

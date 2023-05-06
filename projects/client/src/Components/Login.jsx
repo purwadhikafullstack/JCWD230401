@@ -54,9 +54,9 @@ export default function Login() {
             }
         } catch (error) {
             console.log("ini error dari onBtnLogin : ", error);
-            alert(error.response.data.message);
-            alert(error.response.data.error[0].msg);
-            alert(error.response.data.error[2].msg);
+            // alert(error.response.data.message);
+            // alert(error.response.data.error[0].msg);
+            // alert(error.response.data.error[2].msg);
         } finally {
             setLoading(false);
         }
