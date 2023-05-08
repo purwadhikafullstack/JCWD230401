@@ -28,9 +28,9 @@ export default function ChangePassword() {
         try {
             setLoading(true);
             let token = localStorage.getItem("tempatku_login");
-            await formik.validateForm(); 
+            await formik.validateForm();
             if (!formik.isValid) {
-                return; 
+                return;
             }
             let response = await axios.patch(`${API_URL}/user/changepw`,
                 {
@@ -70,7 +70,7 @@ export default function ChangePassword() {
                 });
             }
         } finally {
-            setLoading(false); 
+            setLoading(false);
         }
     }
 
@@ -100,9 +100,9 @@ export default function ChangePassword() {
                     "different from old password",
                     "New password must be different from old password",
                     function (value) {
-                      return value !== this.parent.oldPassword;
+                        return value !== this.parent.oldPassword;
                     }
-                  ),
+                ),
             passwordConfirmation: yup
                 .string()
                 .required("Confirmation password is a required field")
@@ -110,7 +110,7 @@ export default function ChangePassword() {
                     /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{6,})/,
                     "Password must be at least 6 characters includes 1 number, 1 uppercase, and 1 lowercase letter"
                 )
-                .oneOf([yup.ref('newPassword'), null], 'Must match with new password'), 
+                .oneOf([yup.ref('newPassword'), null], 'Must match with new password'),
         })
     });
 
@@ -123,14 +123,16 @@ export default function ChangePassword() {
             minH={'100vh'}
             align={'center'}
             justify={'center'}
-            bg={'gray.50'}>
+            bg={'white'}>
             <Stack
                 spacing={4}
                 w={'full'}
                 maxW={'md'}
                 bg={'white'}
                 rounded={'xl'}
-                boxShadow={'lg'}
+                borderWidth={'1px'}
+                borderColor='gray.200'
+                // boxShadow={'xs'}
                 p={6}
                 my={12}>
                 <Heading lineHeight={1.1} fontSize={{ base: '2xl', md: '3xl' }}>
@@ -143,7 +145,7 @@ export default function ChangePassword() {
                         <Input
                             type={showOldPassword ? 'text' : 'password'}
                             onChange={handleForm}
-                            name="oldPassword" 
+                            name="oldPassword"
                         />
                         <InputRightElement h={'full'}>
                             <Button
@@ -157,7 +159,7 @@ export default function ChangePassword() {
                             </Button>
                         </InputRightElement>
                     </InputGroup>
-                        <FormErrorMessage fontSize='xs'>{formik.errors.oldPassword}</FormErrorMessage>
+                    <FormErrorMessage fontSize='xs'>{formik.errors.oldPassword}</FormErrorMessage>
                 </FormControl>
                 {/* New Password Field */}
                 <FormControl id="newpassword" isInvalid={formik.errors.newPassword}>
@@ -187,7 +189,7 @@ export default function ChangePassword() {
                     <FormLabel>Confirm New Password</FormLabel>
                     <InputGroup>
                         <Input
-                            type={showPasswordConfirmation ? 'text' : 'password'} 
+                            type={showPasswordConfirmation ? 'text' : 'password'}
                             onChange={handleForm}
                             name="passwordConfirmation"
                         />

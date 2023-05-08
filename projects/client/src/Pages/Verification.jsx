@@ -34,7 +34,6 @@ export default function Verification() {
       }
       );
       console.log("ini hasil response onbtnSendVerifyEmail :", response);
-      // alert(response.data.message);
       toast({
         title: response.data.message,
         status: 'success',
@@ -101,12 +100,12 @@ export default function Verification() {
       console.log("ini error dari onBtnVerify :", error);
       if (error.response && !error.response.data.message) {
         toast({
-            title: 'Verify account failed',
-            status: 'error',
-            duration: 3000,
-            isClosable: true,
+          title: 'Verify account failed',
+          status: 'error',
+          duration: 3000,
+          isClosable: true,
         });
-    } 
+      }
       if (error.response && error.response.status === 401) {
         toast({
           title: 'Your code has expired. Please log in again to resend email to verify your account.',
@@ -148,14 +147,16 @@ export default function Verification() {
       minH={'100vh'}
       align={'center'}
       justify={'center'}
-      bg={'gray.50'}>
+      bg={'white'}>
       <Stack
         spacing={4}
         w={'full'}
         maxW={'sm'}
         bg={'white'}
         rounded={'xl'}
-        boxShadow={'lg'}
+        borderWidth={'1px'}
+        borderColor='gray.200'
+        // boxShadow={'xs'}
         p={6}
         my={10}>
         <Center>

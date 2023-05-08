@@ -30,7 +30,7 @@ export default function RecommendPropertyCard(props) {
                     bg='white'
                     borderWidth={'1px'}
                     borderColor='gray.200'
-                    boxShadow={'xs'}
+                    // boxShadow={'xs'}
                     rounded={'lg'}
                     pos={'relative'}
                     zIndex={0}

@@ -15,7 +15,12 @@ export default function Footer() {
   return (
     <Box
       bg={'gray.50'}
-      color={'gray.700'}>
+      color={'gray.700'}
+      position="relative"
+      bottom={0}
+      left={0}
+      right={0}
+      >
       <Container as={Stack} maxW={'full'} py={10} px={10}>
         <SimpleGrid columns={{ base: 1, sm: 2, md: 4 }} spacing={8}>
           <Stack align={'flex-start'}>
@@ -83,7 +88,7 @@ export default function Footer() {
               variant={'none'}
               borderColor='gray.300'
             >
-              <FaTwitter />
+              <FaTwitter  color='#D3212D' />
             </Button>
             <Button
               rounded={'full'}
@@ -94,7 +99,7 @@ export default function Footer() {
               borderColor='gray.300'
 
             >
-              <FaYoutube />
+              <FaYoutube  color='#D3212D' />
             </Button>
             <Button
               rounded={'full'}
@@ -104,7 +109,7 @@ export default function Footer() {
               variant={'none'}
               borderColor='gray.300'
             >
-              <FaInstagram />
+              <FaInstagram  color='#D3212D' />
             </Button>
             <Button
               rounded={'full'}
@@ -114,7 +119,7 @@ export default function Footer() {
               variant={'none'}
               borderColor='gray.300'
             >
-              <FaFacebook />
+              <FaFacebook  color='#D3212D' />
             </Button>
           </Stack>
         </Container>

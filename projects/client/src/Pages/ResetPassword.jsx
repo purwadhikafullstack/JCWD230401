@@ -110,14 +110,16 @@ export default function ResetPassword() {
             minH={'100vh'}
             align={'center'}
             justify={'center'}
-            bg={'gray.50'}>
+            bg={'white'}>
             <Stack
                 spacing={4}
                 w={'full'}
                 maxW={'md'}
                 bg={'white'}
                 rounded={'xl'}
-                boxShadow={'lg'}
+                borderWidth={'1px'}
+                borderColor='gray.200'
+                // boxShadow={'xs'}
                 p={6}
                 my={12}>
                 <Heading lineHeight={1.1} fontSize={{ base: '2xl', md: '3xl' }}>

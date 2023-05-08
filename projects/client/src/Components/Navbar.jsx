@@ -6,7 +6,7 @@ import {
   Flex,
   Avatar,
   HStack,
-  Link,
+  Link, Image,
   IconButton,
   Button,
   Menu,
@@ -27,6 +27,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { logoutAction } from '../reducers/auth';
 import { API_URL, API_URL_IMG } from '../helper';
 import axios from 'axios';
+import Logo from '../assets/logotempatku.png';
 
 export default function Navbar() {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -70,22 +71,25 @@ export default function Navbar() {
     <>
       <Box
         // position="fixed"
-        w='full' bg='white' zIndex={1}>
+        w='full' bg='white' zIndex={1}
+        borderBottomWidth={1}
+        borderStyle={'solid'}
+        borderColor={'gray.200'}
+        >
         <Box boxShadow={'xs'} px={{ base: '4', sm: '10' }}>
           <Flex h={16} alignItems={'center'} justifyContent={'space-between'}>
             <HStack alignItems={'center'}>
               {/* Logo Tempatku */}
-              <Icon fontSize="40px" as={TbHomeHeart}
+              {/* <Icon fontSize="40px" src={Logo}
                 color='#D3212D'
                 display={{
                   // base: "none", sm: "none", md: "block" 
                 }}
-              />
+              /> */}
+              <Image src={Logo} alt='tempatku logo' boxSize='50px'/>
               <Text
                 display={{
-
-                  // base: "none", sm: "none", md: "block" 
-
+                  base: "none", sm: "none", md: "block" 
                 }}
                 fontSize="23px"
                 fontWeight="600"

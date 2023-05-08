@@ -1,16 +1,16 @@
-import { Flex, Box, FormControl, Divider, Icon, Card, CardBody, FormLabel, Input, InputGroup, HStack, Center, InputRightElement, Stack, Button, Heading, Text, Link, useToast, FormErrorMessage } from '@chakra-ui/react';
-import React, { useEffect, useState } from 'react';
+import { Flex, Box, FormControl, Divider, Image, Icon, Card, CardBody, FormLabel, Input, InputGroup, HStack, Center, InputRightElement, Stack, Button, Heading, Text, Link, useToast, FormErrorMessage } from '@chakra-ui/react';
+import React, { useState } from 'react';
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
 import { FcGoogle } from 'react-icons/fc';
 import { TbHomeHeart } from "react-icons/tb";
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { API_URL } from '../helper';
 import { loginAction } from '../reducers/auth';
 import { useFormik } from 'formik';
 import * as yup from "yup";
-
+import Logo from '../assets/logotempatku.png';
 
 export default function Login() {
     const [showPassword, setShowPassword] = useState(false);
@@ -116,15 +116,16 @@ export default function Login() {
                         px={4}
                     >
                         <Stack mt='4' alignItems={'center'}>
-                            <Icon fontSize="50px" as={TbHomeHeart}
+                            {/* <Icon fontSize="50px" as={TbHomeHeart}
                                 color='#D3212D'
-                            />
+                            /> */}
+                            <Image src={Logo} alt='tempatku logo' boxSize='50px'/>
                         </Stack>
                         <Stack mb='8'>
                             <Text fontSize='3xl' fontWeight='semibold' style={{ display: 'flex' }} m='auto'>Login to tempatku</Text>
                         </Stack>
                         <Stack spacing={4}>
-                            <FormControl id="email" isRequired isInvalid={formik.errors.emailOrPhone}>
+                            <FormControl id="email" isInvalid={formik.errors.emailOrPhone}>
                                 <FormLabel size='sm'>Email or Phone Number</FormLabel>
                                 {/* Input Email or Phone Number */}
                                 <Input type="text" borderColor='#d0d7de'
@@ -133,7 +134,7 @@ export default function Login() {
                                 />
                                 <FormErrorMessage fontSize='xs'>{formik.errors.emailOrPhone}</FormErrorMessage>
                             </FormControl>
-                            <FormControl id="password" isRequired isInvalid={formik.errors.password}>
+                            <FormControl id="password" isInvalid={formik.errors.password}>
                                 <HStack justify='space-between'>
                                     <FormLabel>Password</FormLabel>
                                     <Button

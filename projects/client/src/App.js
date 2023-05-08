@@ -3,6 +3,7 @@ import "./App.css";
 import { Route, Routes, useLocation } from "react-router-dom";
 import NavbarMobile from "./Components/NavbarMobile";
 import Navbar from "./Components/Navbar";
+import Footer from "./Components/Footer";
 import React from "react";
 import UserRegister from "./Pages/UserRegister";
 import { useDispatch, useSelector } from "react-redux";
@@ -19,6 +20,7 @@ import Verification from "./Pages/Verification";
 import ProductDetail from "./Pages/ProductDetail/ProductDetail";
 import TransactionPage from "./Pages/TransactionPage";
 import EditProfile from "./Pages/EditProfile";
+
 
 function App() {
   const location = useLocation();
@@ -110,6 +112,7 @@ function App() {
         )
       }
       {/* {location.pathname === "/" && <NavbarMobile />} */}
+      <Footer />
     </>
   );
 }

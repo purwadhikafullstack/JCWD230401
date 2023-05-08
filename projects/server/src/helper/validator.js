@@ -144,6 +144,47 @@ module.exports = {
             "Password must be at least 6 characters, includes a number, one uppercase letter, and one lowercase letter"
           )
           .run(req);
+      } else if (req.path == "/registerastenant") {
+        await check("name")
+          .notEmpty()
+          .isLength({ max: 255 })
+          .withMessage(
+            "Name must not be empty and must be less than or equal to 255 characters"
+          )
+          .matches(/^[a-zA-Z ]+$/)
+          .withMessage("Name must only contain letters and spaces")
+          .run(req);
+
+        await check("email")
+          .notEmpty()
+          .isEmail()
+          .withMessage("Invalid email address")
+          .run(req);
+
+        await check("phone")
+          .notEmpty()
+          .isMobilePhone()
+          .withMessage("Invalid phone number")
+          .run(req);
+
+        await check("password")
+          .notEmpty()
+          .isStrongPassword({
+            minLength: 6,
+            minLowercase: 1,
+            minNumbers: 1,
+            minUppercase: 1,
+            minSymbols: 0,
+          })
+          .withMessage(
+            "Password must be at least 6 characters, includes a number, one uppercase letter, and one lowercase letter"
+          )
+          .run(req);
+
+        await check("image_ktp")
+          .notEmpty()
+          .withMessage("Image file is required")
+          .run(req);
       } else if (req.path == "/editprofile") {
         if (req.body.name) {
           await check("name")
@@ -178,7 +219,11 @@ module.exports = {
             .notEmpty()
             .isISO8601()
             .withMessage("Birthdate must be a valid date in ISO8601 format.")
-            .isBefore(new Date(Date.now() - 18 * 365 * 24 * 60 * 60 * 1000).toISOString())
+            .isBefore(
+              new Date(
+                Date.now() - 18 * 365 * 24 * 60 * 60 * 1000
+              ).toISOString()
+            )
             .withMessage("You must be at least 18 years old.")
             .isAfter("1899-12-31")
             .withMessage("Birthdate cannot be lower than 1900-01-01.")

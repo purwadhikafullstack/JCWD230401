@@ -176,8 +176,12 @@ export default function EditProfile(props) {
                 isClosable: true,
             });
             modalProfileImage.onClose();
-            // window.location.reload(); // buat ilangin error message props.keeplogin but worse ux
-            props.keeplogin(); //refresh immediately once profpic updated
+            // Wrap props.keeplogin() in a Promise and use the then() method to handle it
+            new Promise((resolve, reject) => {
+                props.keeplogin() //refresh immediately once profpic updated
+                    .then(resolve)
+                    .catch(reject);
+            });
         } catch (error) {
             console.log("ini error dari onBtnEditProfileImage : ", error);
             // alert(error.message);
@@ -233,7 +237,7 @@ export default function EditProfile(props) {
                 minH={'100vh'}
                 align={'center'}
                 justify={'center'}
-                bg={'gray.50'}
+                bg={'white'}
             >
                 <Stack
                     bg='white'
@@ -241,7 +245,9 @@ export default function EditProfile(props) {
                     w={'full'}
                     maxW={'md'}
                     rounded={'xl'}
-                    boxShadow={'lg'}
+                    borderWidth={'1px'}
+                    borderColor='gray.200'
+                    // boxShadow={'xs'}
                     p={6}
                     my={12}>
                     <Heading lineHeight={1.1} fontSize={{ base: '2xl', sm: '3xl' }}>

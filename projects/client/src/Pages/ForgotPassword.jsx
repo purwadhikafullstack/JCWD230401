@@ -24,13 +24,12 @@ export default function ForgotPassword() {
             setLoading(true); //before making the api call
             await formik.validateForm();
             if (!formik.isValid) {
-                return; 
+                return;
             }
             let response = await axios.post(`${API_URL}/user/forgotpw`, {
                 email: formik.values.email
             });
             console.log("ini hasil response onBtnForgotPassword :", response); //testing purposes
-            // alert(response.data.message);
             toast({
                 title: response.data.message,
                 status: 'success',
@@ -84,16 +83,19 @@ export default function ForgotPassword() {
             minH={'100vh'}
             align={'center'}
             justify={'center'}
-            bg={'gray.50'}>
+            bg={'white'}>
             <Stack
                 spacing={4}
                 w={'full'}
                 maxW={'md'}
                 bg={'white'}
                 rounded={'xl'}
-                boxShadow={'lg'}
                 p={6}
-                my={12}>
+                my={12}
+                borderWidth={'1px'}
+                borderColor='gray.200'
+                // boxShadow={'xs'}
+            >
                 <Heading lineHeight={1.1} fontSize={{ base: '2xl', md: '3xl' }}>
                     Forgot your password?
                 </Heading>
@@ -104,7 +106,7 @@ export default function ForgotPassword() {
                 </Text>
                 <FormControl id="email" isInvalid={formik.errors.email}>
                     <Input
-                        placeholder="your-email@example.com"
+                        placeholder="email@example.com"
                         _placeholder={{ color: 'gray.500' }}
                         type="email"
                         onChange={handleForm}

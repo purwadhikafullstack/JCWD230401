@@ -4,7 +4,7 @@ import {
     List, ListItem
 } from '@chakra-ui/react';
 import React, { useState, useEffect } from 'react';
-import Footer from '../../Components/Footer';
+// import Footer from '../../Components/Footer';
 import { SearchIcon } from "@chakra-ui/icons";
 import { useNavigate, Link } from "react-router-dom";
 import axios from 'axios';
@@ -442,10 +442,9 @@ export default function LandingNew() {
                             }} >
                                 <Box position="relative" overflow="hidden" borderRadius="10px" fontSize="18px"
                                     transition="opacity 0.3s"
-                                    _hover={{ opacity: 0.7 }}
                                     cursor='pointer'
                                 >
-                                    <Image src={Hotels1}
+                                    <Image src={Hotels1} _hover={{ transform: 'scale(1.1)', transition: '.5s' }} 
                                         alt="Hotels" w="100%" borderRadius="10px" />
                                     <Text position="absolute" top="50%" left="50%" transform="translate(-50%,-50%)" textAlign="center" color="white" fontSize={{ base: "26px", md: "20px", lg: "26px" }}>
                                         Hotels
@@ -460,10 +459,9 @@ export default function LandingNew() {
                             }} >
                                 <Box position="relative" overflow="hidden" borderRadius="10px" fontSize="18px"
                                     transition="opacity 0.3s"
-                                    _hover={{ opacity: 0.7 }}
                                     cursor='pointer'
                                 >
-                                    <Image src={Homestays1}
+                                    <Image src={Homestays1} _hover={{ transform: 'scale(1.1)', transition: '.5s' }} 
                                         alt="Hotels" w="100%" borderRadius="10px" />
                                     <Text position="absolute" top="50%" left="50%" transform="translate(-50%,-50%)" textAlign="center" color="white" fontSize={{ base: "26px", md: "20px", lg: "26px" }}>
                                         Apartments
@@ -478,31 +476,12 @@ export default function LandingNew() {
                             }} >
                                 <Box position="relative" overflow="hidden" borderRadius="10px" fontSize="18px"
                                     transition="opacity 0.3s"
-                                    _hover={{ opacity: 0.7 }}
                                     cursor='pointer'
                                 >
-                                    <Image src={Villas1}
+                                    <Image src={Villas1} _hover={{ transform: 'scale(1.1)', transition: '.5s' }} 
                                         alt="Hotels" w="100%" borderRadius="10px" />
                                     <Text position="absolute" top="50%" left="50%" transform="translate(-50%,-50%)" textAlign="center" color="white" fontSize={{ base: "26px", md: "20px", lg: "26px" }}>
                                         Villas
-                                    </Text>
-                                </Box>
-                            </Link>
-                        </Box>
-                        <Box p='2'>
-                            <Link to={{
-                                pathname: "/property/filter",
-                                state: { category: "GuestHouse" }
-                            }} >
-                                <Box position="relative" overflow="hidden" borderRadius="10px" fontSize="18px"
-                                    transition="opacity 0.3s"
-                                    _hover={{ opacity: 0.7 }}
-                                    cursor='pointer'
-                                >
-                                    <Image src={GuestHouse1}
-                                        alt="Hotels" w="100%" borderRadius="10px" />
-                                    <Text position="absolute" top="50%" left="50%" transform="translate(-50%,-50%)" textAlign="center" color="white" fontSize={{ base: "26px", md: "20px", lg: "26px" }}>
-                                        Guest House
                                     </Text>
                                 </Box>
                             </Link>
@@ -647,13 +626,6 @@ export default function LandingNew() {
                         </Button>
                     </Box>
                 </Box>
-            </Box>
-            {/* FOOTER */}
-            <Box
-                bottom="0"
-                left="0"
-                right="0">
-                <Footer />
             </Box>
         </>
     )
