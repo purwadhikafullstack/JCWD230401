@@ -85,7 +85,7 @@ export default function FilteredProperty() {
 
     useEffect(() => {
         getAllProperty()
-    }, [page, sortBy, order, category])
+    }, [page, sortBy, order, category, inputCheckIn, inputCheckOut])
 
     return (
         <Box>

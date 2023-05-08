@@ -31,6 +31,7 @@ module.exports = (sequelize, DataTypes) => {
     transaction.hasMany(models.order, { foreignKey: 'transactionId' });
     transaction.belongsTo(models.user, { foreignKey: 'userId' });
     transaction.belongsTo(models.transaction_status, { foreignKey: 'transaction_statusId' });
+    transaction.hasOne(models.review, { foreignKey: 'transactionId' });
   }
   return transaction;
 };

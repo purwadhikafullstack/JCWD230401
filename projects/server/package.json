@@ -20,6 +20,7 @@
     "express-bearer-token": "latest",
     "express-handlebars": "^7.0.4",
     "express-validator": "latest",
+    "handlebars": "^4.7.7",
     "jsonwebtoken": "latest",
     "multer": "latest",
     "mysql2": "latest",
@@ -29,6 +30,7 @@
     "nodemailer-express-handlebars": "^6.1.0",
     "passport": "^0.6.0",
     "passport-google-oauth20": "^2.0.0",
+    "puppeteer": "^20.1.0",
     "redis": "latest",
     "sequelize": "latest",
     "uuid": "latest"

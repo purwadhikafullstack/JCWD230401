@@ -34,6 +34,7 @@ module.exports = (sequelize, DataTypes) => {
     user.hasOne(models.user_detail, { foreignKey: 'userId' });
     user.hasMany(models.transaction, { foreignKey: 'userId' });
     user.hasOne(models.room_category, { foreignKey: 'user_id' });
+    user.hasMany(models.review, { foreignKey: 'userId' });
   }
   return user;
 };

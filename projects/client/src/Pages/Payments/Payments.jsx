@@ -28,12 +28,17 @@ import { useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { API_URL } from '../../helper';
+import { useSelector } from "react-redux";
+
+
 
 
 export default function Payments() {
     const location = useLocation();
     const params = useParams();
     const navigate = useNavigate()
+    const emailUser = useSelector((state) => state.authReducer.email);
+
     let token = localStorage.getItem("tempatku_login");
     console.log("params : ", params);
     const [checkIn, setCheckIn] = useState(location?.state?.inputCheckIn)
@@ -66,7 +71,8 @@ export default function Payments() {
                 start: checkIn,
                 end: checkOut,
                 price: details.price, // INI DI KALI DAYS APA TIDAK ???
-                roomId: details.id
+                roomId: details.id,
+                email: emailUser
             }, {
                 headers: {
                     Authorization: `Bearer ${token}`,

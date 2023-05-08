@@ -6,24 +6,30 @@ const { createToken } = require("../helper/jwt");
 
 module.exports = {
     getDetailRoomTransaction: async (req, res, next) => {
-        let get = await model.room.findAll({
-            where: {
-                uuid: req.query.uuid
-            },
-            include: [
-                {
-                    model: model.property,
-                    include: [{
-                        model: model.property_location, attributes: ['country', 'address'],
-                        include: [{ model: model.regency, attributes: ['name'] }]
-                    }]
+        try {
+            let get = await model.room.findAll({
+                where: {
+                    uuid: req.query.uuid
                 },
-                { model: model.room_category },
-                { model: model.picture_room },
+                include: [
+                    {
+                        model: model.property,
+                        include: [{
+                            model: model.property_location, attributes: ['country', 'address'],
+                            include: [{ model: model.regency, attributes: ['name'] }]
+                        }]
+                    },
+                    { model: model.room_category },
+                    { model: model.picture_room },
 
-            ]
-        });
-        res.status(200).send(get)
+                ]
+            });
+            res.status(200).send(get)
+        } catch (error) {
+            console.log(error);
+            next(error);
+        }
+
     }
 
 };

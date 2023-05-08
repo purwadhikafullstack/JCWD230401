@@ -352,11 +352,10 @@ export default function PaymentDetail() {
     const inputImagePayment = useRef()
     const [fileImagePayment, setFileImagePayment] = useState(null)
     const [message, setMessage] = useState('')
-    const uploadImagePayment = async () => {
+    const uploadImagePayment = async (imageFile) => {
         try {
             let formData = new FormData();
-            formData.append('images', fileImagePayment)
-            console.log(formData)
+            formData.append('images', imageFile)
 
             let add = await axios.patch(`${API_URL}/transaction/uploadimagepayment/${params.uuid}`, formData, {
                 headers: {
@@ -367,8 +366,9 @@ export default function PaymentDetail() {
                 // setFileImagePayment(null);
                 setMessage("Image Uploaded")
             }
+            getTransactionTimeAndBank()
         } catch (error) {
-            console.log(error)
+            console.log("upload image payment gagallll", error)
         }
     }
     const onChangeImagePayment = (event) => {
@@ -377,10 +377,10 @@ export default function PaymentDetail() {
             alert("You can only upload files that are lower than 1MB in size.")
         } else {
             setFileImagePayment(event.target.files[0]);
-            uploadImagePayment();
+            uploadImagePayment(event.target.files[0]);
         }
     }
-    console.log("fileImagePayment", fileImagePayment)
+    // console.log("fileImagePayment", fileImagePayment)
 
 
 
@@ -499,7 +499,7 @@ export default function PaymentDetail() {
                                 bg={'green.400'}
                                 color={'white'}
                                 // rounded={'xl'}
-                                isDisabled={transactionStatus === 'Waiting for payment' || transactionStatus === 'Waiting for confirmation' || transactionStatus === 'Reject' ? false : true}
+                                isDisabled={transactionStatus === 'Waiting for payment' || transactionStatus === 'Reject' ? false : true}
                                 _hover={{
                                     bg: 'green.500',
                                 }}

@@ -16,7 +16,7 @@ import SwiperCarousel from '../../Components/SwiperCarousel/SwiperCarousel'
 
 import "./PropertyDetail.css";
 import { FaHome, FaPaintBrush, FaMapMarkerAlt, FaHeart, FaStar } from 'react-icons/fa';
-import { API_URL, API_URL_IMG } from '../../helper';
+import { API_URL, API_URL_IMG, capitalizeFirstWord, formatRupiah } from '../../helper';
 import axios from 'axios';
 import { useParams, useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
@@ -38,7 +38,10 @@ export default function PropertyDetail() {
     console.log("paramssss", params)
     console.log("useLocation property detail", location)
 
-    const [propertyDetail, setPropertyDetail] = useState(null);
+    const [propertyDetail, setPropertyDetail] = useState([]);
+    const [regency, setRegency] = useState('');
+    const [propertyPrice, setPropertyPrice] = useState(0)
+    const [tenantEmail, setTenantEmail] = useState('')
     const getPropertyDetail = async () => {
         let get = await axios.get(`${API_URL}/property/getpropertydetail?uuid=${params.uuid}`, {
             headers: {
@@ -46,6 +49,10 @@ export default function PropertyDetail() {
             },
         });
         setPropertyDetail(get.data[0]);
+        setRegency(get.data[0].property_location.regency.name);
+        setPropertyPrice(get.data[0].rooms[0].price)
+        setTenantEmail(get.data[0].user.email)
+
     }
 
     console.log("proeprtyy detaillll : ", propertyDetail);
@@ -92,6 +99,11 @@ export default function PropertyDetail() {
         getPictureProperty();
     }, [])
 
+    useEffect(() => {
+        getRoomAvailable();
+    }, [inputCheckIn, inputCheckOut])
+
+
 
     return (
         <>
@@ -100,7 +112,7 @@ export default function PropertyDetail() {
                     <h1>{propertyDetail?.property}</h1>
                     <div className="row">
                         <div>
-                            <FaStar />
+                            <FaStar color='orange' />
                         </div>
                         <div>
                             <p>&nbsp;5.0</p>
@@ -109,7 +121,9 @@ export default function PropertyDetail() {
                             <span>57 Reviews</span>
                         </div>
                         <div>
-                            <p>Location: {propertyDetail?.property_location?.regency.name}, {propertyDetail?.property_location?.country}</p>
+                            <p>Location:
+                                {capitalizeFirstWord(regency)}
+                                , {propertyDetail?.property_location?.country}</p>
                         </div>
                     </div>
                 </div>
@@ -150,8 +164,7 @@ export default function PropertyDetail() {
                 <div className="small-details">
                     <h2>Hosted by {propertyDetail?.user?.user_detail?.name}</h2>
                     <p>Facility .........</p>
-                    <h4>{Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(propertyDetail?.rooms[0].price || 0)}
-                        / day</h4>
+                    <h4>{formatRupiah(propertyPrice)} / day</h4>
                 </div>
                 <Flex w='full'>
                     <Box w='full'>
@@ -194,7 +207,7 @@ export default function PropertyDetail() {
                 <div className="map">
                     <h3>Location on map</h3>
                     <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d31541.345788385628!2d115.05704101562502!3d-8.817205999999993!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2dd24ffebe892cdd%3A0xb7a1edced2ee4c50!2sPuri%20Uluwatu%20Villas!5e0!3m2!1sen!2sid!4v1680459004192!5m2!1sen!2sid" width="600" height="450" style={{ border: "0" }} allowFullScreen="" loading="lazy"></iframe>
-                    <b>{propertyDetail?.property_location?.regency.name}, {propertyDetail?.property_location?.country}</b>
+                    <b>{capitalizeFirstWord(regency)}, {propertyDetail?.property_location?.country}</b>
                     <p>It's like a home away from home.</p>
                 </div>
 
@@ -207,16 +220,13 @@ export default function PropertyDetail() {
                         <p>
                             <div className="row">
                                 <div>
-                                    <FaStar />
-                                </div>
-                                <div>
-                                    <p>&nbsp;5.0</p>
+                                    <p>{tenantEmail}</p>
                                 </div>
                             </div>
                         </p>
                     </div>
                 </div>
-                <a href="#" className="contact-tenant">Contact Tenant</a>
+                <a href={`mailto:${tenantEmail}`} className="contact-tenant">Contact Tenant</a>
 
                 <hr className="line" />
 

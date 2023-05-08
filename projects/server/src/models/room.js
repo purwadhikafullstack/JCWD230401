@@ -32,6 +32,7 @@ module.exports = (sequelize, DataTypes) => {
     room.hasMany(models.order, { foreignKey: 'roomId' });
     room.hasMany(models.picture_room, { foreignKey: 'roomId' });
     room.hasMany(models.maintenance, { foreignKey: 'roomId' });
+    room.hasMany(models.review, { foreignKey: 'roomId' });
   }
   return room;
 };

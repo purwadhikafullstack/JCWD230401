@@ -36,7 +36,7 @@ export default function OrderListCardTenant(props) {
     const days = (diff / 86400000);
 
     const updateTransactionStatus = async () => {
-        let update = await axios.patch(`${API_URL}/transaction/updatetransactionstatus`, {
+        let update = await axios.patch(`${API_URL}/transaction/confirmtransaction`, {
             transaction_statusId: 3,
             uuid: props.uuidTransaction
         }, {
@@ -44,6 +44,8 @@ export default function OrderListCardTenant(props) {
                 Authorization: `Bearer ${token}`,
             },
         })
+        props.getActionsNeeded()
+        props.getSummary();
     }
 
     const rejectTransaction = async () => {
@@ -54,6 +56,8 @@ export default function OrderListCardTenant(props) {
                 Authorization: `Bearer ${token}`,
             },
         })
+        props.getActionsNeeded()
+        props.getSummary();
     }
 
     // ALERT DIALOG BUTTON CONFIRM

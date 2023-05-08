@@ -79,6 +79,11 @@ module.exports = {
             const query = `
             Select r.*, o.start_date, o.end_date, t.transaction_statusId FROM rooms r left join orders o on r.id=o.roomId 
             left join transactions t on o.transactionId = t.id WHERE start_date is null OR start_date < '${start}' OR start_date > '${end}' OR end_date < '${start}' OR end_date > '${end}' OR t.transaction_statusId = 5 order by r.propertyId;`
+
+            // const query = `
+            // Select r.*, o.start_date, o.end_date, t.transaction_statusId FROM rooms r left join orders o on r.id=o.roomId 
+            // left join transactions t on o.transactionId = t.id WHERE (start_date >= '${start}' AND start_date <= '${end}' AND t.transaction_statusId = 5) OR (end_date >= '${start}' AND end_date <= '${end}' AND t.transaction_statusId = 5) OR start_date is null `
+
             const getAvailable = await con.query(query, {
                 type: sequelize.QueryTypes.SELECT
             })
@@ -144,7 +149,12 @@ module.exports = {
                     propertyId: getPropertyId[0].dataValues.id,
                     id: {
                         [sequelize.Op.notIn]: [
-                            sequelize.literal(`SELECT roomId FROM orders join transactions on orders.transactionId = transactions.id WHERE start_date >= '${req.query.start}' AND end_date <= '${req.query.end}' AND transactions.transaction_statusId IN (1,2,3)`) // tambahin transaction_statusId
+                            sequelize.literal(`SELECT roomId FROM orders join transactions on orders.transactionId = transactions.id WHERE start_date >= '${req.query.start}' AND start_date <= '${req.query.end}' OR end_date >= '${req.query.start}' AND end_date <= '${req.query.end}'  AND transactions.transaction_statusId IN (1,2,3)`) // tambahin transaction_statusId
+
+                            // sequelize.literal(`SELECT roomId FROM orders join transactions on orders.transactionId = transactions.id WHERE start_date between '${req.query.start}' AND '${req.query.end}' AND end_date between '${req.query.start}' AND '${req.query.end}'`) // tambahin transaction_statusId
+
+                            // sequelize.literal(`SELECT roomId FROM orders join transactions on orders.transactionId = transactions.id WHERE start_date < '${req.query.start}' OR start_date > '${req.query.end}' AND end_date < '${req.query.start}' OR end_date > '${req.query.end}'`) // tambahin transaction_statusId
+
                         ]
                     }
                 },
@@ -160,44 +170,94 @@ module.exports = {
         }
     },
     getPropertyDetail: async (req, res, next) => {
-        let get = await model.property.findAll({
-            include: [
-                {
-                    model: model.room,
-                    attributes: ['price']
-                },
-                {
-                    model: model.property_location, include: [{ model: model.regency }]
-                },
-                {
-                    model: model.picture_property
-                },
-                {
-                    model: model.user, include: [{ model: model.user_detail, attributes: ['name'] }]
+        try {
+            let get = await model.property.findAll({
+                include: [
+                    {
+                        model: model.room,
+                        attributes: ['price']
+                    },
+                    {
+                        model: model.property_location, include: [{ model: model.regency }]
+                    },
+                    {
+                        model: model.picture_property
+                    },
+                    {
+                        model: model.user, include: [{ model: model.user_detail, attributes: ['name'] }]
+                    },
+
+                ],
+                order: [[model.room, 'price', 'asc']],
+                where: {
+                    uuid: req.query.uuid
                 },
 
-            ],
-            order: [[model.room, 'price', 'asc']],
-            where: {
-                uuid: req.query.uuid
-            },
+            });
+            res.status(200).send(get)
+        } catch (error) {
+            console.log(error);
+            next(error);
+        }
 
-        });
-        res.status(200).send(get)
     },
     getPicturePropertyDetail: async (req, res, next) => {
-        let getProperty = await model.property.findAll({
-            where: {
-                uuid: req.query.uuid
-            }
-        });
-        let getPictureProperty = await model.picture_property.findAll({
-            where: {
-                propertyId: getProperty[0].dataValues.id
-            }
-        });
+        try {
+            let getProperty = await model.property.findAll({
+                where: {
+                    uuid: req.query.uuid
+                }
+            });
+            let getPictureProperty = await model.picture_property.findAll({
+                where: {
+                    propertyId: getProperty[0].dataValues.id
+                }
+            });
 
-        res.status(200).send(getPictureProperty)
-        console.log("getPictureProperty", getPictureProperty);
+            res.status(200).send(getPictureProperty)
+            console.log("getPictureProperty", getPictureProperty);
+        } catch (error) {
+            console.log(error);
+            next(error);
+        }
+
     },
+    testtt: async (req, res, next) => {
+        let name = ''
+        let start = '2023-05-07'
+        let end = '2023-05-11'
+
+        const query = `select properties.id, 
+        properties.property as property_name ,
+        min(rooms.price) as property_price, 
+        picture_properties.picture, 
+        provinces.name as province_name, 
+        regencies.name as regency_name,
+        avg(reviews.rating) as rating
+        from properties
+        join rooms on properties.id = rooms.propertyId
+        left join reviews on rooms.id = reviews.roomId
+        join picture_properties on properties.id = picture_properties.propertyId
+        join property_locations on properties.id = property_locations.propertyId
+        join provinces on property_locations.provinceId = provinces.id
+        join regencies on property_locations.regency_id = regencies.id
+        where properties.property like '%${name}%' and properties.id in (
+            select distinct propertyId from rooms where rooms.id not in (
+                select roomId from orders 
+                join transactions on orders.transactionId = transactions.id where 
+                transactions.transaction_statusId IN (1,2,3,4)
+                and
+                start_date >= '${start}' and start_date <= '${end}' 
+                or 
+                end_date >= '${start}' and end_date <= '${end}'
+            )
+        )
+        group by properties.id, properties.property, picture_properties.picture, provinces.name, regencies.name;`
+
+        const results = await con.query(query, {
+            type: sequelize.QueryTypes.SELECT
+        })
+
+        res.send(results)
+    }
 }

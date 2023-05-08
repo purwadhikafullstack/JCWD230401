@@ -26,6 +26,7 @@ const orderRouter = require('./routers/orderRouter');
 const roomRouter = require('./routers/roomRouter');
 const calendarRouter = require("./routers/calendarRouter");
 const reviewRouter = require("./routers/reviewRouter");
+const { reminderCheckInUser } = require("./helper/schedule");
 
 app.use('/api/user', userRouter);
 app.use('/api/transaction', transactionRouter)
@@ -62,6 +63,16 @@ app.use((req, res, next) => {
     next();
   }
 });
+
+// reminderCheckInUser()
+
+const destinationPath = join(
+  __dirname,
+  `haloo`
+  // `${'Invoice'}-${data.user.fullName}-${milis}.pdf`
+);
+
+console.log(destinationPath);
 
 // error
 app.use((err, req, res, next) => {

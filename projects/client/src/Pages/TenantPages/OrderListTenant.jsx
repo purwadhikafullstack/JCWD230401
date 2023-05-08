@@ -75,6 +75,7 @@ export default function OrderListTenant() {
         });
         setDataSummary(get.data.rows);
         setTotalDataSummary(get.data.count);
+        console.log("SUMMARY count", get.data.count);
     }
     console.log("SUMMARY", dataSummary);
 

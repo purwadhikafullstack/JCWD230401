@@ -27,6 +27,7 @@ export default function AlertDialogTenant(props) {
                 Authorization: `Bearer ${token}`,
             },
         })
+        props.getSummary()
     }
 
     const handleCancel = () => {
@@ -39,7 +40,7 @@ export default function AlertDialogTenant(props) {
     return (
         <>
             <Button colorScheme='red' variant={'outline'} onClick={onOpen}
-                isDisabled={props.status === 'Waiting for payment' ? false : true}
+                isDisabled={props.status === 'Waiting for payment' || props.status === 'Reject' ? false : true}
             >
                 Cancel Order
             </Button>

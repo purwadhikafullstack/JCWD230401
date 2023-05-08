@@ -64,9 +64,7 @@ export default function OrderLists() {
     const printOrderList = () => {
         return orderList?.rows?.map((val, idx) => {
             return (
-                <Link to={`/payment/detail/${val.transaction.uuid}`}>
-                    <CardOrderList property={val.room.property.property} capacity={val.room.capacity} room={val.room.room_category.name} price={val.price} end_date={val.end_date} start_date={val.start_date} status={val.transaction.transaction_status.status} invoice={val.transaction.invoice_number} roomPicture={val.room.picture_rooms} />
-                </Link>
+                <CardOrderList property={val.room.property.property} capacity={val.room.capacity} room={val.room.room_category.name} price={val.price} end_date={val.end_date} start_date={val.start_date} status={val.transaction.transaction_status.status} invoice={val.transaction.invoice_number} roomPicture={val.room.picture_rooms} uuid={val.transaction.uuid} />
             )
         })
     }
