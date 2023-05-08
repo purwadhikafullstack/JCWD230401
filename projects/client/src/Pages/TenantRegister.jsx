@@ -11,7 +11,7 @@ import {
     Stack,
     Image,
     FormErrorMessage,
-    Text, Icon, HStack, Box, Divider, Center, Card, CardBody, InputGroup, InputRightElement, useDisclosure
+    Text, Icon, HStack, Box, Center, Card, CardBody, InputGroup, InputRightElement, useToast
 } from '@chakra-ui/react';
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
 import { useNavigate } from 'react-router-dom';
@@ -24,16 +24,12 @@ import * as yup from "yup";
 export default function TenantRegister() {
     const [showPassword, setShowPassword] = useState(false);
     const [showPasswordConfirmation, setShowPasswordConfirmation] = useState(false);
-    const [passwordConfirmation, setPasswordConfirmation] = React.useState('');
     const navigate = useNavigate();
-    const [name, setName] = React.useState('');
-    const [phone, setPhone] = React.useState('');
-    const [email, setEmail] = React.useState('');
-    const [password, setPassword] = React.useState('');
     const [fileImage, setFileImage] = useState(null);  //state for idcard
     const inputFile = useRef(null);
     const [image, setImage] = useState("https://fakeimg.pl/350x200/");
     const [loading, setLoading] = React.useState(false);
+    const toast = useToast();
 
     console.log("isi fileimage: ", fileImage);
     const onBtnRegister = async () => {
@@ -64,19 +60,36 @@ export default function TenantRegister() {
             formData.append("images", fileBase64);
             console.log("ini isi dari formData", formData);
             if (!formik.isValid) {
-                return;  //gak jalan axios kalo formiknya blom bener tp keluar yup messagenya
+                return;  
             }
             let response = await axios.post(`${API_URL}/user/registerastenant`,
                 formData
             );
             console.log("ini hasil response onbtnregister :", response); //testing purposes
             console.log("ini hasil response onbtnregister message from be :", response.data.message); //testing purposes
-            if (response.data.success) {
-                alert(response.data.message);
-            }
+            toast({
+                title: response.data.message,
+                status: 'success',
+                duration: 3000,
+                isClosable: true,
+            });
         } catch (error) {
             console.log("ini error dari onBtnRegister : ", error); //testing purposes
-            alert(error.response.data.message);
+            if (error.response && !error.response.data.message) {
+                toast({
+                    title: 'Register failed',
+                    status: 'error',
+                    duration: 3000,
+                    isClosable: true,
+                });
+            } else {
+                toast({
+                    title: error.response.data.message,
+                    status: 'error',
+                    duration: 3000,
+                    isClosable: true,
+                });
+            }
         } finally {
             setLoading(false);
         }
@@ -91,7 +104,7 @@ export default function TenantRegister() {
             passwordConfirmation: "",
             fileImage: ""
         },
-        onSubmit: onBtnRegister, // ini paling terakhir (gk jadi) krn dia synchronous
+        onSubmit: onBtnRegister, 
         validationSchema: yup.object().shape({
             name: yup
                 .string()
@@ -255,7 +268,6 @@ export default function TenantRegister() {
                         {/* UPLOAD ID CARD */}
                         <FormControl isInvalid={formik.errors.fileImage}>
                             <FormLabel>Upload a photo of your KTP
-
                             <Text fontSize='xs'>( Image size: max. 1 MB , Image format: .jpg, .jpeg, .png )</Text>
                             </FormLabel>
                             <Image

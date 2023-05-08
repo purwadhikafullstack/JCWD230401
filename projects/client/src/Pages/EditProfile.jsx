@@ -8,6 +8,7 @@ import {
     Input,
     Stack,
     Avatar,
+    useToast,
     Center, Radio, RadioGroup, Box, useDisclosure, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, Text, FormErrorMessage
 } from '@chakra-ui/react';
 import { useSelector } from 'react-redux';
@@ -24,8 +25,6 @@ export default function EditProfile(props) {
     const currentBirth = useSelector((state) => state.authReducer.birth);
     const currentProfileImage = useSelector((state) => state.authReducer.image_profile);
     const role = useSelector((state) => state.authReducer.role);
-    const [name, setName] = useState(currentName);
-    const [email, setEmail] = useState(currentEmail);
     const [gender, setGender] = useState(currentGender);
     const [birth, setBirth] = useState(currentBirth);
     const modalProfileImage = useDisclosure()
@@ -33,7 +32,8 @@ export default function EditProfile(props) {
     const inputFile = useRef(null);
     const [loading1, setLoading1] = useState(false);
     const [loading2, setLoading2] = useState(false);
-    
+    const toast = useToast();
+
     console.log("ini isi dari role edit profile:", role); //testing
 
     const handleGenderChange = (value) => {
@@ -76,14 +76,33 @@ export default function EditProfile(props) {
             );
             console.log("response onbtneditprofile :", response); //testing purposes
             console.log("response onbtneditprofile message from be :", response.data.message); //testing purposes
-            alert(response.data.message);
+            toast({
+                title: response.data.message,
+                status: 'success',
+                duration: 3000,
+                isClosable: true,
+            });
             props.keeplogin(); //refresh once updated
         } catch (error) {
             console.log("ini error dari onBtnEditProfile : ", error); //testing purposes
-            // alert(error.response.data.message);
-            alert(error.response.data.error[0].msg);
+            // alert(error.response.data.error[0].msg);
+            if (error.response && !error.response.data.error) {
+                toast({
+                    title: error.response.data.message,
+                    status: 'error',
+                    duration: 3000,
+                    isClosable: true,
+                });
+            } else {
+                toast({
+                    title: error.response.data.error[0].msg,
+                    status: 'error',
+                    duration: 3000,
+                    isClosable: true,
+                });
+            }
         } finally {
-            setLoading1(false); 
+            setLoading1(false);
         }
     }
 
@@ -149,15 +168,28 @@ export default function EditProfile(props) {
             );
             console.log("response onbtneditprofileimage :", response);
             console.log("response onbtneditprofileimage message be :", response.data.message);
-            alert(response.data.message);
+            // alert(response.data.message);
+            toast({
+                title: response.data.message,
+                status: 'success',
+                duration: 3000,
+                isClosable: true,
+            });
             modalProfileImage.onClose();
+            // window.location.reload(); // buat ilangin error message props.keeplogin but worse ux
             props.keeplogin(); //refresh immediately once profpic updated
         } catch (error) {
             console.log("ini error dari onBtnEditProfileImage : ", error);
-            alert(error.message);
+            // alert(error.message);
+            toast({
+                title: error.message,
+                status: 'error',
+                duration: 3000,
+                isClosable: true,
+            });
         } finally {
-            setLoading2(false); 
-        } 
+            setLoading2(false);
+        }
     };
 
     const onBtnShowKTP = async () => {
@@ -171,7 +203,7 @@ export default function EditProfile(props) {
                 }
             );
             console.log("response onbtnshowktp :", response.data);
-            
+
             //1. Decode Base64 string into binary data
             const binaryData = atob(response.data);
 
@@ -266,11 +298,11 @@ export default function EditProfile(props) {
                                     }} variant='solid'>
                                         Cancel
                                     </Button>
-                                    <Button 
-                                    onClick={onBtnEditProfileImage}
-                                    isLoading={loading2} 
-                                    colorScheme='green' 
-                                    variant='outline'
+                                    <Button
+                                        onClick={onBtnEditProfileImage}
+                                        isLoading={loading2}
+                                        colorScheme='green'
+                                        variant='outline'
                                     >Save</Button>
                                 </ModalFooter>
                             </ModalContent>

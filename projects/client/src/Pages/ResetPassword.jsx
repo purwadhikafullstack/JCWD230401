@@ -7,7 +7,7 @@ import {
     Heading,
     Input,
     Stack,
-    InputGroup, InputRightElement, FormErrorMessage
+    InputGroup, InputRightElement, FormErrorMessage, useToast
 } from '@chakra-ui/react';
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
 import axios from 'axios';
@@ -18,14 +18,11 @@ import * as yup from "yup";
 
 export default function ResetPassword() {
     const [showNewPassword, setShowNewPassword] = useState(false);
-    const [newPassword, setNewPassword] = React.useState('');
     const [showPasswordConfirmation, setShowPasswordConfirmation] = useState(false);
-    const [passwordConfirmation, setPasswordConfirmation] = React.useState('');
-    const [verificationCode, setVerificationCode] = useState('');
     const navigate = useNavigate();
     const params = useParams(); //data token di params
     const [loading, setLoading] = React.useState(false);
-
+    const toast = useToast();
 
     const onBtnResetPassword = async () => {
         try {
@@ -44,13 +41,31 @@ export default function ResetPassword() {
                 }
             });
             console.log("ini hasil response onbtnresetpassword :", response); //testing purposes
-            alert(response.data.message);
+            // alert(response.data.message);
+            toast({
+                title: response.data.message,
+                status: 'success',
+                duration: 3000,
+                isClosable: true,
+            });
             navigate('/', { replace: true });
         } catch (error) {
             console.log("ini error dari onBtnResetPassword : ", error);
-            alert(error.response.data.message);
-            // alert(error.response.data.error[0].msg); //error msg validator new pw
-            // alert(error.response.data.error[1].msg); //error msg validator confirmation pw
+            if (error.response && !error.response.data.message) {
+                toast({
+                    title: 'Reset password failed',
+                    status: 'error',
+                    duration: 3000,
+                    isClosable: true,
+                });
+            } else {
+                toast({
+                    title: error.response.data.message,
+                    status: 'error',
+                    duration: 3000,
+                    isClosable: true,
+                });
+            }
         } finally {
             setLoading(false);
         }

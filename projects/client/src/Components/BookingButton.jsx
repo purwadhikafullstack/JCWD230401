@@ -7,7 +7,8 @@ import {
   ModalBody,
   ModalCloseButton,
   useDisclosure,
-  Button
+  Button,
+  useToast
 } from '@chakra-ui/react';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -22,7 +23,8 @@ export default function BookingButton() {
   const navigate = useNavigate();
   const isVerified = useSelector((state) => state.authReducer.isVerified);
   const [loading, setLoading] = React.useState(false);
-
+  const toast = useToast();
+  console.log("ini isi user is Verified ? :", isVerified);
 
   //inside modal alert cannot continue to transaction page
   const onBtnSendVerifyEmail = async () => {
@@ -36,10 +38,39 @@ export default function BookingButton() {
       }
       );
       console.log("ini hasil response onbtnSendVerifyEmail :", response);
-      alert(response.data.message);
+      // alert(response.data.message);
+      toast({
+        title: response.data.message,
+        status: 'success',
+        duration: 3000,
+        isClosable: true,
+      })
     } catch (error) {
       console.log("ini error dari onBtnSendVerifyEmail :", error);
-      navigate('/transactionpage');
+      // navigate('/transactionpage');
+      if (error.response && error.response.data.message === "You have reached the maximum limit of OTP resend requests for today.") {
+        toast({
+          title: 'You have reached the maximum limit of OTP resend requests for today. Please try again tomorrow.',
+          status: 'error',
+          duration: 3000,
+          isClosable: true,
+        });
+      } 
+      if (error.response && error.response.status === 401){ 
+        toast({
+          title: 'Your code has expired. Please log in again to resend email to verify your account.',
+          status: 'error',
+          duration: 3000,
+          isClosable: true,
+        });
+      } else {
+        toast({
+          title: error.response.data.message,
+          status: 'error',
+          duration: 3000,
+          isClosable: true,
+        });
+      }
     } finally {
       setLoading(false);
     }
@@ -93,7 +124,7 @@ export default function BookingButton() {
             </Modal>
           </>
           :
-          //if isverified true
+          //if isVerified true
           <>
             <Button
               loadingText="Submitting"

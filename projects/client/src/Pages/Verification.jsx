@@ -7,7 +7,7 @@ import {
   Input,
   Stack,
   HStack,
-  FormLabel, FormErrorMessage
+  FormLabel, FormErrorMessage, useToast
 } from '@chakra-ui/react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { API_URL } from '../helper';
@@ -18,33 +18,53 @@ import * as yup from "yup";
 export default function Verification() {
   const params = useParams(); //to get token from email link for auth
   const navigate = useNavigate();
-  const [verificationCode, setVerificationCode] = useState(''); //verification code
   const [loading1, setLoading1] = React.useState(false);
   const [loading2, setLoading2] = React.useState(false);
+  const toast = useToast();
   console.log("ini isi token dari params", params); //testing purposes
-  console.log("ini isi input field otp code :", verificationCode); //testing purposes
-
-
 
   //Send Verification Email
   const onBtnSendVerifyEmail = async () => {
     try {
       setLoading2(true);
-        let response = await axios.post(`${API_URL}/user/sendverificationemail`, {}, {
-          headers: {
-            Authorization: `Bearer ${params.token}`
-          }
+      let response = await axios.post(`${API_URL}/user/sendverificationemail`, {}, {
+        headers: {
+          Authorization: `Bearer ${params.token}`
         }
-        );
-        console.log("ini hasil response onbtnSendVerifyEmail :", response);
-        alert(response.data.message);
+      }
+      );
+      console.log("ini hasil response onbtnSendVerifyEmail :", response);
+      // alert(response.data.message);
+      toast({
+        title: response.data.message,
+        status: 'success',
+        duration: 3000,
+        isClosable: true,
+      });
     } catch (error) {
       console.log("ini error dari onBtnSendVerifyEmail :", error);
-      if (error.response && error.response.status === 401) {
-        alert('Your session has expired. Please log in again to resend email to verify your account.');
+      if (error.response && error.response.data.message === "You have reached the maximum limit of OTP resend requests for today.") {
+        toast({
+          title: 'You have reached the maximum limit of OTP resend requests for today. Please try again tomorrow.',
+          status: 'error',
+          duration: 3000,
+          isClosable: true,
+        });
+      } else if (error.response && error.response.status === 401) {
+        toast({
+          title: 'Your session has expired. Please log in again to resend email to verify your account.',
+          status: 'error',
+          duration: 3000,
+          isClosable: true,
+        });
         navigate('/', { replace: true });
       } else {
-        alert(error.response.data.message);
+        toast({
+          title: error.response.data.message,
+          status: 'error',
+          duration: 3000,
+          isClosable: true,
+        });
       }
     } finally {
       setLoading2(false);
@@ -56,9 +76,9 @@ export default function Verification() {
     try {
       setLoading1(true);
       await formik.validateForm();
-            if (!formik.isValid) {
-                return;
-            }
+      if (!formik.isValid) {
+        return;
+      }
       let response = await axios.patch(`${API_URL}/user/verifyaccount`,
         {
           otp: formik.values.verificationCode
@@ -70,35 +90,58 @@ export default function Verification() {
         }
       );
       console.log("ini hasil response onbtnverify :", response); //testing purposes
-      alert(response.data.message);
+      toast({
+        title: response.data.message,
+        status: 'success',
+        duration: 3000,
+        isClosable: true,
+      })
       navigate('/', { replace: true });
     } catch (error) {
       console.log("ini error dari onBtnVerify :", error);
+      if (error.response && !error.response.data.message) {
+        toast({
+            title: 'Verify account failed',
+            status: 'error',
+            duration: 3000,
+            isClosable: true,
+        });
+    } 
       if (error.response && error.response.status === 401) {
-        alert('Your code has expired. Please log in again to resend email to verify your account.');
+        toast({
+          title: 'Your code has expired. Please log in again to resend email to verify your account.',
+          status: 'error',
+          duration: 3000,
+          isClosable: true,
+        });
         navigate('/', { replace: true });
       } else {
-        alert(error.response.data.message);
+        toast({
+          title: error.response.data.message,
+          status: 'error',
+          duration: 3000,
+          isClosable: true,
+        });
       }
     } finally {
-      setLoading1(false); 
-  }
+      setLoading1(false);
+    }
   };
 
   const formik = useFormik({
     initialValues: {
-        verificationCode: ""
+      verificationCode: ""
     },
     onSubmit: onBtnVerify,
     validationSchema: yup.object().shape({
-        verificationCode: yup.string()
-            .required("OTP code is a required field")
+      verificationCode: yup.string()
+        .required("OTP code is a required field")
     })
-});
+  });
 
-const handleForm = (event) => {
+  const handleForm = (event) => {
     formik.setFieldValue(event.target.name, event.target.value);
-};
+  };
 
   return (
     <Flex
@@ -135,7 +178,7 @@ const handleForm = (event) => {
                   onChange={handleForm}
                   name="verificationCode"
                 />
-                 <FormErrorMessage fontSize='xs'>{formik.errors.verificationCode}</FormErrorMessage>
+                <FormErrorMessage fontSize='xs'>{formik.errors.verificationCode}</FormErrorMessage>
               </FormControl>
             </HStack>
           </Center>

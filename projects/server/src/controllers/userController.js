@@ -10,7 +10,8 @@ const {
 const fs = require("fs");
 const hbs = require("nodemailer-express-handlebars");
 const nodemailer = require("nodemailer");
-const moment = require('moment');
+const moment = require("moment-timezone");
+moment.tz.setDefault("Asia/Jakarta");
 
 let salt = bcrypt.genSaltSync(10);
 
@@ -63,7 +64,7 @@ module.exports = {
           console.log("ini isi dari id regis :", regis.dataValues.id);
           console.log("ini isi dari regisUserDetail :", regisUserDetail);
           let { id, roleId } = regis.dataValues;
-          //2. generate token --> Q: cukup dari tabel user saja?
+          //2. generate token
           let token = createToken({ id, roleId }, "24h");
           // create transporter object and configure Handlebars template
           const transporter = nodemailer.createTransport({
@@ -102,20 +103,20 @@ module.exports = {
           return res.status(200).send({
             success: true,
             message:
-              "register account success ✅ and you received an email to verify your account.",
+              "Register success. You received an email to verify your account.",
             data: regis,
             regisUserDetail,
           });
         } else {
           res.status(400).send({
             success: false,
-            message: "Error❌: Passwords do not match.",
+            message: "Passwords do not match.",
           });
         }
       } else {
         res.status(400).send({
           success: false,
-          message: "Error❌: Email or phone number exist.",
+          message: "Email or phone number exist.",
         });
       }
     } catch (error) {
@@ -171,7 +172,7 @@ module.exports = {
           // LOGIN SUCCESS
           return res.status(200).send({
             success: true,
-            message: "Login success ✅",
+            message: "Login success",
             token,
             name,
             email,
@@ -196,7 +197,7 @@ module.exports = {
             );
             res.status(400).send({
               success: false,
-              message: `Wrong password ❌ attempt number : ${
+              message: `Wrong password. Attempt number : ${
                 getuser[0].dataValues.attempts + 1
               }`,
             });
@@ -211,14 +212,14 @@ module.exports = {
             );
             res.status(400).send({
               success: false,
-              message: "Account suspended ❌ please reset your password",
+              message: "Account suspended. Please reset your password",
             });
           }
         }
       } else {
         res.status(400).send({
           success: false,
-          message: "Account not found ❌",
+          message: "Account not found",
         });
       }
     } catch (error) {
@@ -249,7 +250,7 @@ module.exports = {
       // KEEP LOGIN SUCCESS
       return res.status(200).send({
         success: true,
-        message: "keep login success ✅",
+        message: "keep login success",
         token,
         name,
         email,
@@ -308,32 +309,31 @@ module.exports = {
               );
               return res.status(200).send({
                 success: true,
-                message: "Change password success ✅",
+                message: "Change password success",
               });
             } else {
               res.status(400).send({
                 success: false,
                 message:
-                  "Error❌: Your new password cannot be the same as your current password.",
+                  "Your new password cannot be the same as your current password.",
               });
             }
           } else {
             res.status(400).send({
               success: false,
-              message:
-                "Error❌: New password and confirmation password do not match.",
+              message: "New password and confirmation password do not match.",
             });
           }
         } else {
           res.status(400).send({
             success: false,
-            message: "Error❌: Current password is incorrect",
+            message: "Current password is incorrect",
           });
         }
       } else {
         res.status(400).send({
           success: false,
-          message: "Error❌: Current password not found",
+          message: "Current password not found",
         });
       }
     } catch (error) {
@@ -373,7 +373,7 @@ module.exports = {
         //4. create token to send by email
         let { id, roleId, isSuspended } = getData[0].dataValues;
         let { name } = getData[0].user_detail;
-        let token = createToken({ id, roleId, isSuspended }, "1h"); // apa aja yg jd token? //1 jam (forgot pw dan verifikasi)
+        let token = createToken({ id, roleId, isSuspended }, "1h");
         // create transporter object and configure Handlebars template
         const transporter = nodemailer.createTransport({
           service: "gmail",
@@ -409,13 +409,13 @@ module.exports = {
         });
         res.status(200).send({
           success: true,
-          message: "email to reset password has been delivered ✅",
+          message: "Email to reset password has been delivered",
           token,
         });
       } else {
         res.status(400).send({
           success: false,
-          message: "Account with this email not found ❌",
+          message: "Account with this email not found",
         });
       }
     } catch (error) {
@@ -440,9 +440,9 @@ module.exports = {
         const { otp } = req.body;
         //2. if otp from req.body the same with otp from database user can reset password
         if (otp == getotp[0].dataValues.otp) {
-          //1. hash right before update
+          //3. hash right before update
           req.body.newPassword = bcrypt.hashSync(req.body.newPassword, salt);
-          //2. update the password & isSuspended
+          //4. update the password & isSuspended
           await model.user.update(
             { password: req.body.newPassword, isSuspended: 0 },
             {
@@ -463,19 +463,18 @@ module.exports = {
           );
           return res.status(200).send({
             success: true,
-            message: "Reset password success ✅",
+            message: "Reset password success",
           });
         } else {
           res.status(400).send({
             success: false,
-            message:
-              "Error❌: New password and confirmation password do not match.",
+            message: "Wrong verification code",
           });
         }
       } else {
         res.status(400).send({
           success: false,
-          message: "Wrong verification code ❌",
+          message: "New password and confirmation password do not match.",
         });
       }
     } catch (error) {
@@ -535,7 +534,7 @@ module.exports = {
                 uuid,
                 name,
                 image_ktp,
-                userId: regis.id, // Set userId to the id of the newly created user
+                userId: regis.id, 
               },
               {
                 transaction: ormTransaction,
@@ -544,26 +543,26 @@ module.exports = {
             await ormTransaction.commit();
             return res.status(200).send({
               success: true,
-              message: "register account success ✅",
+              message: "Register success",
               data: regis,
               regisUserDetail,
             });
           } else {
             res.status(400).send({
               success: false,
-              message: "Error❌: Passwords do not match.",
+              message: "Passwords do not match",
             });
           }
         } else {
           res.status(400).send({
             success: false,
-            message: "Error❌: Id card image file is required",
+            message: "Id card image file is required",
           });
         }
       } else {
         res.status(400).send({
           success: false,
-          message: "Error❌: Email or phone number exist.",
+          message: "Email or phone number exist",
         });
       }
     } catch (error) {
@@ -582,16 +581,15 @@ module.exports = {
           id: req.decrypt.id,
         },
       });
-      console.log(
-        "ini isi dataValues checkverifieduser :",
-        checkverifieduser[0].dataValues
-      );
-      console.log(
-        "ini isi isVerified dari checkverifieduser :",
-        checkverifieduser[0].dataValues.isVerified
-      );
-      let { otpCount, otpCountDate } =
-          checkverifieduser[0].dataValues;
+      // console.log(
+      //   "ini isi dataValues checkverifieduser :",
+      //   checkverifieduser[0].dataValues
+      // );
+      // console.log(
+      //   "ini isi isVerified dari checkverifieduser :",
+      //   checkverifieduser[0].dataValues.isVerified
+      // );
+      let { otpCount, otpCountDate } = checkverifieduser[0].dataValues;
       if (!checkverifieduser[0].dataValues.isVerified) {
         // get otp from database
         let getotp = await model.user.findAll({
@@ -624,12 +622,12 @@ module.exports = {
           );
           return res.status(200).send({
             success: true,
-            message: "Your Account has been Verified ✅",
+            message: "Your account has been verified",
           });
         } else {
           res.status(400).send({
             success: false,
-            message: "Wrong verification code ❌",
+            message: "Wrong verification code",
           });
         }
       } else {
@@ -672,31 +670,31 @@ module.exports = {
         // get last time otpCount is updated (send otp email)
         const lastUpdateDate = moment(otpCountDate);
         console.log("ini isi lastUpdateDate :", lastUpdateDate);
+        console.log(!moment().isSame(lastUpdateDate, "day")); //return boolean
         // if last update date is not 'today' otpCount reset to zero
         if (!moment().isSame(lastUpdateDate, "day")) {
           otpCount = 0;
         }
-        console.log(!moment().isSame(lastUpdateDate, "day"));
         // if otpCount is 5 for the day, cannot send anymore verification email
         if (otpCount < 5) {
           // create otp
           const otp = Math.floor(1000 + Math.random() * 9000);
           console.log("random numbers generated for otp :", otp);
-        // patch old otp & otpCount + 1 & otpCountDate
-        await model.user.update(
-          {
-            otp: otp,
-            otpCount: otpCount + 1,
-            otpCountDate: moment().format("YYYY-MM-DD"),
-          },
-          {
-            where: {
-              id: req.decrypt.id,
+          // patch old otp & otpCount + 1 & otpCountDate
+          await model.user.update(
+            {
+              otp: otp,
+              otpCount: otpCount + 1,
+              otpCountDate: moment().format("YYYY-MM-DD"),
             },
-          }
-        );
+            {
+              where: {
+                id: req.decrypt.id,
+              },
+            }
+          );
           //2. generate token
-          let token = createToken({ id, roleId }, "24h"); // ---> masukin email jg (gbole dimunculin di fe)
+          let token = createToken({ id, roleId }, "24h");
           // create transporter object and configure Handlebars template
           const transporter = nodemailer.createTransport({
             service: "gmail",
@@ -732,8 +730,7 @@ module.exports = {
           });
           return res.status(200).send({
             success: true,
-            message:
-              `You received an email to verify your account. Please check your email.
+            message: `You received an email to verify your account. Please check your email.
               otp sent today : ${otpCount + 1}
               today's data : ${otpCountDate}
               `,
@@ -782,12 +779,12 @@ module.exports = {
         );
         return res.status(200).send({
           success: true,
-          message: "Edit profile success ✅",
+          message: "Edit profile success",
         });
       } else {
         res.status(400).send({
           success: false,
-          message: "Error❌: Cannot change user data",
+          message: "Cannot change user data",
         });
       }
     } catch (error) {
@@ -825,7 +822,7 @@ module.exports = {
       );
       res.status(200).send({
         success: true,
-        message: "Profile photo changed ✅",
+        message: "Profile photo changed",
         profileimage: `/profileImage/${req.files[0]?.filename}`,
       });
     } catch (error) {

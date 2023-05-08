@@ -7,8 +7,9 @@ import {
     Heading,
     Input,
     Stack,
+    useToast,
     Image,
-    Text, HStack, Box, Center, Card, CardBody, InputGroup, InputRightElement, useDisclosure, FormErrorMessage
+    Text, HStack, Box, Center, Card, CardBody, InputGroup, InputRightElement, FormErrorMessage
 } from '@chakra-ui/react';
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
 import { useNavigate } from 'react-router-dom';
@@ -25,14 +26,8 @@ export default function UserRegister() {
     const [showPassword, setShowPassword] = useState(false);
     const [showPasswordConfirmation, setShowPasswordConfirmation] = useState(false);
     const navigate = useNavigate();
-    const [name, setName] = React.useState('');
-    const [phone, setPhone] = React.useState('');
-    const [email, setEmail] = React.useState('');
-    const [password, setPassword] = React.useState('');
-    const [passwordConfirmation, setPasswordConfirmation] = React.useState('');
-    const { isOpen, onOpen, onClose } = useDisclosure();
     const [loading, setLoading] = React.useState(false);
-
+    const toast = useToast();
 
     const onBtnRegister = async () => {
         try {
@@ -51,17 +46,31 @@ export default function UserRegister() {
             );
             console.log("ini hasil response onbtnregister :", response); //testing purposes
             console.log("ini hasil response onbtnregister message from be :", response.data.message); //testing purposes
-            if (response.data.success) {
-                alert(response.data.message);
-            }
-            // navigate('/', { replace: true }); --> jangan ktnya bikin bug 
+            toast({
+                title: response.data.message,
+                status: 'success',
+                duration: 3000,
+                isClosable: true,
+            });
         } catch (error) {
             console.log("ini error dari onBtnRegister : ", error); //testing purposes
-            alert(error.response.data.message);
-            alert(error.response.data.error[0].msg);
-            alert(error.response.data.error[1].msg);
+            if (error.response && !error.response.data.message) {
+                toast({
+                    title: 'Register failed',
+                    status: 'error',
+                    duration: 3000,
+                    isClosable: true,
+                });
+            } else {
+                toast({
+                    title: error.response.data.message,
+                    status: 'error',
+                    duration: 3000,
+                    isClosable: true,
+                });
+            }
         } finally {
-            setLoading(false); //after call is complete
+            setLoading(false); 
         }
     }
 
@@ -110,7 +119,7 @@ export default function UserRegister() {
                     /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{6,})/,
                     "Password must be at least 6 characters includes 1 number, 1 uppercase, and 1 lowercase letter"
                 )
-                .oneOf([yup.ref('password'), null], 'Passwords must match'), //check if the value matches "password" field
+                .oneOf([yup.ref('password'), null], 'Passwords must match'), 
         })
     });
 
@@ -130,7 +139,6 @@ export default function UserRegister() {
                 p={{ base: '8', sm: '0' }}
                 flex={1}
                 align={'center'} justify={'center'}
-            // py='20'
             >
                 <Stack spacing={0} w={'full'} maxW={{ base: 'sm' }}>
                     <Heading fontSize={'3xl'} fontWeight='semibold'
@@ -233,7 +241,7 @@ export default function UserRegister() {
 
                         {/* Google */}
                         <Button
-                        onClick={signInWithGoogle}
+                            onClick={signInWithGoogle}
                             w={'full'} variant={'outline'} leftIcon={<FcGoogle />} borderColor='#d0d7de' _hover={'none'}>
                             <Center>
                                 <Text>Continue with Google</Text>
@@ -251,10 +259,8 @@ export default function UserRegister() {
                                     <HStack fontSize='sm'
                                     >
                                         <Text>Have an account?</Text>
-                                        {/* usenavigate ke landing, tp login nya ada di landing page modal, hrs bikin modal login lsg kebuka in order to have this  */}
                                         <Text onClick={() => {
                                             navigate('/');
-                                            // onOpen();
                                         }} color='#0969da'
                                             cursor={'pointer'}
                                         >
@@ -275,7 +281,6 @@ export default function UserRegister() {
                     alt={'User Register Page Image'}
                     objectFit={'cover'}
                     src={Userregisterbanner}
-
                 />
             </Flex>
         </Stack>

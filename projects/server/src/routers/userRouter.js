@@ -11,7 +11,7 @@ const {
   sendverificationemail,
   editprofile,
   updateprofileimage,
-  showktp
+  showktp,
 } = require("../controllers/userController");
 const { readToken } = require("../helper/jwt");
 const uploader = require("../helper/uploader");

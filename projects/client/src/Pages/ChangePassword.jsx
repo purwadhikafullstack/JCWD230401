@@ -7,7 +7,7 @@ import {
     Heading,
     Input,
     Stack,
-    InputGroup, InputRightElement, FormErrorMessage
+    InputGroup, InputRightElement, FormErrorMessage, useToast
 } from '@chakra-ui/react';
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
 import axios from 'axios';
@@ -18,13 +18,11 @@ import * as yup from "yup";
 
 export default function ChangePassword() {
     const [showOldPassword, setShowOldPassword] = useState(false);
-    const [oldPassword, setOldPassword] = React.useState('');
     const [showNewPassword, setShowNewPassword] = useState(false);
-    const [newPassword, setNewPassword] = React.useState('');
     const [showPasswordConfirmation, setShowPasswordConfirmation] = useState(false);
-    const [passwordConfirmation, setPasswordConfirmation] = React.useState('');
     const navigate = useNavigate();
     const [loading, setLoading] = React.useState(false);
+    const toast = useToast();
 
     const onBtnChangePassword = async () => {
         try {
@@ -47,12 +45,30 @@ export default function ChangePassword() {
             );
             console.log("ini hasil response onbtnchangepassword :", response); //testing purposes
             console.log("ini hasil response onbtnchangepassword message from be :", response.data.message); //testing purposes
-            alert(response.data.message);
+            toast({
+                title: response.data.message,
+                status: 'success',
+                duration: 3000,
+                isClosable: true,
+            });
             navigate('/');
         } catch (error) {
             console.log("ini error dari onBtnChangePassword : ", error); //testing purposes
-            alert(error.response.data.message);
-            alert(error.response.data.error[0].msg);
+            if (error.response && !error.response.data.message) {
+                toast({
+                    title: 'Change password failed',
+                    status: 'error',
+                    duration: 3000,
+                    isClosable: true,
+                });
+            } else {
+                toast({
+                    title: error.response.data.message,
+                    status: 'error',
+                    duration: 3000,
+                    isClosable: true,
+                });
+            }
         } finally {
             setLoading(false); 
         }
@@ -94,7 +110,7 @@ export default function ChangePassword() {
                     /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{6,})/,
                     "Password must be at least 6 characters includes 1 number, 1 uppercase, and 1 lowercase letter"
                 )
-                .oneOf([yup.ref('newPassword'), null], 'Passwords must match'), //check if the value matches "password" field
+                .oneOf([yup.ref('newPassword'), null], 'Must match with new password'), 
         })
     });
 

@@ -7,7 +7,8 @@ import {
     Input,
     Stack,
     Text,
-    FormErrorMessage
+    FormErrorMessage,
+    useToast
 } from '@chakra-ui/react';
 import axios from 'axios';
 import { API_URL } from '../helper';
@@ -15,8 +16,8 @@ import { useFormik } from 'formik';
 import * as yup from "yup";
 
 export default function ForgotPassword() {
-    const [email, setEmail] = React.useState('');
     const [loading, setLoading] = React.useState(false);
+    const toast = useToast();
 
     const onBtnForgotPassword = async () => {
         try {
@@ -29,11 +30,30 @@ export default function ForgotPassword() {
                 email: formik.values.email
             });
             console.log("ini hasil response onBtnForgotPassword :", response); //testing purposes
-            alert(response.data.message);
+            // alert(response.data.message);
+            toast({
+                title: response.data.message,
+                status: 'success',
+                duration: 3000,
+                isClosable: true,
+            });
         } catch (error) {
             console.log("ini error dari onBtnForgotPassword : ", error); //testing purposes
-            alert(error.response.data.message);
-            alert(error.response.data.error[0].msg);
+            if (error.response && !error.response.data.message) {
+                toast({
+                    title: 'Request reset password failed',
+                    status: 'error',
+                    duration: 3000,
+                    isClosable: true,
+                });
+            } else {
+                toast({
+                    title: error.response.data.message,
+                    status: 'error',
+                    duration: 3000,
+                    isClosable: true,
+                });
+            }
         } finally {
             setLoading(false); //after call is complete
         }

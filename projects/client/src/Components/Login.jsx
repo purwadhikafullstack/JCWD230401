@@ -1,9 +1,7 @@
-import { Flex, Box, FormControl, Divider, Icon, Card, CardBody, FormLabel, Input, InputGroup, HStack, Center, InputRightElement, Stack, Button, Heading, Text, Link, FormErrorMessage } from '@chakra-ui/react';
+import { Flex, Box, FormControl, Divider, Icon, Card, CardBody, FormLabel, Input, InputGroup, HStack, Center, InputRightElement, Stack, Button, Heading, Text, Link, useToast, FormErrorMessage } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
 import { FcGoogle } from 'react-icons/fc';
-import { FaFacebook, FaApple, FaPhoneAlt } from 'react-icons/fa';
-import { MdOutlineEmail } from 'react-icons/md';
 import { TbHomeHeart } from "react-icons/tb";
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -18,9 +16,8 @@ export default function Login() {
     const [showPassword, setShowPassword] = useState(false);
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const [emailOrPhone, setEmailOrPhone] = React.useState('');
-    const [password, setPassword] = React.useState('');
     const [loading, setLoading] = React.useState(false);
+    const toast = useToast();
 
     const onBtnLogin = async () => {
         try {
@@ -36,27 +33,40 @@ export default function Login() {
             });
             console.log("response.data dari login : ", response.data)
             // console.log("response.data dari login role : ", response.data.role)
-            if (response.data.length == 0) {
-                alert('Account not found ❌');
+            toast({
+                title: 'Login success',
+                status: 'success',
+                duration: 3000,
+                isClosable: true,
+            });
+            //simpen ke LOCALSTORAGE browser u/ KEEPLOGIN
+            localStorage.setItem('tempatku_login', response.data.token);
+            //simpen response.data ke reducer
+            dispatch(loginAction(response.data))
+            if (response.data.role == "User") {
+                navigate('/', { replace: true });
+            } else if (response.data.role == "Tenant") {
+                navigate('/dashboard', { replace: true });
             } else {
-                alert('Login success ✅');
-                //simpen ke LOCALSTORAGE browser u/ KEEPLOGIN
-                localStorage.setItem('tempatku_login', response.data.token);
-                //simpen response.data ke reducer
-                dispatch(loginAction(response.data))
-                if (response.data.role == "User") {
-                    navigate('/', { replace: true });
-                } else if (response.data.role == "Tenant") {
-                    navigate('/dashboard', { replace: true });
-                } else {
-                    navigate('/', { replace: true });
-                }
+                navigate('/', { replace: true });
             }
         } catch (error) {
             console.log("ini error dari onBtnLogin : ", error);
-            // alert(error.response.data.message);
-            // alert(error.response.data.error[0].msg);
-            // alert(error.response.data.error[2].msg);
+            if (error.response && !error.response.data.message) {
+                toast({
+                    title: 'Login failed',
+                    status: 'error',
+                    duration: 3000,
+                    isClosable: true,
+                });
+            } else {
+                toast({
+                    title: error.response.data.message,
+                    status: 'error',
+                    duration: 3000,
+                    isClosable: true,
+                });
+            }
         } finally {
             setLoading(false);
         }
