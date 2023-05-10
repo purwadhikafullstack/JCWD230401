@@ -34,7 +34,7 @@ export default function TenantRegister() {
     console.log("isi fileimage: ", fileImage);
     const onBtnRegister = async () => {
         try {
-             setLoading(true);
+            setLoading(true);
             await formik.validateForm();
             let formData = new FormData();
             formData.append(
@@ -48,7 +48,7 @@ export default function TenantRegister() {
                 })
             );
             //1. function that will read the file image and return a Promise that resolves with the base64 data:
-             const toBase64 = (file) =>
+            const toBase64 = (file) =>
                 new Promise((resolve, reject) => {
                     //FileReader API which allows you to read the contents of files asynchronously.
                     const reader = new FileReader();
@@ -60,7 +60,7 @@ export default function TenantRegister() {
             formData.append("images", fileBase64);
             console.log("ini isi dari formData", formData);
             if (!formik.isValid) {
-                return;  
+                return;
             }
             let response = await axios.post(`${API_URL}/user/registerastenant`,
                 formData
@@ -104,7 +104,7 @@ export default function TenantRegister() {
             passwordConfirmation: "",
             fileImage: ""
         },
-        onSubmit: onBtnRegister, 
+        onSubmit: onBtnRegister,
         validationSchema: yup.object().shape({
             name: yup
                 .string()
@@ -268,7 +268,7 @@ export default function TenantRegister() {
                         {/* UPLOAD ID CARD */}
                         <FormControl isInvalid={formik.errors.fileImage}>
                             <FormLabel>Upload a photo of your KTP
-                            <Text fontSize='xs'>( Image size: max. 1 MB , Image format: .jpg, .jpeg, .png )</Text>
+                                <Text fontSize='xs'>( Image size: max. 1 MB , Image format: .jpg, .jpeg, .png )</Text>
                             </FormLabel>
                             <Image
                                 boxSize='200px'

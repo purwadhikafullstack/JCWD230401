@@ -8,16 +8,20 @@ import {
     Stack,
     Text,
     FormErrorMessage,
-    useToast
+    useToast,
+    Box
 } from '@chakra-ui/react';
 import axios from 'axios';
 import { API_URL } from '../helper';
 import { useFormik } from 'formik';
 import * as yup from "yup";
+import { useNavigate } from 'react-router-dom';
+
 
 export default function ForgotPassword() {
     const [loading, setLoading] = React.useState(false);
     const toast = useToast();
+    const navigate = useNavigate();
 
     const onBtnForgotPassword = async () => {
         try {
@@ -79,11 +83,12 @@ export default function ForgotPassword() {
     };
 
     return (
-        <Flex
+        <Box
             minH={'100vh'}
             align={'center'}
             justify={'center'}
-            bg={'white'}>
+            bg={'white'}
+        >
             <Stack
                 spacing={4}
                 w={'full'}
@@ -93,8 +98,8 @@ export default function ForgotPassword() {
                 p={6}
                 my={12}
                 borderWidth={'1px'}
-                borderColor='gray.200'
-                // boxShadow={'xs'}
+                borderColor='gray.300'
+            // boxShadow={'xs'}
             >
                 <Heading lineHeight={1.1} fontSize={{ base: '2xl', md: '3xl' }}>
                     Forgot your password?
@@ -128,6 +133,19 @@ export default function ForgotPassword() {
                     </Button>
                 </Stack>
             </Stack>
-        </Flex>
+            <Box>
+                <Button
+                    // backgroundColor='#D3212D'
+                    borderWidth="1px"
+                    borderColor="#D3212D"
+                    color="#D3212D"
+                    _hover={{ bg: "#D3212D", textColor: "white" }}
+                    variant="outline"
+                    onClick={() => navigate('/')}
+                >
+                    Return to Homepage
+                </Button>
+            </Box>
+        </Box>
     );
 }

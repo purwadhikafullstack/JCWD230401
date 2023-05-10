@@ -265,12 +265,13 @@ function TenantDashboard() {
       <Box>
         <Sidebar />
       </Box>
-      <Box w='50vw' flex='5' px={{ base: '4', sm: '10' }} bg={'gray.50'} >
+      <Box w='50vw' flex='5' px={{ base: '4', sm: '10' }} bg={'white'} >
         <br />
         <Heading mb={{ base: '2', sm: '10' }}>
           Welcome, {name} 👋
         </Heading>
-        <Box p={{ base: '2', sm: '10' }} bg={'white'} rounded={'xl'} boxShadow={'lg'}>
+        <Box p={{ base: '2', sm: '10' }} bg={'white'} rounded={'xl'} borderWidth={'1px'}
+        borderColor='gray.300'>
           {/* MY PROPERTY */}
           <Box>
             <Text fontSize={{ base: '20', sm: '28' }} fontWeight={'semibold'} mb={{ base: '8', sm: '10' }} textAlign={{ base: 'center', sm: 'left' }}>Your Property Listings :</Text>
@@ -280,7 +281,8 @@ function TenantDashboard() {
           </Box>
         </Box>
         <br />
-        <Box p={{ base: '2', sm: '10' }} bg={'white'} rounded={'xl'} boxShadow={'lg'}>
+        <Box p={{ base: '2', sm: '10' }} bg={'white'} rounded={'xl'} borderWidth={'1px'}
+        borderColor='gray.300'>
           <Text fontSize={{ base: '20', sm: '28' }} fontWeight={'semibold'} mb={{ base: '8', sm: '10' }} textAlign={{ base: 'center', sm: 'left' }}>See Availability by Calendar Date :</Text>
           <Fullcalendar
             className="my-calendar"

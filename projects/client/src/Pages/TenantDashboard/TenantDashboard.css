@@ -34,7 +34,7 @@ font-size: 1rem;
   
   @media (max-width: 480px) {
     .fc .fc-view-harness{
-        font-size: 0.7rem;
+        font-size: 0.5rem;
     }
     .fc .fc-toolbar-title {
         font-size: 1.2rem;

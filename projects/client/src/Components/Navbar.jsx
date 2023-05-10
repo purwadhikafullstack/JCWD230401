@@ -55,9 +55,9 @@ export default function Navbar() {
       console.log("tipe data cookieValue :", typeof cookieValue);
       let response = await axios.get(`${API_URL}/auth/logout`, {
         headers: {
-          Cookie : cookieValue,
+          Cookie: cookieValue,
         }
-      });  
+      });
       document.cookie = "googleAuthToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
       dispatch(logoutAction());
       navigate('/', { replace: true });
@@ -75,21 +75,23 @@ export default function Navbar() {
         borderBottomWidth={1}
         borderStyle={'solid'}
         borderColor={'gray.200'}
-        >
+      >
         <Box boxShadow={'xs'} px={{ base: '4', sm: '10' }}>
           <Flex h={16} alignItems={'center'} justifyContent={'space-between'}>
             <HStack alignItems={'center'}>
               {/* Logo Tempatku */}
-              {/* <Icon fontSize="40px" src={Logo}
-                color='#D3212D'
-                display={{
-                  // base: "none", sm: "none", md: "block" 
-                }}
-              /> */}
-              <Image src={Logo} alt='tempatku logo' boxSize='50px'/>
+              {
+                role == "User" ?
+                  <Image src={Logo} alt='tempatku logo' boxSize='50px' onClick={() => navigate('/')} />
+                  :
+                  role == "Tenant" ?
+                    <Image src={Logo} alt='tempatku logo' boxSize='50px' onClick={() => navigate('/dashboard')} />
+                    :
+                    <Image src={Logo} alt='tempatku logo' boxSize='50px' onClick={() => navigate('/')} />
+              }
               <Text
                 display={{
-                  base: "none", sm: "none", md: "block" 
+                  base: "none", sm: "none", md: "block"
                 }}
                 fontSize="23px"
                 fontWeight="600"

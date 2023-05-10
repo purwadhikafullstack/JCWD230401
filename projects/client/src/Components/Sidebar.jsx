@@ -32,7 +32,7 @@ export default function Sidebar() {
             flexDir="column"
             justifyContent="space-between"
             px={{base:"3", lg:"6"}}
-            // borderRight='1px'
+            borderRight='1px'
             borderColor='gray.300'
             display={{base:'none', sm:'flex'}}
         >

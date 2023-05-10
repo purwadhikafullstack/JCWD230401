@@ -7,6 +7,7 @@ const sequelize = require("sequelize");
 const model = require("../models");
 const { v4: uuidv4 } = require("uuid");
 const cookieParser = require("cookie-parser");
+const { createToken } = require("../helper/jwt");
 
 //serializeUser determines which data of the user object should be stored in the session.
 passport.serializeUser((user, done) => {
@@ -95,18 +96,28 @@ route.get(
   (req, res) => {
     //If user exist
     if (req.user) {
-      console.log("ini isi req.user :", req.user[0]);
-      const googleAuthToken = jwt.sign(
-        { googleAuthToken: req.user },
-        "tempatku",
-        { expiresIn: "24h" }
+      console.log("ini isi req.user google :", req.user[0]);
+      console.log(
+        "ini isi id dari req.user google :",
+        req.user[0].dataValues.id
       );
+      console.log(
+        "ini isi role id dari req.user google :",
+        req.user[0].dataValues.roleId
+      );
+      let { id, roleId } = req.user[0].dataValues; 
+      const googleAuthToken = createToken({ id, roleId }, "24h");
+      // console.log(
+      //   "ini isi dari googleAuthToken sblm jadi cookie :",
+      //   googleAuthToken
+      // );
       res.cookie("googleAuthToken", googleAuthToken, {
         expires: new Date(Date.now() + 86400 * 1000),
         // httpOnly: true,
         sameSite: "None",
         secure: true,
       });
+      // console.log("Cookie created di google callback:", req.cookies.googleAuthToken);
       res.redirect("http://localhost:3000");
     }
   }
@@ -117,11 +128,14 @@ route.get("/login/success", async (req, res, next) => {
   const googleAuthToken = req.cookies.googleAuthToken;
   if (googleAuthToken) {
     try {
-      const decrypt = jwt.verify(googleAuthToken, "tempatku");
-      const user = decrypt.googleAuthToken[0];
-      console.log("ini isi dari req.user google :", user.id);
+      const decrypt = jwt.verify(googleAuthToken, "TEMPATKU");
+      // console.log("ini isi dari decrypt googleAuthToken :", decryptGoogle);
+      // console.log(
+      //   "ini isi dari decrypt googleAuthToken :",
+      //   decrypt
+      // ); 
       let getuser = await model.user.findAll({
-        where: { id: user.id },
+        where: { id: decrypt.id },
         include: [
           { model: model.user_detail },
           { model: model.role, attributes: ["role"] },

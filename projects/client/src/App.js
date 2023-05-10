@@ -21,12 +21,13 @@ import ProductDetail from "./Pages/ProductDetail/ProductDetail";
 import TransactionPage from "./Pages/TransactionPage";
 import EditProfile from "./Pages/EditProfile";
 
-
 function App() {
   const location = useLocation();
   const dispatch = useDispatch();
   const role = useSelector((state) => state.authReducer.role);
   console.log("ini isi role dari useSelector di App.js : ", role);
+  //bikin aja kalo useSelector passwordnya NULL brarti keeplogin gausa dia pake cookie aja 
+  const password = useSelector((state) => state.authReducer.password);
 
   const keeplogin = async () => {
     try {
@@ -45,20 +46,20 @@ function App() {
       console.log("ini error dari keeplogin : ", error);
     }
   };
-
+  
   React.useEffect(() => {
     keeplogin();
   }, []);
 
 
-
   return (
     <>
-      {location.pathname === "/" && <Navbar />}
+      {/* {location.pathname === "/" && <Navbar />}
       {location.pathname === "/editprofile" && <Navbar />}
       {location.pathname === "/dashboard" && role == "Tenant" && <Navbar />}
-      {location.pathname === "/changepassword" && <Navbar />}
-
+      {location.pathname === "/changepassword" && <Navbar />} */}
+      <Navbar />
+      
       {
         // User
         role == "User" ? (

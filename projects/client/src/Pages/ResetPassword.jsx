@@ -118,7 +118,7 @@ export default function ResetPassword() {
                 bg={'white'}
                 rounded={'xl'}
                 borderWidth={'1px'}
-                borderColor='gray.200'
+                borderColor='gray.300'
                 // boxShadow={'xs'}
                 p={6}
                 my={12}>

@@ -8,11 +8,11 @@ export default function NotFound() {
     const navigate = useNavigate();
     return (
         <Flex
-            maxH={'100vh'}
-            align={'center'}
             justify={'center'}
+            minH={'100vh'}
         >
-            <Box textAlign="center" >
+            <Box 
+            textAlign="center" mt={-20}>
             <Image src={Pagenotfound} boxSize='500px'></Image> 
                 <Text fontSize='4xl' fontWeight="bold" mt={-10} mb={2}>
                     Page Not Found

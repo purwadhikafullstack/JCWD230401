@@ -20,6 +20,9 @@ export default function Footer() {
       bottom={0}
       left={0}
       right={0}
+      borderTopWidth={1}
+      borderStyle={'solid'}
+      borderColor={'gray.200'}
       >
       <Container as={Stack} maxW={'full'} py={10} px={10}>
         <SimpleGrid columns={{ base: 1, sm: 2, md: 4 }} spacing={8}>

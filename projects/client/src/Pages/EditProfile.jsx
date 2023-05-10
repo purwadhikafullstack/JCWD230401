@@ -8,7 +8,7 @@ import {
     Input,
     Stack,
     Avatar,
-    useToast,
+    useToast, AvatarBadge, IconButton, Link, Divider,
     Center, Radio, RadioGroup, Box, useDisclosure, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, Text, FormErrorMessage
 } from '@chakra-ui/react';
 import { useSelector } from 'react-redux';
@@ -16,6 +16,8 @@ import { API_URL, API_URL_IMG } from '../helper';
 import axios from 'axios';
 import { useFormik } from 'formik';
 import * as yup from "yup";
+import { SmallCloseIcon } from '@chakra-ui/icons';
+import { BsShieldExclamation, BsShieldCheck } from 'react-icons/bs';
 
 
 export default function EditProfile(props) {
@@ -25,11 +27,13 @@ export default function EditProfile(props) {
     const currentBirth = useSelector((state) => state.authReducer.birth);
     const currentProfileImage = useSelector((state) => state.authReducer.image_profile);
     const role = useSelector((state) => state.authReducer.role);
+    const isVerified = useSelector((state) => state.authReducer.isVerified);
     const [gender, setGender] = useState(currentGender);
     const [birth, setBirth] = useState(currentBirth);
     const modalProfileImage = useDisclosure()
     const [profileImage, setProfileImage] = useState(null);
     const inputFile = useRef(null);
+    const [loading, setLoading] = React.useState(false);
     const [loading1, setLoading1] = useState(false);
     const [loading2, setLoading2] = useState(false);
     const toast = useToast();
@@ -104,7 +108,56 @@ export default function EditProfile(props) {
         } finally {
             setLoading1(false);
         }
-    }
+    };
+
+    const onBtnSendVerifyEmail = async () => {
+        try {
+            setLoading(true);
+            let token = localStorage.getItem("tempatku_login");
+            let response = await axios.post(`${API_URL}/user/sendverificationemail`, {}, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            }
+            );
+            console.log("ini hasil response onbtnSendVerifyEmail :", response);
+            // alert(response.data.message);
+            toast({
+                title: response.data.message,
+                status: 'success',
+                duration: 3000,
+                isClosable: true,
+            })
+        } catch (error) {
+            console.log("ini error dari onBtnSendVerifyEmail :", error);
+            // navigate('/transactionpage');
+            if (error.response && error.response.data.message === "You have reached the maximum limit of OTP resend requests for today.") {
+                toast({
+                    title: 'You have reached the maximum limit of OTP resend requests for today. Please try again tomorrow.',
+                    status: 'error',
+                    duration: 3000,
+                    isClosable: true,
+                });
+            }
+            if (error.response && error.response.status === 401) {
+                toast({
+                    title: 'Your code has expired. Please log in again to resend email to verify your account.',
+                    status: 'error',
+                    duration: 3000,
+                    isClosable: true,
+                });
+            } else {
+                toast({
+                    title: error.response.data.message,
+                    status: 'error',
+                    duration: 3000,
+                    isClosable: true,
+                });
+            }
+        } finally {
+            setLoading(false);
+        }
+    };
 
     const formik = useFormik({
         initialValues: {
@@ -246,27 +299,53 @@ export default function EditProfile(props) {
                     maxW={'md'}
                     rounded={'xl'}
                     borderWidth={'1px'}
-                    borderColor='gray.200'
+                    borderColor='gray.300'
                     // boxShadow={'xs'}
                     p={6}
                     my={12}>
-                    <Heading lineHeight={1.1} fontSize={{ base: '2xl', sm: '3xl' }}>
+                    <Heading lineHeight={1.1} fontSize={{ base: '2xl', sm: '3xl' }} align='center' mb='4'>
                         Profile Page
                     </Heading>
                     <FormControl id="userName">
                         {/* <FormLabel>User Icon</FormLabel> */}
-                        <Stack direction={['column', 'row']}
+                        <Stack 
+                        // direction={['column', 'row']}
+                        direction={['column']}
                             spacing={6}
                         >
                             <Center>
                                 <Avatar size="xl"
                                     src={currentProfileImage && currentProfileImage.includes('http') ? currentProfileImage : `${API_URL_IMG}${currentProfileImage}` ? `${API_URL_IMG}${currentProfileImage}` : ""}
                                 >
+                                    {!isVerified && role == "User" ?
+                                        <AvatarBadge
+                                            as={IconButton}
+                                            size="sm"
+                                            rounded="full"
+                                            bottom="-1px"
+                                            right="-3px"
+                                            colorScheme="red"
+                                            aria-label="remove Image"
+                                            icon={<BsShieldExclamation />}
+                                        /> :
+                                        isVerified && role == "User" ?
+                                            <AvatarBadge
+                                                as={IconButton}
+                                                size="sm"
+                                                rounded="full"
+                                                bottom="-1px"
+                                                right="-3px"
+                                                colorScheme="green"
+                                                aria-label="remove Image"
+                                                icon={<BsShieldCheck />}
+                                            /> :
+                                            <AvatarBadge display={{ base: 'none' }} />
+                                    }
                                 </Avatar>
                             </Center>
                             <Box w="full">
                                 <Center w="full"
-                                    mt={{ base: '0', sm: '8' }}
+                                    // mt={{ base: '0', sm: '0' }}
                                 >
                                     <Button w="full" onClick={() =>
                                         inputFile.current.click()}>Change Profile Photo
@@ -283,8 +362,41 @@ export default function EditProfile(props) {
                                         ></Input>
                                     </Button>
                                 </Center>
-                                <Text fontSize='xs'>Image size: max. 1 MB</Text>
+                                <Text fontSize='xs' pt='1'>Image size: max. 1 MB</Text>
                                 <Text fontSize='xs'>Image format: .jpg, .jpeg, .png, .gif</Text>
+                                {!isVerified && role == "User" ?
+                                    <div>
+                                        <Box py='2'>
+                                            <Divider />
+                                        </Box>
+                                        <Box pb='2'>
+                                            <Text fontSize='xs'>Your account has not been verified yet. Click the button to verify and enjoy tempatku has to offer.</Text>
+                                        </Box>
+                                        <Box>
+                                            <Button
+                                                onClick={onBtnSendVerifyEmail}
+                                                isLoading={loading}
+                                                colorScheme='green'
+                                            >Verify Account</Button>
+                                        </Box>
+                                        <Box py='4'>
+                                            <Divider />
+                                        </Box>
+                                    </div>
+                                    :
+                                    isVerified && role == "User" ?
+                                        <div>
+                                            <Box py='2'>
+                                                <Divider />
+                                            </Box>
+                                            <Text fontSize='xs'>Your account is verified.</Text>
+                                            <Box py='4'>
+                                                <Divider />
+                                            </Box>
+                                        </div>
+                                        :
+                                        <Text fontSize='xs'></Text>
+                                }
                             </Box>
                         </Stack>
                         {/* Modal Open */}
@@ -296,7 +408,6 @@ export default function EditProfile(props) {
                                 <ModalBody textAlign='center'>
                                     <Avatar objectFit='cover' size='2xl' src={profileImage ? URL.createObjectURL(profileImage) : ''}></Avatar>
                                 </ModalBody>
-
                                 <ModalFooter>
                                     <Button colorScheme='red' mr={3} onClick={() => {
                                         modalProfileImage.onClose();

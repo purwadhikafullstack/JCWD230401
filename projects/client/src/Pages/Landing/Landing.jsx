@@ -259,9 +259,20 @@ export default function LandingNew() {
                 withCredentials: true,
             });
             // console.log("ini respon.data.user dari googlelogin :", response.data.getuser[0]);
+            // console.log("ini respon.data dari googlelogin :", response.data);
+            const cookieValue = document.cookie;
+            console.log("ini isi dari cookieValue :", cookieValue);
+            console.log("tipe data cookieValue :", typeof cookieValue);
+            // Find the index of the equals sign (=)
+            var equalsIndex = cookieValue.indexOf("=");
+            // Remove the substring starting from the equals sign
+            var token = cookieValue.substring(equalsIndex + 1);
+            console.log("ini token dari cookie google login:", token);
+            //pengen set token di local storage
+            localStorage.setItem("tempatku_login", token); 
             dispatch(loginActionGoogle(response.data));
         } catch (error) {
-            console.log("error googlelogin (not loggedin google) : ", error);
+            console.log("error googlelogin: ", error);
         }
     };
 
@@ -444,7 +455,7 @@ export default function LandingNew() {
                                     transition="opacity 0.3s"
                                     cursor='pointer'
                                 >
-                                    <Image src={Hotels1} _hover={{ transform: 'scale(1.1)', transition: '.5s' }} 
+                                    <Image src={Hotels1} _hover={{ transform: 'scale(1.1)', transition: '.5s' }}
                                         alt="Hotels" w="100%" borderRadius="10px" />
                                     <Text position="absolute" top="50%" left="50%" transform="translate(-50%,-50%)" textAlign="center" color="white" fontSize={{ base: "26px", md: "20px", lg: "26px" }}>
                                         Hotels
@@ -461,7 +472,7 @@ export default function LandingNew() {
                                     transition="opacity 0.3s"
                                     cursor='pointer'
                                 >
-                                    <Image src={Homestays1} _hover={{ transform: 'scale(1.1)', transition: '.5s' }} 
+                                    <Image src={Homestays1} _hover={{ transform: 'scale(1.1)', transition: '.5s' }}
                                         alt="Hotels" w="100%" borderRadius="10px" />
                                     <Text position="absolute" top="50%" left="50%" transform="translate(-50%,-50%)" textAlign="center" color="white" fontSize={{ base: "26px", md: "20px", lg: "26px" }}>
                                         Apartments
@@ -478,7 +489,7 @@ export default function LandingNew() {
                                     transition="opacity 0.3s"
                                     cursor='pointer'
                                 >
-                                    <Image src={Villas1} _hover={{ transform: 'scale(1.1)', transition: '.5s' }} 
+                                    <Image src={Villas1} _hover={{ transform: 'scale(1.1)', transition: '.5s' }}
                                         alt="Hotels" w="100%" borderRadius="10px" />
                                     <Text position="absolute" top="50%" left="50%" transform="translate(-50%,-50%)" textAlign="center" color="white" fontSize={{ base: "26px", md: "20px", lg: "26px" }}>
                                         Villas
