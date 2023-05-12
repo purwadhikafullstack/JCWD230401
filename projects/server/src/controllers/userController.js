@@ -535,7 +535,7 @@ module.exports = {
               }
             );
             //encrypt into token
-            let image_ktp = createTokenForKTP(base64Data);
+            let image_ktp = createTokenForKTP({base64Data}); 
             console.log(
               "ini isi imagektp dijadiin token abis di jadiin base64:",
               image_ktp
@@ -742,8 +742,8 @@ module.exports = {
           return res.status(200).send({
             success: true,
             message: `You received an email to verify your account. Please check your email.
-              otp sent today : ${otpCount + 1}
-              today's data : ${otpCountDate}
+              OTP sent today : ${otpCount + 1}.
+              Today's data : ${otpCountDate}
               `,
             checkverifieduser, //for testing
           });
@@ -859,10 +859,7 @@ module.exports = {
       // convert binary data to base64 encoded string
       let imageData = get[0].dataValues.image_ktp.toString("utf8");
       console.log("ini dijadiin text data:", imageData);
-      //2. decrypt base64
-      let decryptbase64 = decryptImage(imageData);
-      console.log("ini imagektp base64 di decrypt:", decryptbase64);
-      res.status(200).send(decryptbase64);
+      res.status(200).send(imageData);
     } catch (error) {
       console.log(error);
       next(error);

@@ -17,7 +17,7 @@ import axios from 'axios';
 import { useFormik } from 'formik';
 import * as yup from "yup";
 import { BsShieldExclamation, BsShieldCheck } from 'react-icons/bs';
-
+import { decodeToken } from "react-jwt";
 
 export default function EditProfile(props) {
     const currentName = useSelector((state) => state.authReducer.name);
@@ -257,7 +257,7 @@ export default function EditProfile(props) {
             modalProfileImage.onClose();
             // Wrap props.keeplogin() in a Promise and use the then() method to handle it
             new Promise((resolve, reject) => {
-                props.keeplogin() //refresh immediately once profpic updated
+                props.keeplogin() //refresh profpic once updated
                     .then(resolve)
                     .catch(reject);
             });
@@ -284,24 +284,31 @@ export default function EditProfile(props) {
                     },
                 }
             );
-            console.log("response onbtnshowktp :", response.data);
+            console.log("response.data onbtnshowktp :", response.data);
+            console.log("tipe data response.data onbtnshowktp :", typeof response.data);
 
-            //1. Decode Base64 string into binary data
-            const binaryData = atob(response.data);
+            //1. decrypt base64
+            const decryptbase64 = decodeToken(response.data);
+           
+            console.log("ini imagektp base64 di decrypt:", decryptbase64);
+            console.log("ini imagektp base64Data base64 di decrypt:", decryptbase64.base64Data);
 
-            //2. Convert the binary data into an array of numeric values
+            //2. Decode Base64 string into binary data
+            const binaryData = atob(decryptbase64.base64Data);
+
+            //3. Convert the binary data into an array of numeric values
             const array = [];
             for (let i = 0; i < binaryData.length; i++) {
                 array.push(binaryData.charCodeAt(i));
             }
 
-            //3. Create Blob object from the num val array, with specified MIME type
+            //4. Create Blob object from the num val array, with specified MIME type
             const blob = new Blob([new Uint8Array(array)], { type: "image/png" });
 
-            //4. Create a URL from the Blob object
+            //5. Create a URL from the Blob object
             const imageUrl = URL.createObjectURL(blob);
 
-            // Open the image in a new tab
+            //6. Open the image in a new tab
             window.open(imageUrl, "_blank");
         } catch (error) {
             console.log("ini error dari onBtnShowKTP : ", error);
@@ -487,7 +494,7 @@ export default function EditProfile(props) {
                     <FormControl id="birth" isInvalid={formik.errors.birth}>
                         <FormLabel>Birthdate</FormLabel>
                         <Input
-                            placeholder={currentBirth} //your current birthdate
+                            placeholder={currentBirth} 
                             _placeholder={{ color: 'gray.800' }}
                             type="date"
                             value={formik.values.birth}

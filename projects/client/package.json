@@ -31,6 +31,7 @@
     "react-dom": "^18.2.0",
     "react-icons": "latest",
     "react-iframe": "^1.8.5",
+    "react-jwt": "^1.1.8",
     "react-redux": "latest",
     "react-router-dom": "latest",
     "react-scripts": "5.0.1",
