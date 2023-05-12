@@ -28,6 +28,8 @@ import { logoutAction } from '../reducers/auth';
 import { API_URL, API_URL_IMG } from '../helper';
 import axios from 'axios';
 import Logo from '../assets/logotempatku.png';
+import { Route, Routes, useLocation } from "react-router-dom"; // bisa pake ini buat nyambungin register sama login pop up modal
+
 
 export default function Navbar() {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -37,9 +39,10 @@ export default function Navbar() {
   const imageprofile = useSelector((state) => state.authReducer.image_profile);
   const role = useSelector((state) => state.authReducer.role);
   const password = useSelector((state) => state.authReducer.password);
+  const location = useLocation(); // testing
 
   // console.log("ini isi password useSelector buat google:", password);
-  // console.log("ini isi imageprofile useSelector buat google:", imageprofile);
+  console.log("ini isi imageprofile useSelector:", imageprofile);
   // console.log("tipe data imageprofile", typeof imageprofile);
 
   const onBtnLogout = () => {
@@ -60,6 +63,7 @@ export default function Navbar() {
       });
       document.cookie = "googleAuthToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
       dispatch(logoutAction());
+      localStorage.removeItem('tempatku_login');
       navigate('/', { replace: true });
       // console.log("ini respon dari googlelogout :", response);
     } catch (error) {
@@ -162,10 +166,27 @@ export default function Navbar() {
                   _active={'none'}
                 >
                   <HamburgerIcon w={6} h={6} mx={2} my={1} color='black' />
-                  <Avatar
-                    size={'sm'}
-                    src={imageprofile && imageprofile.includes('http') ? imageprofile : `${API_URL_IMG}${imageprofile}` ? `${API_URL_IMG}${imageprofile}` : ""}
-                  />
+                  {/* kondisi dia logout gaada data login default image , klo ga login avatar chakra ui nya ilangin , gunain role sama user selector */}
+                  {
+                    // User
+                    role == "User" ?
+                      <Avatar
+                        size={'sm'}
+                        src={imageprofile == null ? "https://ionicframework.com/docs/img/demos/avatar.svg" : imageprofile && imageprofile.includes('http') ? imageprofile : `${API_URL_IMG}${imageprofile}` ? `${API_URL_IMG}${imageprofile}` : "https://ionicframework.com/docs/img/demos/avatar.svg"}
+                      />
+                      :
+                      // Tenant
+                      role == "Tenant" ?
+                        <Avatar
+                          size={'sm'}
+                          src={imageprofile == null ? "https://ionicframework.com/docs/img/demos/avatar.svg" : imageprofile && imageprofile.includes('http') ? imageprofile : `${API_URL_IMG}${imageprofile}` ? `${API_URL_IMG}${imageprofile}` : "https://ionicframework.com/docs/img/demos/avatar.svg"}
+                        />
+                        :
+                        <Avatar
+                          size={'sm'}
+                          src={"https://ionicframework.com/docs/img/demos/avatar.svg"}
+                        />
+                  }
                 </MenuButton>
                 {
                   // User

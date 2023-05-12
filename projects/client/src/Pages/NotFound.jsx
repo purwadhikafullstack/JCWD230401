@@ -9,15 +9,18 @@ export default function NotFound() {
     return (
         <Flex
             justify={'center'}
-            minH={'100vh'}
+            align={{base:'none', sm:'center'}}
+            minH={{base:'50vh', lg:'100vh'}}
         >
-            <Box 
-            textAlign="center" mt={-20}>
-            <Image src={Pagenotfound} boxSize='500px'></Image> 
-                <Text fontSize='4xl' fontWeight="bold" mt={-10} mb={2}>
+            <Box
+                textAlign="center" 
+                mt={{base:'-10', sm:'-20'}}
+                >
+                <Image src={Pagenotfound} boxSize={{base:'400px', sm:'500px'}}></Image>
+                <Text fontSize={{base:'2xl', sm:'4xl'}} fontWeight="bold" mt={-10} mb={2}>
                     Page Not Found
                 </Text>
-                <Text mb={6}>
+                <Text mb={6} fontSize={{base:'sm', sm:'lg'}}>
                     The page you're looking for does not seem to exist
                 </Text>
 
@@ -28,9 +31,10 @@ export default function NotFound() {
                     onClick={() => navigate('/')}
                     _hover={{ bg: '#D3212D' }}
                     _active={{
-                      bg: '#D3212D',
-                      transform: 'scale(0.98)',
+                        bg: '#D3212D',
+                        transform: 'scale(0.98)',
                     }}
+                    mb={16}
                 >
                     Return to Homepage
                 </Button>

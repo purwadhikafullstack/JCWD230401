@@ -9,7 +9,8 @@ import {
     Text,
     FormErrorMessage,
     useToast,
-    Box
+    Box,
+    HStack
 } from '@chakra-ui/react';
 import axios from 'axios';
 import { API_URL } from '../helper';
@@ -83,9 +84,9 @@ export default function ForgotPassword() {
     };
 
     return (
-        <Box
-            minH={'100vh'}
-            align={'center'}
+        <Flex
+            minH={{base:'50vh', sm:'100vh'}}
+            align={{base:'none', sm:'center'}}
             justify={'center'}
             bg={'white'}
         >
@@ -98,8 +99,7 @@ export default function ForgotPassword() {
                 p={6}
                 my={12}
                 borderWidth={'1px'}
-                borderColor='gray.300'
-            // boxShadow={'xs'}
+                borderColor={{base:'white', sm:'gray.300'}}
             >
                 <Heading lineHeight={1.1} fontSize={{ base: '2xl', md: '3xl' }}>
                     Forgot your password?
@@ -131,21 +131,19 @@ export default function ForgotPassword() {
                     >
                         Request Reset Password
                     </Button>
+                    <HStack fontSize='sm'
+                    >
+                        <Text>Return to</Text>
+                        <Text onClick={() => {
+                            navigate('/');
+                        }} color='#0969da'
+                            cursor={'pointer'}
+                        >
+                            Homepage
+                        </Text>
+                    </HStack>
                 </Stack>
             </Stack>
-            <Box>
-                <Button
-                    // backgroundColor='#D3212D'
-                    borderWidth="1px"
-                    borderColor="#D3212D"
-                    color="#D3212D"
-                    _hover={{ bg: "#D3212D", textColor: "white" }}
-                    variant="outline"
-                    onClick={() => navigate('/')}
-                >
-                    Return to Homepage
-                </Button>
-            </Box>
-        </Box>
+        </Flex>
     );
 }

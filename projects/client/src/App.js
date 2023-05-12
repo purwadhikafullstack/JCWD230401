@@ -1,6 +1,6 @@
 import axios from "axios";
 import "./App.css";
-import { Route, Routes, useLocation } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import NavbarMobile from "./Components/NavbarMobile";
 import Navbar from "./Components/Navbar";
 import Footer from "./Components/Footer";
@@ -22,12 +22,9 @@ import TransactionPage from "./Pages/TransactionPage";
 import EditProfile from "./Pages/EditProfile";
 
 function App() {
-  const location = useLocation();
   const dispatch = useDispatch();
   const role = useSelector((state) => state.authReducer.role);
   console.log("ini isi role dari useSelector di App.js : ", role);
-  //bikin aja kalo useSelector passwordnya NULL brarti keeplogin gausa dia pake cookie aja 
-  const password = useSelector((state) => state.authReducer.password);
 
   const keeplogin = async () => {
     try {
@@ -54,12 +51,7 @@ function App() {
 
   return (
     <>
-      {/* {location.pathname === "/" && <Navbar />}
-      {location.pathname === "/editprofile" && <Navbar />}
-      {location.pathname === "/dashboard" && role == "Tenant" && <Navbar />}
-      {location.pathname === "/changepassword" && <Navbar />} */}
       <Navbar />
-      
       {
         // User
         role == "User" ? (
@@ -112,7 +104,6 @@ function App() {
           </Routes>
         )
       }
-      {/* {location.pathname === "/" && <NavbarMobile />} */}
       <Footer />
     </>
   );

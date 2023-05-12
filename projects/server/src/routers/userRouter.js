@@ -23,7 +23,7 @@ route.get("/keeplogin", readToken, keeplogin);
 route.patch("/changepw", readToken, checkUser, changepassword);
 route.post("/forgotpw", checkUser, forgotpassword);
 route.patch("/resetpw", readToken, checkUser, resetpassword);
-route.post("/registerastenant", uploader("/imgIdCard", "IDC").array("images", 1), registerastenant);
+route.post("/registerastenant", uploader("/imgIdCard", "IDC").array("images", 1), checkUser, registerastenant);
 route.patch("/verifyaccount", readToken, verify);
 route.post("/sendverificationemail", readToken, sendverificationemail);
 route.patch("/editprofile", readToken, checkUser, editprofile);

@@ -33,7 +33,8 @@ export default function CalendarPropertyCard(props) {
                     w={'full'}
                     bg='white'
                     borderWidth={'1px'}
-                    borderColor='gray.300'
+                    // borderColor='gray.300'
+                    borderColor={{base:'white', sm:'gray.300'}}
                     // boxShadow={'xs'}
                     rounded={'lg'}
                     pos={'relative'}
@@ -61,29 +62,25 @@ export default function CalendarPropertyCard(props) {
                         <Text fontWeight={600} fontSize={{ base: 'lg', lg: 'sm' }} isTruncated>
                             {props.property}
                         </Text>
-                        <Text fontWeight={'normal'} fontSize={'sm'} color='gray.500'>
+                        <Text fontWeight={'normal'} fontSize={{base:'sm', lg:'xs'}} color='gray.500'>
                             {props.regency}, {props.country}
-                            {/* Jakarta Barat, Indonesia */}
                         </Text>
                         <Flex justifyContent={'space-between'}>
-                            <Text fontWeight={600} fontSize={'sm'} textAlign={'left'} display='flex'>
+                            <Text fontWeight={600} fontSize={{base:'sm', lg:'xs'}} textAlign={'left'} display='flex'>
                                 {props.price}
-                                {/* IDR 1.500.000 */}
-                                <Text fontWeight={'normal'} pl='1' fontSize={'sm'}>
+                                <Text fontWeight={'normal'} pl='1' fontSize={{base:'sm', lg:'xs'}}>
                                     / night
                                 </Text>
                             </Text>
-                            <Flex alignItems={'center'} justifyContent="center">
-                                {/* kalo blm ada rating icon bintang sama angkanya ilangin */}
+                        </Flex>
+                            <Flex alignItems={'center'} justifyContent="flex-start">
                                 <Box>
                                     <StarIcon color={'yellow.500'} fontSize={{ base: 'lg', lg: 'sm' }} mb='1' />
                                 </Box>
                                 <Text fontWeight={600} fontSize={{ base: 'lg', lg: 'sm' }} textAlign='right' ml='1'>
                                     {props.rating}
-                                    {/* 5.0 */}
                                 </Text>
                             </Flex>
-                        </Flex>
                     </Box>
                 </Box>
             </Link>

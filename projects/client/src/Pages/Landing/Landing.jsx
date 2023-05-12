@@ -174,8 +174,8 @@ export default function LandingNew() {
                     slidesToShow: 1,
                     slidesToScroll: 1,
                     infinite: true,
-                    prevArrow: false,
-                    nextArrow: false
+                    // prevArrow: false,
+                    // nextArrow: false
                 },
             },
         ],
@@ -210,8 +210,8 @@ export default function LandingNew() {
                     slidesToShow: 1,
                     slidesToScroll: 1,
                     infinite: true,
-                    prevArrow: false,
-                    nextArrow: false
+                    // prevArrow: false,
+                    // nextArrow: false
                 },
             },
         ],
@@ -246,8 +246,8 @@ export default function LandingNew() {
                     slidesToShow: 1,
                     slidesToScroll: 1,
                     infinite: true,
-                    prevArrow: false,
-                    nextArrow: false
+                    // prevArrow: false,
+                    // nextArrow: false
                 },
             },
         ],
@@ -283,7 +283,7 @@ export default function LandingNew() {
     return (
         <>
             {/* BANNER */}
-            <Box>
+            <Box mb={{base:'40px',md:'80px'}}> 
                 <Flex
                     w="full"
                     h={{ base: "80vh", lg: "100vh" }}
@@ -305,7 +305,7 @@ export default function LandingNew() {
                                 Find Your Next Stay
                             </Text>
                             {/* SEARCH BAR */}
-                            <Box bg="white" w={{ base: "80vw", md: "45vw", lg: "75vw" }} m="30px auto" p="6px 10px 6px 30px" borderRadius="10px">
+                            <Box bg="white" w={{ base: "80vw", md: "45vw", lg: "80vw" }} m="30px auto" p="6px 10px 6px 25px" borderRadius="10px" py={{base:'4', lg:'1.5'}}>
                                 <Flex align={{ base: 'left', lg: 'center' }} justify={'space-between'} flexWrap={"wrap"} flexDirection={{ base: "column", lg: "row" }}>
                                     <Box
                                         flex="1.5"
@@ -402,6 +402,7 @@ export default function LandingNew() {
                             fontSize="18px"
                             marginRight="20px"
                             padding="6px 30px"
+                            fontWeight="500"
                         >
                             HOLIDAY SALE
                         </Box>
@@ -411,28 +412,15 @@ export default function LandingNew() {
                             lineHeight={{ base: "4xl", md: "5.3vw" }}
                             mt="10px"
                         >
-                            Special Offers<br />For You
+                            <Text py={{base:'0',md:'2', lg:'0'}}>Special Offers</Text>
+                            <Text py={{base:'0',md:'2', lg:'0'}}>For You</Text>
                         </Heading>
                     </Box>
-                    <Text fontSize="18px" mt="10px">
-                        Get the best prices on properties and rooms here.
+                    <Box maxW={'xl'}>
+                    <Text fontSize={{base:'sm', sm:'18px'}} mt="10px">
+                    During our exclusive holiday sale, we are thrilled to present you with an array of special offers just for you! Take advantage of this limited-time promotion, get the best prices on properties and rooms here.
                     </Text>
-                    <Button
-                        bg="none"
-                        border="2px solid #fff"
-                        borderRadius="8px"
-                        color="#fff"
-                        fontSize="18px"
-                        marginTop="30px"
-                        textDecoration="none"
-                        _hover={{ bg: "#fff", color: "#1a6196" }}
-                        p='6'
-                        textAlign='center'
-                    >
-                        <Text>
-                            See Deals
-                        </Text>
-                    </Button>
+                    </Box>
                 </Box>
                 {/* PROPERTY TYPE */}
                 <Heading fontSize={{ base: "2xl", md: "4xl" }}
@@ -441,10 +429,10 @@ export default function LandingNew() {
                     textDecoration='underline'
                     style={{ textUnderlineOffset: '0.35em' }}
                 >
-                    Browse by property type
+                    Browse by Property Type
                 </Heading>
-                <Box my={{ base: "40px", md: "80px" }}>
-                    {/* <SimpleGrid columns={{ base: 1, md: 3 }} spacing={{ base: 5, lg: 8 }} > */}
+                <Text fontWeight="700" align='center' mt="14px" fontSize={{base:'sm', lg:'md'}}>Enjoy your stay in our fine selection of properties</Text>
+                <Box my={{ base: "40px", md: "80px" }} px={2}>
                     <Slider {...settingsCategory} prevArrow={<FaChevronLeft color="#E2E8F0" />} nextArrow={<FaChevronRight color="#E2E8F0" />}>
                         <Box p='2'>
                             <Link to={{
@@ -457,8 +445,9 @@ export default function LandingNew() {
                                 >
                                     <Image src={Hotels1} _hover={{ transform: 'scale(1.1)', transition: '.5s' }}
                                         alt="Hotels" w="100%" borderRadius="10px" />
-                                    <Text position="absolute" top="50%" left="50%" transform="translate(-50%,-50%)" textAlign="center" color="white" fontSize={{ base: "26px", md: "20px", lg: "26px" }}>
-                                        Hotels
+                                    <Text position="absolute" top="50%" left="50%" transform="translate(-50%,-50%)" textAlign="center" color="white" fontSize={{ base: "26px", md: "20px", lg: "26px" }} fontWeight="500">
+                                        {/* Hotels */}
+                                        HOTELS
                                     </Text>
                                 </Box>
                             </Link>
@@ -474,8 +463,9 @@ export default function LandingNew() {
                                 >
                                     <Image src={Homestays1} _hover={{ transform: 'scale(1.1)', transition: '.5s' }}
                                         alt="Hotels" w="100%" borderRadius="10px" />
-                                    <Text position="absolute" top="50%" left="50%" transform="translate(-50%,-50%)" textAlign="center" color="white" fontSize={{ base: "26px", md: "20px", lg: "26px" }}>
-                                        Apartments
+                                    <Text position="absolute" top="50%" left="50%" transform="translate(-50%,-50%)" textAlign="center" color="white" fontSize={{ base: "26px", md: "20px", lg: "26px" }} fontWeight="500">
+                                        {/* Apartments */}
+                                        APARTMENTS
                                     </Text>
                                 </Box>
                             </Link>
@@ -491,14 +481,14 @@ export default function LandingNew() {
                                 >
                                     <Image src={Villas1} _hover={{ transform: 'scale(1.1)', transition: '.5s' }}
                                         alt="Hotels" w="100%" borderRadius="10px" />
-                                    <Text position="absolute" top="50%" left="50%" transform="translate(-50%,-50%)" textAlign="center" color="white" fontSize={{ base: "26px", md: "20px", lg: "26px" }}>
-                                        Villas
+                                    <Text position="absolute" top="50%" left="50%" transform="translate(-50%,-50%)" textAlign="center" color="white" fontSize={{ base: "26px", md: "20px", lg: "26px" }} fontWeight="500">
+                                        {/* Villas */}
+                                        VILLAS
                                     </Text>
                                 </Box>
                             </Link>
                         </Box>
                     </Slider>
-                    {/* </SimpleGrid> */}
                 </Box>
                 {/* TOP DESTINATIONS */}
                 <Heading fontSize={{ base: "2xl", md: "4xl" }}
@@ -509,9 +499,8 @@ export default function LandingNew() {
                 >
                     Top Destinations
                 </Heading>
-                <Text fontWeight="700" align='center' mt="14px">Discover our properties in big cities of Indonesia</Text>
-                <Box my={{ base: "40px", md: "80px" }}>
-                    {/* <SimpleGrid columns={{ base: 1, md: 3, lg: 4 }} spacing={{ base: 5, lg: 8 }}> */}
+                <Text fontWeight="700" align='center' mt="14px" fontSize={{base:'sm', lg:'md'}}>Discover our properties in big cities of Indonesia</Text>
+                <Box my={{ base: "40px", md: "80px" }} px={2}>
                     <Slider {...settingsDestinations} prevArrow={<FaChevronLeft color="#E2E8F0" />} nextArrow={<FaChevronRight color="#E2E8F0" />}>
                         <Box p='2'>
                             <Link to={{
@@ -520,7 +509,10 @@ export default function LandingNew() {
                             }} >
                                 <Box position="relative" textAlign="center" overflow="hidden" borderRadius="10px" cursor='pointer' boxShadow={'xs'}>
                                     <Image src={Kuta1} borderRadius="10px" _hover={{ transform: 'scale(1.1)', transition: '.5s' }} />
-                                    <Text position="absolute" top="50%" left="50%" transform="translate(-50%,-50%)" color="#fff" fontSize={{ base: "26px", md: "20px", lg: "26px" }}>Denpasar</Text>
+                                    <Text position="absolute" top="50%" left="50%" transform="translate(-50%,-50%)" color="#fff" fontSize={{ base: "26px", md: "20px", lg: "26px" }} fontWeight="500">
+                                        {/* Denpasar */}
+                                        DENPASAR
+                                        </Text>
                                 </Box>
                             </Link>
                         </Box>
@@ -531,7 +523,10 @@ export default function LandingNew() {
                             }} >
                                 <Box position="relative" textAlign="center" overflow="hidden" borderRadius="10px" cursor='pointer' boxShadow={'xs'}>
                                     <Image src={Jakarta1} borderRadius="10px" _hover={{ transform: 'scale(1.1)', transition: '.5s' }} />
-                                    <Text position="absolute" top="50%" left="50%" transform="translate(-50%,-50%)" color="#fff" fontSize={{ base: "26px", md: "20px", lg: "26px" }}>Jakarta</Text>
+                                    <Text position="absolute" top="50%" left="50%" transform="translate(-50%,-50%)" color="#fff" fontSize={{ base: "26px", md: "20px", lg: "26px" }} fontWeight="500">
+                                        {/* Jakarta */}
+                                        JAKARTA
+                                        </Text>
                                 </Box>
                             </Link>
                         </Box>
@@ -542,7 +537,10 @@ export default function LandingNew() {
                             }} >
                                 <Box position="relative" textAlign="center" overflow="hidden" borderRadius="10px" cursor='pointer' boxShadow={'xs'}>
                                     <Image src={Uluwatu1} borderRadius="10px" _hover={{ transform: 'scale(1.1)', transition: '.5s' }} />
-                                    <Text position="absolute" top="50%" left="50%" transform="translate(-50%,-50%)" color="#fff" fontSize={{ base: "26px", md: "20px", lg: "26px" }}>Bogor</Text>
+                                    <Text position="absolute" top="50%" left="50%" transform="translate(-50%,-50%)" color="#fff" fontSize={{ base: "26px", md: "20px", lg: "26px" }} fontWeight="500">
+                                        {/* Bogor */}
+                                        BOGOR
+                                        </Text>
                                 </Box>
                             </Link>
                         </Box>
@@ -553,12 +551,14 @@ export default function LandingNew() {
                             }} >
                                 <Box position="relative" textAlign="center" overflow="hidden" borderRadius="10px" cursor='pointer' boxShadow={'xs'}>
                                     <Image src={Ubud1} borderRadius="10px" _hover={{ transform: 'scale(1.1)', transition: '.5s' }} />
-                                    <Text position="absolute" top="50%" left="50%" transform="translate(-50%,-50%)" color="#fff" fontSize={{ base: "26px", md: "20px", lg: "26px" }}>Bandung</Text>
+                                    <Text position="absolute" top="50%" left="50%" transform="translate(-50%,-50%)" color="#fff" fontSize={{ base: "26px", md: "20px", lg: "26px" }} fontWeight="500">
+                                        {/* Bandung */}
+                                        BANDUNG
+                                        </Text>
                                 </Box>
                             </Link>
                         </Box>
                     </Slider>
-                    {/* </SimpleGrid> */}
                 </Box>
                 {/* TENANT REGISTER BANNER */}
                 <Box
@@ -578,20 +578,21 @@ export default function LandingNew() {
                             lineHeight={{ base: "4xl", md: "5.3vw" }}
                             mt="10px"
                         >
-                            Sharing<br />Is Earning Now
+                            <Text py={{base:'0',md:'2', lg:'0'}}>Sharing</Text>
+                            <Text py={{base:'0',md:'2', lg:'0'}}>Is Earning Now</Text>
                         </Heading>
                     </Box>
-                    <Text fontSize="18px" mt="10px">
+                    <Text fontSize={{base:'sm', sm:'18px'}} mt="10px">
                         Great opportunity to make money by sharing your extra space.
                     </Text>
                     <Button
                         bg="#D3212D"
                         borderRadius="8px"
                         color="#fff"
-                        fontSize="18px"
+                        fontSize={{base:'sm', sm:'18px'}}
                         marginTop="30px"
                         _hover={{ bg: "#fff", color: "#D3212D" }}
-                        p='6'
+                        p={{base:'3', sm:'6'}}
                         textAlign='center'
                         onClick={() => navigate('/tenantregister')}
                     >
@@ -607,27 +608,26 @@ export default function LandingNew() {
                     textDecoration='underline'
                     style={{ textUnderlineOffset: '0.35em' }}
                 >
-                    Recommended for you
+                    Recommended for You
                 </Heading>
-                <Box my={{ base: "40px", md: "80px" }}>
-                    {/* <SimpleGrid columns={{ base: 1, sm: 2, lg: 4 }} spacing={{ base: 5, md: 1, lg: 1 }} > */}
+                <Text fontWeight="700" align='center' mt="14px" fontSize={{base:'sm', lg:'md'}}>Discover our properties with the best ratings</Text>
+                <Box my={{ base: "40px", md: "80px" }} px={2}>
                     <Slider {...settingsRecommendation} prevArrow={<FaChevronLeft color="#E2E8F0" />} nextArrow={<FaChevronRight color="#E2E8F0" />}>
                         {printRecommendProperty()}
                     </Slider>
-                    {/* </SimpleGrid> */}
                     <Box align='center'>
                         <Button
                             bg="#D3212D"
                             borderRadius="8px"
                             bgColor="white"
-                            fontSize="18px"
+                            fontSize={{base:'sm', sm:'18px'}}
                             marginTop="30px"
                             variant='outline'
                             borderWidth="1px"
                             color="#D3212D"
                             borderColor="#D3212D"
                             _hover={{ bg: "#D3212D", color: "white" }}
-                            p='6'
+                            p={{base:'3', sm:'6'}}
                             textAlign='center'
                             onClick={() => navigate('/property')}
                         >

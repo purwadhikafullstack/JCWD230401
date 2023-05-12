@@ -29,7 +29,8 @@ export default function RecommendPropertyCard(props) {
                     w={'full'}
                     bg='white'
                     borderWidth={'1px'}
-                    borderColor='gray.300'
+                    // borderColor='gray.300'
+                    borderColor={{base:'white', sm:'gray.300'}}
                     // boxShadow={'xs'}
                     rounded={'lg'}
                     pos={'relative'}
@@ -57,13 +58,13 @@ export default function RecommendPropertyCard(props) {
                         <Text fontWeight={600} fontSize={{ base: 'lg', lg: 'sm' }} isTruncated>
                             {props.property}
                         </Text>
-                        <Text fontWeight={'normal'} fontSize={'sm'} color='gray.500'>
+                        <Text fontWeight={'normal'} fontSize={{base:'sm', lg:'xs'}} color='gray.500'>
                             {props.regency}, {props.country}
                         </Text>
                         <Flex justifyContent={'space-between'}>
-                            <Text fontWeight={600} fontSize={'sm'} textAlign={'left'} display='flex'>
+                            <Text fontWeight={600} fontSize={{base:'sm', lg:'xs'}} textAlign={'left'} display='flex'>
                                 {props.price}
-                                <Text fontWeight={'normal'} pl='1' fontSize={'sm'}>
+                                <Text fontWeight={'normal'} pl='1' fontSize={{base:'sm', lg:'xs'}}>
                                     / night
                                 </Text>
                             </Text>

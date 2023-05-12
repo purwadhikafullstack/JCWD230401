@@ -162,7 +162,7 @@ function TenantDashboard() {
 
   const dateClick = async (e) => {
     const selectedDate = e.dateStr;
-    const date = new Date(selectedDate); 
+    const date = new Date(selectedDate);
     const formatSelectedDate = `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`; //DD-MM-YYYY
     setFormatSelectedDate(formatSelectedDate);
     setSelectedDate(selectedDate);
@@ -248,8 +248,8 @@ function TenantDashboard() {
           slidesToShow: 1,
           slidesToScroll: 1,
           infinite: true,
-          prevArrow: false,
-          nextArrow: false
+          // prevArrow: false,
+          // nextArrow: false
         },
       },
     ],
@@ -258,23 +258,25 @@ function TenantDashboard() {
   return (
     <Flex
       minH={'100vh'}
-    // align={'center'}
-    // justify={'center'}
-    // p={12}
+      // align={'center'}
+      // justify={'center'}
+      px={2}
     >
       <Box>
         <Sidebar />
       </Box>
       <Box w='50vw' flex='5' px={{ base: '4', sm: '10' }} bg={'white'} >
         <br />
-        <Heading mb={{ base: '2', sm: '10' }}>
+        <Heading mb={{ base: '8', sm: '10' }} textAlign={{ base: 'center', sm: 'left' }} >
           Welcome, {name} 👋
         </Heading>
         <Box p={{ base: '2', sm: '10' }} bg={'white'} rounded={'xl'} borderWidth={'1px'}
-        borderColor='gray.300'>
+          // borderColor='gray.300'
+          borderColor={{ base: 'white', sm: 'gray.300' }}
+        >
           {/* MY PROPERTY */}
           <Box>
-            <Text fontSize={{ base: '20', sm: '28' }} fontWeight={'semibold'} mb={{ base: '8', sm: '10' }} textAlign={{ base: 'center', sm: 'left' }}>Your Property Listings :</Text>
+            <Text fontSize={{ base: '20', sm: '28' }} fontWeight={'semibold'} mb={{ base: '6', sm: '10' }} textAlign={{ base: 'center', sm: 'left' }}>Your Property Listings</Text>
             <Slider {...settingsMyProperty} prevArrow={<FaChevronLeft color="#E2E8F0" />} nextArrow={<FaChevronRight color="#E2E8F0" />}>
               {printMyProperty()}
             </Slider>
@@ -282,8 +284,10 @@ function TenantDashboard() {
         </Box>
         <br />
         <Box p={{ base: '2', sm: '10' }} bg={'white'} rounded={'xl'} borderWidth={'1px'}
-        borderColor='gray.300'>
-          <Text fontSize={{ base: '20', sm: '28' }} fontWeight={'semibold'} mb={{ base: '8', sm: '10' }} textAlign={{ base: 'center', sm: 'left' }}>See Availability by Calendar Date :</Text>
+          // borderColor='gray.300'
+          borderColor={{ base: 'white', sm: 'gray.300' }}
+        >
+          <Text fontSize={{ base: '20', sm: '28' }} fontWeight={'semibold'} mb={{ base: '6', sm: '10' }} textAlign={{ base: 'center', sm: 'left' }}>See Availability by Calendar Date</Text>
           <Fullcalendar
             className="my-calendar"
             // w='full'
@@ -304,18 +308,18 @@ function TenantDashboard() {
             <ModalOverlay />
             <ModalContent>
               <ModalHeader fontWeight={'semibold'}>
-                <Text fontSize={'2xl'} px='4' pt='4'>
-                  Available Properties & Rooms on
+                <Text fontSize={'xl'} px='4' pt='4'>
+                  Available Properties & Rooms
                 </Text>
-                <Text fontSize={'2xl'} px='4'>
-                  {formatSelectedDate} :
+                <Text fontSize={'xl'} px='4'>
+                  on {formatSelectedDate} :
                 </Text>
               </ModalHeader>
               <ModalBody>
                 <OrderedList p='4' m='auto'>
                   {printAvailableRooms().map((val, idx) => {
                     return (
-                      <Card mb='2'>
+                      <Card mb='2' borderColor={'gray.300'} borderWidth={'1px'} boxShadow={'none'}>
                         <CardHeader>
                           <Heading size='md'>{val.property}</Heading>
                         </CardHeader>
@@ -367,7 +371,12 @@ function TenantDashboard() {
                   }}
                   onClick={() => {
                     setModalIsOpen(false);
-                  }} variant='solid'>
+                  }} variant='solid'
+                  _active={{
+                    bg: '#D3212D',
+                    transform: 'scale(0.98)',
+                  }}
+                >
                   Close
                 </Button>
               </ModalFooter>

@@ -37,16 +37,11 @@ export default function TenantRegister() {
             setLoading(true);
             await formik.validateForm();
             let formData = new FormData();
-            formData.append(
-                "data",
-                JSON.stringify({
-                    name: formik.values.name,
-                    email: formik.values.email,
-                    phone: formik.values.phone,
-                    password: formik.values.password,
-                    confirmationPassword: formik.values.passwordConfirmation
-                })
-            );
+            formData.append("name", formik.values.name);
+            formData.append("email", formik.values.email);
+            formData.append("phone", formik.values.phone);
+            formData.append("password", formik.values.password);
+            formData.append("confirmationPassword", formik.values.passwordConfirmation);
             //1. function that will read the file image and return a Promise that resolves with the base64 data:
             const toBase64 = (file) =>
                 new Promise((resolve, reject) => {
@@ -279,6 +274,7 @@ export default function TenantRegister() {
                                     )
                                     : image}
                                 w='full'
+                                borderRadius="8px 8px 0 0"
                             />
                             <Button fontFamily={'heading'} bg={'gray.200'} color={'gray.800'} w='full'
                                 leftIcon={<Icon as={FiUpload} ml='8' fontSize={'2xl'} />}
@@ -286,6 +282,7 @@ export default function TenantRegister() {
                                 onClick={() =>
                                     inputFile.current.click()
                                 }
+                                borderRadius="0 0 8px 8px"
                             >
                                 {/* Upload your id card */}
                                 <Input

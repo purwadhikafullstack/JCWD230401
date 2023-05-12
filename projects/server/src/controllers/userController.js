@@ -145,8 +145,14 @@ module.exports = {
       //   "ini getuser role buat login :",
       //   getuser[0].dataValues.role.role
       // );
+      // console.log(
+      //   "ini getuser password buat login :",
+      //   getuser[0].dataValues.password
+      // );
       //2. if found compare hashed password with req.body.password
       if (getuser.length > 0) {
+        //if google account throw error login have to by google
+        if(getuser[0].dataValues.password !== "NULL"){
         let checkpw = bcrypt.compareSync(
           req.body.password,
           getuser[0].dataValues.password
@@ -216,6 +222,12 @@ module.exports = {
             });
           }
         }
+      } else {
+        res.status(400).send({
+          success: false,
+          message: "Account not found",
+        });
+      }
       } else {
         res.status(400).send({
           success: false,
@@ -496,20 +508,19 @@ module.exports = {
       console.log("ini base64Data :", base64Data);
       let checkExistingUser = await model.user.findAll({
         where: sequelize.or(
-          { email: JSON.parse(req.body.data).email },
-          { phone: JSON.parse(req.body.data).phone }
+          { email: req.body.email },
+          { phone: req.body.phone }
         ),
       });
       console.log("ini isi checkExistingUser:", checkExistingUser);
       if (checkExistingUser == 0) {
         if (req.body.images.length > 0) {
           if (
-            JSON.parse(req.body.data).password ==
-            JSON.parse(req.body.data).confirmationPassword
+            req.body.password == req.body.confirmationPassword
           ) {
-            delete JSON.parse(req.body.data).confirmationPassword;
+            delete req.body.confirmationPassword;
             const uuid = uuidv4();
-            const { name, email, password, phone } = JSON.parse(req.body.data);
+            const { name, email, password, phone } = req.body;
             const hashedPassword = bcrypt.hashSync(password, salt);
             let regis = await model.user.create(
               {
@@ -534,7 +545,7 @@ module.exports = {
                 uuid,
                 name,
                 image_ktp,
-                userId: regis.id, 
+                userId: regis.id,
               },
               {
                 transaction: ormTransaction,

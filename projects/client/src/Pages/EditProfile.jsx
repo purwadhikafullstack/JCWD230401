@@ -16,7 +16,6 @@ import { API_URL, API_URL_IMG } from '../helper';
 import axios from 'axios';
 import { useFormik } from 'formik';
 import * as yup from "yup";
-import { SmallCloseIcon } from '@chakra-ui/icons';
 import { BsShieldExclamation, BsShieldCheck } from 'react-icons/bs';
 
 
@@ -39,15 +38,22 @@ export default function EditProfile(props) {
     const toast = useToast();
 
     console.log("ini isi dari role edit profile:", role); //testing
+    console.log(currentGender);
+    console.log(currentBirth);
+
 
     const handleGenderChange = (value) => {
         setGender(value);
+        formik.setFieldValue('gender', value);
+        console.log("ini isi value gender change:", value);
     }
 
     const handleBirthChange = (event) => {
         const selectedDate = event.target.value;
         setBirth(selectedDate);
-        console.log(selectedDate);
+        formik.setFieldValue("birth", selectedDate);
+        console.log("ini isi selectedDate:", selectedDate);
+        console.log("ini type data selectedDate:", typeof selectedDate);
     }
 
     const onBtnEditProfile = async () => {
@@ -89,7 +95,6 @@ export default function EditProfile(props) {
             props.keeplogin(); //refresh once updated
         } catch (error) {
             console.log("ini error dari onBtnEditProfile : ", error); //testing purposes
-            // alert(error.response.data.error[0].msg);
             if (error.response && !error.response.data.error) {
                 toast({
                     title: error.response.data.message,
@@ -121,7 +126,6 @@ export default function EditProfile(props) {
             }
             );
             console.log("ini hasil response onbtnSendVerifyEmail :", response);
-            // alert(response.data.message);
             toast({
                 title: response.data.message,
                 status: 'success',
@@ -130,7 +134,6 @@ export default function EditProfile(props) {
             })
         } catch (error) {
             console.log("ini error dari onBtnSendVerifyEmail :", error);
-            // navigate('/transactionpage');
             if (error.response && error.response.data.message === "You have reached the maximum limit of OTP resend requests for today.") {
                 toast({
                     title: 'You have reached the maximum limit of OTP resend requests for today. Please try again tomorrow.',
@@ -163,6 +166,8 @@ export default function EditProfile(props) {
         initialValues: {
             name: currentName || "",
             email: currentEmail || "",
+            gender: currentGender || "",
+            birth: currentBirth || "",
         },
         onSubmit: onBtnEditProfile,
         validationSchema: yup.object().shape({
@@ -180,6 +185,28 @@ export default function EditProfile(props) {
                     /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
                     "Please enter a valid email address"
                 ),
+            gender: yup
+                .string()
+                .required("Gender is a required field")
+                .oneOf(["Male", "Female"], "Invalid gender"),
+            birth: yup
+                .string()
+                .required("Birthdate is a required field")
+                .test(
+                    "age",
+                    "You must be at least 18 years old.",
+                    function (value) {
+                        const currentDate = new Date();
+                        const birthdate = new Date(value);
+                        const minimumAgeDate = new Date(
+                            currentDate.getFullYear() - 18,
+                            currentDate.getMonth(),
+                            currentDate.getDate()
+                        );
+                        return birthdate <= minimumAgeDate;
+                    }
+                )
+                .max(new Date(), "Birthdate cannot past today.")
         })
     });
 
@@ -221,7 +248,6 @@ export default function EditProfile(props) {
             );
             console.log("response onbtneditprofileimage :", response);
             console.log("response onbtneditprofileimage message be :", response.data.message);
-            // alert(response.data.message);
             toast({
                 title: response.data.message,
                 status: 'success',
@@ -237,7 +263,6 @@ export default function EditProfile(props) {
             });
         } catch (error) {
             console.log("ini error dari onBtnEditProfileImage : ", error);
-            // alert(error.message);
             toast({
                 title: error.message,
                 status: 'error',
@@ -299,8 +324,7 @@ export default function EditProfile(props) {
                     maxW={'md'}
                     rounded={'xl'}
                     borderWidth={'1px'}
-                    borderColor='gray.300'
-                    // boxShadow={'xs'}
+                    borderColor={{ base: 'white', sm: 'gray.300' }}
                     p={6}
                     my={12}>
                     <Heading lineHeight={1.1} fontSize={{ base: '2xl', sm: '3xl' }} align='center' mb='4'>
@@ -308,14 +332,13 @@ export default function EditProfile(props) {
                     </Heading>
                     <FormControl id="userName">
                         {/* <FormLabel>User Icon</FormLabel> */}
-                        <Stack 
-                        // direction={['column', 'row']}
-                        direction={['column']}
+                        <Stack
+                            direction={['column']}
                             spacing={6}
                         >
                             <Center>
                                 <Avatar size="xl"
-                                    src={currentProfileImage && currentProfileImage.includes('http') ? currentProfileImage : `${API_URL_IMG}${currentProfileImage}` ? `${API_URL_IMG}${currentProfileImage}` : ""}
+                                    src={currentProfileImage == null ? "https://ionicframework.com/docs/img/demos/avatar.svg" : currentProfileImage && currentProfileImage.includes('http') ? currentProfileImage : `${API_URL_IMG}${currentProfileImage}` ? `${API_URL_IMG}${currentProfileImage}` : "https://ionicframework.com/docs/img/demos/avatar.svg"}
                                 >
                                     {!isVerified && role == "User" ?
                                         <AvatarBadge
@@ -345,7 +368,6 @@ export default function EditProfile(props) {
                             </Center>
                             <Box w="full">
                                 <Center w="full"
-                                    // mt={{ base: '0', sm: '0' }}
                                 >
                                     <Button w="full" onClick={() =>
                                         inputFile.current.click()}>Change Profile Photo
@@ -448,26 +470,31 @@ export default function EditProfile(props) {
                         />
                         <FormErrorMessage fontSize='xs'>{formik.errors.email}</FormErrorMessage>
                     </FormControl>
-                    <FormControl id="gender">
+                    <FormControl id="gender" isInvalid={formik.errors.gender}>
                         <FormLabel>Gender</FormLabel>
                         <Box justifyContent='space-between'>
                             <RadioGroup
-                                value={gender} onChange={handleGenderChange}
+                                value={formik.values.gender}
+                                onChange={handleGenderChange}
+                                name="gender"
                             >
                                 <Radio value="Male" mr={2}>Male</Radio>
                                 <Radio value="Female">Female</Radio>
                             </RadioGroup>
                         </Box>
+                        <FormErrorMessage fontSize='xs'>{formik.errors.gender}</FormErrorMessage>
                     </FormControl>
-                    <FormControl id="birth">
+                    <FormControl id="birth" isInvalid={formik.errors.birth}>
                         <FormLabel>Birthdate</FormLabel>
                         <Input
                             placeholder={currentBirth} //your current birthdate
                             _placeholder={{ color: 'gray.800' }}
                             type="date"
-                            value={birth}
+                            value={formik.values.birth}
                             onChange={handleBirthChange}
+                            name="birth"
                         />
+                        <FormErrorMessage fontSize='xs'>{formik.errors.birth}</FormErrorMessage>
                     </FormControl>
                     {
                         // Tenant

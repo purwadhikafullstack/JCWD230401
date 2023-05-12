@@ -26,31 +26,31 @@ export default function Footer() {
       >
       <Container as={Stack} maxW={'full'} py={10} px={10}>
         <SimpleGrid columns={{ base: 1, sm: 2, md: 4 }} spacing={8}>
-          <Stack align={'flex-start'}>
-            <Text fontWeight={'600'} fontSize={'lg'} mb={2}>Company</Text>
+          <Stack align={'flex-start'} fontSize={{base:'sm', sm:'md'}}>
+            <Text fontWeight={'600'} fontSize={{base:'md', sm:'lg'}} mb={2}>Company</Text>
             <Link href={'#'}>About Us</Link>
             <Link href={'#'}>Blog</Link>
             <Link href={'#'}>Careers</Link>
             <Link href={'#'}>Contact Us</Link>
           </Stack>
 
-          <Stack align={'flex-start'}>
-            <Text fontWeight={'600'} fontSize={'lg'} mb={2}>Support</Text>
+          <Stack align={'flex-start'} fontSize={{base:'sm', sm:'md'}}>
+            <Text fontWeight={'600'} fontSize={{base:'md', sm:'lg'}} mb={2}>Support</Text>
             <Link href={'#'}>Help Center</Link>
             <Link href={'#'}>Safety Center</Link>
             <Link href={'#'}>Community Guidelines</Link>
           </Stack>
 
-          <Stack align={'flex-start'}>
-            <Text fontWeight={'600'} fontSize={'lg'} mb={2}>Hosting</Text>
+          <Stack align={'flex-start'} fontSize={{base:'sm', sm:'md'}}>
+            <Text fontWeight={'600'} fontSize={{base:'md', sm:'lg'}} mb={2}>Hosting</Text>
             <Link href={'#'}>Rent out your home</Link>
             <Link href={'#'}>Cover for Host</Link>
             <Link href={'#'}>Explore hosting resources</Link>
             <Link href={'#'}>Community forum</Link>
             <Link href={'#'}>How to host responsibly</Link>
           </Stack>
-          <Stack align={'flex-start'}>
-            <Text fontWeight={'600'} fontSize={'lg'} mb={2}>Tempatku</Text>
+          <Stack align={'flex-start'} fontSize={{base:'sm', sm:'md'}}>
+            <Text fontWeight={'600'} fontSize={{base:'md', sm:'lg'}} mb={2}>Tempatku</Text>
             <Link href={'#'}>Newsroom</Link>
             <Link href={'#'}>Learn about new features</Link>
             <Link href={'#'}>Letter from our founders</Link>
@@ -74,13 +74,13 @@ export default function Footer() {
           justify={{base:'center', md: 'space-between'}}
           align={{ base: 'center' }}>
           <Stack align={'flex-start'}  direction={'row'}>
-          <Text>© 2023 tempatku.</Text>
-          <Text>•</Text>
-          <Text>Terms</Text>
-          <Text>•</Text>
-          <Text>Sitemap</Text>
-          <Text>•</Text>
-          <Text>Privacy</Text>
+          <Text fontSize={{base:'sm', sm:'md'}}>© 2023 tempatku.</Text>
+          <Text fontSize={{base:'sm', sm:'md'}}>•</Text>
+          <Text fontSize={{base:'sm', sm:'md'}}>Terms</Text>
+          <Text fontSize={{base:'sm', sm:'md'}}>•</Text>
+          <Text fontSize={{base:'sm', sm:'md'}}>Sitemap</Text>
+          <Text fontSize={{base:'sm', sm:'md'}}>•</Text>
+          <Text fontSize={{base:'sm', sm:'md'}}>Privacy</Text>
           </Stack>
           <Stack align={'flex-end'} direction={'row'} spacing={4}>
             <Button

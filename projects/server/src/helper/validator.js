@@ -180,11 +180,6 @@ module.exports = {
             "Password must be at least 6 characters, includes a number, one uppercase letter, and one lowercase letter"
           )
           .run(req);
-
-        await check("image_ktp")
-          .notEmpty()
-          .withMessage("Image file is required")
-          .run(req);
       } else if (req.path == "/editprofile") {
         if (req.body.name) {
           await check("name")
@@ -219,12 +214,19 @@ module.exports = {
             .notEmpty()
             .isISO8601()
             .withMessage("Birthdate must be a valid date in ISO8601 format.")
-            .isBefore(
-              new Date(
-                Date.now() - 18 * 365 * 24 * 60 * 60 * 1000
-              ).toISOString()
-            )
-            .withMessage("You must be at least 18 years old.")
+            .custom((value) => {
+              const currentDate = new Date();
+              const birthdate = new Date(value);
+              const minimumAgeDate = new Date(
+                currentDate.getFullYear() - 18,
+                currentDate.getMonth(),
+                currentDate.getDate()
+              );
+              if (birthdate > minimumAgeDate) {
+                throw new Error("You must be at least 18 years old.");
+              }
+              return true;
+            })
             .isAfter("1899-12-31")
             .withMessage("Birthdate cannot be lower than 1900-01-01.")
             .run(req);

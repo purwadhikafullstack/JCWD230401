@@ -46,6 +46,9 @@ module.exports = {
     try {
       let getdata = await model.maintenance.findAll({
         attributes: ["startDate", "endDate"],
+        where: {
+          isDeleted: 0,
+        },
         include: [
           {
             model: model.room,
@@ -139,6 +142,7 @@ module.exports = {
                 ),
               ],
             },
+            // order: [["price", "ASC"]], //not working yet
           },
           {
             model: model.picture_property,
@@ -158,6 +162,7 @@ module.exports = {
           },
         ],
         group: ["property.id"],
+        order: [[model.room, "price", "ASC"]], //not working yet
       });
       console.log("ini isi dari getdata: ", getdata);
       res.status(200).send(getdata);

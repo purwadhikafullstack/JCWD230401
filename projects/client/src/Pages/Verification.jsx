@@ -144,8 +144,9 @@ export default function Verification() {
 
   return (
     <Flex
-      minH={'100vh'}
-      align={'center'}
+      // minH={'100vh'}
+      minH={{base:'50vh', sm:'100vh'}}
+      align={{base:'none', sm:'center'}}
       justify={'center'}
       bg={'white'}>
       <Stack
@@ -155,8 +156,7 @@ export default function Verification() {
         bg={'white'}
         rounded={'xl'}
         borderWidth={'1px'}
-        borderColor='gray.300'
-        // boxShadow={'xs'}
+        borderColor={{base:'white', sm:'gray.300'}}
         p={6}
         my={10}>
         <Center>

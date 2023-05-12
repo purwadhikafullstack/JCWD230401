@@ -4,19 +4,28 @@
 
 .fc .fc-button-primary {
 font-size: 1rem;
+color: black;
+background-color: white;
 }
 
 .fc-h-event{
-  background-color: goldenrod;
-  border: 1px solid goldenrod;
+  background-color: rgb(250, 162, 162);
+  border: 2px solid rgb(250, 162, 162);
+  
 }
 
 .fc-event-title-container{
-  background-color: goldenrod;
+  background-color: rgb(250, 162, 162);
+  /* border: 1px solid #f04651; */
+  color:white;
 }
 
 .fc-event-title {
-  background-color: goldenrod;
+  background-color: rgb(250, 162, 162);
+}
+
+.fc .fc-view-harness{
+  font-size: 0.7rem;
 }
   
   @media (max-width: 768px) {
@@ -26,6 +35,7 @@ font-size: 1rem;
     .fc-button-group {
       font-size: 1rem; 
       padding: 0.5rem;
+      
     }
     .fc .fc-button-primary {
         font-size: 1rem;
@@ -37,7 +47,7 @@ font-size: 1rem;
         font-size: 0.5rem;
     }
     .fc .fc-toolbar-title {
-        font-size: 1.2rem;
+        font-size: 0.8rem;
     }
     .fc-button-group {
       font-size: 0.7rem;
