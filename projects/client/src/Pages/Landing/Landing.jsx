@@ -263,7 +263,7 @@ export default function Landing() {
                 {/* PROPERTY RECOMMENDATIONS */}
                 <br />
                 <div className="recommendations">
-                    {printAllProperty()}
+                    {/* {printAllProperty()} */}
                 </div>
                 <button onClick={() => navigate('/property')} type='button' className="see-more-btn">See more properties</button>
             </Box>

@@ -194,6 +194,19 @@ module.exports = {
                 },
 
             });
+            let getAvg = await model.review.findAll({
+                attributes: [[sequelize.fn('AVG', sequelize.col('rating')), 'avgRating']],
+                include: [
+                    {
+                        model: model.room, attributes: ['uuid'], required: true,
+                        include: [{
+                            model: model.property, attributes: ['property'], where: {
+                                uuid: req.query.uuid // pake uuid harusnya
+                            }
+                        }]
+                    }
+                ]
+            })
             res.status(200).send(get)
         } catch (error) {
             console.log(error);
@@ -222,42 +235,156 @@ module.exports = {
         }
 
     },
-    testtt: async (req, res, next) => {
-        let name = ''
-        let start = '2023-05-07'
-        let end = '2023-05-11'
+    getAvailableProperty: async (req, res, next) => {
+        let today = new Date().toISOString().split('T')[0]
+        let tomorrow = new Date(today);
+        tomorrow.setDate(tomorrow.getDate() + 1);
 
-        const query = `select properties.id, 
+        let name = req.query.name || ''
+        let start = req.query.start || today
+        let end = req.query.end || new Date(tomorrow).toISOString().split('T')[0]
+        let capacity = req.query.capacity || ''
+        let category = req.query.category || ''
+        let sortby = req.query.sortby || 'property'
+        let order = req.query.order || "DESC"
+        let city = req.query.city || ''
+        let limit = parseInt(parseInt(req.query.size) || 3)
+        let offset = parseInt(((parseInt(req.query.page) || 1) - 1) * (parseInt(req.query.size) || 3))
+
+        // Available Property
+        const query1 = `select properties.id, 
+        properties.uuid as uuid,
         properties.property as property_name ,
         min(rooms.price) as property_price, 
         picture_properties.picture, 
         provinces.name as province_name, 
         regencies.name as regency_name,
-        avg(reviews.rating) as rating
+        property_locations.country as country,
+        avg(reviews.rating) as rating,
+        count(*) OVER() AS total_data
         from properties
         join rooms on properties.id = rooms.propertyId
+        join categories on properties.categoryId = categories.id
         left join reviews on rooms.id = reviews.roomId
+        left join maintenances on rooms.id = maintenances.roomId -- maintenance
         join picture_properties on properties.id = picture_properties.propertyId
         join property_locations on properties.id = property_locations.propertyId
         join provinces on property_locations.provinceId = provinces.id
         join regencies on property_locations.regency_id = regencies.id
         where properties.property like '%${name}%' and properties.id in (
             select distinct propertyId from rooms where rooms.id not in (
-                select roomId from orders 
-                join transactions on orders.transactionId = transactions.id where 
+                select roomId from orders join transactions 
+                on orders.transactionId = transactions.id 
+                where 
                 transactions.transaction_statusId IN (1,2,3,4)
-                and
-                start_date >= '${start}' and start_date <= '${end}' 
+                and (
+                (start_date >= '${start}' and start_date <= '${end}') 
                 or 
-                end_date >= '${start}' and end_date <= '${end}'
-            )
-        )
-        group by properties.id, properties.property, picture_properties.picture, provinces.name, regencies.name;`
+                (end_date >= '${start}' and end_date <= '${end}'))
+            ) AND rooms.id not in (
+                SELECT roomId FROM maintenances WHERE (startDate >= '${start}' and startDate <= '${end}') 
+                or 
+                (endDate >= '${start}' and endDate <= '${end}') 
+            ) AND properties.isDeleted = 0 AND rooms.capacity >= '${capacity}'
+        ) AND categories.category LIKE '%${category}%' AND provinces.name LIKE '%${city}%'
+        group by properties.id, properties.property, picture_properties.picture, provinces.name, 
+        regencies.name
+        order by properties.property ${order} 
+        limit ${limit} offset ${offset}
+        ;`
 
-        const results = await con.query(query, {
+        // Special Price
+        const query2 = `
+        SELECT s.id, s.startDate, s.endDate, s.priceOnDate, s.isActive, r.propertyId FROM special_prices s join rooms r
+        on s.roomId = r.id 
+        WHERE  '${start}' >= startDate 
+        AND (
+            (startDate >= '${start}' and startDate <= '${end}') 
+            or 
+            (endDate >= '${start}' and endDate <= '${end}')
+        )
+        AND 
+        isActive = 1
+        ;`
+
+        // Total Data (count)
+        const query3 = `select 
+        count(*) OVER() AS total_data
+        from properties
+        join rooms on properties.id = rooms.propertyId
+        left join reviews on rooms.id = reviews.roomId
+        join categories on properties.categoryId = categories.id
+        left join maintenances on rooms.id = maintenances.roomId -- maintenance
+        join picture_properties on properties.id = picture_properties.propertyId
+        join property_locations on properties.id = property_locations.propertyId
+        join provinces on property_locations.provinceId = provinces.id
+        join regencies on property_locations.regency_id = regencies.id
+        where properties.property like '%${name}%' and properties.id in (
+            select distinct propertyId from rooms where rooms.id not in (
+                select roomId from orders join transactions 
+                on orders.transactionId = transactions.id 
+                where 
+                transactions.transaction_statusId IN (1,2,3,4)
+                and (
+                (start_date >= '${start}' and start_date <= '${end}') 
+                or 
+                (end_date >= '${start}' and end_date <= '${end}'))
+            ) AND rooms.id not in (
+                SELECT roomId FROM maintenances WHERE (startDate >= '${start}' and startDate <= '${end}') 
+                or 
+                (endDate >= '${start}' and endDate <= '${end}') 
+            ) AND properties.isDeleted = 0 AND rooms.capacity >= '${capacity}'
+        ) AND categories.category LIKE '%${category}%' AND provinces.name LIKE '%${city}%'
+        group by properties.id, properties.property, picture_properties.picture, provinces.name, 
+        regencies.name 
+        ;`
+
+        const room_available = await con.query(query1, {
             type: sequelize.QueryTypes.SELECT
         })
 
-        res.send(results)
+        const special_prices = await con.query(query2, {
+            type: sequelize.QueryTypes.SELECT
+        })
+
+        const total_data = await con.query(query3, {
+            type: sequelize.QueryTypes.SELECT
+        })
+        console.log("room_available", room_available);
+
+        // function sort by
+        const sortbyFunc = (result) => {
+            if (sortby === 'price' && order === 'ASC') {
+                return result.sort((a, b) => a.property_price - b.property_price)
+            } else if (sortby === 'price' && order === 'DESC') {
+                return result.sort((a, b) => b.property_price - a.property_price)
+            } else {
+                return result
+            }
+        }
+
+        if (special_prices.length) {
+            const final_result = room_available.map((val1) => {
+                let special_price = special_prices.find((val2) => val2.propertyId === val1.id)
+                if (special_price) {
+                    return { ...val1, property_price: special_price.priceOnDate }
+                } else {
+                    return val1
+                }
+            })
+            console.log("final result");
+            res.status(200).send({
+                success: true,
+                data: sortbyFunc(final_result),
+                total_data: total_data.length
+            })
+        } else {
+            console.log("room_available");
+            res.status(200).send({
+                success: true,
+                data: sortbyFunc(room_available),
+                total_data: total_data.length
+            })
+        }
     }
 }

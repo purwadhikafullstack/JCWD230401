@@ -4,6 +4,9 @@ const { readToken } = require('../helper/jwt');
 const { checkUser } = require('../helper/validator');
 
 route.get('/getaverageandreviewproperty', reviewController.getAverageAndReviewProperty)
+route.post('/', readToken, reviewController.addReview)
+route.get('/', reviewController.getAllReview)
+route.get('/average', reviewController.getAverage)
 
 
 

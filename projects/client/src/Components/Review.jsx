@@ -8,17 +8,17 @@ import {
     Image, Flex, HStack, Badge, Icon
 } from '@chakra-ui/react';
 import { StarIcon, ChevronRightIcon } from '@chakra-ui/icons';
+import { Rating } from '@smastrom/react-rating';
 
-export default function Review() {
-    const property = {
-        imageUrl: 'https://bit.ly/2Z4KKcF',
-        imageAlt: 'Rear view of modern home with pool',
-        username: 'anonymous',
-        date: 'February 2023',
-        comment: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Veniam, quibusdam sint? At, ipsum. Ipsum quo voluptatum perspiciatis temporibus, sunt iste ab saepe quia non numquam. Eius dolore fuga inventore ipsum.',
-        formattedPrice: '$1,900.00',
-        reviewCount: 34,
-        rating: 4,
+export default function Review(props) {
+    function RatingUser() {
+        return (
+            <Rating
+                style={{ maxWidth: 80 }}
+                value={props.value}
+                readOnly
+            />
+        );
     }
 
     return (
@@ -27,11 +27,11 @@ export default function Review() {
 
             <Box p='6'>
                 <Box>
-                    <Box display='flex' justifyContent='space-between' alignItems='center'>
+                    <Box display='flex' justifyContent='space-between' minW='250px'>
                         <Box display='flex'>
                             <Avatar
                                 size={'sm'}
-                                src=""
+                                src={props.profile ? props.profile : ""}
                             />
                             <Box>
                                 <Box
@@ -42,7 +42,7 @@ export default function Review() {
                                     textTransform='uppercase'
                                     ml='2'
                                 >
-                                    {property.username}
+                                    {props.name}
                                 </Box>
                                 <Box
                                     color='gray.500'
@@ -50,19 +50,12 @@ export default function Review() {
                                     fontSize='xs'
                                     ml='2'
                                 >
-                                    {property.date}
+                                    {new Date(props.createdAt).toISOString().split('T')[0] || '2023-05-09'}
                                 </Box>
                             </Box>
                         </Box>
-                        <Box display='flex' alignItems='right'>
-                            {Array(5)
-                                .fill('')
-                                .map((_, i) => (
-                                    <StarIcon
-                                        key={i}
-                                        color={i < property.rating ? 'yellow.500' : 'gray.300'}
-                                    />
-                                ))}
+                        <Box display='flex' alignItems='baseline' >
+                            {RatingUser()}
                         </Box>
                     </Box>
                 </Box>
@@ -73,7 +66,7 @@ export default function Review() {
                     lineHeight='tight'
                     noOfLines={4}
                 >
-                    {property.comment}
+                    {props.comment}
                 </Box>
             </Box>
         </Box>

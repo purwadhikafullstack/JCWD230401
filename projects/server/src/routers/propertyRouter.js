@@ -11,6 +11,6 @@ route.get('/getroomavailable', propertyController.getRoomAvailable)
 route.get('/getpropertydetail', propertyController.getPropertyDetail)
 route.get('/getpictureproperty', propertyController.getPicturePropertyDetail)
 
-route.get('/testquery', propertyController.testtt)
+route.get('/available', propertyController.getAvailableProperty)
 
 module.exports = route;

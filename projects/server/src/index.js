@@ -66,13 +66,32 @@ app.use((req, res, next) => {
 
 // reminderCheckInUser()
 
-const destinationPath = join(
-  __dirname,
-  `haloo`
-  // `${'Invoice'}-${data.user.fullName}-${milis}.pdf`
-);
+let arr1 = [
+  { propertyId: 1, name: 'hotel 1', normalPrice: 25000, description: 'sss', location: 'jakarta', rating: 4.00 },
+  { propertyId: 2, name: 'resort 1', normalPrice: 40000, description: 'sss', location: 'bali', rating: 4.00 }
+];
 
-console.log(destinationPath);
+let arr2 = [
+  { id: 1, start_date: '2023-05-06', end_date: '2023-05-08', propertyId: 1, priceOnDate: 1000 },
+  { id: 2, start_date: '2023-05-06', end_date: '2023-05-08', propertyId: 2, priceOnDate: 2000 },
+  { id: 3, start_date: '2023-05-06', end_date: '2023-05-08', propertyId: 1, priceOnDate: 3000 }
+];
+
+
+let final = arr1.map(item1 => {
+  let item2 = arr2.find(item => item.propertyId === item1.propertyId);
+  console.log(item2);
+  if (item2) {
+    return { ...item1, normalPrice: item2.priceOnDate };
+  } else {
+    return item1
+  }
+});
+
+
+
+console.log("ssss1", final);
+
 
 // error
 app.use((err, req, res, next) => {

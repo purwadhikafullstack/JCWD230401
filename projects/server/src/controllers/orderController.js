@@ -22,7 +22,7 @@ module.exports = {
                 include: [
                     {
                         model: model.transaction,
-                        attributes: ['transaction_statusId', 'invoice_number', 'uuid'],
+                        attributes: ['id', 'transaction_statusId', 'invoice_number', 'uuid'],
                         where: {
                             transaction_statusId: { [sequelize.Op.like]: `%${req.query.status}%` }, // filter by transaction_status
                             userId: req.decrypt.id, //////////// req.decrypt.id

@@ -29,10 +29,6 @@ import Review from '../../Components/Review';
 export default function PropertyDetail() {
     let token = localStorage.getItem("tempatku_login");
 
-    // const [startDate, setStartDate] = useState(new Date());
-    // const [endDate, setEndDate] = useState(null);
-    // const { isOpen, onToggle } = useDisclosure()
-
     const params = useParams();
     const location = useLocation();
     console.log("paramssss", params)
@@ -52,10 +48,21 @@ export default function PropertyDetail() {
         setRegency(get.data[0].property_location.regency.name);
         setPropertyPrice(get.data[0].rooms[0].price)
         setTenantEmail(get.data[0].user.email)
-
     }
-
     console.log("proeprtyy detaillll : ", propertyDetail);
+
+    const [average, setAverage] = useState(0)
+    const getAverage = async () => {
+        let get = await axios.get(`${API_URL}/review/average?uuid=${params.uuid}`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        })
+        setAverage(get.data.avg_rating)
+        console.log('average', get.data.avg_rating);
+    }
+    console.log('average', average);
+    console.log('average', typeof (average));
 
     // MODAL
     const modalProperty = useDisclosure()
@@ -93,10 +100,34 @@ export default function PropertyDetail() {
         console.log("picture property", get);
     }
 
+    const [reviews, setReviews] = useState([]);
+    const getReviews = async () => {
+        let review = await axios.get(`${API_URL}/review?uuid=${params.uuid}`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        })
+        console.log("review", review);
+        setReviews(review.data)
+    }
+    console.log("state reviews", reviews);
+
+    const printReviews = () => {
+        if (reviews.length) {
+            return reviews.map((val, idx) => {
+                return <Review value={val.rating} profile={val.user.user_detail.image_profile} name={val.user.user_detail.name} createdAt={val.createdAt} comment={val.review} />
+            })
+        } else {
+            return <Text>No review cekguuu</Text>
+        }
+    }
+
     useEffect(() => {
         getPropertyDetail();
         getRoomAvailable();
         getPictureProperty();
+        getReviews();
+        getAverage();
     }, [])
 
     useEffect(() => {
@@ -115,7 +146,7 @@ export default function PropertyDetail() {
                             <FaStar color='orange' />
                         </div>
                         <div>
-                            <p>&nbsp;5.0</p>
+                            <p>&nbsp;{parseFloat(average).toFixed(1)}</p>
                         </div>
                         <div>
                             <span>57 Reviews</span>
@@ -236,12 +267,7 @@ export default function PropertyDetail() {
                         Review
                     </Text>
                     <Flex gap='5' wrap={'wrap'}>
-                        <Review />
-                        <Review />
-                        <Review />
-                        <Review />
-                        <Review />
-                        <Review />
+                        {printReviews()}
                     </Flex>
                 </Box>
             </div>

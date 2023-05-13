@@ -25,7 +25,7 @@ import { Link } from 'react-router-dom'
 import CardOrderList from '../Components/CardOrderList'
 import Pagination from '../Components/Pagination'
 import { API_URL } from '../helper'
-
+import { Rating } from '@smastrom/react-rating';
 
 
 export default function OrderLists() {
@@ -61,13 +61,50 @@ export default function OrderLists() {
     }
     console.log("order list", orderList.rows);
 
+    function getRating(rating) {
+        switch (rating) {
+            case 1:
+                return 'Poor';
+            case 2:
+                return 'Nothing special';
+            case 3:
+                return 'Average';
+            case 4:
+                return 'Very good';
+            case 5:
+                return 'Excellent';
+            default:
+                return 'None';
+        }
+    }
+
+    const [rating, setRating] = useState(5);
+    const [review, setReview] = useState(' ');
+    function RatingUser() {
+        const [hoveredRating, setHoveredRating] = useState(0);
+
+        return (
+            <Flex style={{ maxWidth: 200, width: '100%' }} gap='5' alignItems='center'>
+                <Box w='60%'>
+                    <Rating value={rating} onChange={setRating} onHoverChange={setHoveredRating} />
+                </Box>
+                <Box w={'40%'}>
+                    <Text fontSize={'sm'}>{`${getRating(rating)}`}</Text>
+                </Box>
+            </Flex>
+        );
+    }
+
+
     const printOrderList = () => {
         return orderList?.rows?.map((val, idx) => {
             return (
-                <CardOrderList property={val.room.property.property} capacity={val.room.capacity} room={val.room.room_category.name} price={val.price} end_date={val.end_date} start_date={val.start_date} status={val.transaction.transaction_status.status} invoice={val.transaction.invoice_number} roomPicture={val.room.picture_rooms} uuid={val.transaction.uuid} />
+                <CardOrderList property={val.room.property.property} capacity={val.room.capacity} room={val.room.room_category.name} price={val.price} end_date={val.end_date} start_date={val.start_date} status={val.transaction.transaction_status.status} invoice={val.transaction.invoice_number} roomPicture={val.room.picture_rooms} uuid={val.transaction.uuid} RatingUser={RatingUser} review={review} setReview={setReview} roomId={val.room.id} rating={rating} transactionId={val.transaction.id} isReview={val.transaction.review} getOrderList={getOrderList} />
             )
         })
     }
+
+
 
     useEffect(() => {
         getOrderList();
