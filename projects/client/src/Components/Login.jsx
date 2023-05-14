@@ -12,7 +12,7 @@ import { useFormik } from 'formik';
 import * as yup from "yup";
 import Logo from '../assets/logotempatku.png';
 
-export default function Login() {
+export default function Login(props) {
     const [showPassword, setShowPassword] = useState(false);
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -119,7 +119,7 @@ export default function Login() {
                             {/* <Icon fontSize="50px" as={TbHomeHeart}
                                 color='#D3212D'
                             /> */}
-                            <Image src={Logo} alt='tempatku logo' boxSize='50px'/>
+                            <Image src={Logo} alt='tempatku logo' boxSize='50px' />
                         </Stack>
                         <Stack mb='8'>
                             <Text fontSize='3xl' fontWeight='semibold' style={{ display: 'flex' }} m='auto'>Login to tempatku</Text>
@@ -143,7 +143,10 @@ export default function Login() {
                                         size='xs'
                                         color='#0969da'
                                         fontWeight='500'
-                                        onClick={() => navigate('/forgotpassword')}
+                                        onClick={() => {
+                                            props.onCloseModal()
+                                            navigate('/forgotpassword')
+                                        }}
                                     >
                                         Forgot password?
                                     </Button>
@@ -206,7 +209,11 @@ export default function Login() {
                                                     <Center>
                                                         <HStack fontSize='sm' spacing='1'>
                                                             <Text>New to tempatku?</Text>
-                                                            <Text onClick={() => navigate('/userregister')} color='#0969da'
+                                                            <Text onClick={() => {
+                                                                props.onCloseModal()
+                                                                navigate('/userregister')
+                                                            }
+                                                            } color='#0969da'
                                                                 cursor={'pointer'}
                                                             >
                                                                 Create an account.

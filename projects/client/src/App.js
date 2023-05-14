@@ -30,7 +30,7 @@ function App() {
     try {
       let token = localStorage.getItem("tempatku_login");
       if (token) {
-        let response = await axios.get(`${API_URL}/user/keeplogin`, {
+        let response = await axios.get(`${API_URL}/user/keep-login`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

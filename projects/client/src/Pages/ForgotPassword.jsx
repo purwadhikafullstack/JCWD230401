@@ -31,7 +31,7 @@ export default function ForgotPassword() {
             if (!formik.isValid) {
                 return;
             }
-            let response = await axios.post(`${API_URL}/user/forgotpw`, {
+            let response = await axios.post(`${API_URL}/user/forgot-password`, {
                 email: formik.values.email
             });
             console.log("ini hasil response onBtnForgotPassword :", response); //testing purposes

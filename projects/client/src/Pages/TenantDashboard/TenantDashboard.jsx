@@ -252,8 +252,6 @@ function TenantDashboard() {
           slidesToShow: 1,
           slidesToScroll: 1,
           infinite: true,
-          // prevArrow: false,
-          // nextArrow: false
         },
       },
     ],

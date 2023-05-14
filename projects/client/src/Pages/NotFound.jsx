@@ -6,6 +6,11 @@ import Pagenotfound from '../assets/page-not-found.svg'
 
 export default function NotFound() {
     const navigate = useNavigate();
+
+    React.useEffect(() => {
+        window.scrollTo(0, 0);
+      }, []);
+      
     return (
         <Flex
             justify={'center'}

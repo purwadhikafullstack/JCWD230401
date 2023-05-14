@@ -37,7 +37,7 @@ export default function BookingButton() {
     try {
       setLoading(true);
       let token = localStorage.getItem("tempatku_login");
-      let response = await axios.post(`${API_URL}/user/sendverificationemail`, {}, {
+      let response = await axios.post(`${API_URL}/user/send-verification-email`, {}, {
         headers: {
           Authorization: `Bearer ${token}`
         }

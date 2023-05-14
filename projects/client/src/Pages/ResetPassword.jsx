@@ -31,7 +31,7 @@ export default function ResetPassword() {
             if (!formik.isValid) {
                 return;
             }
-            let response = await axios.patch(`${API_URL}/user/resetpw`, {
+            let response = await axios.patch(`${API_URL}/user/reset-password`, {
                 newPassword: formik.values.newPassword,
                 confirmationPassword: formik.values.passwordConfirmation,
                 otp: formik.values.verificationCode
@@ -41,7 +41,6 @@ export default function ResetPassword() {
                 }
             });
             console.log("ini hasil response onbtnresetpassword :", response); //testing purposes
-            // alert(response.data.message);
             toast({
                 title: response.data.message,
                 status: 'success',

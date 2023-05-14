@@ -72,7 +72,7 @@ export default function EditProfile(props) {
             if (!formik.isValid) {
                 return;
             }
-            let response = await axios.patch(`${API_URL}/user/editprofile`,
+            let response = await axios.patch(`${API_URL}/user/edit-profile`,
                 {
                     name: formik.values.name,
                     email: formik.values.email,
@@ -119,7 +119,7 @@ export default function EditProfile(props) {
         try {
             setLoading(true);
             let token = localStorage.getItem("tempatku_login");
-            let response = await axios.post(`${API_URL}/user/sendverificationemail`, {}, {
+            let response = await axios.post(`${API_URL}/user/send-verification-email`, {}, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
@@ -239,7 +239,7 @@ export default function EditProfile(props) {
             formData.append("image_profile", profileImage);
             console.log("ini isi dari formData", formData);
             console.log("ini tipe dari image_profile :", profileImage.type)
-            let response = await axios.patch(`${API_URL}/user/updateprofileimage`, formData,
+            let response = await axios.patch(`${API_URL}/user/update-profile-image`, formData,
                 {
                     headers: {
                         Authorization: `Bearer ${token}`,
@@ -277,7 +277,7 @@ export default function EditProfile(props) {
     const onBtnShowKTP = async () => {
         try {
             let token = localStorage.getItem("tempatku_login");
-            let response = await axios.get(`${API_URL}/user/showktp`,
+            let response = await axios.get(`${API_URL}/user/show-ktp`,
                 {
                     headers: {
                         Authorization: `Bearer ${token}`,
@@ -408,7 +408,7 @@ export default function EditProfile(props) {
                                                 colorScheme='green'
                                             >Verify Account</Button>
                                         </Box>
-                                        <Box py='4'>
+                                        <Box py='2'>
                                             <Divider />
                                         </Box>
                                     </div>
@@ -419,7 +419,7 @@ export default function EditProfile(props) {
                                                 <Divider />
                                             </Box>
                                             <Text fontSize='xs'>Your account is verified.</Text>
-                                            <Box py='4'>
+                                            <Box py='2'>
                                                 <Divider />
                                             </Box>
                                         </div>

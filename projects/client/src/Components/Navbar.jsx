@@ -39,11 +39,30 @@ export default function Navbar() {
   const imageprofile = useSelector((state) => state.authReducer.image_profile);
   const role = useSelector((state) => state.authReducer.role);
   const password = useSelector((state) => state.authReducer.password);
-  const location = useLocation(); // testing
+  const { pathname } = useLocation();
+  const [modalIsOpen, setModalIsOpen] = React.useState(false);
 
+  // console.log("ini isi modalIsOpen :", modalIsOpen);
   // console.log("ini isi password useSelector buat google:", password);
   console.log("ini isi imageprofile useSelector:", imageprofile);
   // console.log("tipe data imageprofile", typeof imageprofile);
+
+  // Login Page Modal
+  const onOpenModal = () => {
+    onOpen();
+    setModalIsOpen(true);
+  };
+  
+  const onCloseModal = () => {
+    onClose();
+    setModalIsOpen(false);
+  };
+
+  React.useEffect(() => {
+    if (pathname === '/') {
+      onOpenModal();
+    }
+  }, [pathname]);
 
   const onBtnLogout = () => {
     localStorage.removeItem('tempatku_login');
@@ -232,9 +251,10 @@ export default function Navbar() {
                           <Modal onClose={onClose} isOpen={isOpen} scrollBehavior={scrollBehavior} >
                             <ModalOverlay />
                             <ModalContent>
-                              <ModalCloseButton />
+                              <ModalCloseButton onClose={onCloseModal} />
                               <ModalBody>
-                                <Login />
+                                {/* login modal */}
+                                <Login onOpenModal={onOpenModal} onCloseModal={onCloseModal} /> 
                               </ModalBody>
                             </ModalContent>
                           </Modal>

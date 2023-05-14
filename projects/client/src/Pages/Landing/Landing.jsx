@@ -267,6 +267,10 @@ export default function LandingNew() {
         googlelogin();
     }, []);
 
+    React.useEffect(() => {
+        window.scrollTo(0, 0);
+      }, []);
+
     return (
         <>
             {/* BANNER */}

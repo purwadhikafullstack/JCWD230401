@@ -32,7 +32,7 @@ export default function Verification() {
   const onBtnSendVerifyEmail = async () => {
     try {
       setLoading2(true);
-      let response = await axios.post(`${API_URL}/user/sendverificationemail`, {}, {
+      let response = await axios.post(`${API_URL}/user/send-verification-email`, {}, {
         headers: {
           Authorization: `Bearer ${params.token}`
         }
@@ -83,7 +83,7 @@ export default function Verification() {
       if (!formik.isValid) {
         return;
       }
-      let response = await axios.patch(`${API_URL}/user/verifyaccount`,
+      let response = await axios.patch(`${API_URL}/user/verify-account`,
         {
           otp: formik.values.verificationCode
         }

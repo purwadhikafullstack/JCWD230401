@@ -1,13 +1,11 @@
 import React, { useRef, useState } from 'react';
 import {
     Button,
-    Checkbox,
     Flex,
     FormControl,
     FormLabel,
     Heading,
     Input,
-    Link,
     Stack,
     Image,
     FormErrorMessage,
@@ -59,7 +57,7 @@ export default function TenantRegister() {
             if (!formik.isValid) {
                 return;
             }
-            let response = await axios.post(`${API_URL}/user/registerastenant`,
+            let response = await axios.post(`${API_URL}/user/register-as-tenant`,
                 formData
             );
             console.log("ini hasil response onbtnregister :", response); //testing purposes
@@ -176,7 +174,6 @@ export default function TenantRegister() {
                 p={{ base: '8', sm: '0' }}
                 flex={1}
                 align={'center'} justify={'center'}
-            // py='20'
             >
                 <Stack spacing={0} w={'full'} maxW={{ base: 'sm' }}>
                     <Heading fontSize={'3xl'} fontWeight='semibold'
@@ -279,7 +276,7 @@ export default function TenantRegister() {
                                 borderRadius="8px 8px 0 0"
                             />
                             <Button fontFamily={'heading'} bg={'gray.200'} color={'gray.800'} w='full'
-                                leftIcon={<Icon as={FiUpload} ml='8' fontSize={'2xl'} />}
+                                leftIcon={<Icon as={FiUpload} ml={{base:'4', sm:'8'}} fontSize={'2xl'} />}
                                 variant={"link"}
                                 onClick={() =>
                                     inputFile.current.click()
@@ -289,11 +286,10 @@ export default function TenantRegister() {
                                 {/* Upload your id card */}
                                 <Input
                                     my='4'
-                                    ml='6'
+                                    ml={{base:'3', sm:'6'}}
                                     type="file"
                                     id="file"
                                     ref={inputFile}
-                                    // style={{ display: "none" }}
                                     onChange={onChangeFile}
                                     accept="image/*"
                                     variant='unstyled'

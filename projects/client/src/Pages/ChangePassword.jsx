@@ -32,7 +32,7 @@ export default function ChangePassword() {
             if (!formik.isValid) {
                 return;
             }
-            let response = await axios.patch(`${API_URL}/user/changepw`,
+            let response = await axios.patch(`${API_URL}/user/change-password`,
                 {
                     password: formik.values.oldPassword,
                     newPassword: formik.values.newPassword,
