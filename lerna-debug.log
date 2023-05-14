@@ -1,0 +1,26 @@
+0 silly argv {
+0 silly argv   _: [ 'add' ],
+0 silly argv   scope: 'client',
+0 silly argv   globs: [],
+0 silly argv   lernaVersion: '5.4.0',
+0 silly argv   '$0': 'node_modules\\lerna\\cli.js',
+0 silly argv   pkg: 'chart.js'
+0 silly argv }
+1 notice cli v5.4.0
+2 verbose rootPath C:\Users\butar\Documents\FULLSTACK WEBDEV\FinProJCWD2304\JCWD230401
+3 notice filter including "client"
+4 info filter [ 'client' ]
+5 error TypeError: Invalid comparator: latest
+5 error     at Comparator.parse (C:\Users\butar\Documents\FULLSTACK WEBDEV\FinProJCWD2304\JCWD230401\node_modules\semver\classes\comparator.js:38:13)
+5 error     at new Comparator (C:\Users\butar\Documents\FULLSTACK WEBDEV\FinProJCWD2304\JCWD230401\node_modules\semver\classes\comparator.js:22:10)
+5 error     at C:\Users\butar\Documents\FULLSTACK WEBDEV\FinProJCWD2304\JCWD230401\node_modules\semver\classes\range.js:133:47
+5 error     at Array.map (<anonymous>)
+5 error     at Range.parseRange (C:\Users\butar\Documents\FULLSTACK WEBDEV\FinProJCWD2304\JCWD230401\node_modules\semver\classes\range.js:133:35)
+5 error     at C:\Users\butar\Documents\FULLSTACK WEBDEV\FinProJCWD2304\JCWD230401\node_modules\semver\classes\range.js:34:22
+5 error     at Array.map (<anonymous>)
+5 error     at new Range (C:\Users\butar\Documents\FULLSTACK WEBDEV\FinProJCWD2304\JCWD230401\node_modules\semver\classes\range.js:34:8)
+5 error     at Object.intersects (C:\Users\butar\Documents\FULLSTACK WEBDEV\FinProJCWD2304\JCWD230401\node_modules\semver\ranges\intersects.js:3:8)
+5 error     at getRangeToReference (C:\Users\butar\Documents\FULLSTACK WEBDEV\FinProJCWD2304\JCWD230401\node_modules\@lerna\add\lib\get-range-to-reference.js:27:35)
+5 error     at C:\Users\butar\Documents\FULLSTACK WEBDEV\FinProJCWD2304\JCWD230401\node_modules\@lerna\add\index.js:152:14
+5 error     at Array.filter (<anonymous>)
+5 error     at AddCommand.collectPackagesToChange (C:\Users\butar\Documents\FULLSTACK WEBDEV\FinProJCWD2304\JCWD230401\node_modules\@lerna\add\index.js:144:21)

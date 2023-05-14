@@ -28,6 +28,15 @@ app.use("/api/user", userRouter);
 
 const locationRouter = require("./routers/locationRouter");
 app.use("/api/location", locationRouter);
+
+const specialRouter = require("./routers/specialRouter");
+app.use("/api/special", specialRouter);
+
+const maintenanceRouter = require("./routers/maintenanceRouter");
+app.use("/api/maintenance", maintenanceRouter);
+
+const reportRouter = require("./routers/reportRouter");
+app.use("/api/report", reportRouter)
 // ==============================================
 // NOTE : Add your routes here
 app.get("/api", (req, res) => {

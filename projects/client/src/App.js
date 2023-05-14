@@ -15,6 +15,11 @@ import Landing from "./Pages/Landing/Landing";
 import AddProperty from "./Pages/Tenant/AddProperty";
 import ManageProperty from "./Pages/Tenant/ManageProperty";
 import AddRoom from "./Pages/Tenant/AddRoom";
+import ManageRoom from "./Pages/Tenant/ManageRoom";
+import PropertyList from "./Pages/Tenant/PropertyList";
+import RoomList from "./Pages/Tenant/RoomList";
+import RoomConditionList from "./Pages/Tenant/RoomConditionList";
+import SalesReport from "./Components/SalesReport";
 
 function App(props) {
     const location = useLocation();
@@ -30,7 +35,7 @@ function App(props) {
                         Authorization: `Bearer ${token}`,
                     },
                 });
-                console.log("ini respon dari keeplogin :", response.data);
+                // console.log("ini respon dari keeplogin :", response.data);
                 localStorage.setItem("tempatku_login", response.data.token);
                 dispatch(loginAction(response.data));
             }
@@ -67,6 +72,14 @@ function App(props) {
                 <Route path="/listing" element={<AddProperty />} />
                 <Route path="/editlisting/:uuid" element={<ManageProperty />} />
                 <Route path="/room" element={<AddRoom />} />
+                <Route path="/editroom/:uuid" element={<ManageRoom />} />
+                <Route path="/propertylist" element={<PropertyList />} />
+                <Route path="/roomlist/:uuid" element={<RoomList />} />
+                <Route
+                    path="/specialconditions/:uuid"
+                    element={<RoomConditionList />}
+                />
+                <Route path="/report" element={<SalesReport/>}/>
             </Routes>
             {location.pathname === "/" && <NavbarMobile />}
         </>

@@ -23,11 +23,14 @@
     "framer-motion": "latest",
     "react": "^18.2.0",
     "react-chartjs-2": "latest",
+    "react-datepicker": "^4.11.0",
     "react-dom": "^18.2.0",
     "react-icons": "latest",
+    "react-paginate": "^8.2.0",
     "react-redux": "latest",
     "react-router-dom": "latest",
     "react-scripts": "5.0.1",
+    "recharts": "^2.6.2",
     "web-vitals": "^2.1.4"
   },
   "eslintConfig": {

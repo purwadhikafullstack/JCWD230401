@@ -27,10 +27,15 @@ module.exports = (sequelize, DataTypes) => {
         }
     );
     room.associate = (models) => {
+        room.belongsTo(models.property, { foreignKey: "propertyId" });
         room.belongsTo(models.room_category, {
             foreignKey: "room_categoryId",
         });
+        room.hasMany(models.order, { foreignKey: "roomId" });
         room.hasMany(models.picture_room, { foreignKey: "roomId" });
+        room.hasMany(models.maintenance, { foreignKey: "roomId" });
+        room.hasMany(models.special_price, { foreignKey: "roomId" });
+        room.hasMany(models.review, { foreignKey: "roomId" });
     };
     return room;
 };

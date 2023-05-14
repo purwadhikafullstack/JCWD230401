@@ -32,12 +32,12 @@ function AddProperty(props) {
     const [province, setProvince] = useState(null); // useState province
     const [zipcode, setZipcode] = useState(""); // useState zip
     const [country, setCountry] = useState(""); // useState country
-    // const [mapsUrl, setMapsUrl] = useState(""); // useState link maps
     const [allProvince, setAllProvince] = useState([]);
     const [allRegency, setAllRegency] = useState([]);
     const [activeButton, setActiveButton] = useState(null);
     const [fileProperty, setFileProperty] = useState(null);
     const toast = useToast();
+    // const [mapsUrl, setMapsUrl] = useState(""); // useState link maps
 
     // For Each untuk check size per file (max 2mb)
     const checkFileSize = (files) => {
@@ -93,17 +93,6 @@ function AddProperty(props) {
         onChange: setRegency,
     });
 
-    // const getRegency = async () => {
-    //     try {
-    //         let get = await axios.post(`${API_URL}/property/getregency`, {
-    //             province_id: province.value,
-    //         });
-    //         setAllRegency(get.data);
-    //     } catch (error) {
-    //         console.log(error);
-    //     }
-    // };
-
     const getRegencyById = async () => {
         try {
             let get = await axios.post(`${API_URL}/property/getregencybyid`, {
@@ -140,8 +129,7 @@ function AddProperty(props) {
             ) {
                 toast({
                     title: "Error occured",
-                    description:
-                        "Please fill all forms UWU :3",
+                    description: "Please fill all forms UWU :3",
                     status: "error",
                     duration: 3500,
                     isClosable: true,
@@ -190,7 +178,13 @@ function AddProperty(props) {
                     setProvince("");
                     setZipcode("");
                     setCountry("");
-                    alert("Property Added");
+                    setActiveButton(null);
+                    toast({
+                        title: "Property successfully created",
+                        status: "success",
+                        duration: 3500,
+                        isClosable: true,
+                    });
                     // ubah ke toast
                 }
             }
@@ -496,14 +490,18 @@ function AddProperty(props) {
                                                                 )}
                                                                 style={{
                                                                     maxWidth:
-                                                                        "75px",
+                                                                        "100px",
                                                                     maxHeight:
-                                                                        "75px",
-                                                                    margin: "3px",
+                                                                        "100px",
+                                                                    margin: "8px",
                                                                     aspectRatio:
-                                                                        "3/2",
+                                                                        "1/1",
                                                                     objectFit:
-                                                                        "contain",
+                                                                        "cover",
+                                                                    borderRadius:
+                                                                        "6px",
+                                                                    boxShadow:
+                                                                        "2px 2px 5px gray",
                                                                 }}
                                                             />
                                                         ))
@@ -522,6 +520,7 @@ function AddProperty(props) {
                                                     w={"35px"}
                                                     variant="outline"
                                                     alignItems={"center"}
+                                                    alignSelf={"center"}
                                                     onClick={() =>
                                                         setFileProperty(null)
                                                     }
@@ -646,10 +645,16 @@ function AddProperty(props) {
                                     placeholder="Enter zip code"
                                     mb={"2"}
                                     value={zipcode}
-                                    onChange={(e) => {
-                                        setZipcode(e.target.value);
-                                    }}
                                     maxLength={5}
+                                    onChange={(e) => {
+                                        // if (zipcode.length < 5)
+                                            setZipcode(e.target.value);
+                                    }}
+                                    // onKeyDown={(e) => {
+                                    //     if (e.key == "Backspace") {
+                                    //         setZipcode(e.target.value);
+                                    //     }
+                                    // }}
                                 />
 
                                 <FormLabel>Country</FormLabel>

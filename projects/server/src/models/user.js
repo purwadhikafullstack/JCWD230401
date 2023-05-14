@@ -62,6 +62,7 @@ module.exports = (sequelize, DataTypes) => {
             isSuspended: DataTypes.BOOLEAN,
             isDeleted: DataTypes.BOOLEAN,
             roleId: DataTypes.INTEGER,
+            otpCount: DataTypes.INTEGER,
         },
         {
             sequelize,
