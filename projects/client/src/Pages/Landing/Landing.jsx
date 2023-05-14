@@ -4,7 +4,6 @@ import {
     List, ListItem
 } from '@chakra-ui/react';
 import React, { useState, useEffect } from 'react';
-// import Footer from '../../Components/Footer';
 import { SearchIcon } from "@chakra-ui/icons";
 import { useNavigate, Link } from "react-router-dom";
 import axios from 'axios';
@@ -13,20 +12,14 @@ import BannerImage from "./images/banner.png"
 import DatePicker from 'react-datepicker';
 import SpecialDeals from "./images/banner-1.png";
 import TenantRegisterBanner from "./images/banner-2.png";
-import Homestays1 from './images/image-s1.png';
-import Apartments1 from './images/image-s2.png';
+import Apartment1 from './images/image-s1.png';
 import Hotels1 from './images/image-s3.png';
 import Villas1 from './images/image-s4.png';
-import Resorts1 from './images/image-s5.png';
-import GuestHouse1 from './images/image-s6.png';
 import Jakarta1 from './images/jakarta-1.jpg';
-import Canggu1 from './images/canggu-1.jpg';
 import Uluwatu1 from './images/uluwatu-1.jpg';
 import Kuta1 from './images/kuta-1.jpg';
 import Ubud1 from './images/ubud-1.jpg';
-import Bandung1 from './images/bandung-1.jpg';
-import Bali1 from './images/bali-1.png';
-import NusaPenida1 from './images/nusapenida-1.png';
+import Yogyakarta1 from './images/yogyakarta-1.jpg';
 import RecommendPropertyCard from "../../Components/RecommendPropertyCard";
 import Slider from "react-slick";
 import 'slick-carousel/slick/slick.css';
@@ -113,13 +106,13 @@ export default function LandingNew() {
     const getRecommendProperty = async () => {
         try {
             let response = await axios.get(`${API_URL}/landing/property-recommendation`);
-            // console.log("ini response dari getRecommendProperty :", response.data);
+            console.log("ini response dari getRecommendProperty :", response.data);
             setRecommendProperty(response.data);
         } catch (error) {
             console.log("ini error dari getRecommendProperty:", error);
         }
     };
-    // console.log("ini isi RecommendProperty:", recommendProperty);
+    console.log("ini isi RecommendProperty:", recommendProperty);
 
     //kirim via props ke recommendpropertycard
     const printRecommendProperty = () => {
@@ -135,7 +128,7 @@ export default function LandingNew() {
                 rating={parseFloat(val.average_rating).toFixed(2)}
                 regency={regency}
                 country={val.room.property.property_location.country}
-                price={Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(val.room.property.rooms[0]?.price)}
+                price={Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(val.room?.lowest_price)}
             />
         })
     };
@@ -174,8 +167,6 @@ export default function LandingNew() {
                     slidesToShow: 1,
                     slidesToScroll: 1,
                     infinite: true,
-                    // prevArrow: false,
-                    // nextArrow: false
                 },
             },
         ],
@@ -210,8 +201,6 @@ export default function LandingNew() {
                     slidesToShow: 1,
                     slidesToScroll: 1,
                     infinite: true,
-                    // prevArrow: false,
-                    // nextArrow: false
                 },
             },
         ],
@@ -246,8 +235,6 @@ export default function LandingNew() {
                     slidesToShow: 1,
                     slidesToScroll: 1,
                     infinite: true,
-                    // prevArrow: false,
-                    // nextArrow: false
                 },
             },
         ],
@@ -418,7 +405,7 @@ export default function LandingNew() {
                     </Box>
                     <Box maxW={'xl'}>
                     <Text fontSize={{base:'sm', sm:'18px'}} mt="10px">
-                    During our exclusive holiday sale, we are thrilled to present you with an array of special offers just for you! Take advantage of this limited-time promotion, get the best prices on properties and rooms here.
+                    During our exclusive holiday sale, we are thrilled to present you with an array of special offers! Take advantage of this limited-time promotion, get the best prices on properties and rooms here.
                     </Text>
                     </Box>
                 </Box>
@@ -445,8 +432,7 @@ export default function LandingNew() {
                                 >
                                     <Image src={Hotels1} _hover={{ transform: 'scale(1.1)', transition: '.5s' }}
                                         alt="Hotels" w="100%" borderRadius="10px" />
-                                    <Text position="absolute" top="50%" left="50%" transform="translate(-50%,-50%)" textAlign="center" color="white" fontSize={{ base: "26px", md: "20px", lg: "26px" }} fontWeight="500">
-                                        {/* Hotels */}
+                                    <Text position="absolute" top="50%" left="50%" transform="translate(-50%,-50%)" textAlign="center" color="white" fontSize={{ base: "26px", md: "20px", lg: "20px" }} fontWeight="500">
                                         HOTELS
                                     </Text>
                                 </Box>
@@ -461,10 +447,9 @@ export default function LandingNew() {
                                     transition="opacity 0.3s"
                                     cursor='pointer'
                                 >
-                                    <Image src={Homestays1} _hover={{ transform: 'scale(1.1)', transition: '.5s' }}
+                                    <Image src={Apartment1} _hover={{ transform: 'scale(1.1)', transition: '.5s' }}
                                         alt="Hotels" w="100%" borderRadius="10px" />
-                                    <Text position="absolute" top="50%" left="50%" transform="translate(-50%,-50%)" textAlign="center" color="white" fontSize={{ base: "26px", md: "20px", lg: "26px" }} fontWeight="500">
-                                        {/* Apartments */}
+                                    <Text position="absolute" top="50%" left="50%" transform="translate(-50%,-50%)" textAlign="center" color="white" fontSize={{ base: "26px", md: "20px", lg: "20px" }} fontWeight="500">
                                         APARTMENTS
                                     </Text>
                                 </Box>
@@ -481,8 +466,7 @@ export default function LandingNew() {
                                 >
                                     <Image src={Villas1} _hover={{ transform: 'scale(1.1)', transition: '.5s' }}
                                         alt="Hotels" w="100%" borderRadius="10px" />
-                                    <Text position="absolute" top="50%" left="50%" transform="translate(-50%,-50%)" textAlign="center" color="white" fontSize={{ base: "26px", md: "20px", lg: "26px" }} fontWeight="500">
-                                        {/* Villas */}
+                                    <Text position="absolute" top="50%" left="50%" transform="translate(-50%,-50%)" textAlign="center" color="white" fontSize={{ base: "26px", md: "20px", lg: "20px" }} fontWeight="500">
                                         VILLAS
                                     </Text>
                                 </Box>
@@ -509,8 +493,7 @@ export default function LandingNew() {
                             }} >
                                 <Box position="relative" textAlign="center" overflow="hidden" borderRadius="10px" cursor='pointer' boxShadow={'xs'}>
                                     <Image src={Kuta1} borderRadius="10px" _hover={{ transform: 'scale(1.1)', transition: '.5s' }} />
-                                    <Text position="absolute" top="50%" left="50%" transform="translate(-50%,-50%)" color="#fff" fontSize={{ base: "26px", md: "20px", lg: "26px" }} fontWeight="500">
-                                        {/* Denpasar */}
+                                    <Text position="absolute" top="50%" left="50%" transform="translate(-50%,-50%)" color="#fff" fontSize={{ base: "26px", md: "20px", lg: "20px" }} fontWeight="500">
                                         DENPASAR
                                         </Text>
                                 </Box>
@@ -523,8 +506,7 @@ export default function LandingNew() {
                             }} >
                                 <Box position="relative" textAlign="center" overflow="hidden" borderRadius="10px" cursor='pointer' boxShadow={'xs'}>
                                     <Image src={Jakarta1} borderRadius="10px" _hover={{ transform: 'scale(1.1)', transition: '.5s' }} />
-                                    <Text position="absolute" top="50%" left="50%" transform="translate(-50%,-50%)" color="#fff" fontSize={{ base: "26px", md: "20px", lg: "26px" }} fontWeight="500">
-                                        {/* Jakarta */}
+                                    <Text position="absolute" top="50%" left="50%" transform="translate(-50%,-50%)" color="#fff" fontSize={{ base: "26px", md: "20px", lg: "20px" }} fontWeight="500">
                                         JAKARTA
                                         </Text>
                                 </Box>
@@ -537,8 +519,7 @@ export default function LandingNew() {
                             }} >
                                 <Box position="relative" textAlign="center" overflow="hidden" borderRadius="10px" cursor='pointer' boxShadow={'xs'}>
                                     <Image src={Uluwatu1} borderRadius="10px" _hover={{ transform: 'scale(1.1)', transition: '.5s' }} />
-                                    <Text position="absolute" top="50%" left="50%" transform="translate(-50%,-50%)" color="#fff" fontSize={{ base: "26px", md: "20px", lg: "26px" }} fontWeight="500">
-                                        {/* Bogor */}
+                                    <Text position="absolute" top="50%" left="50%" transform="translate(-50%,-50%)" color="#fff" fontSize={{ base: "26px", md: "20px", lg: "20px" }} fontWeight="500">
                                         BOGOR
                                         </Text>
                                 </Box>
@@ -551,9 +532,21 @@ export default function LandingNew() {
                             }} >
                                 <Box position="relative" textAlign="center" overflow="hidden" borderRadius="10px" cursor='pointer' boxShadow={'xs'}>
                                     <Image src={Ubud1} borderRadius="10px" _hover={{ transform: 'scale(1.1)', transition: '.5s' }} />
-                                    <Text position="absolute" top="50%" left="50%" transform="translate(-50%,-50%)" color="#fff" fontSize={{ base: "26px", md: "20px", lg: "26px" }} fontWeight="500">
-                                        {/* Bandung */}
+                                    <Text position="absolute" top="50%" left="50%" transform="translate(-50%,-50%)" color="#fff" fontSize={{ base: "26px", md: "20px", lg: "20px" }} fontWeight="500">
                                         BANDUNG
+                                        </Text>
+                                </Box>
+                            </Link>
+                        </Box>
+                        <Box p='2'>
+                            <Link to={{
+                                pathname: "/property/filter",
+                                state: { inputLocation: "KOTA YOGYAKARTA" }
+                            }} >
+                                <Box position="relative" textAlign="center" overflow="hidden" borderRadius="10px" cursor='pointer' boxShadow={'xs'}>
+                                    <Image src={Yogyakarta1} borderRadius="10px" _hover={{ transform: 'scale(1.1)', transition: '.5s' }} />
+                                    <Text position="absolute" top="50%" left="50%" transform="translate(-50%,-50%)" color="#fff" fontSize={{ base: "26px", md: "20px", lg: "20px" }} fontWeight="500">
+                                    YOGYAKARTA
                                         </Text>
                                 </Box>
                             </Link>

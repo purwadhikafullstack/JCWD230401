@@ -21,11 +21,11 @@ function TenantDashboard() {
   const [roomMaintenances, setRoomMaintenances] = useState([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
-  const [date, setDate] = useState('');
+  // const [date, setDate] = useState('');
   const [formatSelectedDate, setFormatSelectedDate] = useState('');
   const [availableRooms, setAvailableRooms] = useState([]);
   const [propertyListing, setPropertyListing] = useState([]);
-
+  console.log("ini isi propertyListing :", propertyListing);
 
   //1. axios booked and under maintenance
   const getRoomOrders = async () => {
@@ -132,7 +132,7 @@ function TenantDashboard() {
           Authorization: `Bearer ${token}`,
         },
       });
-      // console.log("response.data onBtnAvailableRooms :", response.data); //testing purposes
+      console.log("response.data onBtnAvailableRooms :", response.data); //testing purposes
       setAvailableRooms(response.data);
     } catch (error) {
       console.log("ini error dari onBtnAvailableRooms :", error);
@@ -140,7 +140,7 @@ function TenantDashboard() {
   };
 
   //2. print available rooms
-  // console.log("ini isi dari availableRooms :", availableRooms); // testing for map 
+  console.log("ini isi dari availableRooms :", availableRooms); // testing for map 
   const printAvailableRooms = () => {
     let print = availableRooms.map((val, idx) => {
       return {
@@ -155,27 +155,31 @@ function TenantDashboard() {
     return print;
   }
 
-  //3. Date Click calendar 
-  const openModal = () => {
-    setModalIsOpen(true);
-  };
-
   const dateClick = async (e) => {
     const selectedDate = e.dateStr;
     const date = new Date(selectedDate);
     const formatSelectedDate = `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`; //DD-MM-YYYY
     setFormatSelectedDate(formatSelectedDate);
     setSelectedDate(selectedDate);
-    onBtnAvailableRooms(selectedDate); //get the available rooms data from the server
     openModal();
     // console.log("ini isi selectedDate: ", selectedDate); // YYYY-MM-DD
   };
+  
+  React.useEffect(() => {
+    onBtnAvailableRooms();
+  }, [selectedDate]);
+  
+  // Date Click calendar 
+  const openModal = () => {
+    setModalIsOpen(true);
+  };
+
 
   //1. axios get my property listings
   const getMyProperty = async () => {
     try {
       let token = localStorage.getItem("tempatku_login");
-      let response = await axios.get(`${API_URL}/calendar/my-property`, {
+      let response = await axios.get(`${API_URL}/calendar/property-listing`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -201,7 +205,7 @@ function TenantDashboard() {
         picture={val.picture_properties[0]?.picture}
         regency={regency}
         country={val.property_location?.country}
-        price={Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(val.rooms[0]?.price)}
+        price={Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(val.rooms[0]?.lowest_price)}
         rating={averageRating}
       />
     })
@@ -271,26 +275,27 @@ function TenantDashboard() {
           Welcome, {name} 👋
         </Heading>
         <Box p={{ base: '2', sm: '10' }} bg={'white'} rounded={'xl'} borderWidth={'1px'}
-          // borderColor='gray.300'
           borderColor={{ base: 'white', sm: 'gray.300' }}
         >
           {/* MY PROPERTY */}
           <Box>
             <Text fontSize={{ base: '20', sm: '28' }} fontWeight={'semibold'} mb={{ base: '6', sm: '10' }} textAlign={{ base: 'center', sm: 'left' }}>Your Property Listings</Text>
-            <Slider {...settingsMyProperty} prevArrow={<FaChevronLeft color="#E2E8F0" />} nextArrow={<FaChevronRight color="#E2E8F0" />}>
-              {printMyProperty()}
-            </Slider>
+            {propertyListing.length === 0 ? (
+              <Text>No property listings yet</Text>
+            ) : (
+              <Slider {...settingsMyProperty} prevArrow={<FaChevronLeft color="#E2E8F0" />} nextArrow={<FaChevronRight color="#E2E8F0" />}>
+                {printMyProperty()}
+              </Slider>
+            )}
           </Box>
         </Box>
         <br />
         <Box p={{ base: '2', sm: '10' }} bg={'white'} rounded={'xl'} borderWidth={'1px'}
-          // borderColor='gray.300'
           borderColor={{ base: 'white', sm: 'gray.300' }}
         >
           <Text fontSize={{ base: '20', sm: '28' }} fontWeight={'semibold'} mb={{ base: '6', sm: '10' }} textAlign={{ base: 'center', sm: 'left' }}>See Availability by Calendar Date</Text>
           <Fullcalendar
             className="my-calendar"
-            // w='full'
             plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
             initialView={"dayGridMonth"}
             headerToolbar={{
@@ -312,7 +317,7 @@ function TenantDashboard() {
                   Available Properties & Rooms
                 </Text>
                 <Text fontSize={'xl'} px='4'>
-                  on {formatSelectedDate} :
+                  {formatSelectedDate} :
                 </Text>
               </ModalHeader>
               <ModalBody>

@@ -20,6 +20,8 @@ import { API_URL } from '../helper';
 import { FiUpload } from 'react-icons/fi';
 import { useFormik } from 'formik';
 import * as yup from "yup";
+import tenantRegisterBanner from '../assets/tenant-register-banner.jpg';
+
 
 export default function TenantRegister() {
     const [showPassword, setShowPassword] = useState(false);
@@ -348,9 +350,9 @@ export default function TenantRegister() {
                 <Image
                     alt={'User Register Page Image'}
                     objectFit={'cover'}
-                    src={
-                        'https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1352&q=80'
-                    }
+                    src={tenantRegisterBanner}
+                    h={{base:'30vh', sm:'50vh', lg:'full'}}
+                    w='full'
                 />
             </Flex>
         </Stack>

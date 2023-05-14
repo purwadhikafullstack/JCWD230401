@@ -3,14 +3,14 @@ const {
   roomOrders,
   roomMaintenances,
   availableRooms,
-  myProperty,
+  propertyListing,
 } = require("../controllers/calendarController");
 const { readToken } = require("../helper/jwt");
 
 route.post("/room-orders", readToken, roomOrders);
 route.post("/room-maintenances", readToken, roomMaintenances);
 route.post("/available-rooms", readToken, availableRooms);
-route.get("/my-property", readToken, myProperty);
+route.get("/property-listing", readToken, propertyListing);
 
 
 module.exports = route;

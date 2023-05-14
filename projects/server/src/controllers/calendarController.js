@@ -111,7 +111,7 @@ module.exports = {
     }
   },
   //4. GET ALL MY PROPERTY
-  myProperty: async (req, res, next) => {
+  propertyListing: async (req, res, next) => {
     try {
       let getdata = await model.property.findAll({
         where: {
@@ -121,6 +121,7 @@ module.exports = {
         include: [
           {
             model: model.room,
+            attributes: [[sequelize.fn('MIN', sequelize.col('rooms.price')), 'lowest_price']],
             include: [
               {
                 model: model.review,
@@ -142,7 +143,6 @@ module.exports = {
                 ),
               ],
             },
-            // order: [["price", "ASC"]], //not working yet
           },
           {
             model: model.picture_property,
@@ -162,7 +162,6 @@ module.exports = {
           },
         ],
         group: ["property.id"],
-        order: [[model.room, "price", "ASC"]], //not working yet
       });
       console.log("ini isi dari getdata: ", getdata);
       res.status(200).send(getdata);

@@ -15,7 +15,7 @@ import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { API_URL } from '../helper';
-import Userregisterbanner from '../assets/userregisterbanner.jpg';
+import userRegisterBanner from '../assets/user-register-banner.jpg';
 import { FcGoogle } from 'react-icons/fc';
 import { useFormik } from 'formik';
 import * as yup from "yup";
@@ -70,7 +70,7 @@ export default function UserRegister() {
                 });
             }
         } finally {
-            setLoading(false); 
+            setLoading(false);
         }
     }
 
@@ -119,7 +119,7 @@ export default function UserRegister() {
                     /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{6,})/,
                     "Password must be at least 6 characters includes 1 number, 1 uppercase, and 1 lowercase letter"
                 )
-                .oneOf([yup.ref('password'), null], 'Passwords must match'), 
+                .oneOf([yup.ref('password'), null], 'Passwords must match'),
         })
     });
 
@@ -280,7 +280,7 @@ export default function UserRegister() {
                 <Image
                     alt={'User Register Page Image'}
                     objectFit={'cover'}
-                    src={Userregisterbanner}
+                    src={userRegisterBanner}
                 />
             </Flex>
         </Stack>

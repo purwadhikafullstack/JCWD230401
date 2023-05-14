@@ -36,23 +36,16 @@ module.exports = {
   //3. PROPERTY RECOMMENDATIONS
   propertyRecommendation: async (req, res, next) => {
     try {
-      // 1. get top rating roomId minimum average rating is 4.00
+      // get top rating roomId minimum average rating is 4.00
       let get = await model.review.findAll({
         attributes: [
           "roomId",
           [sequelize.fn("avg", sequelize.col("rating")), "average_rating"],
         ],
-        where: sequelize.literal(
-          `roomId NOT IN (SELECT id FROM rooms WHERE isDeleted = 1)`
-        ),
-        group: ["propertyId"],
-        having: sequelize.literal("AVG(rating) >= 4.00"),
-        order: [[sequelize.literal("average_rating"), "DESC"]],
-        limit: 20,
         include: [
           {
             model: model.room,
-            attributes: ["propertyId"],
+            where: { isDeleted: 0 },
             include: [
               {
                 model: model.property,
@@ -74,14 +67,26 @@ module.exports = {
                       },
                     ],
                   },
-                  {
-                    model: model.room,
-                  },
                 ],
               },
             ],
+            attributes: [
+              [sequelize.fn("MIN", sequelize.col("price")), "lowest_price"],
+            ],
+            required: false,
+            right: true,
+            group: ["propertyId"],
           },
         ],
+        group: ["propertyId"],
+        having: sequelize.where(
+          sequelize.fn("avg", sequelize.col("rating")),
+          ">=",
+          4.0
+        ),
+        // order: [[sequelize.literal("average_rating"), "DESC"]],
+        order: sequelize.literal("rand()"),
+        limit: 20,
       });
       res.status(200).send(get);
     } catch (error) {

@@ -8,7 +8,10 @@ import {
   ModalCloseButton,
   useDisclosure,
   Button,
-  useToast
+  useToast,
+  Text,
+  Center,
+  HStack
 } from '@chakra-ui/react';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -24,7 +27,10 @@ export default function BookingButton() {
   const isVerified = useSelector((state) => state.authReducer.isVerified);
   const [loading, setLoading] = React.useState(false);
   const toast = useToast();
+  const role = useSelector((state) => state.authReducer.role);
   console.log("ini isi user is Verified ? :", isVerified);
+  console.log("ini isi user role ? :", role);
+
 
   //inside modal alert cannot continue to transaction page
   const onBtnSendVerifyEmail = async () => {
@@ -38,7 +44,6 @@ export default function BookingButton() {
       }
       );
       console.log("ini hasil response onbtnSendVerifyEmail :", response);
-      // alert(response.data.message);
       toast({
         title: response.data.message,
         status: 'success',
@@ -47,7 +52,6 @@ export default function BookingButton() {
       })
     } catch (error) {
       console.log("ini error dari onBtnSendVerifyEmail :", error);
-      // navigate('/transactionpage');
       if (error.response && error.response.data.message === "You have reached the maximum limit of OTP resend requests for today.") {
         toast({
           title: 'You have reached the maximum limit of OTP resend requests for today. Please try again tomorrow.',
@@ -55,8 +59,8 @@ export default function BookingButton() {
           duration: 3000,
           isClosable: true,
         });
-      } 
-      if (error.response && error.response.status === 401){ 
+      }
+      if (error.response && error.response.status === 401) {
         toast({
           title: 'Your code has expired. Please log in again to resend email to verify your account.',
           status: 'error',
@@ -79,66 +83,128 @@ export default function BookingButton() {
   return (
     <>
       {
-        //if user isverified false
-        !isVerified ?
-          <>
-            <Button
-              loadingText="Submitting"
-              bg={'#D3212D'}
-              color={'white'}
-              _hover={{
-                bg: '#D3212D',
-              }}
-              type='button'
-              onClick={onOpen}
-            >
-              Book now
-            </Button>
-            <Modal onClose={onClose} isOpen={isOpen} isCentered>
-              <ModalOverlay />
-              <ModalContent>
-                <ModalHeader>Please verify your account!</ModalHeader>
-                <ModalCloseButton />
-                <ModalBody>
-                  <p>You need to verify your email address before you can make a booking.
-                    Click the button below an we will send you an email to verify your account</p>
-                  <br />
-                  <Button
-                    bg={'#D3212D'}
-                    color={'white'}
-                    _hover={{
-                      bg: '#D3212D',
-                    }}
-                    type='button'
-                    onClick={onBtnSendVerifyEmail}
-                    isLoading={loading}
-                    w='full'
-                  >
-                    Send Verification Email
-                  </Button>
-                </ModalBody>
-                <ModalFooter>
-                  <Button onClick={onClose}>Cancel</Button>
-                </ModalFooter>
-              </ModalContent>
-            </Modal>
-          </>
+        // User
+        role == "User" ? (
+          //if user isverified false
+          !isVerified ? (
+            <>
+              <Button
+                loadingText="Submitting"
+                bg={'#D3212D'}
+                color={'white'}
+                _hover={{
+                  bg: '#D3212D',
+                }}
+                type='button'
+                onClick={onOpen}
+              >
+                Book now
+              </Button>
+              <Modal onClose={onClose} isOpen={isOpen} isCentered>
+                <ModalOverlay />
+                <ModalContent>
+                  <ModalHeader>Please verify your account!</ModalHeader>
+                  <ModalCloseButton />
+                  <ModalBody>
+                    <p>You need to verify your email address before you can make a booking.
+                      Click the button below an we will send you an email to verify your account</p>
+                    <br />
+                    <Button
+                      bg={'#D3212D'}
+                      color={'white'}
+                      _hover={{
+                        bg: '#D3212D',
+                      }}
+                      type='button'
+                      onClick={onBtnSendVerifyEmail}
+                      isLoading={loading}
+                      w='full'
+                    >
+                      Send Verification Email
+                    </Button>
+                  </ModalBody>
+                  <ModalFooter>
+                    <Button onClick={onClose}>Cancel</Button>
+                  </ModalFooter>
+                </ModalContent>
+              </Modal>
+            </>
+          )
+            :
+            (
+              //if User isVerified true
+              <>
+                <Button
+                  loadingText="Submitting"
+                  bg={'#D3212D'}
+                  color={'white'}
+                  _hover={{
+                    bg: '#D3212D',
+                  }}
+                  type='button'
+                  onClick={() => navigate('/transactionpage')}
+                >
+                  Book now
+                </Button>
+              </>
+            ))
           :
-          //if isVerified true
-          <>
-            <Button
-              loadingText="Submitting"
-              bg={'#D3212D'}
-              color={'white'}
-              _hover={{
-                bg: '#D3212D',
-              }}
-              type='button'
-              onClick={() => navigate('/transactionpage')}
-            >
-              Book now
-            </Button>
-          </>
+          // if not user
+          (
+            <>
+              <Button
+                loadingText="Submitting"
+                bg={'#D3212D'}
+                color={'white'}
+                _hover={{
+                  bg: '#D3212D',
+                }}
+                type='button'
+                onClick={onOpen}
+              >
+                Book now
+              </Button>
+              <Modal onClose={onClose} isOpen={isOpen} isCentered>
+                <ModalOverlay />
+                <ModalContent>
+                  <ModalHeader>Please login to continue</ModalHeader>
+                  <ModalCloseButton />
+                  <ModalBody>
+                    <p>Please login to your account and continue with your booking.</p>
+                    <br />
+                    <Center>
+                    <Button
+                      bg={'#D3212D'}
+                      color={'white'}
+                      _hover={{
+                        bg: '#D3212D',
+                      }}
+                      type='button'
+                      onClick={() => navigate('/')}
+                      w='full'
+                      mb='2'
+                    >
+                      Return to Homepage
+                    </Button>
+                    </Center>
+                    <Center>
+                      <HStack fontSize='sm' spacing='1'>
+                        <Text>New to tempatku?</Text>
+                        <Text onClick={() => navigate('/userregister')} color='#0969da'
+                          cursor={'pointer'}
+                        >
+                          Create an account.
+                        </Text>
+                      </HStack>
+                    </Center>
+                  </ModalBody>
+                  <ModalFooter>
+                    <Button onClick={onClose}>Cancel</Button>
+                  </ModalFooter>
+                </ModalContent>
+              </Modal>
+            </>
+          )
       }
     </>
   )

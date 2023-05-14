@@ -152,82 +152,82 @@ module.exports = {
       //2. if found compare hashed password with req.body.password
       if (getuser.length > 0) {
         //if google account throw error login have to by google
-        if(getuser[0].dataValues.password !== "NULL"){
-        let checkpw = bcrypt.compareSync(
-          req.body.password,
-          getuser[0].dataValues.password
-        );
-        //3. if isSuspended false 0 & checkpw true 1 ? reset pw attempts : pw attempts + 1
-        if (checkpw && getuser[0].dataValues.isSuspended == 0) {
-          //4. update the attempts field in the database with 0
-          await model.user.update(
-            { attempts: 0 },
-            {
-              where: {
-                id: getuser[0].dataValues.id,
-              },
-            }
+        if (getuser[0].dataValues.password !== "NULL") {
+          let checkpw = bcrypt.compareSync(
+            req.body.password,
+            getuser[0].dataValues.password
           );
-          let { id, uuid, email, phone, isSuspended, attempts, isVerified } =
-            getuser[0].dataValues;
-          let { name, birth, gender, image_profile } = getuser[0].user_detail;
-          let role = getuser[0].dataValues.role.role;
-          // console.log("cek role keluar gak:", role);
-          // GENERATE TOKEN ---> 400h buat gampang aja developnya jgn lupa diganti!
-          let token = createToken({ id, role, isSuspended }, "400h"); //24 jam
-          // LOGIN SUCCESS
-          return res.status(200).send({
-            success: true,
-            message: "Login success",
-            token,
-            name,
-            email,
-            phone,
-            role,
-            attempts,
-            isVerified,
-            image_profile,
-            gender,
-            birth,
-          });
-        } else {
-          //3. jika salah passwordnya attempt + 1 sampe 5 kali nanti suspended
-          if (getuser[0].dataValues.attempts < 5) {
+          //3. if isSuspended false 0 & checkpw true 1 ? reset pw attempts : pw attempts + 1
+          if (checkpw && getuser[0].dataValues.isSuspended == 0) {
+            //4. update the attempts field in the database with 0
             await model.user.update(
-              { attempts: getuser[0].dataValues.attempts + 1 },
+              { attempts: 0 },
               {
                 where: {
                   id: getuser[0].dataValues.id,
                 },
               }
             );
-            res.status(400).send({
-              success: false,
-              message: `Wrong password. Attempt number : ${
-                getuser[0].dataValues.attempts + 1
-              }`,
+            let { id, uuid, email, phone, isSuspended, attempts, isVerified } =
+              getuser[0].dataValues;
+            let { name, birth, gender, image_profile } = getuser[0].user_detail;
+            let role = getuser[0].dataValues.role.role;
+            // console.log("cek role keluar gak:", role);
+            // GENERATE TOKEN ---> 400h buat gampang aja developnya jgn lupa diganti!
+            let token = createToken({ id, role, isSuspended }, "400h"); //24 jam
+            // LOGIN SUCCESS
+            return res.status(200).send({
+              success: true,
+              message: "Login success",
+              token,
+              name,
+              email,
+              phone,
+              role,
+              attempts,
+              isVerified,
+              image_profile,
+              gender,
+              birth,
             });
           } else {
-            await model.user.update(
-              { isSuspended: 1 },
-              {
-                where: {
-                  id: getuser[0].dataValues.id,
-                },
-              }
-            );
-            res.status(400).send({
-              success: false,
-              message: "Account suspended. Please reset your password",
-            });
+            //3. jika salah passwordnya attempt + 1 sampe 5 kali nanti suspended
+            if (getuser[0].dataValues.attempts < 5) {
+              await model.user.update(
+                { attempts: getuser[0].dataValues.attempts + 1 },
+                {
+                  where: {
+                    id: getuser[0].dataValues.id,
+                  },
+                }
+              );
+              res.status(400).send({
+                success: false,
+                message: `Wrong password. Attempt number : ${
+                  getuser[0].dataValues.attempts + 1
+                }`,
+              });
+            } else {
+              await model.user.update(
+                { isSuspended: 1 },
+                {
+                  where: {
+                    id: getuser[0].dataValues.id,
+                  },
+                }
+              );
+              res.status(400).send({
+                success: false,
+                message: "Account suspended. Please reset your password",
+              });
+            }
           }
+        } else {
+          res.status(400).send({
+            success: false,
+            message: "Account not found",
+          });
         }
-      } else {
-        res.status(400).send({
-          success: false,
-          message: "Account not found",
-        });
-      }
       } else {
         res.status(400).send({
           success: false,
@@ -241,7 +241,7 @@ module.exports = {
   },
 
   //3. KEEP LOGIN
-  keeplogin: async (req, res, next) => {
+  keepLogin: async (req, res, next) => {
     try {
       console.log("Decrypt token:", req.decrypt);
       let getuser = await model.user.findAll({
@@ -280,7 +280,7 @@ module.exports = {
   },
 
   //4. CHANGE PASSWORD
-  changepassword: async (req, res, next) => {
+  changePassword: async (req, res, next) => {
     try {
       //1. get old password from user yg login
       let getData = await model.user.findAll({
@@ -355,7 +355,7 @@ module.exports = {
   },
 
   //5. FORGOT PASSWORD
-  forgotpassword: async (req, res, next) => {
+  forgotPassword: async (req, res, next) => {
     try {
       //1. get user data by email
       let getData = await model.user.findAll({
@@ -437,7 +437,7 @@ module.exports = {
   },
 
   //6. RESET PASSWORD
-  resetpassword: async (req, res, next) => {
+  resetPassword: async (req, res, next) => {
     try {
       if (req.body.newPassword == req.body.confirmationPassword) {
         console.log("Decrypt token : ", req.decrypt);
@@ -496,7 +496,7 @@ module.exports = {
   },
 
   //7. REGISTER AS TENANT
-  registerastenant: async (req, res, next) => {
+  registerAsTenant: async (req, res, next) => {
     const ormTransaction = await model.sequelize.transaction();
     try {
       console.log("req.body.data : ", req.body.data); //krn dlm bntk object jd data masuk req.body.data
@@ -515,9 +515,7 @@ module.exports = {
       console.log("ini isi checkExistingUser:", checkExistingUser);
       if (checkExistingUser == 0) {
         if (req.body.images.length > 0) {
-          if (
-            req.body.password == req.body.confirmationPassword
-          ) {
+          if (req.body.password == req.body.confirmationPassword) {
             delete req.body.confirmationPassword;
             const uuid = uuidv4();
             const { name, email, password, phone } = req.body;
@@ -535,7 +533,7 @@ module.exports = {
               }
             );
             //encrypt into token
-            let image_ktp = createTokenForKTP({base64Data}); 
+            let image_ktp = createTokenForKTP({ base64Data });
             console.log(
               "ini isi imagektp dijadiin token abis di jadiin base64:",
               image_ktp
@@ -654,7 +652,7 @@ module.exports = {
   },
 
   //9. SEND VERIFICATION EMAIL
-  sendverificationemail: async (req, res, next) => {
+  sendVerificationEmail: async (req, res, next) => {
     try {
       console.log("Decrypt token:", req.decrypt);
       //find user by read token from login
@@ -767,7 +765,7 @@ module.exports = {
   },
 
   //10. EDIT PROFILE
-  editprofile: async (req, res, next) => {
+  editProfile: async (req, res, next) => {
     try {
       console.log("Decrypt token:", req.decrypt);
       const { name, email, birth, gender } = req.body;
@@ -805,7 +803,7 @@ module.exports = {
   },
 
   //11. UPDATE PROFILE IMAGE
-  updateprofileimage: async (req, res, next) => {
+  updateProfileImage: async (req, res, next) => {
     try {
       console.log("req.files  : ", req.files);
       //1. get current profile image
@@ -845,7 +843,7 @@ module.exports = {
   },
 
   //12. SHOW KTP PHOTO
-  showktp: async (req, res, next) => {
+  showKTP: async (req, res, next) => {
     try {
       //1. get current ktp photo
       let get = await model.user_detail.findAll({
