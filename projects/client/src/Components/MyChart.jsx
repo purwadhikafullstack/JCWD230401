@@ -28,20 +28,21 @@ export const options = {
         legend: {
             display: false,
         },
-    },
-    scales: {
-        x: {
-            display: true,
-            title: {
+        scales: {
+            x: {
                 display: true,
-                text: "Date",
+                title: {
+                    display: true,
+                    text: "Date",
+                    textColor: "#000000",
+                },
             },
-        },
-        y: {
-            display: true,
-            title: {
+            y: {
                 display: true,
-                text: "Value",
+                title: {
+                    display: true,
+                    text: "Value",
+                },
             },
         },
     },
@@ -55,17 +56,18 @@ function MyChart(props) {
             {
                 label: "Value",
                 data: props.datachart.total, // income per date here
-                lineTension: 0.4,
+                lineTension: 0.55,
                 backgroundColor: "#000000",
                 borderColor: "#2196F3",
                 borderCapStyle: "",
                 borderDashOffset: 0.0,
-                borderWidth: 10,
+                borderWidth: 5,
                 borderJoinStyle: "#B57295",
+                color: "#000000",
                 pointStyle: "circle",
                 pointBorderColor: "#D3212D",
                 pointBackgroundColor: "#fff",
-                pointBorderWidth: 8,
+                pointBorderWidth: 5,
                 pointHoverRadius: 5,
                 pointHoverBackgroundColor: "#D3212D",
                 pointHoverBorderColor: "#D3212D",

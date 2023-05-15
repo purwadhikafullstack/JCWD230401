@@ -69,6 +69,7 @@ module.exports = {
                 provinceId,
                 zipcode,
                 country,
+                gmaps,
             } = JSON.parse(req.body.data);
 
             let addCategory = await model.category.create(
@@ -112,6 +113,7 @@ module.exports = {
                     address: address,
                     zip: zipcode,
                     country: country,
+                    gmaps: gmaps,
                     regencyId: regencyId,
                     provinceId: provinceId,
                     propertyId: addProperty.dataValues.id,
@@ -208,6 +210,7 @@ module.exports = {
                     country: req.body.country,
                     regencyId: req.body.regencyId,
                     provinceId: req.body.provinceId,
+                    gmaps: req.body.gmaps,
                 },
                 {
                     where: {

@@ -36,8 +36,8 @@ function AddProperty(props) {
     const [allRegency, setAllRegency] = useState([]);
     const [activeButton, setActiveButton] = useState(null);
     const [fileProperty, setFileProperty] = useState(null);
+    const [mapsUrl, setMapsUrl] = useState(""); // useState link maps
     const toast = useToast();
-    // const [mapsUrl, setMapsUrl] = useState(""); // useState link maps
 
     // For Each untuk check size per file (max 2mb)
     const checkFileSize = (files) => {
@@ -125,7 +125,8 @@ function AddProperty(props) {
                 regency === null ||
                 province === null ||
                 zipcode === "" ||
-                country === ""
+                country === "" ||
+                mapsUrl === ""
             ) {
                 toast({
                     title: "Error occured",
@@ -147,6 +148,7 @@ function AddProperty(props) {
                         provinceId: province.value,
                         zipcode: zipcode,
                         country: country,
+                        gmaps: mapsUrl,
                     })
                 );
                 console.log("formData", formData);
@@ -178,6 +180,7 @@ function AddProperty(props) {
                     setProvince("");
                     setZipcode("");
                     setCountry("");
+                    setMapsUrl("");
                     setActiveButton(null);
                     toast({
                         title: "Property successfully created",
@@ -185,7 +188,6 @@ function AddProperty(props) {
                         duration: 3500,
                         isClosable: true,
                     });
-                    // ubah ke toast
                 }
             }
         } catch (error) {
@@ -648,7 +650,7 @@ function AddProperty(props) {
                                     maxLength={5}
                                     onChange={(e) => {
                                         // if (zipcode.length < 5)
-                                            setZipcode(e.target.value);
+                                        setZipcode(e.target.value);
                                     }}
                                     // onKeyDown={(e) => {
                                     //     if (e.key == "Backspace") {
@@ -668,8 +670,8 @@ function AddProperty(props) {
                                         setCountry(e.target.value);
                                     }}
                                 />
-                                {/* Form untuk react-iframe */}
-                                {/* <FormLabel>Google Maps</FormLabel>
+
+                                <FormLabel>Google Maps</FormLabel>
                                 <Input
                                     isRequired
                                     type="url"
@@ -679,7 +681,7 @@ function AddProperty(props) {
                                     onChange={(e) => {
                                         setMapsUrl(e.target.value);
                                     }}
-                                /> */}
+                                />
                             </FormControl>
                         </Box>
                     </Box>

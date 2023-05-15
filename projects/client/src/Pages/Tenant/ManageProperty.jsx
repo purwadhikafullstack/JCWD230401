@@ -43,6 +43,9 @@ function ManageProperty(props) {
     const [province, setProvince] = useState(null);
     const [zipcode, setZipcode] = useState("");
     const [country, setCountry] = useState("");
+    const [mapsUrl, setMapsUrl] = useState("");
+
+
     const [allRegency, setAllRegency] = useState([]);
     const [activeButton, setActiveButton] = useState(null);
     const [allProvince, setAllProvince] = useState([]);
@@ -261,6 +264,8 @@ function ManageProperty(props) {
                     country: country,
                     regencyId: regency,
                     provinceId: province,
+                    gmaps: mapsUrl,
+
                 },
                 {
                     headers: {
@@ -1368,18 +1373,18 @@ function ManageProperty(props) {
                                         setCountry(e.target.value);
                                     }}
                                 />
-                                {/* Form untuk react-iframe */}
-                                {/* <FormLabel>Google Maps</FormLabel>
+
+                                <FormLabel>Google Maps</FormLabel>
                                 <Input
                                     isRequired
                                     type="url"
                                     placeholder="Enter Google Maps Link"
                                     mb={"2"}
-                                    value={mapsUrl}
+                                    defaultValue={propertyData?.property_location.gmaps}
                                     onChange={(e) => {
                                         setMapsUrl(e.target.value);
                                     }}
-                                /> */}
+                                />
                             </FormControl>
                         </Box>
                     </Box>
