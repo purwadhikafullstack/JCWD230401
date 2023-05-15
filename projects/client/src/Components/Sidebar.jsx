@@ -77,7 +77,7 @@ export default function Sidebar() {
                             </Text>
                         </Button>
                     </Box>
-                    <Box h='40px' >
+                    <Box h='40px' onClick={()=> navigate('/salesreport')}>
                         <Button leftIcon={<BiPieChartAlt2 size={20} />} variant='none' size="md">
                             <Text ml="2" fontWeight="medium" display={{base:'none', lg:'block'}}>
                                 Report

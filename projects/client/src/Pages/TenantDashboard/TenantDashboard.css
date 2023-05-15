@@ -57,11 +57,9 @@ background-color: white;
         font-size: 0.7rem;
         padding: 0.3rem;
       }
-    /* .fc-dayGridMonth-view {
-    height: 300px;
-    } */
-     /* .fc .fc-daygrid-body {
-    height: 10px;
-    width: 50vw;
-    } */
+    /* .fc td {
+      padding: 0;
+      vertical-align: top;
+      height: 30vh;
+      } */
   }

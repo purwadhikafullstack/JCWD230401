@@ -156,7 +156,7 @@ export default function LandingNew() {
             {
                 breakpoint: 600,
                 settings: {
-                    slidesToShow: 1,
+                    slidesToShow: 2,
                     slidesToScroll: 1,
                     infinite: true,
                 },
@@ -164,7 +164,7 @@ export default function LandingNew() {
             {
                 breakpoint: 480,
                 settings: {
-                    slidesToShow: 1,
+                    slidesToShow: 2,
                     slidesToScroll: 1,
                     infinite: true,
                 },
@@ -190,7 +190,7 @@ export default function LandingNew() {
             {
                 breakpoint: 600,
                 settings: {
-                    slidesToShow: 1,
+                    slidesToShow: 2,
                     slidesToScroll: 1,
                     infinite: true,
                 },
@@ -198,7 +198,7 @@ export default function LandingNew() {
             {
                 breakpoint: 480,
                 settings: {
-                    slidesToShow: 1,
+                    slidesToShow: 2,
                     slidesToScroll: 1,
                     infinite: true,
                 },
@@ -328,7 +328,7 @@ export default function LandingNew() {
                                             </List>
                                         </Box>
                                     </Box>
-                                    <Box flex="1" py='1'>
+                                    <Box flex="1" py={{base:'4', sm:'1'}}>
                                         <Text fontWeight="600">Check in</Text>
                                         <DatePicker
                                             selected={checkInDate}
@@ -350,7 +350,7 @@ export default function LandingNew() {
                                             shouldCloseOnSelect={false}
                                         />
                                     </Box>
-                                    <Box flex="1" py='1'>
+                                    <Box flex="1" py={{base:'4', sm:'1'}}>
                                         <Text fontWeight="600">Duration</Text>
                                         <Text>{duration} days</Text>
                                     </Box>
@@ -436,7 +436,7 @@ export default function LandingNew() {
                                 >
                                     <Image src={Hotels1} _hover={{ transform: 'scale(1.1)', transition: '.5s' }}
                                         alt="Hotels" w="100%" borderRadius="10px" />
-                                    <Text position="absolute" top="50%" left="50%" transform="translate(-50%,-50%)" textAlign="center" color="white" fontSize={{ base: "26px", md: "20px", lg: "20px" }} fontWeight="500">
+                                    <Text position="absolute" top="50%" left="50%" transform="translate(-50%,-50%)" textAlign="center" color="white" fontSize={{ base: "sm", md: "20px", lg: "20px" }} fontWeight="500">
                                         HOTELS
                                     </Text>
                                 </Box>
@@ -453,7 +453,7 @@ export default function LandingNew() {
                                 >
                                     <Image src={Apartment1} _hover={{ transform: 'scale(1.1)', transition: '.5s' }}
                                         alt="Hotels" w="100%" borderRadius="10px" />
-                                    <Text position="absolute" top="50%" left="50%" transform="translate(-50%,-50%)" textAlign="center" color="white" fontSize={{ base: "26px", md: "20px", lg: "20px" }} fontWeight="500">
+                                    <Text position="absolute" top="50%" left="50%" transform="translate(-50%,-50%)" textAlign="center" color="white" fontSize={{ base: "sm", md: "20px", lg: "20px" }} fontWeight="500">
                                         APARTMENTS
                                     </Text>
                                 </Box>
@@ -470,7 +470,7 @@ export default function LandingNew() {
                                 >
                                     <Image src={Villas1} _hover={{ transform: 'scale(1.1)', transition: '.5s' }}
                                         alt="Hotels" w="100%" borderRadius="10px" />
-                                    <Text position="absolute" top="50%" left="50%" transform="translate(-50%,-50%)" textAlign="center" color="white" fontSize={{ base: "26px", md: "20px", lg: "20px" }} fontWeight="500">
+                                    <Text position="absolute" top="50%" left="50%" transform="translate(-50%,-50%)" textAlign="center" color="white" fontSize={{ base: "sm", md: "20px", lg: "20px" }} fontWeight="500">
                                         VILLAS
                                     </Text>
                                 </Box>
@@ -497,7 +497,7 @@ export default function LandingNew() {
                             }} >
                                 <Box position="relative" textAlign="center" overflow="hidden" borderRadius="10px" cursor='pointer' boxShadow={'xs'}>
                                     <Image src={Kuta1} borderRadius="10px" _hover={{ transform: 'scale(1.1)', transition: '.5s' }} />
-                                    <Text position="absolute" top="50%" left="50%" transform="translate(-50%,-50%)" color="#fff" fontSize={{ base: "26px", md: "20px", lg: "20px" }} fontWeight="500">
+                                    <Text position="absolute" top="50%" left="50%" transform="translate(-50%,-50%)" color="#fff" fontSize={{ base: "sm", md: "20px", lg: "20px" }} fontWeight="500">
                                         DENPASAR
                                         </Text>
                                 </Box>
@@ -510,7 +510,7 @@ export default function LandingNew() {
                             }} >
                                 <Box position="relative" textAlign="center" overflow="hidden" borderRadius="10px" cursor='pointer' boxShadow={'xs'}>
                                     <Image src={Jakarta1} borderRadius="10px" _hover={{ transform: 'scale(1.1)', transition: '.5s' }} />
-                                    <Text position="absolute" top="50%" left="50%" transform="translate(-50%,-50%)" color="#fff" fontSize={{ base: "26px", md: "20px", lg: "20px" }} fontWeight="500">
+                                    <Text position="absolute" top="50%" left="50%" transform="translate(-50%,-50%)" color="#fff" fontSize={{ base: "sm", md: "20px", lg: "20px" }} fontWeight="500">
                                         JAKARTA
                                         </Text>
                                 </Box>
@@ -523,7 +523,7 @@ export default function LandingNew() {
                             }} >
                                 <Box position="relative" textAlign="center" overflow="hidden" borderRadius="10px" cursor='pointer' boxShadow={'xs'}>
                                     <Image src={Uluwatu1} borderRadius="10px" _hover={{ transform: 'scale(1.1)', transition: '.5s' }} />
-                                    <Text position="absolute" top="50%" left="50%" transform="translate(-50%,-50%)" color="#fff" fontSize={{ base: "26px", md: "20px", lg: "20px" }} fontWeight="500">
+                                    <Text position="absolute" top="50%" left="50%" transform="translate(-50%,-50%)" color="#fff" fontSize={{ base: "sm", md: "20px", lg: "20px" }} fontWeight="500">
                                         BOGOR
                                         </Text>
                                 </Box>
@@ -536,7 +536,7 @@ export default function LandingNew() {
                             }} >
                                 <Box position="relative" textAlign="center" overflow="hidden" borderRadius="10px" cursor='pointer' boxShadow={'xs'}>
                                     <Image src={Ubud1} borderRadius="10px" _hover={{ transform: 'scale(1.1)', transition: '.5s' }} />
-                                    <Text position="absolute" top="50%" left="50%" transform="translate(-50%,-50%)" color="#fff" fontSize={{ base: "26px", md: "20px", lg: "20px" }} fontWeight="500">
+                                    <Text position="absolute" top="50%" left="50%" transform="translate(-50%,-50%)" color="#fff" fontSize={{ base: "sm", md: "20px", lg: "20px" }} fontWeight="500">
                                         BANDUNG
                                         </Text>
                                 </Box>
@@ -549,7 +549,7 @@ export default function LandingNew() {
                             }} >
                                 <Box position="relative" textAlign="center" overflow="hidden" borderRadius="10px" cursor='pointer' boxShadow={'xs'}>
                                     <Image src={Yogyakarta1} borderRadius="10px" _hover={{ transform: 'scale(1.1)', transition: '.5s' }} />
-                                    <Text position="absolute" top="50%" left="50%" transform="translate(-50%,-50%)" color="#fff" fontSize={{ base: "26px", md: "20px", lg: "20px" }} fontWeight="500">
+                                    <Text position="absolute" top="50%" left="50%" transform="translate(-50%,-50%)" color="#fff" fontSize={{ base: "sm", md: "20px", lg: "20px" }} fontWeight="500">
                                     YOGYAKARTA
                                         </Text>
                                 </Box>

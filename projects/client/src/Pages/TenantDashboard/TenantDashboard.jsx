@@ -4,7 +4,7 @@ import Fullcalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
-import { Box, Flex, Stack, Text, UnorderedList, OrderedList, ListItem, Heading, Modal, Button, ModalOverlay, ModalContent, Card, CardHeader, CardBody, CardFooter, ModalHeader, ModalBody, ModalFooter, StackDivider } from "@chakra-ui/react";
+import { Box, Flex, Stack, Text, OrderedList, Heading, Modal, Button, ModalOverlay, ModalContent, Card, CardHeader, CardBody, ModalHeader, ModalBody, ModalFooter, StackDivider } from "@chakra-ui/react";
 import Sidebar from "../../Components/Sidebar";
 import { API_URL } from '../../helper';
 import axios from 'axios';
@@ -21,7 +21,6 @@ function TenantDashboard() {
   const [roomMaintenances, setRoomMaintenances] = useState([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
-  // const [date, setDate] = useState('');
   const [formatSelectedDate, setFormatSelectedDate] = useState('');
   const [availableRooms, setAvailableRooms] = useState([]);
   const [propertyListing, setPropertyListing] = useState([]);
