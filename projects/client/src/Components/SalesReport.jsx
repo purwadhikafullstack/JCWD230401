@@ -104,7 +104,6 @@ function SalesReport(props) {
 
     console.log("propertyDataChart", propertyDataChart);
 
-    
     const getUsers = async () => {
         try {
             let get = await axios.get(
@@ -161,6 +160,7 @@ function SalesReport(props) {
             justifyContent={"center"}
             minW="1280px"
         >
+            {/* Box 1 */}
             <Box
                 flex={"3"}
                 display={{ base: "block", md: "flex", lg: "flex" }}
@@ -323,7 +323,7 @@ function SalesReport(props) {
                     </CardBody>
                 </Card>
             </Box>
-
+            {/* Box 2 */}
             <Box
                 flex={"1"}
                 display="flex"
@@ -437,7 +437,7 @@ function SalesReport(props) {
                                                     lg: "155px",
                                                 }}
                                                 onChange={(e) =>
-                                                    setStartDateUsers(
+                                                    setStartDateProperty(
                                                         e.target.value
                                                     )
                                                 }
@@ -469,7 +469,7 @@ function SalesReport(props) {
                                                     lg: "155px",
                                                 }}
                                                 onChange={(e) =>
-                                                    setEndDateUsers(
+                                                    setEndDateProperty(
                                                         e.target.value
                                                     )
                                                 }
@@ -518,7 +518,6 @@ function SalesReport(props) {
                     justifyContent="center"
                     w={{ base: "100%", md: "md", lg: "md" }}
                     maxW={{ base: "unset", md: "375px" }}
-                    mb={{ base: "16", md: "0", lg: "0" }}
                 >
                     <Card
                         w="full"

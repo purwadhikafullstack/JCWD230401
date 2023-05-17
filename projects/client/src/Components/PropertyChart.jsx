@@ -47,7 +47,7 @@ function PropertyChart(props) {
             {
                 label: "Value",
                 data: props.propertydatachart.total,
-                barPercentage: 0.3,
+                barPercentage: 0.3 ,
                 backgroundColor: "#66BB6A",
                 borderRadius: 5 ,
                 borderCapStyle: "",
