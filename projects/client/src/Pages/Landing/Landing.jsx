@@ -50,21 +50,39 @@ export default function Landing() {
     //     }
     // };
     //api to fetch search result
+    const onSearch = (searchTerm) => {
+        setInputLocation(searchTerm); //if suggestion clicked, it will be put inside the input field
+        console.log("Ini adalah search : ", searchTerm);
+    };
 
-    // const onSearch = (searchTerm) => {
-    //     setInputLocation(searchTerm); //if suggestion clicked, it will be put inside the input field
-    //     console.log("Ini adalah search : ", searchTerm)
-    // }
+    const getAllLocations = async () => {
+        try {
+            let response = await axios.get(`${API_URL}/location/list`, {
+                city: showLocation,
+            });
+            // console.log("ini response.data dari getAllLocations 🪶 : ", response.data.data);
+            setShowLocation(response.data.data);
+        } catch (error) {
+            console.log("ini error dari getAllLocations:", error);
+        }
+    };
+
+    const navigate = useNavigate();
+
+    // Jalanin fungsi getAllLocations
+    React.useEffect(() => {
+        getAllLocations();
+    }, [inputLocation]);
 
     // Check In Check Out
-    const [inputCheckIn, setInputCheckIn] = useState('');
-    const [inputCheckOut, setInputCheckOut] = useState('');
+    const [inputCheckIn, setInputCheckIn] = useState("");
+    const [inputCheckOut, setInputCheckOut] = useState("");
 
     const OnBtnCheckIn = () => {
-        setInputCheckIn('date');
+        setInputCheckIn("date");
     };
     const OnBtnCheckOut = () => {
-        setInputCheckOut('date');
+        setInputCheckOut("date");
     };
     // const onBlurInput = () => {
     //     setInputTypeIn('');
@@ -126,33 +144,47 @@ export default function Landing() {
     return (
         <>
             {/* BANNER */}
-            <Box className='header'>
-                <Box className='container'>
-                    <Heading as='h1'>
-                        Find Your Next Stay
-                    </Heading>
+            <Box className="header">
+                <Box className="container">
+                    <Heading as="h1">Find Your Next Stay</Heading>
                     {/* SEARCH BAR */}
-                    <Box className='search-bar'>
+                    <Box className="search-bar">
                         <form>
                             <div className="location-input">
                                 <label>Location</label>
-                                <input type="text" placeholder="Where are you going?"
-                                    // onChange={(e) => setInputLocation(e.target.value)}
-                                    // value={inputLocation}
+                                <input
+                                    type="text"
+                                    placeholder="Where are you going?"
+                                    onChange={(e) =>
+                                        setInputLocation(e.target.value)
+                                    }
+                                    value={inputLocation}
                                 />
                                 <div className="dropdown">
-                                    {/* {showLocation.filter(item => {
-                                        const searchTerm = inputLocation.toLowerCase();
-                                        const city = item.city.toLowerCase();
-                                        return (searchTerm && city.startsWith(searchTerm) && city !== searchTerm);
-                                    }
-                                    ).slice(0, 5) //will show only first 5 items di location input field
-                                        .map((item) =>
-                                        (<div
-                                            onClick={() => onSearch(item.city)}
-                                            className="dropdown-row"
-                                            key={item.city}
-                                        >{item.city}</div>))} */}
+                                    {showLocation
+                                        .filter((item) => {
+                                            const searchTerm =
+                                                inputLocation.toLowerCase();
+                                            const city =
+                                                item.city.toLowerCase();
+                                            return (
+                                                searchTerm &&
+                                                city.startsWith(searchTerm) &&
+                                                city !== searchTerm
+                                            );
+                                        })
+                                        .slice(0, 5) //will show only first 5 items di location input field
+                                        .map((item) => (
+                                            <div
+                                                onClick={() =>
+                                                    onSearch(item.city)
+                                                }
+                                                className="dropdown-row"
+                                                key={item.city}
+                                            >
+                                                {item.city}
+                                            </div>
+                                        ))}
                                 </div>
                             </div>
                             <div>
@@ -193,17 +225,20 @@ export default function Landing() {
                     </Box>
                 </Box>
             </Box>
-            <Box className='container'>
+            <Box className="container">
                 {/* SPECIAL DEALS */}
                 <div className="special-offers">
                     <p className="special-offers-flag">HOLIDAY SALE</p>
                     <h3>Special Offers</h3>
-                    <p>Get the best prices on 20,000+ properties the best prices on.</p>
-                    <a href="#" class="special-offers-btn">See Deals</a>
+                    <p>
+                        Get the best prices on 20,000+ properties the best
+                        prices on.
+                    </p>
+                    <a href="#" class="special-offers-btn">
+                        See Deals
+                    </a>
                 </div>
-                <Heading as='h2'>
-                    Browse by property type
-                </Heading>
+                <Heading as="h2">Browse by property type</Heading>
                 <br />
                 {/* PROPERTY TYPE */}
                 <div className="property-type">
@@ -212,9 +247,7 @@ export default function Landing() {
                 <br />
                 <br />
                 <br />
-                <Heading as='h2'>
-                    Top Destinations
-                </Heading>
+                <Heading as="h2">Top Destinations</Heading>
                 <br />
                 {/* LOCATIONS */}
                 <div className="locations">
@@ -257,9 +290,7 @@ export default function Landing() {
                     <p>Great opportunity to make money by <br />sharing your extra space.</p>
                     <a href="#" class="cta-btn" onClick={() => navigate('/tenantregister')}>Become a Tenant</a>
                 </div>
-                <Heading as='h2'>
-                    Recommended for you
-                </Heading>
+                <Heading as="h2">Recommended for you</Heading>
                 {/* PROPERTY RECOMMENDATIONS */}
                 <br />
                 <div className="recommendations">
@@ -272,5 +303,5 @@ export default function Landing() {
             <br />
             <Footer />
         </>
-    )
+    );
 }

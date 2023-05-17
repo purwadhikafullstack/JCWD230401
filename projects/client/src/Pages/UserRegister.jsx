@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
     Button,
     Checkbox,
@@ -23,15 +23,15 @@ import { FcGoogle } from 'react-icons/fc';
 
 export default function UserRegister() {
     const [showPassword, setShowPassword] = useState(false);
-    const [showPasswordConfirmation, setShowPasswordConfirmation] = useState(false);
+    const [showPasswordConfirmation, setShowPasswordConfirmation] =
+        useState(false);
     const navigate = useNavigate();
-    const [name, setName] = React.useState('');
-    const [phone, setPhone] = React.useState('');
-    const [email, setEmail] = React.useState('');
-    const [password, setPassword] = React.useState('');
-    const [passwordConfirmation, setPasswordConfirmation] = React.useState('');
+    const [name, setName] = React.useState("");
+    const [phone, setPhone] = React.useState("");
+    const [email, setEmail] = React.useState("");
+    const [password, setPassword] = React.useState("");
+    const [passwordConfirmation, setPasswordConfirmation] = React.useState("");
     const { isOpen, onOpen, onClose } = useDisclosure();
-
 
     const onBtnRegister = async () => {
         try {
@@ -40,11 +40,13 @@ export default function UserRegister() {
                 phone: phone,
                 email: email,
                 password: password,
-                confirmationPassword: passwordConfirmation
-            }
-            );
+                confirmationPassword: passwordConfirmation,
+            });
             console.log("ini hasil response onbtnregister :", response); //testing purposes
-            console.log("ini hasil response onbtnregister message from be :", response.data.message); //testing purposes
+            console.log(
+                "ini hasil response onbtnregister message from be :",
+                response.data.message
+            ); //testing purposes
             if (response.data.success) {
                 alert(response.data.message);
             }
@@ -55,30 +57,35 @@ export default function UserRegister() {
             alert(error.response.data.error[0].msg);
             alert(error.response.data.error[1].msg);
         }
-    }
+    };
 
     return (
-        <Stack minH={{ lg: '100vh' }}
-            direction={{ base: 'column', md: 'column', lg: 'row' }}
+        <Stack
+            minH={{ lg: "100vh" }}
+            direction={{ base: "column", md: "column", lg: "row" }}
         >
             <Flex
-                p={{ base: '8', sm: '0' }}
+                p={{ base: "8", sm: "0" }}
                 flex={1}
-                align={'center'} justify={'center'}
-            // py='20'
+                align={"center"}
+                justify={"center"}
+                // py='20'
             >
-                <Stack spacing={0} w={'full'} maxW={{ base: 'sm' }}>
-                    <Heading fontSize={'3xl'} fontWeight='semibold'
-                        my='8'
-                    >Register to tempatku</Heading>
+                <Stack spacing={0} w={"full"} maxW={{ base: "sm" }}>
+                    <Heading fontSize={"3xl"} fontWeight="semibold" my="8">
+                        Register to tempatku
+                    </Heading>
                     <Stack spacing={2}>
                         <HStack>
                             <Box>
                                 {/* NAME */}
                                 <FormControl id="Name">
                                     <FormLabel>Name</FormLabel>
-                                    <Input type="text"
-                                        onChange={(e) => setName(e.target.value)}
+                                    <Input
+                                        type="text"
+                                        onChange={(e) =>
+                                            setName(e.target.value)
+                                        }
                                     />
                                 </FormControl>
                             </Box>
@@ -86,8 +93,11 @@ export default function UserRegister() {
                                 {/* PHONE */}
                                 <FormControl id="phonenumber">
                                     <FormLabel>Phone number</FormLabel>
-                                    <Input type="text"
-                                        onChange={(e) => setPhone(e.target.value)}
+                                    <Input
+                                        type="text"
+                                        onChange={(e) =>
+                                            setPhone(e.target.value)
+                                        }
                                     />
                                 </FormControl>
                             </Box>
@@ -95,7 +105,8 @@ export default function UserRegister() {
                         {/* EMAIL */}
                         <FormControl id="email">
                             <FormLabel>Email address</FormLabel>
-                            <Input type="email"
+                            <Input
+                                type="email"
                                 onChange={(e) => setEmail(e.target.value)}
                             />
                         </FormControl>
@@ -105,18 +116,27 @@ export default function UserRegister() {
                             <InputGroup>
                                 {/* Input Password */}
                                 <Input
-                                    type={showPassword ? 'text' : 'password'}
-                                    onChange={(e) => setPassword(e.target.value)}
+                                    type={showPassword ? "text" : "password"}
+                                    onChange={(e) =>
+                                        setPassword(e.target.value)
+                                    }
                                 />
-                                <InputRightElement h={'full'}>
+                                <InputRightElement h={"full"}>
                                     <Button
-                                        variant={'ghost'}
-                                        _hover={'none'}
-                                        _active={'none'}
+                                        variant={"ghost"}
+                                        _hover={"none"}
+                                        _active={"none"}
                                         onClick={() =>
-                                            setShowPassword((showPassword) => !showPassword)
-                                        }>
-                                        {showPassword ? <ViewIcon /> : <ViewOffIcon />}
+                                            setShowPassword(
+                                                (showPassword) => !showPassword
+                                            )
+                                        }
+                                    >
+                                        {showPassword ? (
+                                            <ViewIcon />
+                                        ) : (
+                                            <ViewOffIcon />
+                                        )}
                                     </Button>
                                 </InputRightElement>
                             </InputGroup>
@@ -126,17 +146,32 @@ export default function UserRegister() {
                             <InputGroup>
                                 {/* Input Password Confirmation*/}
                                 <Input
-                                    type={showPasswordConfirmation ? 'text' : 'password'} onChange={(e) => setPasswordConfirmation(e.target.value)}
+                                    type={
+                                        showPasswordConfirmation
+                                            ? "text"
+                                            : "password"
+                                    }
+                                    onChange={(e) =>
+                                        setPasswordConfirmation(e.target.value)
+                                    }
                                 />
-                                <InputRightElement h={'full'}>
+                                <InputRightElement h={"full"}>
                                     <Button
-                                        variant={'ghost'}
-                                        _hover={'none'}
-                                        _active={'none'}
+                                        variant={"ghost"}
+                                        _hover={"none"}
+                                        _active={"none"}
                                         onClick={() =>
-                                            setShowPasswordConfirmation((showPasswordConfirmation) => !showPasswordConfirmation)
-                                        }>
-                                        {showPasswordConfirmation ? <ViewIcon /> : <ViewOffIcon />}
+                                            setShowPasswordConfirmation(
+                                                (showPasswordConfirmation) =>
+                                                    !showPasswordConfirmation
+                                            )
+                                        }
+                                    >
+                                        {showPasswordConfirmation ? (
+                                            <ViewIcon />
+                                        ) : (
+                                            <ViewOffIcon />
+                                        )}
                                     </Button>
                                 </InputRightElement>
                             </InputGroup>
@@ -147,7 +182,7 @@ export default function UserRegister() {
                     >
                         <Button bg={'#D3212D'} color={'white'} variant={'solid'}
                             _hover={{
-                                bg: '#D3212D',
+                                bg: "#D3212D",
                             }}
                             onClick={onBtnRegister}
                         >
@@ -174,15 +209,16 @@ export default function UserRegister() {
                         <Card variant='none' borderColor='#d0d7de' mt='2'>
                             <CardBody>
                                 <Center>
-                                    <HStack fontSize='sm'
-                                    >
+                                    <HStack fontSize="sm">
                                         <Text>Have an account?</Text>
                                         {/* usenavigate ke landing, tp login nya ada di landing page modal, hrs bikin modal login lsg kebuka in order to have this  */}
-                                        <Text onClick={() => {
-                                            navigate('/');
-                                            // onOpen();
-                                        }} color='#0969da'
-                                            cursor={'pointer'}
+                                        <Text
+                                            onClick={() => {
+                                                navigate("/");
+                                                // onOpen();
+                                            }}
+                                            color="#0969da"
+                                            cursor={"pointer"}
                                         >
                                             Login.
                                         </Text>
@@ -193,10 +229,7 @@ export default function UserRegister() {
                     </Stack>
                 </Stack>
             </Flex>
-            <Flex
-                flex={1}
-                display={{ base: 'flex', sm: 'flex' }}
-            >
+            <Flex flex={1} display={{ base: "flex", sm: "flex" }}>
                 <Image
                     alt={'User Register Page Image'}
                     objectFit={'cover'}
