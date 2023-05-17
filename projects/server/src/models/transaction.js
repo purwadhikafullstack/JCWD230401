@@ -33,6 +33,7 @@ module.exports = (sequelize, DataTypes) => {
         transaction.belongsTo(models.transaction_status, {
             foreignKey: "transaction_statusId",
         });
+        transaction.belongsTo(models.room, { foreignKey: 'roomId' });
         transaction.hasOne(models.review, { foreignKey: "transactionId" });
     };
     return transaction;

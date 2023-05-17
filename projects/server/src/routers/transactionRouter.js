@@ -1,0 +1,12 @@
+const { transactionController } = require('../controllers');
+const { readToken } = require('../helper/jwt');
+const route = require('express').Router();
+const uploader = require('../helper/uploader');
+
+route.post('/', readToken, transactionController.newTransaction)
+route.post('/detail', transactionController.getTransactionTimeAndBank)
+route.post('/uploadimagepayment/:uuid', readToken, uploader('/ImgPayment', 'PAY').array('images', 1), transactionController.uploadImagePayment)
+
+
+
+module.exports = route;

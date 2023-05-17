@@ -1,7 +1,18 @@
-const { propertyController, roomController } = require("../controllers");
-const { readToken } = require("../helper/jwt");
-const route = require("express").Router();
+const route = require('express').Router();
+const { propertyController } = require('../controllers');
+const { readToken } = require('../helper/jwt');
+const { checkUser } = require('../helper/validator');
 const uploader = require("../helper/uploader");
+
+route.get('/', propertyController.getAllProperty)
+route.post('/filter', propertyController.filterProperty)
+route.post('/getroomavailable', propertyController.getRoomAvailable)
+
+
+route.post('/getpropertydetail', propertyController.getPropertyDetail)
+route.post('/getpictureproperty', propertyController.getPicturePropertyDetail)
+
+
 
 route.get("/getallpropertytenant", propertyController.getAllPropertyTenant);
 route.get("/getprovince", propertyController.getProvince);
@@ -23,5 +34,6 @@ route.patch(
     propertyController.updateImageProperty
 );
 route.patch("/deleteimageproperty", propertyController.deletePropertyPicture);
+
 
 module.exports = route;

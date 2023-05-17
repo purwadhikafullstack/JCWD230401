@@ -1,11 +1,12 @@
 const { join } = require("path");
 require("dotenv/config");
 require("dotenv").config({ path: join(__dirname, ".env") });
+require("dotenv").config({ path: join(__dirname, ".env") });
 const express = require("express");
 const cors = require("cors");
 const bearerToken = require("express-bearer-token");
 
-// console.log(__dirname);
+// console.log("isi dari __dirname :" + __dirname);
 const PORT = process.env.PORT || 8000;
 const app = express();
 app.use(express.json());
@@ -26,9 +27,6 @@ app.use("/api/room", roomRouter);
 const userRouter = require("./routers/userRouter");
 app.use("/api/user", userRouter);
 
-const locationRouter = require("./routers/locationRouter");
-app.use("/api/location", locationRouter);
-
 const specialRouter = require("./routers/specialRouter");
 app.use("/api/special", specialRouter);
 
@@ -48,6 +46,9 @@ app.get("/api/greetings", (req, res, next) => {
         message: "Hello, Student !",
     });
 });
+
+
+
 
 // ===========================
 

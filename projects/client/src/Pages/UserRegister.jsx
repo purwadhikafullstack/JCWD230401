@@ -10,24 +10,17 @@ import {
     Link,
     Stack,
     Image,
-    Text,
-    Icon,
-    HStack,
-    Box,
-    Divider,
-    Center,
-    Card,
-    CardBody,
-    InputGroup,
-    InputRightElement,
-    useDisclosure,
-} from "@chakra-ui/react";
-import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import { API_URL } from "../helper";
+    Text, Icon, HStack, Box, Divider, Center, Card, CardBody, InputGroup, InputRightElement, useDisclosure
+} from '@chakra-ui/react';
+import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { API_URL } from '../helper';
+import Userregisterbanner from '../assets/userregisterbanner.jpg';
+import { FcGoogle } from 'react-icons/fc';
 
-//user
+
+
 export default function UserRegister() {
     const [showPassword, setShowPassword] = useState(false);
     const [showPasswordConfirmation, setShowPasswordConfirmation] =
@@ -57,6 +50,7 @@ export default function UserRegister() {
             if (response.data.success) {
                 alert(response.data.message);
             }
+            navigate('/', { replace: true });
         } catch (error) {
             console.log("ini error dari onBtnRegister : ", error); //testing purposes
             alert(error.response.data.message);
@@ -183,18 +177,28 @@ export default function UserRegister() {
                             </InputGroup>
                         </FormControl>
                     </Stack>
-                    {/* Khusus untuk daftar menjadi tenant */}
-                    <Stack pt="8">
-                        <Button
-                            bg={"#D3212D"}
-                            color={"white"}
-                            variant={"solid"}
+                    <Stack
+                        pt='8'
+                    >
+                        <Button bg={'#D3212D'} color={'white'} variant={'solid'}
                             _hover={{
                                 bg: "#D3212D",
                             }}
                             onClick={onBtnRegister}
                         >
                             Register
+                        </Button>
+                        <Flex alignItems="center" w='full' py='4'>
+                            <Divider color="black" thickness="2px" />
+                            <Text mx="2" fontSize="sm">or</Text>
+                            <Divider color="black" thickness="2px" />
+                        </Flex>
+                        {/* Google */}
+                        <Button
+                            w={'full'} variant={'outline'} leftIcon={<FcGoogle />} borderColor='#d0d7de' _hover={'none'}>
+                            <Center>
+                                <Text>Continue with Google</Text>
+                            </Center>
                         </Button>
                         {/* Login */}
                     </Stack>
@@ -227,11 +231,10 @@ export default function UserRegister() {
             </Flex>
             <Flex flex={1} display={{ base: "flex", sm: "flex" }}>
                 <Image
-                    alt={"User Register Page Image"}
-                    objectFit={"cover"}
-                    src={
-                        "https://images.unsplash.com/photo-1597634285596-01fd1bffe116?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1074&q=80"
-                    }
+                    alt={'User Register Page Image'}
+                    objectFit={'cover'}
+                    src={Userregisterbanner}
+
                 />
             </Flex>
         </Stack>

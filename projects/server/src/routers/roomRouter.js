@@ -26,3 +26,5 @@ route.get("/getlistroom", roomController.listRoom);
 route.patch("/deleteroom/:uuid", readToken, roomController.deleteRoom);
 
 module.exports = route;
+
+module.exports = route;
