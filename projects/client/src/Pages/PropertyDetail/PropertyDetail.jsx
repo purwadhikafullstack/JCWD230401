@@ -68,8 +68,12 @@ export default function PropertyDetail() {
     const modalProperty = useDisclosure()
 
     // Get Room Available
-    const [inputCheckIn, setInputCheckIn] = useState(location.state.inputCheckIn)
-    const [inputCheckOut, setInputCheckOut] = useState(location.state.inputCheckOut)
+    const today = new Date().toISOString().split('T')[0]
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    const nextDay = tomorrow.toISOString().split('T')[0];
+    const [inputCheckIn, setInputCheckIn] = useState(location.state.inputCheckIn || today)
+    const [inputCheckOut, setInputCheckOut] = useState(location.state.inputCheckOut || nextDay)
     const [roomAvailable, setRoomAvailable] = useState([])
     const getRoomAvailable = async () => {
         let get = await axios.get(`${API_URL}/property/getroomavailable?uuid=${params.uuid}&start=${inputCheckIn}&end=${inputCheckOut}`, {
@@ -146,7 +150,7 @@ export default function PropertyDetail() {
                             <FaStar color='orange' />
                         </div>
                         <div>
-                            <p>&nbsp;{parseFloat(average).toFixed(1)}</p>
+                            <p>&nbsp;{average === null ? 'No Rating' : parseFloat(average).toFixed(1)}</p>
                         </div>
                         <div>
                             <span>57 Reviews</span>
@@ -245,7 +249,7 @@ export default function PropertyDetail() {
                 <hr className="line" />
                 <div className="tenant">
                     {/* Di database belom ada isinya jd sementara pake image ini */}
-                    <img style={{ width: '70px', height: '70px', objectFit: 'cover' }} src={'https://images.unsplash.com/photo-1599566150163-29194dcaad36?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80'} />
+                    <img style={{ width: '70px', height: '70px', objectFit: 'cover' }} src={propertyDetail?.user?.user_detail?.image_profile || ''} />
                     <div>
                         <h2>Hosted by {propertyDetail?.user?.user_detail?.name}</h2>
                         <p>

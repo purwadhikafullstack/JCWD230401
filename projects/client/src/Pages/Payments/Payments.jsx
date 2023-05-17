@@ -27,8 +27,10 @@ import { LockIcon } from '@chakra-ui/icons'
 import { useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
-import { API_URL } from '../../helper';
+import { API_URL, capitalizeFirstWord, formatDateIndo, formatRupiah } from '../../helper';
 import { useSelector } from "react-redux";
+import { Rating } from '@smastrom/react-rating'
+import '@smastrom/react-rating/style.css'
 
 
 
@@ -88,8 +90,29 @@ export default function Payments() {
     now.getTime()
     console.log("nowwwww", now.getTime())
 
+    const [average, setAverage] = useState(0)
+    const getAverage = async () => {
+        let get = await axios.get(`${API_URL}/review/average?uuid=${params.uuid}`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+        console.log("average", get);
+        setAverage(get.data.avg_rating)
+    }
+    function RatingProperty(average) {
+        return (
+            <Rating
+                style={{ maxWidth: 100 }}
+                value={average}
+                readOnly
+            />
+        );
+    }
+
     useEffect(() => {
         getDetails()
+        getAverage()
     }, [])
     return (
         <Box mt='3' px='3'>
@@ -261,16 +284,12 @@ export default function Payments() {
 
                                         {/* BOX 2 */}
                                         <Box flex='2'>
-                                            <Text fontSize={'2xl'}>{details?.property?.property}</Text>
+                                            <Text fontSize={'xl'}>{details?.property?.property}</Text>
                                             {/* RATING */}
                                             <Flex my='2'>
-                                                <StarIcon color='yellow.500' />
-                                                <StarIcon color='yellow.500' />
-                                                <StarIcon color='yellow.500' />
-                                                <StarIcon color='yellow.500' />
-                                                <StarIcon color='gray.500' />
+                                                <Text>{average === null ? <Text><StarIcon color='yellow.500' /> No Rating</Text> : RatingProperty(average)}</Text>
                                             </Flex>
-                                            <Text fontSize={'sm'} fontWeight='light'>{details?.property?.property_location?.regency?.name}, {details?.property?.property_location?.country}</Text>
+                                            <Text fontSize={'sm'} fontWeight='light'>{details?.property?.property_location?.regency?.name ? capitalizeFirstWord(details?.property?.property_location?.regency?.name) : ''}, <br /> {details?.property?.property_location?.country}</Text>
                                         </Box>
                                     </Flex>
                                 </Box>
@@ -283,10 +302,10 @@ export default function Payments() {
                                 <Box p='3'>
                                     <Text fontWeight={'semibold'} fontSize='xl'>{details?.room_category?.name}</Text>
                                     <Flex justify={'space-between'}>
-                                        <Text>{checkIn} -  {checkOut}</Text>
+                                        <Text>{formatDateIndo(checkIn)} -  {formatDateIndo(checkOut)}</Text>
                                         <Text>{days} night</Text>
                                     </Flex>
-                                    <Text>Price : Rp {details?.price} / night</Text>
+                                    <Text>Price : {formatRupiah(details?.price)} / night</Text>
                                 </Box>
                                 <hr />
 
@@ -301,7 +320,7 @@ export default function Payments() {
 
                                 {/* PRICE */}
                                 <Box my='3'>
-                                    <Text fontSize={'2xl'}>Total : Rp {details?.price * parseInt(days)}</Text>
+                                    <Text fontSize={'2xl'}>Total : {formatRupiah(details?.price * parseInt(days))}</Text>
                                 </Box>
 
                                 {/* BUTTON */}

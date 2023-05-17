@@ -31,16 +31,17 @@ export default function CardOrderList(props) {
     const totalPrice = props.price * days
 
 
-    function validToReview() {
-        const today = new Date();
-        const end_date = new Date(props.end_date);
-        return end_date > today && props.status === 'Paid';
-
-        // Return false for cases when conditions are not met
-        return false;
+    function validToReview(end_date, status) {
+        const today = new Date().getTime();
+        const endDate = new Date(end_date).getTime();
+        if (endDate < today && status === 'Paid') {
+            return true
+        } else {
+            return false
+        }
     }
 
-    console.log("validToReview", validToReview());
+    console.log("validToReview", validToReview(props.end_date, props.status));
 
 
     function ModalReview() {
@@ -153,7 +154,7 @@ export default function CardOrderList(props) {
                     </Button>
                     {/* KASIH KONDISI KALO BELOM REVIEW JNAGAN MUNCULIN TOMBOL REVIEW */}
                     {/* - jika end date sudah lewat hari ini dan transaction_statusId === 3 tampilkan button review */}
-                    {validToReview() ? ModalReview() : null}
+                    {validToReview(props.end_date, props.status) ? ModalReview() : null}
                 </Stack>
             </Stack>
         </Stack>

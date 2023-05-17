@@ -108,17 +108,22 @@ export default function OrderLists() {
 
     useEffect(() => {
         getOrderList();
-    }, [page, size, sortBy, order, start, end, transactionStatusId, invoice])
+    }, [page, size, sortBy, order, start, end, transactionStatusId])
     return (
         <Container maxW={'7xl'}>
             {/* TITLE & FILTER */}
             <Flex justifyContent={'space-between'} alignItems='center' my='5'>
                 <Text fontWeight={'bold'} fontSize={'3xl'}>My order</Text>
                 <Flex gap='3'>
-                    <Input type='text' placeholder='Invoice number' onChange={(e) => setInvoice(e.target.value)} />
+                    <InputGroup>
+                        <Input type='text' placeholder='Invoice' onChange={(e) => setInvoice(e.target.value)} />
+                        <InputRightElement width='4.5rem'>
+                            <Button h='1.75rem' size='sm' onClick={getOrderList}>Find</Button>
+                        </InputRightElement>
+                    </InputGroup>
                     <Menu closeOnSelect={false}>
-                        <MenuButton as={Button}>
-                            Filter
+                        <MenuButton as={Button} w='100px' colorScheme='red'>
+                            <Text>Filter</Text>
                         </MenuButton>
                         <MenuList minWidth='240px'>
                             <MenuOptionGroup title='Filter by'>

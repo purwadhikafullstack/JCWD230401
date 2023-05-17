@@ -106,7 +106,26 @@ module.exports = {
                 }
             ]
         })
+        console.log("average", getAvg.dataValues);
         res.status(200).send(getAvg)
+    },
+    countReview: async (req, res, next) => {
+        let get = await model.review.findAll({
+            attributes: [[sequelize.fn('COUNT', sequelize.col('review')), 'review']],
+            include: [
+                {
+                    model: model.room, attributes: ['uuid'],
+                    include: [
+                        {
+                            model: model.property, attributes: ['property'],
+                            where: {
+                                uuid: req.query.uuid
+                            }
+                        }
+                    ]
+                }
+            ]
+        })
     }
 
 }

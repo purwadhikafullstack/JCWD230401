@@ -147,23 +147,75 @@ module.exports = {
             let get = await model.room.findAll({
                 where: {
                     propertyId: getPropertyId[0].dataValues.id,
-                    id: {
-                        [sequelize.Op.notIn]: [
-                            sequelize.literal(`SELECT roomId FROM orders join transactions on orders.transactionId = transactions.id WHERE start_date >= '${req.query.start}' AND start_date <= '${req.query.end}' OR end_date >= '${req.query.start}' AND end_date <= '${req.query.end}'  AND transactions.transaction_statusId IN (1,2,3)`) // tambahin transaction_statusId
+                    isDeleted: 0,
+                    [sequelize.Op.and]: [
+                        {
+                            id: {
+                                [sequelize.Op.notIn]: [
+                                    sequelize.literal(`(
+                                        SELECT roomId FROM orders join transactions on orders.transactionId = transactions.id WHERE 
+                                        ((start_date >= '${req.query.start}' AND start_date <= '${req.query.end}')
+                                        OR 
+                                        (end_date >= '${req.query.start}' AND end_date <= '${req.query.end}')
+                                        ) 
+                                        AND transactions.transaction_statusId IN (1,2,3,4)) 
+                                        `)
+                                ]
+                            }
+                        },
+                        {
+                            id: {
+                                [sequelize.Op.notIn]: [
+                                    sequelize.literal(`
+                                    SELECT roomId FROM maintenances WHERE 
+                                    (maintenances.startDate >= '${req.query.start}' and maintenances.startDate <= '${req.query.end}') 
+                                    or 
+                                    (maintenances.endDate >= '${req.query.start}' and maintenances.endDate <= '${req.query.end}') 
+                                        `)
+                                ],
+                            },
+                        }
+                    ]
 
-                            // sequelize.literal(`SELECT roomId FROM orders join transactions on orders.transactionId = transactions.id WHERE start_date between '${req.query.start}' AND '${req.query.end}' AND end_date between '${req.query.start}' AND '${req.query.end}'`) // tambahin transaction_statusId
-
-                            // sequelize.literal(`SELECT roomId FROM orders join transactions on orders.transactionId = transactions.id WHERE start_date < '${req.query.start}' OR start_date > '${req.query.end}' AND end_date < '${req.query.start}' OR end_date > '${req.query.end}'`) // tambahin transaction_statusId
-
-                        ]
-                    }
                 },
                 include: [
                     { model: model.room_category, attributes: ['name'] },
                     { model: model.picture_room, attributes: ['picture'] },
                 ]
             });
-            res.status(200).send(get)
+
+            const query = `
+                SELECT s.id, s.startDate, s.endDate, s.priceOnDate, s.isActive, s.roomId ,r.propertyId FROM special_prices s join rooms r
+                on s.roomId = r.id 
+                WHERE  '${req.query.start}' >= startDate 
+                AND (
+                    (startDate >= '${req.query.start}' and startDate <= '${req.query.end}') 
+                    or 
+                    (endDate >= '${req.query.start}' and endDate <= '${req.query.end}')
+                )
+                AND 
+                isActive = 1
+                ;
+            `
+
+            const special_prices = await con.query(query, {
+                type: sequelize.QueryTypes.SELECT
+            });
+
+
+
+            const final = get.map((val1) => {
+                let special_price = special_prices.find((val2) => val2.roomId === val1.dataValues.id)
+                if (special_price) {
+                    return { ...val1.dataValues, price: special_price.priceOnDate }
+                } else {
+                    return val1
+                }
+            })
+
+            console.log("get room available", final);
+
+            res.status(200).send(final)
         } catch (error) {
             console.log(error);
             next(error)
@@ -175,7 +227,7 @@ module.exports = {
                 include: [
                     {
                         model: model.room,
-                        attributes: ['price']
+                        attributes: ['price', 'uuid']
                     },
                     {
                         model: model.property_location, include: [{ model: model.regency }]
@@ -184,7 +236,7 @@ module.exports = {
                         model: model.picture_property
                     },
                     {
-                        model: model.user, include: [{ model: model.user_detail, attributes: ['name'] }]
+                        model: model.user, include: [{ model: model.user_detail, attributes: ['name', 'image_profile'] }]
                     },
 
                 ],
