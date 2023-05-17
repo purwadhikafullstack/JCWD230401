@@ -43,8 +43,6 @@ export default function ChangePassword() {
                 },
             }
             );
-            console.log("ini hasil response onbtnchangepassword :", response); //testing purposes
-            console.log("ini hasil response onbtnchangepassword message from be :", response.data.message); //testing purposes
             toast({
                 title: response.data.message,
                 status: 'success',
@@ -53,7 +51,7 @@ export default function ChangePassword() {
             });
             navigate('/');
         } catch (error) {
-            console.log("ini error dari onBtnChangePassword : ", error); //testing purposes
+            console.log("ini error dari onBtnChangePassword : ", error); 
             if (error.response && !error.response.data.message) {
                 toast({
                     title: 'Change password failed',
@@ -120,7 +118,6 @@ export default function ChangePassword() {
 
     return (
         <Flex
-            // minH={'100vh'}
             minH={{base:'50vh', sm:'100vh'}}
             align={{base:'none', sm:'center'}}
             justify={'center'}

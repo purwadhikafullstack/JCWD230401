@@ -18,8 +18,7 @@ import { useNavigate } from 'react-router-dom';
 import { API_URL } from '../helper';
 import axios from 'axios';
 import { useSelector } from "react-redux";
-//moved from Booking component TPK-9
-
+// Looks like have to incorporate this BookingButton into the RoomCard krn gbs ini onClick={() => navigate('/transactionpage')}
 
 export default function BookingButton() {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -28,8 +27,6 @@ export default function BookingButton() {
   const [loading, setLoading] = React.useState(false);
   const toast = useToast();
   const role = useSelector((state) => state.authReducer.role);
-  console.log("ini isi user is Verified ? :", isVerified);
-  console.log("ini isi user role ? :", role);
 
 
   //inside modal alert cannot continue to transaction page
@@ -43,7 +40,6 @@ export default function BookingButton() {
         }
       }
       );
-      console.log("ini hasil response onbtnSendVerifyEmail :", response);
       toast({
         title: response.data.message,
         status: 'success',
@@ -190,7 +186,7 @@ export default function BookingButton() {
                     <Center>
                       <HStack fontSize='sm' spacing='1'>
                         <Text>New to tempatku?</Text>
-                        <Text onClick={() => navigate('/userregister')} color='#0969da'
+                        <Text onClick={() => navigate('/register/user')} color='#0969da'
                           cursor={'pointer'}
                         >
                           Create an account.

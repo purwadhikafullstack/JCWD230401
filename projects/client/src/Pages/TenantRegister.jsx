@@ -45,7 +45,6 @@ export default function TenantRegister() {
             //1. function that will read the file image and return a Promise that resolves with the base64 data:
             const toBase64 = (file) =>
                 new Promise((resolve, reject) => {
-                    //FileReader API which allows you to read the contents of files asynchronously.
                     const reader = new FileReader();
                     reader.readAsDataURL(file);
                     reader.onload = () => resolve(reader.result);
@@ -60,8 +59,6 @@ export default function TenantRegister() {
             let response = await axios.post(`${API_URL}/user/register-as-tenant`,
                 formData
             );
-            console.log("ini hasil response onbtnregister :", response); //testing purposes
-            console.log("ini hasil response onbtnregister message from be :", response.data.message); //testing purposes
             toast({
                 title: response.data.message,
                 status: 'success',
@@ -69,7 +66,7 @@ export default function TenantRegister() {
                 isClosable: true,
             });
         } catch (error) {
-            console.log("ini error dari onBtnRegister : ", error); //testing purposes
+            console.log("ini error dari onBtnRegister : ", error);
             if (error.response && !error.response.data.message) {
                 toast({
                     title: 'Register failed',
@@ -162,7 +159,7 @@ export default function TenantRegister() {
     //untuk upload ktp
     const onChangeFile = (event) => {
         console.log("ini isi dari event.target.files onchangefile :", event.target.files);
-        formik.setFieldValue(event.target.name, event.target.files[0]); //change to setFileImage
+        formik.setFieldValue(event.target.name, event.target.files[0]); 
     };
 
 
@@ -323,10 +320,8 @@ export default function TenantRegister() {
                                     <HStack fontSize='sm'
                                     >
                                         <Text>Have an account?</Text>
-                                        {/* usenavigate ke landing, tp login nya ada di landing page modal, hrs bikin modal login lsg kebuka in order to have this  */}
                                         <Text onClick={() => {
                                             navigate('/');
-                                            // onOpen();
                                         }} color='#0969da'
                                             cursor={'pointer'}
                                         >

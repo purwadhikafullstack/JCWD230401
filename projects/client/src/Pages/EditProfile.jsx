@@ -37,10 +37,6 @@ export default function EditProfile(props) {
     const [loading2, setLoading2] = useState(false);
     const toast = useToast();
 
-    console.log("ini isi dari role edit profile:", role); //testing
-    console.log(currentGender);
-    console.log(currentBirth);
-
 
     const handleGenderChange = (value) => {
         setGender(value);
@@ -84,17 +80,15 @@ export default function EditProfile(props) {
                 },
             }
             );
-            console.log("response onbtneditprofile :", response); //testing purposes
-            console.log("response onbtneditprofile message from be :", response.data.message); //testing purposes
             toast({
                 title: response.data.message,
                 status: 'success',
                 duration: 3000,
                 isClosable: true,
             });
-            props.keeplogin(); //refresh once updated
+            props.keepLogin(); //refresh once updated
         } catch (error) {
-            console.log("ini error dari onBtnEditProfile : ", error); //testing purposes
+            console.log("ini error dari onBtnEditProfile : ", error); 
             if (error.response && !error.response.data.error) {
                 toast({
                     title: error.response.data.message,
@@ -125,7 +119,6 @@ export default function EditProfile(props) {
                 }
             }
             );
-            console.log("ini hasil response onbtnSendVerifyEmail :", response);
             toast({
                 title: response.data.message,
                 status: 'success',
@@ -214,7 +207,7 @@ export default function EditProfile(props) {
         formik.setFieldValue(event.target.name, event.target.value);
     };
 
-    //untuk change state image profile
+    //change state image profile
     const onChangeFile = (event) => {
         console.log("ini isi dari event.target.files onchangefile :", event.target.files);
         modalProfileImage.onOpen();
@@ -230,7 +223,7 @@ export default function EditProfile(props) {
             if (profileImage.size > 1000000) {
                 throw new Error("Image size should not exceed 1MB");
             }
-            // image has to be .jpg .png .gif (.jpg = .jpeg)
+            // image has to be .jpg .png .gif .jpeg
             if (
                 !["image/jpg", "image/png", "image/jpeg", "image/gif"].includes(profileImage.type)
             ) {
@@ -255,9 +248,8 @@ export default function EditProfile(props) {
                 isClosable: true,
             });
             modalProfileImage.onClose();
-            // Wrap props.keeplogin() in a Promise and use the then() method to handle it
             new Promise((resolve, reject) => {
-                props.keeplogin() //refresh profpic once updated
+                props.keepLogin() //refresh profpic once updated
                     .then(resolve)
                     .catch(reject);
             });
@@ -284,31 +276,17 @@ export default function EditProfile(props) {
                     },
                 }
             );
-            console.log("response.data onbtnshowktp :", response.data);
-            console.log("tipe data response.data onbtnshowktp :", typeof response.data);
 
-            //1. decrypt base64
+            //decode Base64 string into binary data into an array of numeric values
             const decryptbase64 = decodeToken(response.data);
-           
-            console.log("ini imagektp base64 di decrypt:", decryptbase64);
-            console.log("ini imagektp base64Data base64 di decrypt:", decryptbase64.base64Data);
-
-            //2. Decode Base64 string into binary data
             const binaryData = atob(decryptbase64.base64Data);
-
-            //3. Convert the binary data into an array of numeric values
             const array = [];
             for (let i = 0; i < binaryData.length; i++) {
                 array.push(binaryData.charCodeAt(i));
             }
-
-            //4. Create Blob object from the num val array, with specified MIME type
             const blob = new Blob([new Uint8Array(array)], { type: "image/png" });
-
-            //5. Create a URL from the Blob object
+            // Create a URL from the Blob object
             const imageUrl = URL.createObjectURL(blob);
-
-            //6. Open the image in a new tab
             window.open(imageUrl, "_blank");
         } catch (error) {
             console.log("ini error dari onBtnShowKTP : ", error);
@@ -338,7 +316,6 @@ export default function EditProfile(props) {
                         Profile Page
                     </Heading>
                     <FormControl id="userName">
-                        {/* <FormLabel>User Icon</FormLabel> */}
                         <Stack
                             direction={['column']}
                             spacing={6}

@@ -22,7 +22,7 @@ export default function Login(props) {
     const onBtnLogin = async () => {
         try {
             setLoading(true);
-            await formik.validateForm(); // trigger form validation
+            await formik.validateForm(); 
             if (!formik.isValid) {
                 return;
             }
@@ -31,8 +31,6 @@ export default function Login(props) {
                 phone: formik.values.emailOrPhone,
                 password: formik.values.password
             });
-            console.log("response.data dari login : ", response.data)
-            // console.log("response.data dari login role : ", response.data.role)
             toast({
                 title: 'Login success',
                 status: 'success',
@@ -112,29 +110,25 @@ export default function Login(props) {
                     <Box
                         rounded={'lg'}
                         bg={'white'}
-                        // boxShadow={'xs'}
                         px={4}
                     >
                         <Stack mt='4' alignItems={'center'}>
-                            {/* <Icon fontSize="50px" as={TbHomeHeart}
-                                color='#D3212D'
-                            /> */}
                             <Image src={Logo} alt='tempatku logo' boxSize='50px' />
                         </Stack>
                         <Stack mb='8'>
                             <Text fontSize='3xl' fontWeight='semibold' style={{ display: 'flex' }} m='auto'>Login to tempatku</Text>
                         </Stack>
                         <Stack spacing={4}>
-                            <FormControl id="email" isInvalid={formik.errors.emailOrPhone}>
+                            <FormControl isInvalid={formik.errors.emailOrPhone}>
                                 <FormLabel size='sm'>Email or Phone Number</FormLabel>
                                 {/* Input Email or Phone Number */}
                                 <Input type="text" borderColor='#d0d7de'
                                     onChange={handleForm}
-                                    name="emailOrPhone" //identifier formik
+                                    name="emailOrPhone" 
                                 />
                                 <FormErrorMessage fontSize='xs'>{formik.errors.emailOrPhone}</FormErrorMessage>
                             </FormControl>
-                            <FormControl id="password" isInvalid={formik.errors.password}>
+                            <FormControl isInvalid={formik.errors.password}>
                                 <HStack justify='space-between'>
                                     <FormLabel>Password</FormLabel>
                                     <Button
@@ -145,7 +139,7 @@ export default function Login(props) {
                                         fontWeight='500'
                                         onClick={() => {
                                             props.onCloseModal()
-                                            navigate('/forgotpassword')
+                                            navigate('/password/forgot')
                                         }}
                                     >
                                         Forgot password?
@@ -155,7 +149,7 @@ export default function Login(props) {
                                     {/* Input Password */}
                                     <Input type={showPassword ? 'text' : 'password'}
                                         onChange={handleForm}
-                                        name="password" //identifier formik
+                                        name="password" 
                                     />
                                     <InputRightElement h={'full'}>
                                         <Button
@@ -211,7 +205,7 @@ export default function Login(props) {
                                                             <Text>New to tempatku?</Text>
                                                             <Text onClick={() => {
                                                                 props.onCloseModal()
-                                                                navigate('/userregister')
+                                                                navigate('/register/user')
                                                             }
                                                             } color='#0969da'
                                                                 cursor={'pointer'}

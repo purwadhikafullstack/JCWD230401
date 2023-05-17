@@ -26,7 +26,7 @@ export default function ForgotPassword() {
 
     const onBtnForgotPassword = async () => {
         try {
-            setLoading(true); //before making the api call
+            setLoading(true); 
             await formik.validateForm();
             if (!formik.isValid) {
                 return;
@@ -34,7 +34,6 @@ export default function ForgotPassword() {
             let response = await axios.post(`${API_URL}/user/forgot-password`, {
                 email: formik.values.email
             });
-            console.log("ini hasil response onBtnForgotPassword :", response); //testing purposes
             toast({
                 title: response.data.message,
                 status: 'success',
@@ -42,7 +41,7 @@ export default function ForgotPassword() {
                 isClosable: true,
             });
         } catch (error) {
-            console.log("ini error dari onBtnForgotPassword : ", error); //testing purposes
+            console.log("ini error dari onBtnForgotPassword : ", error); 
             if (error.response && !error.response.data.message) {
                 toast({
                     title: 'Request reset password failed',
@@ -59,7 +58,7 @@ export default function ForgotPassword() {
                 });
             }
         } finally {
-            setLoading(false); //after call is complete
+            setLoading(false); 
         }
     }
 

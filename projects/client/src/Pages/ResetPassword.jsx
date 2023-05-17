@@ -40,7 +40,6 @@ export default function ResetPassword() {
                     Authorization: `Bearer ${params.token}`
                 }
             });
-            console.log("ini hasil response onbtnresetpassword :", response); //testing purposes
             toast({
                 title: response.data.message,
                 status: 'success',
@@ -70,7 +69,6 @@ export default function ResetPassword() {
         }
     }
 
-    console.log("ini isi params :", params); //testing purposes
 
     const formik = useFormik({
         initialValues: {
@@ -106,7 +104,6 @@ export default function ResetPassword() {
 
     return (
         <Flex
-            // minH={'100vh'}
             minH={{base:'50vh', sm:'100vh'}}
             align={{base:'none', sm:'center'}}
             justify={'center'}

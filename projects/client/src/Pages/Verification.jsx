@@ -14,7 +14,6 @@ import { API_URL } from '../helper';
 import axios from 'axios';
 import { useFormik } from 'formik';
 import * as yup from "yup";
-import { decodeToken } from "react-jwt";
 
 
 export default function Verification() {
@@ -23,9 +22,6 @@ export default function Verification() {
   const [loading1, setLoading1] = React.useState(false);
   const [loading2, setLoading2] = React.useState(false);
   const toast = useToast();
-  console.log("ini isi token dari params", params.token); //testing purposes
-  const myDecodedToken = decodeToken(params.token);
-  console.log("ini percobaan decrypt token pake jwt-react", myDecodedToken);
 
 
   //Send Verification Email
@@ -93,7 +89,7 @@ export default function Verification() {
           }
         }
       );
-      console.log("ini hasil response onbtnverify :", response); //testing purposes
+      console.log("ini hasil response onbtnverify :", response); 
       toast({
         title: response.data.message,
         status: 'success',
@@ -149,7 +145,6 @@ export default function Verification() {
 
   return (
     <Flex
-      // minH={'100vh'}
       minH={{base:'50vh', sm:'100vh'}}
       align={{base:'none', sm:'center'}}
       justify={'center'}

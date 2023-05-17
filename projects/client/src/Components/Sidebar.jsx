@@ -10,7 +10,6 @@ import {
     Button
 } from '@chakra-ui/react'
 import {
-    FiCalendar,
     FiUser,
 } from 'react-icons/fi';
 import { AiOutlineLineChart } from 'react-icons/ai'
@@ -54,7 +53,7 @@ export default function Sidebar() {
                             </Text>
                         </Button>
                     </Box>
-                    <Box h='40px' onClick={() => navigate('/editprofile')}>
+                    <Box h='40px' onClick={() => navigate('/profile/edit')}>
                         <Button leftIcon={<FiUser size={20} />} variant='none' size="md">
                             <Text ml="2" fontWeight="medium" display={{base:'none', lg:'block'}}>
                                 Profile

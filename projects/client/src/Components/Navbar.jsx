@@ -15,7 +15,6 @@ import {
   MenuItem,
   MenuDivider,
   useDisclosure,
-  useColorModeValue,
   Stack, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, InputGroup, Input, InputRightElement
 } from '@chakra-ui/react';
 import { HamburgerIcon, CloseIcon, AddIcon } from '@chakra-ui/icons';
@@ -28,7 +27,7 @@ import { logoutAction } from '../reducers/auth';
 import { API_URL, API_URL_IMG } from '../helper';
 import axios from 'axios';
 import Logo from '../assets/logotempatku.png';
-import { Route, Routes, useLocation } from "react-router-dom"; // bisa pake ini buat nyambungin register sama login pop up modal
+import { Route, Routes, useLocation } from "react-router-dom";
 
 
 export default function Navbar() {
@@ -42,17 +41,13 @@ export default function Navbar() {
   const { pathname } = useLocation();
   const [modalIsOpen, setModalIsOpen] = React.useState(false);
 
-  // console.log("ini isi modalIsOpen :", modalIsOpen);
-  // console.log("ini isi password useSelector buat google:", password);
-  console.log("ini isi imageprofile useSelector:", imageprofile);
-  // console.log("tipe data imageprofile", typeof imageprofile);
 
   // Login Page Modal
   const onOpenModal = () => {
     onOpen();
     setModalIsOpen(true);
   };
-  
+
   const onCloseModal = () => {
     onClose();
     setModalIsOpen(false);
@@ -73,8 +68,6 @@ export default function Navbar() {
   const onBtnLogoutGoogle = async () => {
     try {
       const cookieValue = document.cookie;
-      console.log("ini isi dari cookieValue :", cookieValue);
-      console.log("tipe data cookieValue :", typeof cookieValue);
       let response = await axios.get(`${API_URL}/auth/logout`, {
         headers: {
           Cookie: cookieValue,
@@ -84,7 +77,6 @@ export default function Navbar() {
       dispatch(logoutAction());
       localStorage.removeItem('tempatku_login');
       navigate('/', { replace: true });
-      // console.log("ini respon dari googlelogout :", response);
     } catch (error) {
       console.log("ini error dari onBtnGoogleLogout : ", error);
     }
@@ -93,7 +85,6 @@ export default function Navbar() {
   return (
     <>
       <Box
-        // position="fixed"
         w='full' bg='white' zIndex={1}
         borderBottomWidth={1}
         borderStyle={'solid'}
@@ -140,7 +131,7 @@ export default function Navbar() {
                     mr={4}
                     _hover={'none'}
                     display={{ base: "none", sm: "none", md: "block" }}
-                    onClick={() => navigate('/tenantregister')}
+                    onClick={() => navigate('/register/tenant')}
                   >
                     Become a Tenant
                   </Button>
@@ -153,7 +144,7 @@ export default function Navbar() {
                       mr={4}
                       display={{ base: "none" }}
                       _hover={'none'}
-                      onClick={() => navigate('/tenantregister')}
+                      onClick={() => navigate('/register/tenant')}
                     >
                       Become a Tenant
                     </Button>
@@ -164,7 +155,7 @@ export default function Navbar() {
                       mr={4}
                       _hover={'none'}
                       display={{ base: "none", sm: "none", md: "block" }}
-                      onClick={() => navigate('/tenantregister')}
+                      onClick={() => navigate('/register/tenant')}
                     >
                       Become a Tenant
                     </Button>
@@ -181,11 +172,9 @@ export default function Navbar() {
                   border='1px'
                   color='gray.300'
                   p='1'
-                  // display={{ base: "none", sm: "none", md: "block" }}
                   _active={'none'}
                 >
                   <HamburgerIcon w={6} h={6} mx={2} my={1} color='black' />
-                  {/* kondisi dia logout gaada data login default image , klo ga login avatar chakra ui nya ilangin , gunain role sama user selector */}
                   {
                     // User
                     role == "User" ?
@@ -212,7 +201,7 @@ export default function Navbar() {
                   role == "User" ?
                     <MenuList zIndex={9999}>
                       <MenuItem onClick={() => navigate('/')}>Home</MenuItem>
-                      <MenuItem onClick={() => navigate('/editprofile')}>Profile</MenuItem>
+                      <MenuItem onClick={() => navigate('/profile/edit')}>Profile</MenuItem>
                       <MenuItem>Bookings</MenuItem>
 
                       {password === "NULL" ? (
@@ -224,7 +213,7 @@ export default function Navbar() {
                       ) : (
                         <div>
 
-                          <MenuItem onClick={() => navigate('/changepassword')}>Change Password</MenuItem>
+                          <MenuItem onClick={() => navigate('/password/change')}>Change Password</MenuItem>
                           <MenuItem
                             onClick={onBtnLogout}
                           >Logout</MenuItem>
@@ -236,8 +225,8 @@ export default function Navbar() {
                     role == "Tenant" ?
                       <MenuList zIndex={9999}>
                         <MenuItem onClick={() => navigate('/dashboard')}>Dashboard</MenuItem>
-                        <MenuItem onClick={() => navigate('/editprofile')}>Profile</MenuItem>
-                        <MenuItem onClick={() => navigate('/changepassword')}>Change Password</MenuItem>
+                        <MenuItem onClick={() => navigate('/profile/edit')}>Profile</MenuItem>
+                        <MenuItem onClick={() => navigate('/password/change')}>Change Password</MenuItem>
                         <MenuItem>Manage Property / Rooms</MenuItem>
                         <MenuItem>Transaction</MenuItem>
                         <MenuItem>Report</MenuItem>
@@ -254,13 +243,13 @@ export default function Navbar() {
                               <ModalCloseButton onClose={onCloseModal} />
                               <ModalBody>
                                 {/* login modal */}
-                                <Login onOpenModal={onOpenModal} onCloseModal={onCloseModal} /> 
+                                <Login onOpenModal={onOpenModal} onCloseModal={onCloseModal} />
                               </ModalBody>
                             </ModalContent>
                           </Modal>
                         </MenuItem>
                         <MenuItem
-                          onClick={() => navigate('/userregister')}
+                          onClick={() => navigate('/register/user')}
                         >Register</MenuItem>
                       </MenuList>
                 }

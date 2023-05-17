@@ -12,15 +12,14 @@ import noimage from "../assets/noimage.png";
 import { Link } from 'react-router-dom';
 
 export default function RecommendPropertyCard(props) {
-    // console.log("props property :", props.property);
-    // console.log("props picture :", props.picture);
-    // console.log("props uuid :", props.uuid);
 
     return (
         <Center
             p='1'
         >
-            <Link to={`/property/detail/${props.uuid}`}>
+            <Link to={`/property/detail/${props.uuid}`}
+                state={{ inputCheckIn: props.inputCheckIn, inputCheckOut: props.inputCheckOut }}
+            >
                 <Box
                     role={'group'}
                     px={{ base: '2', md: '2', lg: '2' }}
@@ -29,9 +28,7 @@ export default function RecommendPropertyCard(props) {
                     w={'full'}
                     bg='white'
                     borderWidth={'1px'}
-                    // borderColor='gray.300'
-                    borderColor={{base:'white', sm:'gray.300'}}
-                    // boxShadow={'xs'}
+                    borderColor={{ base: 'white', sm: 'gray.300' }}
                     rounded={'lg'}
                     pos={'relative'}
                     zIndex={0}
@@ -44,7 +41,6 @@ export default function RecommendPropertyCard(props) {
                         <Image
                             rounded={'lg'}
                             height={{ base: '300px', lg: '230px' }}
-                            // width={{ base: '400px', lg: '250px' }}
                             objectFit={'cover'}
                             src={!props.picture ? noimage : `${API_URL_IMG}${props.picture}`}
                             aspectRatio={1}
@@ -58,13 +54,13 @@ export default function RecommendPropertyCard(props) {
                         <Text fontWeight={600} fontSize={{ base: 'lg', lg: 'sm' }} isTruncated>
                             {props.property}
                         </Text>
-                        <Text fontWeight={'normal'} fontSize={{base:'sm', lg:'xs'}} color='gray.500'>
+                        <Text fontWeight={'normal'} fontSize={{ base: 'sm', lg: 'xs' }} color='gray.500'>
                             {props.regency}, {props.country}
                         </Text>
                         <Flex justifyContent={'space-between'}>
-                            <Text fontWeight={600} fontSize={{base:'sm', lg:'xs'}} textAlign={'left'} display='flex'>
+                            <Text fontWeight={600} fontSize={{ base: 'sm', lg: 'xs' }} textAlign={'left'} display='flex'>
                                 {props.price}
-                                <Text fontWeight={'normal'} pl='1' fontSize={{base:'sm', lg:'xs'}}>
+                                <Text fontWeight={'normal'} pl='1' fontSize={{ base: 'sm', lg: 'xs' }}>
                                     / night
                                 </Text>
                             </Text>

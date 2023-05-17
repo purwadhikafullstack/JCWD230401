@@ -24,9 +24,8 @@ function TenantDashboard() {
   const [formatSelectedDate, setFormatSelectedDate] = useState('');
   const [availableRooms, setAvailableRooms] = useState([]);
   const [propertyListing, setPropertyListing] = useState([]);
-  console.log("ini isi propertyListing :", propertyListing);
 
-  //1. axios booked and under maintenance
+  //get booked and under maintenance rooms
   const getRoomOrders = async () => {
     try {
       let token = localStorage.getItem("tempatku_login");
@@ -36,7 +35,6 @@ function TenantDashboard() {
         },
       });
       setRoomOrders(response.data)
-      // console.log("response getRoomOrders :", response.data); //testing purposes
     } catch (error) {
       console.log("ini error dari getRoomOrders :", error);
     }
@@ -51,21 +49,20 @@ function TenantDashboard() {
         },
       });
       setRoomMaintenances(response.data)
-      // console.log("response getRoomMaintenances :", response.data); //testing purposes
     } catch (error) {
       console.log("ini error dari getRoomMaintenances :", error);
     }
   };
 
-  //2. Jalani fungsi api
   React.useEffect(() => {
     getRoomOrders();
   }, []);
+
   React.useEffect(() => {
     getRoomMaintenances();
   }, []);
 
-  //3. Print room orders and under maintenances for calendar
+  //Print room orders and under maintenances for calendar
   const printRoomOrders = () => {
     let print = roomOrders.map((val, idx) => {
       const { start_date, end_date, room } = val;
@@ -88,11 +85,10 @@ function TenantDashboard() {
       }
       return { startDate, endDate, name: name, property: property };
     });
-    // console.log("printRoomMaintenances print: ", print);
     return print;
   };
 
-  //4. Format calendar
+  // Format calendar events
   const roomEvents1 = printRoomOrders().filter(val => val !== null).map((val) => {
     const startDate = new Date(val.start_date);
     const endDate = new Date(val.end_date);
@@ -120,7 +116,7 @@ function TenantDashboard() {
   const roomEvents = [...roomEvents1, ...roomEvents2];
 
 
-  //1. axios available rooms
+  //get available rooms
   const onBtnAvailableRooms = async () => {
     try {
       let token = localStorage.getItem("tempatku_login");
@@ -131,15 +127,12 @@ function TenantDashboard() {
           Authorization: `Bearer ${token}`,
         },
       });
-      console.log("response.data onBtnAvailableRooms :", response.data); //testing purposes
       setAvailableRooms(response.data);
     } catch (error) {
       console.log("ini error dari onBtnAvailableRooms :", error);
     }
   };
 
-  //2. print available rooms
-  console.log("ini isi dari availableRooms :", availableRooms); // testing for map 
   const printAvailableRooms = () => {
     let print = availableRooms.map((val, idx) => {
       return {
@@ -150,7 +143,6 @@ function TenantDashboard() {
         capacity: val.capacity,
       };
     });
-    // console.log("printAvailableRooms print: ", print);
     return print;
   }
 
@@ -161,7 +153,6 @@ function TenantDashboard() {
     setFormatSelectedDate(formatSelectedDate);
     setSelectedDate(selectedDate);
     openModal();
-    // console.log("ini isi selectedDate: ", selectedDate); // YYYY-MM-DD
   };
   
   React.useEffect(() => {
@@ -174,7 +165,7 @@ function TenantDashboard() {
   };
 
 
-  //1. axios get my property listings
+  //get property listings
   const getMyProperty = async () => {
     try {
       let token = localStorage.getItem("tempatku_login");
@@ -190,7 +181,6 @@ function TenantDashboard() {
     }
   };
 
-  //2. print listings and send ke props
   const printMyProperty = () => {
     return propertyListing.map((val, idx) => {
       const regency = val.property_location?.regency.name
@@ -209,13 +199,12 @@ function TenantDashboard() {
       />
     })
   };
-
-  //3. jalani fungsi api 
+ 
   React.useEffect(() => {
     getMyProperty();
   }, []);
 
-  //react-slick slider my property
+  //react-slick slider property listing
   const numberOfProperties = propertyListing.length;
   let slidesToShowValue = 3;
   if (numberOfProperties === 1) {
@@ -259,8 +248,6 @@ function TenantDashboard() {
   return (
     <Flex
       minH={'100vh'}
-      // align={'center'}
-      // justify={'center'}
       px={2}
     >
       <Box>
@@ -303,7 +290,7 @@ function TenantDashboard() {
             height={"90vh"}
             events=
             {roomEvents}
-            dayMaxEvents={2} // set the max number of events displayed per day to 1
+            dayMaxEvents={2} // max number of events displayed per day
             dateClick={dateClick}
           />
           <Modal isOpen={modalIsOpen} onClose={() => setModalIsOpen(false)} scrollBehavior={'inside'}>

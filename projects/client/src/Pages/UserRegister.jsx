@@ -44,8 +44,6 @@ export default function UserRegister() {
                 confirmationPassword: formik.values.passwordConfirmation
             }
             );
-            console.log("ini hasil response onbtnregister :", response); //testing purposes
-            console.log("ini hasil response onbtnregister message from be :", response.data.message); //testing purposes
             toast({
                 title: response.data.message,
                 status: 'success',
@@ -53,7 +51,7 @@ export default function UserRegister() {
                 isClosable: true,
             });
         } catch (error) {
-            console.log("ini error dari onBtnRegister : ", error); //testing purposes
+            console.log("ini error dari onBtnRegister : ", error); 
             if (error.response && !error.response.data.message) {
                 toast({
                     title: 'Register failed',

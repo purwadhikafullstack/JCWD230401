@@ -1,7 +1,6 @@
 import axios from "axios";
 import "./App.css";
 import { Route, Routes } from "react-router-dom";
-import NavbarMobile from "./Components/NavbarMobile";
 import Navbar from "./Components/Navbar";
 import Footer from "./Components/Footer";
 import React from "react";
@@ -24,9 +23,8 @@ import EditProfile from "./Pages/EditProfile";
 function App() {
   const dispatch = useDispatch();
   const role = useSelector((state) => state.authReducer.role);
-  console.log("ini isi role dari useSelector di App.js : ", role);
 
-  const keeplogin = async () => {
+  const keepLogin = async () => {
     try {
       let token = localStorage.getItem("tempatku_login");
       if (token) {
@@ -35,7 +33,6 @@ function App() {
             Authorization: `Bearer ${token}`,
           },
         });
-        // console.log("ini respon dari keeplogin :", response.data);
         localStorage.setItem("tempatku_login", response.data.token);
         dispatch(loginAction(response.data));
       }
@@ -43,11 +40,10 @@ function App() {
       console.log("ini error dari keeplogin : ", error);
     }
   };
-  
-  React.useEffect(() => {
-    keeplogin();
-  }, []);
 
+  React.useEffect(() => {
+    keepLogin();
+  }, []);
 
   return (
     <>
@@ -56,51 +52,56 @@ function App() {
         // User
         role == "User" ? (
           <Routes>
-            <Route path="/changepassword" element={<ChangePassword />} />
-            <Route path="/userregister" element={<UserRegister />} />
-            <Route path="/tenantregister" element={<TenantRegister />} />
-            <Route path="/forgotpassword" element={<ForgotPassword />} />
-            <Route path="/resetpassword/:token" element={<ResetPassword />} />
-            <Route path="/verifyaccount/:token" element={<Verification />} />
+            <Route path="/password/change" element={<ChangePassword />} />
+            <Route path="/register/user" element={<UserRegister />} />
+            <Route path="/register/tenant" element={<TenantRegister />} />
+            <Route path="/password/forgot" element={<ForgotPassword />} />
+            <Route path="/password/reset/:token" element={<ResetPassword />} />
+            <Route
+              path="/account/verification/:token"
+              element={<Verification />}
+            />
             <Route path="/" element={<Landing />} />
             <Route path="*" element={<NotFound />} />
-            <Route path="/productdetail" element={<ProductDetail />} />
-            <Route path="/transactionpage" element={<TransactionPage />} />
+            <Route path="/productdetail" element={<ProductDetail />} />{" "}
+            {/* TESTING, DELETE LATER */}
+            <Route path="/transactionpage" element={<TransactionPage />} />{" "}
+            {/* TESTING, DELETE LATER */}
             <Route
-              path="/editprofile"
-              element={<EditProfile keeplogin={() => dispatch(keeplogin())} />}
+              path="/profile/edit"
+              element={<EditProfile keepLogin={() => dispatch(keepLogin())} />}
             />
           </Routes>
         ) : // Tenant
         role == "Tenant" ? (
           <Routes>
-            <Route path="/changepassword" element={<ChangePassword />} />
-            <Route path="/userregister" element={<UserRegister />} />
-            <Route path="/tenantregister" element={<TenantRegister />} />
-            <Route path="/forgotpassword" element={<ForgotPassword />} />
-            <Route path="/resetpassword/:token" element={<ResetPassword />} />
-            <Route path="/verifyaccount/:token" element={<Verification />} />
+            <Route path="/password/change" element={<ChangePassword />} />
+            <Route path="/register/tenant" element={<TenantRegister />} />
+            <Route path="/password/forgot" element={<ForgotPassword />} />
+            <Route path="/password/reset/:token" element={<ResetPassword />} />
             <Route path="/dashboard" element={<TenantDashboard />} />
-            <Route path="/" element={<Landing />} />
             <Route path="*" element={<NotFound />} />
-            <Route path="/productdetail" element={<ProductDetail />} />
             <Route
-              path="/editprofile"
-              element={<EditProfile keeplogin={() => dispatch(keeplogin())} />}
+              path="/profile/edit"
+              element={<EditProfile keepLogin={() => dispatch(keepLogin())} />}
             />
           </Routes>
         ) : (
           // Not logged in
           <Routes>
-            <Route path="/changepassword" element={<ChangePassword />} />
-            <Route path="/userregister" element={<UserRegister />} />
-            <Route path="/tenantregister" element={<TenantRegister />} />
-            <Route path="/forgotpassword" element={<ForgotPassword />} />
-            <Route path="/resetpassword/:token" element={<ResetPassword />} />
-            <Route path="/verifyaccount/:token" element={<Verification />} />
+            <Route path="/password/change" element={<ChangePassword />} />
+            <Route path="/register/user" element={<UserRegister />} />
+            <Route path="/register/tenant" element={<TenantRegister />} />
+            <Route path="/password/forgot" element={<ForgotPassword />} />
+            <Route path="/password/reset/:token" element={<ResetPassword />} />
+            <Route
+              path="/account/verification/:token"
+              element={<Verification />}
+            />
             <Route path="/" element={<Landing />} />
             <Route path="*" element={<NotFound />} />
-            <Route path="/productdetail" element={<ProductDetail />} />
+            <Route path="/productdetail" element={<ProductDetail />} />{" "}
+            {/* TESTING, DELETE LATER */}
           </Routes>
         )
       }

@@ -45,12 +45,13 @@ export default function LandingNew() {
     const [showLocation, setShowLocation] = useState([]);
     const [recommendProperty, setRecommendProperty] = useState([]);
     const dispatch = useDispatch();
+    const [category, setCategory] = useState('');
+
 
 
     //API to fetch search result (Location Search Bar)
     const onSearch = (searchTerm) => {
         setInputLocation(searchTerm); //if suggestion clicked, it will be put inside the input field
-        // console.log("Ini adalah search : ", searchTerm);
     };
 
     const getAllLocations = async () => {
@@ -58,8 +59,6 @@ export default function LandingNew() {
             let response = await axios.post(`${API_URL}/landing/all-location`, {
                 name: showLocation
             })
-            // console.log("ini response.data dari getAllLocations 🪶 : ", response.data[0].name);
-            // console.log("ini response.data dari getAllLocations 🪶 : ", response.data);
             setShowLocation(response.data);
         } catch (error) {
             console.log("ini error dari getAllLocations:", error);
@@ -91,14 +90,15 @@ export default function LandingNew() {
         setInputCheckOut('date');
     };
 
-    // For Search Button
+    // For Search Button --> tambahin di Page FilteredProperty: category=${category || ''} di api call getAllProperty, sama const [category, setCategory] = useState(location.state?.category);
     const handleSearch = () => {
         navigate('/property', {
             state: {
                 inputLocation: inputLocation,
                 inputCheckIn: inputCheckIn,
                 inputCheckOut: inputCheckOut,
-                guest: guest
+                guest: guest,
+                category: category,
             }
         })
     };
@@ -114,7 +114,6 @@ export default function LandingNew() {
     };
     console.log("ini isi RecommendProperty:", recommendProperty);
 
-    //kirim via props ke recommendpropertycard
     const printRecommendProperty = () => {
         return recommendProperty.map((val, idx) => {
             // capitalize 1st letter, lowercase rest
@@ -245,17 +244,12 @@ export default function LandingNew() {
             let response = await axios.get(`${API_URL}/auth/login/success`, {
                 withCredentials: true,
             });
-            // console.log("ini respon.data.user dari googlelogin :", response.data.getuser[0]);
-            // console.log("ini respon.data dari googlelogin :", response.data);
             const cookieValue = document.cookie;
             console.log("ini isi dari cookieValue :", cookieValue);
             console.log("tipe data cookieValue :", typeof cookieValue);
-            // Find the index of the equals sign (=)
+            // Find idx of the equals sign (=) and remove substring starting (=)
             var equalsIndex = cookieValue.indexOf("=");
-            // Remove the substring starting from the equals sign
             var token = cookieValue.substring(equalsIndex + 1);
-            console.log("ini token dari cookie google login:", token);
-            //pengen set token di local storage
             localStorage.setItem("tempatku_login", token); 
             dispatch(loginActionGoogle(response.data));
         } catch (error) {
@@ -312,8 +306,8 @@ export default function LandingNew() {
                                         <Box position="absolute" top="100%" left="0%" bgColor={'white'} borderBottomLeftRadius={'lg'} borderBottomRightRadius={'lg'} zIndex={9999} cursor='pointer'>
                                             <List>
                                                 {showLocation.filter(item => {
-                                                    const searchTerm = inputLocation.toLowerCase(); //yg kita tulis di input location
-                                                    const name = item.name.toLowerCase();  //dari backend name of regency
+                                                    const searchTerm = inputLocation.toLowerCase(); //user write in input location
+                                                    const name = item.name.toLowerCase();  
                                                     return (searchTerm && name.includes(searchTerm) && name !== searchTerm);
                                                 }
                                                 ).slice(0, 4) //will show only first 4 items di location input field
@@ -322,7 +316,7 @@ export default function LandingNew() {
                                                         onClick={() => onSearch(item.name
                                                             .toLowerCase().replace(/(^|\s)\S/g, (letter) => letter.toUpperCase()))}
                                                         className="dropdown-row"
-                                                        key={item.id} // so each drop down has an unique identifier
+                                                        key={item.id} //each drop down has an unique identifier
                                                     >{item.name
                                                         .toLowerCase().replace(/(^|\s)\S/g, (letter) => letter.toUpperCase())}</ListItem>))}
                                             </List>
@@ -427,7 +421,7 @@ export default function LandingNew() {
                     <Slider {...settingsCategory} prevArrow={<FaChevronLeft color="#E2E8F0" />} nextArrow={<FaChevronRight color="#E2E8F0" />}>
                         <Box p='2'>
                             <Link to={{
-                                pathname: "/property/filter",
+                                pathname: "/property/",
                                 state: { category: "Hotel" }
                             }} >
                                 <Box position="relative" overflow="hidden" borderRadius="10px" fontSize="18px"
@@ -444,7 +438,7 @@ export default function LandingNew() {
                         </Box>
                         <Box p='2'>
                             <Link to={{
-                                pathname: "/property/filter",
+                                pathname: "/property/",
                                 state: { category: "Apartment" }
                             }} >
                                 <Box position="relative" overflow="hidden" borderRadius="10px" fontSize="18px"
@@ -461,7 +455,7 @@ export default function LandingNew() {
                         </Box>
                         <Box p='2'>
                             <Link to={{
-                                pathname: "/property/filter",
+                                pathname: "/property/",
                                 state: { category: "Villa" }
                             }} >
                                 <Box position="relative" overflow="hidden" borderRadius="10px" fontSize="18px"
@@ -492,7 +486,7 @@ export default function LandingNew() {
                     <Slider {...settingsDestinations} prevArrow={<FaChevronLeft color="#E2E8F0" />} nextArrow={<FaChevronRight color="#E2E8F0" />}>
                         <Box p='2'>
                             <Link to={{
-                                pathname: "/property/filter",
+                                pathname: "/property/",
                                 state: { inputLocation: "KOTA DENPASAR" }
                             }} >
                                 <Box position="relative" textAlign="center" overflow="hidden" borderRadius="10px" cursor='pointer' boxShadow={'xs'}>
@@ -505,7 +499,7 @@ export default function LandingNew() {
                         </Box>
                         <Box p='2'>
                             <Link to={{
-                                pathname: "/property/filter",
+                                pathname: "/property/",
                                 state: { inputLocation: "KOTA JAKARTA" }
                             }} >
                                 <Box position="relative" textAlign="center" overflow="hidden" borderRadius="10px" cursor='pointer' boxShadow={'xs'}>
@@ -518,7 +512,7 @@ export default function LandingNew() {
                         </Box>
                         <Box p='2'>
                             <Link to={{
-                                pathname: "/property/filter",
+                                pathname: "/property/",
                                 state: { inputLocation: "KOTA BOGOR" }
                             }} >
                                 <Box position="relative" textAlign="center" overflow="hidden" borderRadius="10px" cursor='pointer' boxShadow={'xs'}>
@@ -531,7 +525,7 @@ export default function LandingNew() {
                         </Box>
                         <Box p='2'>
                             <Link to={{
-                                pathname: "/property/filter",
+                                pathname: "/property/",
                                 state: { inputLocation: "KOTA BANDUNG" }
                             }} >
                                 <Box position="relative" textAlign="center" overflow="hidden" borderRadius="10px" cursor='pointer' boxShadow={'xs'}>
@@ -544,7 +538,7 @@ export default function LandingNew() {
                         </Box>
                         <Box p='2'>
                             <Link to={{
-                                pathname: "/property/filter",
+                                pathname: "/property/",
                                 state: { inputLocation: "KOTA YOGYAKARTA" }
                             }} >
                                 <Box position="relative" textAlign="center" overflow="hidden" borderRadius="10px" cursor='pointer' boxShadow={'xs'}>
@@ -591,7 +585,7 @@ export default function LandingNew() {
                         _hover={{ bg: "#fff", color: "#D3212D" }}
                         p={{base:'3', sm:'6'}}
                         textAlign='center'
-                        onClick={() => navigate('/tenantregister')}
+                        onClick={() => navigate('/register/tenant')}
                     >
                         <Text>
                             Become a Tenant
@@ -626,7 +620,7 @@ export default function LandingNew() {
                             _hover={{ bg: "#D3212D", color: "white" }}
                             p={{base:'3', sm:'6'}}
                             textAlign='center'
-                            onClick={() => navigate('/property')}
+                            onClick={() => navigate('/property/')}
                         >
                             <Text>
                                 See more properties

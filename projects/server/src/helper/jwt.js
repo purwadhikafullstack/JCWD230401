@@ -19,5 +19,4 @@ module.exports = {
         })
     },
     createTokenForKTP: (payload) => jwt.sign(payload, 'TEMPATKU'),
-    decryptImage: (payload) => jwt.verify(payload, 'TEMPATKU')
 }

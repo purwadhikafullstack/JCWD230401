@@ -6,17 +6,17 @@ module.exports = {
   allLocation: async (req, res, next) => {
     try {
       let { name } = req.body;
-      let get = await model.regency.findAll({
+      let get = await model.province.findAll({
         attributes: ["name"],
         where: { name: { [sequelize.Op.like]: `%${name}%` } },
       });
-      console.log("isi get :", get);
       res.status(200).send(get);
     } catch (error) {
       console.log(error);
       next(error);
     }
   },
+
   //2. PROPERTY CATEGORIES
   propertyCategory: async (req, res, next) => {
     try {
@@ -26,13 +26,13 @@ module.exports = {
         },
         group: ["category"],
       });
-      console.log("isi get :", get);
       res.status(200).send(get);
     } catch (error) {
       console.log(error);
       next(error);
     }
   },
+  
   //3. PROPERTY RECOMMENDATIONS
   propertyRecommendation: async (req, res, next) => {
     try {
@@ -84,7 +84,6 @@ module.exports = {
           ">=",
           4.0
         ),
-        // order: [[sequelize.literal("average_rating"), "DESC"]],
         order: sequelize.literal("rand()"),
         limit: 20,
       });

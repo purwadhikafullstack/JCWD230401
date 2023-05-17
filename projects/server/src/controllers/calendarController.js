@@ -33,7 +33,6 @@ module.exports = {
         },
       ],
     });
-    console.log("ini isi dari getdata: ", getdata[0].dataValues);
     res.status(200).send(getdata);
     try {
     } catch (error) {
@@ -41,6 +40,7 @@ module.exports = {
       next(error);
     }
   },
+
   //2. GET MY UNDER MAINTENANCE ROOMS
   roomMaintenances: async (req, res, next) => {
     try {
@@ -69,13 +69,13 @@ module.exports = {
           },
         ],
       });
-      console.log("ini isi dari getdata: ", getdata[0].dataValues);
       res.status(200).send(getdata);
     } catch (error) {
       console.log(error);
       next(error);
     }
   },
+
   //3. GET MY AVAILABLE ROOMS
   availableRooms: async (req, res, next) => {
     try {
@@ -103,13 +103,13 @@ module.exports = {
           room.isDeleted = 0 
         `),
       });
-      console.log("ini isi dari getdata: ", getdata);
       res.status(200).send(getdata);
     } catch (error) {
       console.log(error);
       next(error);
     }
   },
+  
   //4. GET ALL MY PROPERTY
   propertyListing: async (req, res, next) => {
     try {
@@ -163,7 +163,6 @@ module.exports = {
         ],
         group: ["property.id"],
       });
-      console.log("ini isi dari getdata: ", getdata);
       res.status(200).send(getdata);
     } catch (error) {
       console.log(error);

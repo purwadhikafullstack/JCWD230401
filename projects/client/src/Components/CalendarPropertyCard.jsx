@@ -12,13 +12,6 @@ import noimage from "../assets/noimage.png";
 import { Link } from 'react-router-dom';
 
 export default function CalendarPropertyCard(props) {
-    // console.log("props property :", props.property);
-    // console.log("props picture :", props.picture);
-    // console.log("props uuid :", props.uuid);
-    // console.log("props regency :", props.regency);
-    // console.log("props price :", props.price);
-    // console.log("props rating :", props .rating);
-    // console.log("props country :", props.country);
 
     return (
         <Center
@@ -33,9 +26,7 @@ export default function CalendarPropertyCard(props) {
                     w={'full'}
                     bg='white'
                     borderWidth={'1px'}
-                    // borderColor='gray.300'
                     borderColor={{base:'white', sm:'gray.300'}}
-                    // boxShadow={'xs'}
                     rounded={'lg'}
                     pos={'relative'}
                     zIndex={0}
@@ -48,7 +39,6 @@ export default function CalendarPropertyCard(props) {
                         <Image
                             rounded={'lg'}
                             height={{ base: '300px', lg: '230px' }}
-                            // width={{ base: '400px', lg: '250px' }}
                             objectFit={'cover'}
                             src={!props.picture ? noimage : `${API_URL_IMG}${props.picture}`}
                             aspectRatio={1}
