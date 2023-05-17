@@ -72,7 +72,7 @@ function RoomConditionList(props) {
     const [pageSpecialPrice, setPageSpecialPrice] = React.useState(
         specialPriceDefaultPage
     );
-    const [sizeSpecialPrice] = React.useState(5);
+    const [sizeSpecialPrice] = React.useState(4);
 
     const [sortbySpecialPrice, setSortbySpecialPrice] = React.useState(
         specialPriceDefaultSort
@@ -84,7 +84,7 @@ function RoomConditionList(props) {
     const [pageMaintenance, setPageMaintenance] = React.useState(
         maintenanceDefaultPage
     );
-    const [sizeMaintenance] = React.useState(5);
+    const [sizeMaintenance] = React.useState(4);
 
     const [sortbyMaintenance, setSortbyMaintenance] = React.useState(
         maintenanceDefaultSort

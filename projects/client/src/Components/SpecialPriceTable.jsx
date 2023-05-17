@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
     Box,
     Table,
@@ -133,13 +133,14 @@ function SpecialPriceTable(props) {
 
     const editIsActiveSpecial = async () => {
         let token = localStorage.getItem("tempatku_login");
-        await axios.patch(
+        let update = await axios.patch(
             `${API_URL}/special/editactive/${props.uuidSpecial}`,
             {},
             {
                 headers: { Authorization: `Bearer ${token}` },
             }
         );
+        props.getSpecialPriceData();
     };
 
     return (
@@ -166,7 +167,7 @@ function SpecialPriceTable(props) {
                         size={"lg"}
                         alignSelf={"center"}
                         colorScheme={"green"}
-                        defaultChecked={props.isActiveSpecial}
+                        isChecked={props.isActiveSpecial}
                         onChange={editIsActiveSpecial}
                     />
                 </Td>

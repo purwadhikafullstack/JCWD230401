@@ -160,7 +160,7 @@ module.exports = {
             // console.log("get", get);
             res.status(200).send({
                 success: true,
-                // data: get
+                data: get
             });
         } catch (error) {
             console.log(error);

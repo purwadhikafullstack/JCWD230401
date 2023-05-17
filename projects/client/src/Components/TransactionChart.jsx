@@ -29,15 +29,14 @@ export const options = {
             display: false,
         },
         scales: {
-            x: {
+            xAxis: {
                 display: true,
                 title: {
                     display: true,
                     text: "Date",
-                    textColor: "#000000",
                 },
             },
-            y: {
+            yAxs: {
                 display: true,
                 title: {
                     display: true,
@@ -48,17 +47,17 @@ export const options = {
     },
 };
 
-function MyChart(props) {
-    const labels = props.datachart.date;
+function TransactionChart(props) {
+    const labels = props.transactiondatachart.date;
     const data = {
         labels,
         datasets: [
             {
                 label: "Value",
-                data: props.datachart.total, // income per date here
+                data: props.transactiondatachart.total, // income per date here
                 lineTension: 0.55,
                 backgroundColor: "#000000",
-                borderColor: "#2196F3",
+                borderColor: "#66BB6A",
                 borderCapStyle: "",
                 borderDashOffset: 0.0,
                 borderWidth: 5,
@@ -80,4 +79,4 @@ function MyChart(props) {
     return <Line options={options} data={data} {...props} />;
 }
 
-export default MyChart;
+export default TransactionChart;

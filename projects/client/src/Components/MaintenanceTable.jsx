@@ -119,6 +119,7 @@ function MaintenanceTable(props) {
                 headers: { Authorization: `Bearer ${token}` },
             }
         );
+        props.getMaintenanceData();
     };
 
     return (
@@ -146,7 +147,7 @@ function MaintenanceTable(props) {
                         size={"lg"}
                         alignSelf={"center"}
                         colorScheme={"green"}
-                        defaultChecked={props.isActiveMaintenance}
+                        isChecked={props.isActiveMaintenance}
                         onChange={editIsActiveMaintenance}
                     />
                 </Td>
