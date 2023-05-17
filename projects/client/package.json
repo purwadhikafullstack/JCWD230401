@@ -9,8 +9,6 @@
     "eject": "react-scripts eject"
   },
   "dependencies": {
-    
-    
     "@fullcalendar/daygrid": "^6.1.5",
     "@fullcalendar/interaction": "^6.1.5",
     "@fullcalendar/react": "^6.1.5",
@@ -34,13 +32,11 @@
     "react-chartjs-2": "latest",
     "react-datepicker": "^4.11.0",
     "react-countdown": "^2.3.5",
-
     "react-dom": "^18.2.0",
     "react-icons": "latest",
     "react-paginate": "^8.2.0",
     "react-iframe": "^1.8.5",
     "react-upload-in": "^0.1.0",
-    "react-nice-dates": "^3.1.0",
     "react-redux": "latest",
     "react-router-dom": "latest",
     "react-scripts": "5.0.1",
@@ -68,4 +64,3 @@
     ]
   }
 }
-
