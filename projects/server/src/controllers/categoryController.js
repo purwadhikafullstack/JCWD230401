@@ -112,9 +112,6 @@ module.exports = {
             next(error);
         }
     },
-};
-
-module.exports = {
     getAllCategory: async (req, res, next) => {
         try {
             let get = await model.category.findAll({
@@ -129,4 +126,4 @@ module.exports = {
             next(error);
         }
     }
-}
+};

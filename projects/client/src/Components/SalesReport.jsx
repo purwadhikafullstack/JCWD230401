@@ -19,7 +19,9 @@ import { API_URL } from "../helper";
 import { Select, useChakraSelectProps } from "chakra-react-select";
 
 function SalesReport(props) {
-
+    const today = new Date()
+        .toLocaleString("sv", { timeZone: "Asia/Jakarta" })
+        .split(" ")[0];
     const tempDate = new Date() - 604800000;
     const weekAgo = new Date(tempDate).toISOString().split("T")[0];
 
