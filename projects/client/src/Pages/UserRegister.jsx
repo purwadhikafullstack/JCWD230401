@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
     Button,
     Flex,
@@ -10,14 +10,14 @@ import {
     useToast,
     Image,
     Text, HStack, Box, Center, Card, CardBody, InputGroup, InputRightElement, FormErrorMessage
-} from '@chakra-ui/react';
-import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import { API_URL } from '../helper';
-import userRegisterBanner from '../assets/user-register-banner.jpg';
-import { FcGoogle } from 'react-icons/fc';
-import { useFormik } from 'formik';
+} from "@chakra-ui/react";
+import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { API_URL } from "../helper";
+import userRegisterBanner from "../assets/user-register-banner.jpg";
+import { FcGoogle } from "react-icons/fc";
+import { useFormik } from "formik";
 import * as yup from "yup";
 
 
@@ -46,23 +46,24 @@ export default function UserRegister() {
             );
             toast({
                 title: response.data.message,
-                status: 'success',
+                status: "success",
                 duration: 3000,
                 isClosable: true,
             });
+            navigate("/", { replace: true });
         } catch (error) {
             console.log("ini error dari onBtnRegister : ", error); 
             if (error.response && !error.response.data.message) {
                 toast({
-                    title: 'Register failed',
-                    status: 'error',
+                    title: "Register failed",
+                    status: "error",
                     duration: 3000,
                     isClosable: true,
                 });
             } else {
                 toast({
                     title: error.response.data.message,
-                    status: 'error',
+                    status: "error",
                     duration: 3000,
                     isClosable: true,
                 });
@@ -117,7 +118,7 @@ export default function UserRegister() {
                     /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{6,})/,
                     "Password must be at least 6 characters includes 1 number, 1 uppercase, and 1 lowercase letter"
                 )
-                .oneOf([yup.ref('password'), null], 'Passwords must match'),
+                .oneOf([yup.ref("password"), null], "Passwords must match"),
         })
     });
 
@@ -126,21 +127,21 @@ export default function UserRegister() {
     };
 
     const signInWithGoogle = () => {
-        window.open(`${API_URL}/auth/google`, "_self", 'toolbar=no, scrollbars=yes, resizable=no, width=1000, height=auto')
+        window.open(`${API_URL}/auth/google`, "_self", "toolbar=no, scrollbars=yes, resizable=no, width=1000, height=auto")
     };
 
     return (
-        <Stack minH={{ lg: '100vh' }}
-            direction={{ base: 'column', md: 'column', lg: 'row' }}
+        <Stack minH={{ lg: "100vh" }}
+            direction={{ base: "column", md: "column", lg: "row" }}
         >
             <Flex
-                p={{ base: '8', sm: '0' }}
+                p={{ base: "8", sm: "0" }}
                 flex={1}
-                align={'center'} justify={'center'}
+                align={"center"} justify={"center"}
             >
-                <Stack spacing={0} w={'full'} maxW={{ base: 'sm' }}>
-                    <Heading fontSize={'3xl'} fontWeight='semibold'
-                        my='8'
+                <Stack spacing={0} w={"full"} maxW={{ base: "sm" }}>
+                    <Heading fontSize={"3xl"} fontWeight="semibold"
+                        my="8"
                     >Register to tempatku</Heading>
                     <Stack spacing={2}>
                         <HStack>
@@ -152,7 +153,7 @@ export default function UserRegister() {
                                         onChange={handleForm}
                                         name="name"
                                     />
-                                    <FormErrorMessage fontSize='xs'>{formik.errors.name}</FormErrorMessage>
+                                    <FormErrorMessage fontSize="xs">{formik.errors.name}</FormErrorMessage>
                                 </FormControl>
                             </Box>
                             <Box>
@@ -163,7 +164,7 @@ export default function UserRegister() {
                                         onChange={handleForm}
                                         name="phone"
                                     />
-                                    <FormErrorMessage fontSize='xs'>{formik.errors.phone}</FormErrorMessage>
+                                    <FormErrorMessage fontSize="xs">{formik.errors.phone}</FormErrorMessage>
                                 </FormControl>
                             </Box>
                         </HStack>
@@ -174,7 +175,7 @@ export default function UserRegister() {
                                 onChange={handleForm}
                                 name="email"
                             />
-                            <FormErrorMessage fontSize='xs'>{formik.errors.email}</FormErrorMessage>
+                            <FormErrorMessage fontSize="xs">{formik.errors.email}</FormErrorMessage>
                         </FormControl>
                         {/* PASSWORD */}
                         <FormControl id="password" isInvalid={formik.errors.password}>
@@ -182,15 +183,15 @@ export default function UserRegister() {
                             <InputGroup>
                                 {/* Input Password */}
                                 <Input
-                                    type={showPassword ? 'text' : 'password'}
+                                    type={showPassword ? "text" : "password"}
                                     onChange={handleForm}
                                     name="password"
                                 />
-                                <InputRightElement h={'full'}>
+                                <InputRightElement h={"full"}>
                                     <Button
-                                        variant={'ghost'}
-                                        _hover={'none'}
-                                        _active={'none'}
+                                        variant={"ghost"}
+                                        _hover={"none"}
+                                        _active={"none"}
                                         onClick={() =>
                                             setShowPassword((showPassword) => !showPassword)
                                         }>
@@ -198,22 +199,22 @@ export default function UserRegister() {
                                     </Button>
                                 </InputRightElement>
                             </InputGroup>
-                            <FormErrorMessage fontSize='xs'>{formik.errors.password}</FormErrorMessage>
+                            <FormErrorMessage fontSize="xs">{formik.errors.password}</FormErrorMessage>
                         </FormControl>
                         <FormControl id="confirmation_password" isInvalid={formik.errors.passwordConfirmation}>
                             <FormLabel>Confirmation Password</FormLabel>
                             <InputGroup>
                                 {/* Input Password Confirmation*/}
                                 <Input
-                                    type={showPasswordConfirmation ? 'text' : 'password'}
+                                    type={showPasswordConfirmation ? "text" : "password"}
                                     onChange={handleForm}
                                     name="passwordConfirmation"
                                 />
-                                <InputRightElement h={'full'}>
+                                <InputRightElement h={"full"}>
                                     <Button
-                                        variant={'ghost'}
-                                        _hover={'none'}
-                                        _active={'none'}
+                                        variant={"ghost"}
+                                        _hover={"none"}
+                                        _active={"none"}
                                         onClick={() =>
                                             setShowPasswordConfirmation((showPasswordConfirmation) => !showPasswordConfirmation)
                                         }>
@@ -221,15 +222,15 @@ export default function UserRegister() {
                                     </Button>
                                 </InputRightElement>
                             </InputGroup>
-                            <FormErrorMessage fontSize='xs'>{formik.errors.passwordConfirmation}</FormErrorMessage>
+                            <FormErrorMessage fontSize="xs">{formik.errors.passwordConfirmation}</FormErrorMessage>
                         </FormControl>
                     </Stack>
                     <Stack
-                        pt='8'
+                        pt="8"
                     >
-                        <Button bg={'#D3212D'} color={'white'} variant={'solid'}
+                        <Button bg={"#D3212D"} color={"white"} variant={"solid"}
                             _hover={{
-                                bg: '#D3212D',
+                                bg: "#D3212D",
                             }}
                             onClick={onBtnRegister}
                             isLoading={loading}
@@ -240,7 +241,7 @@ export default function UserRegister() {
                         {/* Google */}
                         <Button
                             onClick={signInWithGoogle}
-                            w={'full'} variant={'outline'} leftIcon={<FcGoogle />} borderColor='#d0d7de' _hover={'none'}>
+                            w={"full"} variant={"outline"} leftIcon={<FcGoogle />} borderColor="#d0d7de" _hover={"none"}>
                             <Center>
                                 <Text>Continue with Google</Text>
                             </Center>
@@ -248,19 +249,19 @@ export default function UserRegister() {
                         {/* Login */}
                     </Stack>
                     <Stack
-                        pb='6'
-                        px='10'
+                        pb="6"
+                        px="10"
                     >
-                        <Card variant='none' borderColor='#d0d7de' mt='2'>
+                        <Card variant="none" borderColor="#d0d7de" mt="2">
                             <CardBody>
                                 <Center>
-                                    <HStack fontSize='sm'
+                                    <HStack fontSize="sm"
                                     >
                                         <Text>Have an account?</Text>
                                         <Text onClick={() => {
-                                            navigate('/');
-                                        }} color='#0969da'
-                                            cursor={'pointer'}
+                                            navigate("/");
+                                        }} color="#0969da"
+                                            cursor={"pointer"}
                                         >
                                             Login.
                                         </Text>
@@ -273,11 +274,11 @@ export default function UserRegister() {
             </Flex>
             <Flex
                 flex={1}
-                display={{ base: 'flex', sm: 'flex' }}
+                display={{ base: "flex", sm: "flex" }}
             >
                 <Image
-                    alt={'User Register Page Image'}
-                    objectFit={'cover'}
+                    alt={"User Register Page Image"}
+                    objectFit={"cover"}
                     src={userRegisterBanner}
                 />
             </Flex>

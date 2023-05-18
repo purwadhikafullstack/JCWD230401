@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
     Button,
     Flex,
@@ -8,12 +8,12 @@ import {
     Input,
     Stack,
     InputGroup, InputRightElement, FormErrorMessage, useToast
-} from '@chakra-ui/react';
-import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
-import axios from 'axios';
-import { useNavigate, useParams } from 'react-router-dom';
-import { API_URL } from '../helper';
-import { useFormik } from 'formik';
+} from "@chakra-ui/react";
+import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
+import axios from "axios";
+import { useNavigate, useParams } from "react-router-dom";
+import { API_URL } from "../helper";
+import { useFormik } from "formik";
 import * as yup from "yup";
 
 export default function ResetPassword() {
@@ -42,24 +42,24 @@ export default function ResetPassword() {
             });
             toast({
                 title: response.data.message,
-                status: 'success',
+                status: "success",
                 duration: 3000,
                 isClosable: true,
             });
-            navigate('/', { replace: true });
+            navigate("/", { replace: true });
         } catch (error) {
             console.log("ini error dari onBtnResetPassword : ", error);
             if (error.response && !error.response.data.message) {
                 toast({
-                    title: 'Reset password failed',
-                    status: 'error',
+                    title: "Reset password failed",
+                    status: "error",
                     duration: 3000,
                     isClosable: true,
                 });
             } else {
                 toast({
                     title: error.response.data.message,
-                    status: 'error',
+                    status: "error",
                     duration: 3000,
                     isClosable: true,
                 });
@@ -92,7 +92,7 @@ export default function ResetPassword() {
                     /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{6,})/,
                     "Password must be at least 6 characters includes 1 number, 1 uppercase, and 1 lowercase letter"
                 )
-                .oneOf([yup.ref('newPassword'), null], 'Passwords must match'), //check if the value matches "password" field
+                .oneOf([yup.ref("newPassword"), null], "Passwords must match"), //check if the value matches "password" field
             verificationCode: yup.string()
                 .required("OTP code is a required field")
         })
@@ -104,21 +104,21 @@ export default function ResetPassword() {
 
     return (
         <Flex
-            minH={{base:'50vh', sm:'100vh'}}
-            align={{base:'none', sm:'center'}}
-            justify={'center'}
-            bg={'white'}>
+            minH={{base:"50vh", sm:"100vh"}}
+            align={{base:"none", sm:"center"}}
+            justify={"center"}
+            bg={"white"}>
             <Stack
                 spacing={4}
-                w={'full'}
-                maxW={'md'}
-                bg={'white'}
-                rounded={'xl'}
-                borderWidth={'1px'}
-                borderColor={{base:'white', sm:'gray.300'}}
+                w={"full"}
+                maxW={"md"}
+                bg={"white"}
+                rounded={"xl"}
+                borderWidth={"1px"}
+                borderColor={{base:"white", sm:"gray.300"}}
                 p={6}
                 my={12}>
-                <Heading lineHeight={1.1} fontSize={{ base: '2xl', md: '3xl' }}>
+                <Heading lineHeight={1.1} fontSize={{ base: "2xl", md: "3xl" }}>
                     Enter new password
                 </Heading>
                 {/* New Password Field */}
@@ -126,15 +126,15 @@ export default function ResetPassword() {
                     <FormLabel>New Password</FormLabel>
                     <InputGroup>
                         <Input
-                            type={showNewPassword ? 'text' : 'password'}
+                            type={showNewPassword ? "text" : "password"}
                             onChange={handleForm}
                             name="newPassword"
                         />
-                        <InputRightElement h={'full'}>
+                        <InputRightElement h={"full"}>
                             <Button
-                                variant={'ghost'}
-                                _hover={'none'}
-                                _active={'none'}
+                                variant={"ghost"}
+                                _hover={"none"}
+                                _active={"none"}
                                 onClick={() =>
                                     setShowNewPassword((showNewPassword) => !showNewPassword)
                                 }>
@@ -142,22 +142,22 @@ export default function ResetPassword() {
                             </Button>
                         </InputRightElement>
                     </InputGroup>
-                    <FormErrorMessage fontSize='xs'>{formik.errors.newPassword}</FormErrorMessage>
+                    <FormErrorMessage fontSize="xs">{formik.errors.newPassword}</FormErrorMessage>
                 </FormControl>
                 {/* Confirm New Password  */}
                 <FormControl id="confirmation_password" isInvalid={formik.errors.passwordConfirmation}>
                     <FormLabel>Confirm New Password</FormLabel>
                     <InputGroup>
                         <Input
-                            type={showPasswordConfirmation ? 'text' : 'password'}
+                            type={showPasswordConfirmation ? "text" : "password"}
                             onChange={handleForm}
                             name="passwordConfirmation"
                         />
-                        <InputRightElement h={'full'}>
+                        <InputRightElement h={"full"}>
                             <Button
-                                variant={'ghost'}
-                                _hover={'none'}
-                                _active={'none'}
+                                variant={"ghost"}
+                                _hover={"none"}
+                                _active={"none"}
                                 onClick={() =>
                                     setShowPasswordConfirmation((showPasswordConfirmation) => !showPasswordConfirmation)
                                 }>
@@ -165,7 +165,7 @@ export default function ResetPassword() {
                             </Button>
                         </InputRightElement>
                     </InputGroup>
-                    <FormErrorMessage fontSize='xs'>{formik.errors.passwordConfirmation}</FormErrorMessage>
+                    <FormErrorMessage fontSize="xs">{formik.errors.passwordConfirmation}</FormErrorMessage>
                 </FormControl>
                 <FormControl isInvalid={formik.errors.verificationCode}>
                     <FormLabel>To complete your password reset, please enter the OTP code sent to your email below :</FormLabel>
@@ -173,16 +173,16 @@ export default function ResetPassword() {
                         onChange={handleForm}
                         name="verificationCode"
                     />
-                    <FormErrorMessage fontSize='xs'>{formik.errors.verificationCode}</FormErrorMessage>
+                    <FormErrorMessage fontSize="xs">{formik.errors.verificationCode}</FormErrorMessage>
                 </FormControl>
                 <Stack spacing={6}>
                     <Button
-                        bg={'#D3212D'}
-                        color={'white'}
+                        bg={"#D3212D"}
+                        color={"white"}
                         _hover={{
-                            bg: '#D3212D',
+                            bg: "#D3212D",
                         }}
-                        type='button'
+                        type="button"
                         onClick={onBtnResetPassword}
                         isLoading={loading}
                     >

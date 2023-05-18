@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState } from "react";
 import {
     Button,
     Flex,
@@ -10,15 +10,15 @@ import {
     Image,
     FormErrorMessage,
     Text, Icon, HStack, Box, Center, Card, CardBody, InputGroup, InputRightElement, useToast
-} from '@chakra-ui/react';
-import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import { API_URL } from '../helper';
-import { FiUpload } from 'react-icons/fi';
-import { useFormik } from 'formik';
+} from "@chakra-ui/react";
+import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { API_URL } from "../helper";
+import { FiUpload } from "react-icons/fi";
+import { useFormik } from "formik";
 import * as yup from "yup";
-import tenantRegisterBanner from '../assets/tenant-register-banner.jpg';
+import tenantRegisterBanner from "../assets/tenant-register-banner.jpg";
 
 
 export default function TenantRegister() {
@@ -61,23 +61,24 @@ export default function TenantRegister() {
             );
             toast({
                 title: response.data.message,
-                status: 'success',
+                status: "success",
                 duration: 3000,
                 isClosable: true,
             });
+            navigate("/", { replace: true });
         } catch (error) {
             console.log("ini error dari onBtnRegister : ", error);
             if (error.response && !error.response.data.message) {
                 toast({
-                    title: 'Register failed',
-                    status: 'error',
+                    title: "Register failed",
+                    status: "error",
                     duration: 3000,
                     isClosable: true,
                 });
             } else {
                 toast({
                     title: error.response.data.message,
-                    status: 'error',
+                    status: "error",
                     duration: 3000,
                     isClosable: true,
                 });
@@ -133,20 +134,20 @@ export default function TenantRegister() {
                     /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{6,})/,
                     "Password must be at least 6 characters includes 1 number, 1 uppercase, and 1 lowercase letter"
                 )
-                .oneOf([yup.ref('password'), null], 'Passwords must match'),
+                .oneOf([yup.ref("password"), null], "Passwords must match"),
             fileImage: yup
                 .mixed()
                 .required("KTP photo is a required field")
                 .test(
-                    'fileSize',
-                    'File size must be less than 1MB',
+                    "fileSize",
+                    "File size must be less than 1MB",
                     (value) => value && value.size <= 1000000
                 )
                 .test(
-                    'fileFormat',
-                    'Only jpg, jpeg, and png formats are allowed',
+                    "fileFormat",
+                    "Only jpg, jpeg, and png formats are allowed",
                     (value) =>
-                        value && ['image/jpeg', 'image/jpg', 'image/png'].includes(value.type)
+                        value && ["image/jpeg", "image/jpg", "image/png"].includes(value.type)
                 )
         }),
 
@@ -164,17 +165,17 @@ export default function TenantRegister() {
 
 
     return (
-        <Stack minH={{ lg: '100vh' }}
-            direction={{ base: 'column', md: 'column', lg: 'row' }}
+        <Stack minH={{ lg: "100vh" }}
+            direction={{ base: "column", md: "column", lg: "row" }}
         >
             <Flex
-                p={{ base: '8', sm: '0' }}
+                p={{ base: "8", sm: "0" }}
                 flex={1}
-                align={'center'} justify={'center'}
+                align={"center"} justify={"center"}
             >
-                <Stack spacing={0} w={'full'} maxW={{ base: 'sm' }}>
-                    <Heading fontSize={'3xl'} fontWeight='semibold'
-                        my='8'
+                <Stack spacing={0} w={"full"} maxW={{ base: "sm" }}>
+                    <Heading fontSize={"3xl"} fontWeight="semibold"
+                        my="8"
                     >Register as a Tenant</Heading>
                     <Stack spacing={2}>
                         <HStack>
@@ -186,7 +187,7 @@ export default function TenantRegister() {
                                         onChange={handleForm}
                                         name="name"
                                     />
-                                    <FormErrorMessage fontSize='xs'>{formik.errors.name}</FormErrorMessage>
+                                    <FormErrorMessage fontSize="xs">{formik.errors.name}</FormErrorMessage>
                                 </FormControl>
                             </Box>
                             <Box>
@@ -197,7 +198,7 @@ export default function TenantRegister() {
                                         onChange={handleForm}
                                         name="phone"
                                     />
-                                    <FormErrorMessage fontSize='xs'>{formik.errors.phone}</FormErrorMessage>
+                                    <FormErrorMessage fontSize="xs">{formik.errors.phone}</FormErrorMessage>
                                 </FormControl>
                             </Box>
                         </HStack>
@@ -208,7 +209,7 @@ export default function TenantRegister() {
                                 onChange={handleForm}
                                 name="email"
                             />
-                            <FormErrorMessage fontSize='xs'>{formik.errors.email}</FormErrorMessage>
+                            <FormErrorMessage fontSize="xs">{formik.errors.email}</FormErrorMessage>
                         </FormControl>
                         {/* PASSWORD */}
                         <FormControl isInvalid={formik.errors.password}>
@@ -216,15 +217,15 @@ export default function TenantRegister() {
                             <InputGroup>
                                 {/* Input Password */}
                                 <Input
-                                    type={showPassword ? 'text' : 'password'}
+                                    type={showPassword ? "text" : "password"}
                                     onChange={handleForm}
                                     name="password"
                                 />
-                                <InputRightElement h={'full'}>
+                                <InputRightElement h={"full"}>
                                     <Button
-                                        variant={'ghost'}
-                                        _hover={'none'}
-                                        _active={'none'}
+                                        variant={"ghost"}
+                                        _hover={"none"}
+                                        _active={"none"}
                                         onClick={() =>
                                             setShowPassword((showPassword) => !showPassword)
                                         }>
@@ -232,21 +233,21 @@ export default function TenantRegister() {
                                     </Button>
                                 </InputRightElement>
                             </InputGroup>
-                            <FormErrorMessage fontSize='xs'>{formik.errors.password}</FormErrorMessage>
+                            <FormErrorMessage fontSize="xs">{formik.errors.password}</FormErrorMessage>
                         </FormControl>
                         <FormControl isInvalid={formik.errors.passwordConfirmation}>
                             <FormLabel>Confirmation Password</FormLabel>
                             <InputGroup>
                                 <Input
-                                    type={showPasswordConfirmation ? 'text' : 'password'}
+                                    type={showPasswordConfirmation ? "text" : "password"}
                                     onChange={handleForm}
                                     name="passwordConfirmation"
                                 />
-                                <InputRightElement h={'full'}>
+                                <InputRightElement h={"full"}>
                                     <Button
-                                        variant={'ghost'}
-                                        _hover={'none'}
-                                        _active={'none'}
+                                        variant={"ghost"}
+                                        _hover={"none"}
+                                        _active={"none"}
                                         onClick={() =>
                                             setShowPasswordConfirmation((showPasswordConfirmation) => !showPasswordConfirmation)
                                         }>
@@ -254,26 +255,26 @@ export default function TenantRegister() {
                                     </Button>
                                 </InputRightElement>
                             </InputGroup>
-                            <FormErrorMessage fontSize='xs'>{formik.errors.passwordConfirmation}</FormErrorMessage>
+                            <FormErrorMessage fontSize="xs">{formik.errors.passwordConfirmation}</FormErrorMessage>
                         </FormControl>
                         {/* UPLOAD ID CARD */}
                         <FormControl isInvalid={formik.errors.fileImage}>
                             <FormLabel>Upload a photo of your KTP
-                                <Text fontSize='xs'>( Image size: max. 1 MB , Image format: .jpg, .jpeg, .png )</Text>
+                                <Text fontSize="xs">( Image size: max. 1 MB , Image format: .jpg, .jpeg, .png )</Text>
                             </FormLabel>
                             <Image
-                                boxSize='200px'
-                                objectFit='cover'
+                                boxSize="200px"
+                                objectFit="cover"
                                 src={formik.values.fileImage
                                     ? URL.createObjectURL(
                                         formik.values.fileImage
                                     )
                                     : image}
-                                w='full'
+                                w="full"
                                 borderRadius="8px 8px 0 0"
                             />
-                            <Button fontFamily={'heading'} bg={'gray.200'} color={'gray.800'} w='full'
-                                leftIcon={<Icon as={FiUpload} ml={{base:'4', sm:'8'}} fontSize={'2xl'} />}
+                            <Button fontFamily={"heading"} bg={"gray.200"} color={"gray.800"} w="full"
+                                leftIcon={<Icon as={FiUpload} ml={{base:"4", sm:"8"}} fontSize={"2xl"} />}
                                 variant={"link"}
                                 onClick={() =>
                                     inputFile.current.click()
@@ -282,26 +283,26 @@ export default function TenantRegister() {
                             >
                                 {/* Upload your id card */}
                                 <Input
-                                    my='4'
-                                    ml={{base:'3', sm:'6'}}
+                                    my="4"
+                                    ml={{base:"3", sm:"6"}}
                                     type="file"
                                     id="file"
                                     ref={inputFile}
                                     onChange={onChangeFile}
                                     accept="image/*"
-                                    variant='unstyled'
+                                    variant="unstyled"
                                     name="fileImage"
                                 ></Input>
                             </Button>
-                            <FormErrorMessage fontSize='xs'>{formik.errors.fileImage}</FormErrorMessage>
+                            <FormErrorMessage fontSize="xs">{formik.errors.fileImage}</FormErrorMessage>
                         </FormControl>
                     </Stack>
                     <Stack
-                        pt='8'
+                        pt="8"
                     >
-                        <Button bg={'#D3212D'} color={'white'} variant={'solid'}
+                        <Button bg={"#D3212D"} color={"white"} variant={"solid"}
                             _hover={{
-                                bg: '#D3212D',
+                                bg: "#D3212D",
                             }}
                             onClick={onBtnRegister}
                             isLoading={loading}
@@ -311,19 +312,19 @@ export default function TenantRegister() {
                         {/* Login */}
                     </Stack>
                     <Stack
-                        pb='6'
-                        px='10'
+                        pb="6"
+                        px="10"
                     >
-                        <Card variant='none' borderColor='#d0d7de' mt='2'>
+                        <Card variant="none" borderColor="#d0d7de" mt="2">
                             <CardBody>
                                 <Center>
-                                    <HStack fontSize='sm'
+                                    <HStack fontSize="sm"
                                     >
                                         <Text>Have an account?</Text>
                                         <Text onClick={() => {
-                                            navigate('/');
-                                        }} color='#0969da'
-                                            cursor={'pointer'}
+                                            navigate("/");
+                                        }} color="#0969da"
+                                            cursor={"pointer"}
                                         >
                                             Login.
                                         </Text>
@@ -336,14 +337,14 @@ export default function TenantRegister() {
             </Flex>
             <Flex
                 flex={1}
-                display={{ base: 'flex', sm: 'flex' }}
+                display={{ base: "flex", sm: "flex" }}
             >
                 <Image
-                    alt={'User Register Page Image'}
-                    objectFit={'cover'}
+                    alt={"User Register Page Image"}
+                    objectFit={"cover"}
                     src={tenantRegisterBanner}
-                    h={{base:'30vh', sm:'50vh', lg:'full'}}
-                    w='full'
+                    h={{base:"30vh", sm:"50vh", lg:"full"}}
+                    w="full"
                 />
             </Flex>
         </Stack>

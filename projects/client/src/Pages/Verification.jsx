@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Center, Heading } from '@chakra-ui/react';
+import React, { useState } from "react";
+import { Center, Heading } from "@chakra-ui/react";
 import {
   Button,
   FormControl,
@@ -7,12 +7,12 @@ import {
   Input,
   Stack,
   HStack,
-  FormLabel, FormErrorMessage, useToast
-} from '@chakra-ui/react';
-import { useNavigate, useParams } from 'react-router-dom';
-import { API_URL } from '../helper';
-import axios from 'axios';
-import { useFormik } from 'formik';
+  FormLabel, FormErrorMessage, useToast, Text
+} from "@chakra-ui/react";
+import { useNavigate, useParams } from "react-router-dom";
+import { API_URL } from "../helper";
+import axios from "axios";
+import { useFormik } from "formik";
 import * as yup from "yup";
 
 
@@ -37,7 +37,7 @@ export default function Verification() {
       console.log("ini hasil response onbtnSendVerifyEmail :", response);
       toast({
         title: response.data.message,
-        status: 'success',
+        status: "success",
         duration: 3000,
         isClosable: true,
       });
@@ -45,23 +45,23 @@ export default function Verification() {
       console.log("ini error dari onBtnSendVerifyEmail :", error);
       if (error.response && error.response.data.message === "You have reached the maximum limit of OTP resend requests for today.") {
         toast({
-          title: 'You have reached the maximum limit of OTP resend requests for today. Please try again tomorrow.',
-          status: 'error',
+          title: "You have reached the maximum limit of OTP resend requests for today. Please try again tomorrow.",
+          status: "error",
           duration: 3000,
           isClosable: true,
         });
       } else if (error.response && error.response.status === 401) {
         toast({
-          title: 'Your session has expired. Please log in again to resend email to verify your account.',
-          status: 'error',
+          title: "Your session has expired. Please log in again to resend email to verify your account.",
+          status: "error",
           duration: 3000,
           isClosable: true,
         });
-        navigate('/', { replace: true });
+        navigate("/", { replace: true });
       } else {
         toast({
           title: error.response.data.message,
-          status: 'error',
+          status: "error",
           duration: 3000,
           isClosable: true,
         });
@@ -92,33 +92,33 @@ export default function Verification() {
       console.log("ini hasil response onbtnverify :", response); 
       toast({
         title: response.data.message,
-        status: 'success',
+        status: "success",
         duration: 3000,
         isClosable: true,
       })
-      navigate('/', { replace: true });
+      navigate("/", { replace: true });
     } catch (error) {
       console.log("ini error dari onBtnVerify :", error);
       if (error.response && !error.response.data.message) {
         toast({
-          title: 'Verify account failed',
-          status: 'error',
+          title: "Verify account failed",
+          status: "error",
           duration: 3000,
           isClosable: true,
         });
       }
       if (error.response && error.response.status === 401) {
         toast({
-          title: 'Your code has expired. Please log in again to resend email to verify your account.',
-          status: 'error',
+          title: "Your code has expired. Please log in again to resend email to verify your account.",
+          status: "error",
           duration: 3000,
           isClosable: true,
         });
-        navigate('/', { replace: true });
+        navigate("/", { replace: true });
       } else {
         toast({
           title: error.response.data.message,
-          status: 'error',
+          status: "error",
           duration: 3000,
           isClosable: true,
         });
@@ -145,30 +145,28 @@ export default function Verification() {
 
   return (
     <Flex
-      minH={{base:'50vh', sm:'100vh'}}
-      align={{base:'none', sm:'center'}}
-      justify={'center'}
-      bg={'white'}>
+      minH={{base:"50vh", sm:"100vh"}}
+      align={{base:"none", sm:"center"}}
+      justify={"center"}
+      bg={"white"}>
       <Stack
         spacing={4}
-        w={'full'}
-        maxW={'sm'}
-        bg={'white'}
-        rounded={'xl'}
-        borderWidth={'1px'}
-        borderColor={{base:'white', sm:'gray.300'}}
+        w={"full"}
+        maxW={"sm"}
+        bg={"white"}
+        rounded={"xl"}
+        borderWidth={"1px"}
+        borderColor={{base:"white", sm:"gray.300"}}
         p={6}
         my={10}>
-        <Center>
-          <Heading lineHeight={1.1} fontSize={{ base: '2xl', md: '3xl' }}>
+          <Heading lineHeight={1.1} fontSize={{ base: "2xl", md: "3xl" }}>
             Verify your Account
           </Heading>
-        </Center>
-        <Center
-          fontSize={{ base: 'sm', sm: 'md' }}
+        <Text
+          fontSize={{ base: "sm", sm: "md" }}
         >
           We have sent code to your email
-        </Center>
+        </Text>
 
         <FormControl>
           <Center>
@@ -179,12 +177,12 @@ export default function Verification() {
                   onChange={handleForm}
                   name="verificationCode"
                 />
-                <FormErrorMessage fontSize='xs'>{formik.errors.verificationCode}</FormErrorMessage>
+                <FormErrorMessage fontSize="xs">{formik.errors.verificationCode}</FormErrorMessage>
               </FormControl>
             </HStack>
           </Center>
           <Center
-            fontSize={{ base: 'xs', sm: 'sm' }}
+            fontSize={{ base: "xs", sm: "sm" }}
             fontWeight="thin"
             my={2}
           >
@@ -193,27 +191,27 @@ export default function Verification() {
         </FormControl>
         <Stack spacing={2}>
           <Button
-            bg={'#D3212D'}
-            color={'white'}
+            bg={"#D3212D"}
+            color={"white"}
             _hover={{
-              bg: '#D3212D',
+              bg: "#D3212D",
             }}
-            type='button'
+            type="button"
             onClick={onBtnVerify}
             isLoading={loading1}
           >
             Verify
           </Button>
           <Button
-            bg={'none'}
-            color={'#D3212D'}
-            variant='outline'
+            bg={"none"}
+            color={"#D3212D"}
+            variant="outline"
             _hover={{
-              color: '#D3212D',
+              color: "#D3212D",
             }}
-            borderColor={'#D3212D'}
+            borderColor={"#D3212D"}
             onClick={onBtnSendVerifyEmail}
-            type='button'
+            type="button"
             isLoading={loading2}
           >
             Resend OTP

@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState } from "react";
 import {
     Button,
     Flex,
@@ -10,13 +10,13 @@ import {
     Avatar,
     useToast, AvatarBadge, IconButton, Link, Divider,
     Center, Radio, RadioGroup, Box, useDisclosure, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, Text, FormErrorMessage
-} from '@chakra-ui/react';
-import { useSelector } from 'react-redux';
-import { API_URL, API_URL_IMG } from '../helper';
-import axios from 'axios';
-import { useFormik } from 'formik';
+} from "@chakra-ui/react";
+import { useSelector } from "react-redux";
+import { API_URL, API_URL_IMG } from "../helper";
+import axios from "axios";
+import { useFormik } from "formik";
 import * as yup from "yup";
-import { BsShieldExclamation, BsShieldCheck } from 'react-icons/bs';
+import { BsShieldExclamation, BsShieldCheck } from "react-icons/bs";
 import { decodeToken } from "react-jwt";
 
 export default function EditProfile(props) {
@@ -40,7 +40,7 @@ export default function EditProfile(props) {
 
     const handleGenderChange = (value) => {
         setGender(value);
-        formik.setFieldValue('gender', value);
+        formik.setFieldValue("gender", value);
         console.log("ini isi value gender change:", value);
     }
 
@@ -82,7 +82,7 @@ export default function EditProfile(props) {
             );
             toast({
                 title: response.data.message,
-                status: 'success',
+                status: "success",
                 duration: 3000,
                 isClosable: true,
             });
@@ -92,14 +92,14 @@ export default function EditProfile(props) {
             if (error.response && !error.response.data.error) {
                 toast({
                     title: error.response.data.message,
-                    status: 'error',
+                    status: "error",
                     duration: 3000,
                     isClosable: true,
                 });
             } else {
                 toast({
                     title: error.response.data.error[0].msg,
-                    status: 'error',
+                    status: "error",
                     duration: 3000,
                     isClosable: true,
                 });
@@ -121,7 +121,7 @@ export default function EditProfile(props) {
             );
             toast({
                 title: response.data.message,
-                status: 'success',
+                status: "success",
                 duration: 3000,
                 isClosable: true,
             })
@@ -129,23 +129,23 @@ export default function EditProfile(props) {
             console.log("ini error dari onBtnSendVerifyEmail :", error);
             if (error.response && error.response.data.message === "You have reached the maximum limit of OTP resend requests for today.") {
                 toast({
-                    title: 'You have reached the maximum limit of OTP resend requests for today. Please try again tomorrow.',
-                    status: 'error',
+                    title: "You have reached the maximum limit of OTP resend requests for today. Please try again tomorrow.",
+                    status: "error",
                     duration: 3000,
                     isClosable: true,
                 });
             }
             if (error.response && error.response.status === 401) {
                 toast({
-                    title: 'Your code has expired. Please log in again to resend email to verify your account.',
-                    status: 'error',
+                    title: "Your code has expired. Please log in again to resend email to verify your account.",
+                    status: "error",
                     duration: 3000,
                     isClosable: true,
                 });
             } else {
                 toast({
                     title: error.response.data.message,
-                    status: 'error',
+                    status: "error",
                     duration: 3000,
                     isClosable: true,
                 });
@@ -243,7 +243,7 @@ export default function EditProfile(props) {
             console.log("response onbtneditprofileimage message be :", response.data.message);
             toast({
                 title: response.data.message,
-                status: 'success',
+                status: "success",
                 duration: 3000,
                 isClosable: true,
             });
@@ -257,7 +257,7 @@ export default function EditProfile(props) {
             console.log("ini error dari onBtnEditProfileImage : ", error);
             toast({
                 title: error.message,
-                status: 'error',
+                status: "error",
                 duration: 3000,
                 isClosable: true,
             });
@@ -297,32 +297,32 @@ export default function EditProfile(props) {
     return (
         <>
             <Flex
-                minH={'100vh'}
-                align={'center'}
-                justify={'center'}
-                bg={'white'}
+                minH={"100vh"}
+                align={"center"}
+                justify={"center"}
+                bg={"white"}
             >
                 <Stack
-                    bg='white'
+                    bg="white"
                     spacing={4}
-                    w={'full'}
-                    maxW={'md'}
-                    rounded={'xl'}
-                    borderWidth={'1px'}
-                    borderColor={{ base: 'white', sm: 'gray.300' }}
+                    w={"full"}
+                    maxW={"md"}
+                    rounded={"xl"}
+                    borderWidth={"1px"}
+                    borderColor={{ base: "white", sm: "gray.300" }}
                     p={6}
                     my={12}>
-                    <Heading lineHeight={1.1} fontSize={{ base: '2xl', sm: '3xl' }} align='center' mb='4'>
+                    <Heading lineHeight={1.1} fontSize={{ base: "2xl", sm: "3xl" }} align="center" mb="4">
                         Profile Page
                     </Heading>
                     <FormControl id="userName">
                         <Stack
-                            direction={['column']}
+                            direction={["column"]}
                             spacing={6}
                         >
                             <Center>
                                 <Avatar size="xl"
-                                    src={currentProfileImage == null ? "https://ionicframework.com/docs/img/demos/avatar.svg" : currentProfileImage && currentProfileImage.includes('http') ? currentProfileImage : `${API_URL_IMG}${currentProfileImage}` ? `${API_URL_IMG}${currentProfileImage}` : "https://ionicframework.com/docs/img/demos/avatar.svg"}
+                                    src={currentProfileImage == null ? "https://ionicframework.com/docs/img/demos/avatar.svg" : currentProfileImage && currentProfileImage.includes("http") ? currentProfileImage : `${API_URL_IMG}${currentProfileImage}` ? `${API_URL_IMG}${currentProfileImage}` : "https://ionicframework.com/docs/img/demos/avatar.svg"}
                                 >
                                     {!isVerified && role == "User" ?
                                         <AvatarBadge
@@ -346,7 +346,7 @@ export default function EditProfile(props) {
                                                 aria-label="remove Image"
                                                 icon={<BsShieldCheck />}
                                             /> :
-                                            <AvatarBadge display={{ base: 'none' }} />
+                                            <AvatarBadge display={{ base: "none" }} />
                                     }
                                 </Avatar>
                             </Center>
@@ -356,52 +356,52 @@ export default function EditProfile(props) {
                                     <Button w="full" onClick={() =>
                                         inputFile.current.click()}>Change Profile Photo
                                         <Input
-                                            my='4'
-                                            ml='6'
+                                            my="4"
+                                            ml="6"
                                             type="file"
                                             id="file"
                                             ref={inputFile}
                                             style={{ display: "none" }}
                                             onChange={onChangeFile}
                                             accept="image/*"
-                                            variant='unstyled'
+                                            variant="unstyled"
                                         ></Input>
                                     </Button>
                                 </Center>
-                                <Text fontSize='xs' pt='1'>Image size: max. 1 MB</Text>
-                                <Text fontSize='xs'>Image format: .jpg, .jpeg, .png, .gif</Text>
+                                <Text fontSize="xs" pt="1">Image size: max. 1 MB</Text>
+                                <Text fontSize="xs">Image format: .jpg, .jpeg, .png, .gif</Text>
                                 {!isVerified && role == "User" ?
                                     <div>
-                                        <Box py='2'>
+                                        <Box py="2">
                                             <Divider />
                                         </Box>
-                                        <Box pb='2'>
-                                            <Text fontSize='xs'>Your account has not been verified yet. Click the button to verify and enjoy tempatku has to offer.</Text>
+                                        <Box pb="2">
+                                            <Text fontSize="xs">Your account has not been verified yet. Click the button to verify and enjoy tempatku has to offer.</Text>
                                         </Box>
                                         <Box>
                                             <Button
                                                 onClick={onBtnSendVerifyEmail}
                                                 isLoading={loading}
-                                                colorScheme='green'
+                                                colorScheme="green"
                                             >Verify Account</Button>
                                         </Box>
-                                        <Box py='2'>
+                                        <Box py="2">
                                             <Divider />
                                         </Box>
                                     </div>
                                     :
                                     isVerified && role == "User" ?
                                         <div>
-                                            <Box py='2'>
+                                            <Box py="2">
                                                 <Divider />
                                             </Box>
-                                            <Text fontSize='xs'>Your account is verified.</Text>
-                                            <Box py='2'>
+                                            <Text fontSize="xs">Your account is verified.</Text>
+                                            <Box py="2">
                                                 <Divider />
                                             </Box>
                                         </div>
                                         :
-                                        <Text fontSize='xs'></Text>
+                                        <Text fontSize="xs"></Text>
                                 }
                             </Box>
                         </Stack>
@@ -411,21 +411,21 @@ export default function EditProfile(props) {
                             <ModalContent>
                                 <ModalHeader>Change Profile Photo</ModalHeader>
                                 <ModalCloseButton />
-                                <ModalBody textAlign='center'>
-                                    <Avatar objectFit='cover' size='2xl' src={profileImage ? URL.createObjectURL(profileImage) : ''}></Avatar>
+                                <ModalBody textAlign="center">
+                                    <Avatar objectFit="cover" size="2xl" src={profileImage ? URL.createObjectURL(profileImage) : ""}></Avatar>
                                 </ModalBody>
                                 <ModalFooter>
-                                    <Button colorScheme='red' mr={3} onClick={() => {
+                                    <Button colorScheme="red" mr={3} onClick={() => {
                                         modalProfileImage.onClose();
                                         setProfileImage(null);
-                                    }} variant='solid'>
+                                    }} variant="solid">
                                         Cancel
                                     </Button>
                                     <Button
                                         onClick={onBtnEditProfileImage}
                                         isLoading={loading2}
-                                        colorScheme='green'
-                                        variant='outline'
+                                        colorScheme="green"
+                                        variant="outline"
                                     >Save</Button>
                                 </ModalFooter>
                             </ModalContent>
@@ -436,27 +436,27 @@ export default function EditProfile(props) {
                         <FormLabel>Name</FormLabel>
                         <Input
                             placeholder={currentName}
-                            _placeholder={{ color: 'black' }}
+                            _placeholder={{ color: "black" }}
                             type="text"
                             onChange={handleForm}
                             name="name"
                         />
-                        <FormErrorMessage fontSize='xs'>{formik.errors.name}</FormErrorMessage>
+                        <FormErrorMessage fontSize="xs">{formik.errors.name}</FormErrorMessage>
                     </FormControl>
                     <FormControl id="email" isInvalid={formik.errors.email}>
                         <FormLabel>Email address</FormLabel>
                         <Input
                             placeholder={currentEmail}
-                            _placeholder={{ color: 'black' }}
+                            _placeholder={{ color: "black" }}
                             type="email"
                             onChange={handleForm}
                             name="email"
                         />
-                        <FormErrorMessage fontSize='xs'>{formik.errors.email}</FormErrorMessage>
+                        <FormErrorMessage fontSize="xs">{formik.errors.email}</FormErrorMessage>
                     </FormControl>
                     <FormControl id="gender" isInvalid={formik.errors.gender}>
                         <FormLabel>Gender</FormLabel>
-                        <Box justifyContent='space-between'>
+                        <Box justifyContent="space-between">
                             <RadioGroup
                                 value={formik.values.gender}
                                 onChange={handleGenderChange}
@@ -466,46 +466,46 @@ export default function EditProfile(props) {
                                 <Radio value="Female">Female</Radio>
                             </RadioGroup>
                         </Box>
-                        <FormErrorMessage fontSize='xs'>{formik.errors.gender}</FormErrorMessage>
+                        <FormErrorMessage fontSize="xs">{formik.errors.gender}</FormErrorMessage>
                     </FormControl>
                     <FormControl id="birth" isInvalid={formik.errors.birth}>
                         <FormLabel>Birthdate</FormLabel>
                         <Input
                             placeholder={currentBirth} 
-                            _placeholder={{ color: 'gray.800' }}
+                            _placeholder={{ color: "gray.800" }}
                             type="date"
                             value={formik.values.birth}
                             onChange={handleBirthChange}
                             name="birth"
                         />
-                        <FormErrorMessage fontSize='xs'>{formik.errors.birth}</FormErrorMessage>
+                        <FormErrorMessage fontSize="xs">{formik.errors.birth}</FormErrorMessage>
                     </FormControl>
                     {
                         // Tenant
                         role == "Tenant" ? (
-                            <Stack spacing={3} direction={['column']}>
+                            <Stack spacing={3} direction={["column"]}>
                                 <Button
-                                    bg={'#D3212D'}
-                                    color={'white'}
+                                    bg={"#D3212D"}
+                                    color={"white"}
                                     _hover={{
-                                        bg: '#D3212D',
+                                        bg: "#D3212D",
                                     }}
-                                    type='button'
-                                    w='full'
+                                    type="button"
+                                    w="full"
                                     onClick={onBtnEditProfile}
                                     isLoading={loading1}
                                 >
                                     Save
                                 </Button>
                                 <Button
-                                    variant={'outline'}
-                                    color={'#D3212D'}
+                                    variant={"outline"}
+                                    color={"#D3212D"}
                                     _hover={{
-                                        bg: 'gray.200',
+                                        bg: "gray.200",
                                     }}
-                                    type='button'
-                                    w='full'
-                                    borderColor='#D3212D'
+                                    type="button"
+                                    w="full"
+                                    borderColor="#D3212D"
                                     onClick={onBtnShowKTP}
                                 >
                                     Show KTP Photo
@@ -513,15 +513,15 @@ export default function EditProfile(props) {
                             </Stack>
                         ) : (
                             // User
-                            <Stack spacing={3} direction={['column']}>
+                            <Stack spacing={3} direction={["column"]}>
                                 <Button
-                                    bg={'#D3212D'}
-                                    color={'white'}
+                                    bg={"#D3212D"}
+                                    color={"white"}
                                     _hover={{
-                                        bg: '#D3212D',
+                                        bg: "#D3212D",
                                     }}
-                                    type='button'
-                                    w='full'
+                                    type="button"
+                                    w="full"
                                     onClick={onBtnEditProfile}
                                     isLoading={loading1}
                                 >

@@ -12,13 +12,13 @@ import {
   Text,
   Center,
   HStack
-} from '@chakra-ui/react';
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import { API_URL } from '../helper';
-import axios from 'axios';
+} from "@chakra-ui/react";
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import { API_URL } from "../helper";
+import axios from "axios";
 import { useSelector } from "react-redux";
-// Looks like have to incorporate this BookingButton into the RoomCard krn gbs ini onClick={() => navigate('/transactionpage')}
+// Looks like have to incorporate this BookingButton into the RoomCard krn gbs ini onClick={() => navigate("/transactionpage")}
 
 export default function BookingButton() {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -42,7 +42,7 @@ export default function BookingButton() {
       );
       toast({
         title: response.data.message,
-        status: 'success',
+        status: "success",
         duration: 3000,
         isClosable: true,
       })
@@ -50,23 +50,23 @@ export default function BookingButton() {
       console.log("ini error dari onBtnSendVerifyEmail :", error);
       if (error.response && error.response.data.message === "You have reached the maximum limit of OTP resend requests for today.") {
         toast({
-          title: 'You have reached the maximum limit of OTP resend requests for today. Please try again tomorrow.',
-          status: 'error',
+          title: "You have reached the maximum limit of OTP resend requests for today. Please try again tomorrow.",
+          status: "error",
           duration: 3000,
           isClosable: true,
         });
       }
       if (error.response && error.response.status === 401) {
         toast({
-          title: 'Your code has expired. Please log in again to resend email to verify your account.',
-          status: 'error',
+          title: "Your code has expired. Please log in again to resend email to verify your account.",
+          status: "error",
           duration: 3000,
           isClosable: true,
         });
       } else {
         toast({
           title: error.response.data.message,
-          status: 'error',
+          status: "error",
           duration: 3000,
           isClosable: true,
         });
@@ -86,12 +86,12 @@ export default function BookingButton() {
             <>
               <Button
                 loadingText="Submitting"
-                bg={'#D3212D'}
-                color={'white'}
+                bg={"#D3212D"}
+                color={"white"}
                 _hover={{
-                  bg: '#D3212D',
+                  bg: "#D3212D",
                 }}
-                type='button'
+                type="button"
                 onClick={onOpen}
               >
                 Book now
@@ -106,15 +106,15 @@ export default function BookingButton() {
                       Click the button below an we will send you an email to verify your account</p>
                     <br />
                     <Button
-                      bg={'#D3212D'}
-                      color={'white'}
+                      bg={"#D3212D"}
+                      color={"white"}
                       _hover={{
-                        bg: '#D3212D',
+                        bg: "#D3212D",
                       }}
-                      type='button'
+                      type="button"
                       onClick={onBtnSendVerifyEmail}
                       isLoading={loading}
-                      w='full'
+                      w="full"
                     >
                       Send Verification Email
                     </Button>
@@ -132,13 +132,13 @@ export default function BookingButton() {
               <>
                 <Button
                   loadingText="Submitting"
-                  bg={'#D3212D'}
-                  color={'white'}
+                  bg={"#D3212D"}
+                  color={"white"}
                   _hover={{
-                    bg: '#D3212D',
+                    bg: "#D3212D",
                   }}
-                  type='button'
-                  onClick={() => navigate('/transactionpage')}
+                  type="button"
+                  onClick={() => navigate("/transactionpage")}
                 >
                   Book now
                 </Button>
@@ -150,12 +150,12 @@ export default function BookingButton() {
             <>
               <Button
                 loadingText="Submitting"
-                bg={'#D3212D'}
-                color={'white'}
+                bg={"#D3212D"}
+                color={"white"}
                 _hover={{
-                  bg: '#D3212D',
+                  bg: "#D3212D",
                 }}
-                type='button'
+                type="button"
                 onClick={onOpen}
               >
                 Book now
@@ -170,24 +170,24 @@ export default function BookingButton() {
                     <br />
                     <Center>
                     <Button
-                      bg={'#D3212D'}
-                      color={'white'}
+                      bg={"#D3212D"}
+                      color={"white"}
                       _hover={{
-                        bg: '#D3212D',
+                        bg: "#D3212D",
                       }}
-                      type='button'
-                      onClick={() => navigate('/')}
-                      w='full'
-                      mb='2'
+                      type="button"
+                      onClick={() => navigate("/")}
+                      w="full"
+                      mb="2"
                     >
                       Return to Homepage
                     </Button>
                     </Center>
                     <Center>
-                      <HStack fontSize='sm' spacing='1'>
+                      <HStack fontSize="sm" spacing="1">
                         <Text>New to tempatku?</Text>
-                        <Text onClick={() => navigate('/register/user')} color='#0969da'
-                          cursor={'pointer'}
+                        <Text onClick={() => navigate("/register/user")} color="#0969da"
+                          cursor={"pointer"}
                         >
                           Create an account.
                         </Text>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
     Button,
     FormControl,
@@ -11,12 +11,12 @@ import {
     useToast,
     Box,
     HStack
-} from '@chakra-ui/react';
-import axios from 'axios';
-import { API_URL } from '../helper';
-import { useFormik } from 'formik';
+} from "@chakra-ui/react";
+import axios from "axios";
+import { API_URL } from "../helper";
+import { useFormik } from "formik";
 import * as yup from "yup";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 
 
 export default function ForgotPassword() {
@@ -36,7 +36,7 @@ export default function ForgotPassword() {
             });
             toast({
                 title: response.data.message,
-                status: 'success',
+                status: "success",
                 duration: 3000,
                 isClosable: true,
             });
@@ -44,15 +44,15 @@ export default function ForgotPassword() {
             console.log("ini error dari onBtnForgotPassword : ", error); 
             if (error.response && !error.response.data.message) {
                 toast({
-                    title: 'Request reset password failed',
-                    status: 'error',
+                    title: "Request reset password failed",
+                    status: "error",
                     duration: 3000,
                     isClosable: true,
                 });
             } else {
                 toast({
                     title: error.response.data.message,
-                    status: 'error',
+                    status: "error",
                     duration: 3000,
                     isClosable: true,
                 });
@@ -84,59 +84,59 @@ export default function ForgotPassword() {
 
     return (
         <Flex
-            minH={{base:'50vh', sm:'100vh'}}
-            align={{base:'none', sm:'center'}}
-            justify={'center'}
-            bg={'white'}
+            minH={{base:"50vh", sm:"100vh"}}
+            align={{base:"none", sm:"center"}}
+            justify={"center"}
+            bg={"white"}
         >
             <Stack
                 spacing={4}
-                w={'full'}
-                maxW={'md'}
-                bg={'white'}
-                rounded={'xl'}
+                w={"full"}
+                maxW={"md"}
+                bg={"white"}
+                rounded={"xl"}
                 p={6}
                 my={12}
-                borderWidth={'1px'}
-                borderColor={{base:'white', sm:'gray.300'}}
+                borderWidth={"1px"}
+                borderColor={{base:"white", sm:"gray.300"}}
             >
-                <Heading lineHeight={1.1} fontSize={{ base: '2xl', md: '3xl' }}>
+                <Heading lineHeight={1.1} fontSize={{ base: "2xl", md: "3xl" }}>
                     Forgot your password?
                 </Heading>
                 <Text
-                    fontSize={{ base: 'sm', sm: 'md' }}
-                    color={'gray.800'}>
+                    fontSize={{ base: "sm", sm: "md" }}
+                    color={"gray.800"}>
                     You&apos;ll get an email with a reset link
                 </Text>
                 <FormControl id="email" isInvalid={formik.errors.email}>
                     <Input
                         placeholder="email@example.com"
-                        _placeholder={{ color: 'gray.500' }}
+                        _placeholder={{ color: "gray.500" }}
                         type="email"
                         onChange={handleForm}
                         name="email"
                     />
-                    <FormErrorMessage fontSize='xs'>{formik.errors.email}</FormErrorMessage>
+                    <FormErrorMessage fontSize="xs">{formik.errors.email}</FormErrorMessage>
                 </FormControl>
                 <Stack spacing={6}>
                     <Button
-                        bg={'#D3212D'}
-                        color={'white'}
+                        bg={"#D3212D"}
+                        color={"white"}
                         _hover={{
-                            bg: '#D3212D',
+                            bg: "#D3212D",
                         }}
                         onClick={onBtnForgotPassword}
                         isLoading={loading}
                     >
                         Request Reset Password
                     </Button>
-                    <HStack fontSize='sm'
+                    <HStack fontSize="sm"
                     >
                         <Text>Return to</Text>
                         <Text onClick={() => {
-                            navigate('/');
-                        }} color='#0969da'
-                            cursor={'pointer'}
+                            navigate("/");
+                        }} color="#0969da"
+                            cursor={"pointer"}
                         >
                             Homepage
                         </Text>

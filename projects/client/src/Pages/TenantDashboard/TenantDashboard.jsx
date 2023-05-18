@@ -6,13 +6,13 @@ import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import { Box, Flex, Stack, Text, OrderedList, Heading, Modal, Button, ModalOverlay, ModalContent, Card, CardHeader, CardBody, ModalHeader, ModalBody, ModalFooter, StackDivider } from "@chakra-ui/react";
 import Sidebar from "../../Components/Sidebar";
-import { API_URL } from '../../helper';
-import axios from 'axios';
-import { useSelector } from 'react-redux';
+import { API_URL } from "../../helper";
+import axios from "axios";
+import { useSelector } from "react-redux";
 import Slider from "react-slick";
-import 'slick-carousel/slick/slick.css';
-import 'slick-carousel/slick/slick-theme.css';
-import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import CalendarPropertyCard from "../../Components/CalendarPropertyCard";
 
 function TenantDashboard() {
@@ -21,7 +21,7 @@ function TenantDashboard() {
   const [roomMaintenances, setRoomMaintenances] = useState([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
-  const [formatSelectedDate, setFormatSelectedDate] = useState('');
+  const [formatSelectedDate, setFormatSelectedDate] = useState("");
   const [availableRooms, setAvailableRooms] = useState([]);
   const [propertyListing, setPropertyListing] = useState([]);
 
@@ -96,8 +96,8 @@ function TenantDashboard() {
 
     return {
       title: `${val.property}: ${val.name} booked`,
-      start: startDate.toISOString().split('T')[0],
-      end: endDate.toISOString().split('T')[0],
+      start: startDate.toISOString().split("T")[0],
+      end: endDate.toISOString().split("T")[0],
     }
   });
 
@@ -108,8 +108,8 @@ function TenantDashboard() {
 
     return {
       title: `${val.property}: ${val.name} under maintenance`,
-      start: startDate.toISOString().split('T')[0],
-      end: endDate.toISOString().split('T')[0],
+      start: startDate.toISOString().split("T")[0],
+      end: endDate.toISOString().split("T")[0],
     }
   });
 
@@ -139,7 +139,7 @@ function TenantDashboard() {
         property: val.property.property,
         name: val.room_category.name,
         description: val.description,
-        price: Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(val.price),
+        price: Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR" }).format(val.price),
         capacity: val.capacity,
       };
     });
@@ -194,7 +194,7 @@ function TenantDashboard() {
         picture={val.picture_properties[0]?.picture}
         regency={regency}
         country={val.property_location?.country}
-        price={Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(val.rooms[0]?.lowest_price)}
+        price={Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR" }).format(val.rooms[0]?.lowest_price)}
         rating={averageRating}
       />
     })
@@ -247,23 +247,23 @@ function TenantDashboard() {
 
   return (
     <Flex
-      minH={'100vh'}
+      minH={"100vh"}
       px={2}
     >
       <Box>
         <Sidebar />
       </Box>
-      <Box w='50vw' flex='5' px={{ base: '4', sm: '10' }} bg={'white'} >
+      <Box w="50vw" flex="5" px={{ base: "4", sm: "10" }} bg={"white"} >
         <br />
-        <Heading mb={{ base: '8', sm: '10' }} textAlign={{ base: 'center', sm: 'left' }} >
+        <Heading mb={{ base: "8", sm: "10" }} textAlign={{ base: "center", sm: "left" }} >
           Welcome, {name} 👋
         </Heading>
-        <Box p={{ base: '2', sm: '10' }} bg={'white'} rounded={'xl'} borderWidth={'1px'}
-          borderColor={{ base: 'white', sm: 'gray.300' }}
+        <Box p={{ base: "2", sm: "10" }} bg={"white"} rounded={"xl"} borderWidth={"1px"}
+          borderColor={{ base: "white", sm: "gray.300" }}
         >
           {/* MY PROPERTY */}
           <Box>
-            <Text fontSize={{ base: '20', sm: '28' }} fontWeight={'semibold'} mb={{ base: '6', sm: '10' }} textAlign={{ base: 'center', sm: 'left' }}>Your Property Listings</Text>
+            <Text fontSize={{ base: "20", sm: "28" }} fontWeight={"semibold"} mb={{ base: "6", sm: "10" }} textAlign={{ base: "center", sm: "left" }}>Your Property Listings</Text>
             {propertyListing.length === 0 ? (
               <Text>No property listings yet</Text>
             ) : (
@@ -274,10 +274,10 @@ function TenantDashboard() {
           </Box>
         </Box>
         <br />
-        <Box p={{ base: '2', sm: '10' }} bg={'white'} rounded={'xl'} borderWidth={'1px'}
-          borderColor={{ base: 'white', sm: 'gray.300' }}
+        <Box p={{ base: "2", sm: "10" }} bg={"white"} rounded={"xl"} borderWidth={"1px"}
+          borderColor={{ base: "white", sm: "gray.300" }}
         >
-          <Text fontSize={{ base: '20', sm: '28' }} fontWeight={'semibold'} mb={{ base: '6', sm: '10' }} textAlign={{ base: 'center', sm: 'left' }}>See Availability by Calendar Date</Text>
+          <Text fontSize={{ base: "20", sm: "28" }} fontWeight={"semibold"} mb={{ base: "6", sm: "10" }} textAlign={{ base: "center", sm: "left" }}>See Availability by Calendar Date</Text>
           <Fullcalendar
             className="my-calendar"
             plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
@@ -293,56 +293,56 @@ function TenantDashboard() {
             dayMaxEvents={2} // max number of events displayed per day
             dateClick={dateClick}
           />
-          <Modal isOpen={modalIsOpen} onClose={() => setModalIsOpen(false)} scrollBehavior={'inside'}>
+          <Modal isOpen={modalIsOpen} onClose={() => setModalIsOpen(false)} scrollBehavior={"inside"}>
             <ModalOverlay />
             <ModalContent>
-              <ModalHeader fontWeight={'semibold'}>
-                <Text fontSize={'xl'} px='4' pt='4'>
+              <ModalHeader fontWeight={"semibold"}>
+                <Text fontSize={"xl"} px="4" pt="4">
                   Available Properties & Rooms
                 </Text>
-                <Text fontSize={'xl'} px='4'>
+                <Text fontSize={"xl"} px="4">
                   {formatSelectedDate} :
                 </Text>
               </ModalHeader>
               <ModalBody>
-                <OrderedList p='4' m='auto'>
+                <OrderedList p="4" m="auto">
                   {printAvailableRooms().map((val, idx) => {
                     return (
-                      <Card mb='2' borderColor={'gray.300'} borderWidth={'1px'} boxShadow={'none'}>
+                      <Card mb="2" borderColor={"gray.300"} borderWidth={"1px"} boxShadow={"none"}>
                         <CardHeader>
-                          <Heading size='md'>{val.property}</Heading>
+                          <Heading size="md">{val.property}</Heading>
                         </CardHeader>
                         <CardBody>
-                          <Stack divider={<StackDivider />} spacing='4'>
+                          <Stack divider={<StackDivider />} spacing="4">
                             <Box>
-                              <Heading size='xs' textTransform='uppercase'>
+                              <Heading size="xs" textTransform="uppercase">
                                 Room Name
                               </Heading>
-                              <Text pt='2' fontSize='sm'>
+                              <Text pt="2" fontSize="sm">
                                 {val.name}
                               </Text>
                             </Box>
                             <Box>
-                              <Heading size='xs' textTransform='uppercase'>
+                              <Heading size="xs" textTransform="uppercase">
                                 Price
                               </Heading>
-                              <Text pt='2' fontSize='sm'>
+                              <Text pt="2" fontSize="sm">
                                 {val.price}
                               </Text>
                             </Box>
                             <Box>
-                              <Heading size='xs' textTransform='uppercase'>
+                              <Heading size="xs" textTransform="uppercase">
                                 Capacity
                               </Heading>
-                              <Text pt='2' fontSize='sm'>
+                              <Text pt="2" fontSize="sm">
                                 {val.capacity} adults
                               </Text>
                             </Box>
                             <Box>
-                              <Heading size='xs' textTransform='uppercase'>
+                              <Heading size="xs" textTransform="uppercase">
                                 Description
                               </Heading>
-                              <Text pt='2' fontSize='sm'>
+                              <Text pt="2" fontSize="sm">
                                 {val.description}
                               </Text>
                             </Box>
@@ -354,16 +354,16 @@ function TenantDashboard() {
                 </OrderedList>
               </ModalBody>
               <ModalFooter>
-                <Button color='white' bg='#D3212D'
+                <Button color="white" bg="#D3212D"
                   _hover={{
-                    bg: '#D3212D',
+                    bg: "#D3212D",
                   }}
                   onClick={() => {
                     setModalIsOpen(false);
-                  }} variant='solid'
+                  }} variant="solid"
                   _active={{
-                    bg: '#D3212D',
-                    transform: 'scale(0.98)',
+                    bg: "#D3212D",
+                    transform: "scale(0.98)",
                   }}
                 >
                   Close

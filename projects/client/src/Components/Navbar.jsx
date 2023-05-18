@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {
   Icon,
   Text,
@@ -16,26 +16,26 @@ import {
   MenuDivider,
   useDisclosure,
   Stack, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, InputGroup, Input, InputRightElement
-} from '@chakra-ui/react';
-import { HamburgerIcon, CloseIcon, AddIcon } from '@chakra-ui/icons';
+} from "@chakra-ui/react";
+import { HamburgerIcon, CloseIcon, AddIcon } from "@chakra-ui/icons";
 import { TbHomeHeart } from "react-icons/tb";
 import { AiOutlineSearch } from "react-icons/ai";
-import Login from './Login';
-import { useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import { logoutAction } from '../reducers/auth';
-import { API_URL, API_URL_IMG } from '../helper';
-import axios from 'axios';
-import Logo from '../assets/logotempatku.png';
+import Login from "./Login";
+import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { logoutAction } from "../reducers/auth";
+import { API_URL, API_URL_IMG } from "../helper";
+import axios from "axios";
+import Logo from "../assets/logotempatku.png";
 import { Route, Routes, useLocation } from "react-router-dom";
 
 
 export default function Navbar() {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [scrollBehavior, setScrollBehavior] = React.useState('outside');
+  const [scrollBehavior, setScrollBehavior] = React.useState("outside");
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const imageprofile = useSelector((state) => state.authReducer.image_profile);
+  const imageProfile = useSelector((state) => state.authReducer.image_profile);
   const role = useSelector((state) => state.authReducer.role);
   const password = useSelector((state) => state.authReducer.password);
   const { pathname } = useLocation();
@@ -54,15 +54,15 @@ export default function Navbar() {
   };
 
   React.useEffect(() => {
-    if (pathname === '/') {
+    if (pathname === "/") {
       onOpenModal();
     }
   }, [pathname]);
 
   const onBtnLogout = () => {
-    localStorage.removeItem('tempatku_login');
+    localStorage.removeItem("tempatku_login");
     dispatch(logoutAction());
-    navigate('/', { replace: true });
+    navigate("/", { replace: true });
   };
 
   const onBtnLogoutGoogle = async () => {
@@ -75,8 +75,8 @@ export default function Navbar() {
       });
       document.cookie = "googleAuthToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
       dispatch(logoutAction());
-      localStorage.removeItem('tempatku_login');
-      navigate('/', { replace: true });
+      localStorage.removeItem("tempatku_login");
+      navigate("/", { replace: true });
     } catch (error) {
       console.log("ini error dari onBtnGoogleLogout : ", error);
     }
@@ -85,23 +85,23 @@ export default function Navbar() {
   return (
     <>
       <Box
-        w='full' bg='white' zIndex={1}
+        w="full" bg="white" zIndex={1}
         borderBottomWidth={1}
-        borderStyle={'solid'}
-        borderColor={'gray.200'}
+        borderStyle={"solid"}
+        borderColor={"gray.200"}
       >
-        <Box boxShadow={'xs'} px={{ base: '4', sm: '10' }}>
-          <Flex h={16} alignItems={'center'} justifyContent={'space-between'}>
-            <HStack alignItems={'center'}>
+        <Box boxShadow={"xs"} px={{ base: "4", sm: "10" }}>
+          <Flex h={16} alignItems={"center"} justifyContent={"space-between"}>
+            <HStack alignItems={"center"}>
               {/* Logo Tempatku */}
               {
                 role == "User" ?
-                  <Image src={Logo} alt='tempatku logo' boxSize='50px' onClick={() => navigate('/')} />
+                  <Image src={Logo} alt="tempatku logo" boxSize="50px" onClick={() => navigate("/")} />
                   :
                   role == "Tenant" ?
-                    <Image src={Logo} alt='tempatku logo' boxSize='50px' onClick={() => navigate('/dashboard')} />
+                    <Image src={Logo} alt="tempatku logo" boxSize="50px" onClick={() => navigate("/dashboard")} />
                     :
-                    <Image src={Logo} alt='tempatku logo' boxSize='50px' onClick={() => navigate('/')} />
+                    <Image src={Logo} alt="tempatku logo" boxSize="50px" onClick={() => navigate("/")} />
               }
               <Text
                 display={{
@@ -113,25 +113,25 @@ export default function Navbar() {
                 tempatku
               </Text>
               <HStack
-                as={'nav'}
+                as={"nav"}
                 spacing={4}
-                display={{ base: 'none', md: 'flex' }}>
+                display={{ base: "none", md: "flex" }}>
               </HStack>
             </HStack>
 
-            <Flex alignItems={'center'}>
+            <Flex alignItems={"center"}>
 
               {/* Become TENANT */}
               {
                 // User
                 role == "User" ?
                   <Button
-                    variant={'ghost'}
-                    size={'sm'}
+                    variant={"ghost"}
+                    size={"sm"}
                     mr={4}
-                    _hover={'none'}
+                    _hover={"none"}
                     display={{ base: "none", sm: "none", md: "block" }}
-                    onClick={() => navigate('/register/tenant')}
+                    onClick={() => navigate("/register/tenant")}
                   >
                     Become a Tenant
                   </Button>
@@ -139,23 +139,23 @@ export default function Navbar() {
                   // Tenant
                   role == "Tenant" ?
                     <Button
-                      variant={'ghost'}
-                      size={'sm'}
+                      variant={"ghost"}
+                      size={"sm"}
                       mr={4}
                       display={{ base: "none" }}
-                      _hover={'none'}
-                      onClick={() => navigate('/register/tenant')}
+                      _hover={"none"}
+                      onClick={() => navigate("/register/tenant")}
                     >
                       Become a Tenant
                     </Button>
                     :
                     <Button
-                      variant={'ghost'}
-                      size={'sm'}
+                      variant={"ghost"}
+                      size={"sm"}
                       mr={4}
-                      _hover={'none'}
+                      _hover={"none"}
                       display={{ base: "none", sm: "none", md: "block" }}
-                      onClick={() => navigate('/register/tenant')}
+                      onClick={() => navigate("/register/tenant")}
                     >
                       Become a Tenant
                     </Button>
@@ -165,33 +165,33 @@ export default function Navbar() {
               <Menu>
                 <MenuButton
                   as={Button}
-                  rounded={'full'}
-                  variant={'link'}
-                  cursor={'pointer'}
+                  rounded={"full"}
+                  variant={"link"}
+                  cursor={"pointer"}
                   minW={0}
-                  border='1px'
-                  color='gray.300'
-                  p='1'
-                  _active={'none'}
+                  border="1px"
+                  color="gray.300"
+                  p="1"
+                  _active={"none"}
                 >
-                  <HamburgerIcon w={6} h={6} mx={2} my={1} color='black' />
+                  <HamburgerIcon w={6} h={6} mx={2} my={1} color="black" />
                   {
                     // User
                     role == "User" ?
                       <Avatar
-                        size={'sm'}
-                        src={imageprofile == null ? "https://ionicframework.com/docs/img/demos/avatar.svg" : imageprofile && imageprofile.includes('http') ? imageprofile : `${API_URL_IMG}${imageprofile}` ? `${API_URL_IMG}${imageprofile}` : "https://ionicframework.com/docs/img/demos/avatar.svg"}
+                        size={"sm"}
+                        src={imageProfile == null ? "https://ionicframework.com/docs/img/demos/avatar.svg" : imageProfile && imageProfile.includes("http") ? imageProfile : `${API_URL_IMG}${imageProfile}` ? `${API_URL_IMG}${imageProfile}` : "https://ionicframework.com/docs/img/demos/avatar.svg"}
                       />
                       :
                       // Tenant
                       role == "Tenant" ?
                         <Avatar
-                          size={'sm'}
-                          src={imageprofile == null ? "https://ionicframework.com/docs/img/demos/avatar.svg" : imageprofile && imageprofile.includes('http') ? imageprofile : `${API_URL_IMG}${imageprofile}` ? `${API_URL_IMG}${imageprofile}` : "https://ionicframework.com/docs/img/demos/avatar.svg"}
+                          size={"sm"}
+                          src={imageProfile == null ? "https://ionicframework.com/docs/img/demos/avatar.svg" : imageProfile && imageProfile.includes("http") ? imageProfile : `${API_URL_IMG}${imageProfile}` ? `${API_URL_IMG}${imageProfile}` : "https://ionicframework.com/docs/img/demos/avatar.svg"}
                         />
                         :
                         <Avatar
-                          size={'sm'}
+                          size={"sm"}
                           src={"https://ionicframework.com/docs/img/demos/avatar.svg"}
                         />
                   }
@@ -200,8 +200,8 @@ export default function Navbar() {
                   // User
                   role == "User" ?
                     <MenuList zIndex={9999}>
-                      <MenuItem onClick={() => navigate('/')}>Home</MenuItem>
-                      <MenuItem onClick={() => navigate('/profile/edit')}>Profile</MenuItem>
+                      <MenuItem onClick={() => navigate("/")}>Home</MenuItem>
+                      <MenuItem onClick={() => navigate("/profile/edit")}>Profile</MenuItem>
                       <MenuItem>Bookings</MenuItem>
 
                       {password === "NULL" ? (
@@ -213,7 +213,7 @@ export default function Navbar() {
                       ) : (
                         <div>
 
-                          <MenuItem onClick={() => navigate('/password/change')}>Change Password</MenuItem>
+                          <MenuItem onClick={() => navigate("/password/change")}>Change Password</MenuItem>
                           <MenuItem
                             onClick={onBtnLogout}
                           >Logout</MenuItem>
@@ -224,9 +224,9 @@ export default function Navbar() {
                     // Tenant
                     role == "Tenant" ?
                       <MenuList zIndex={9999}>
-                        <MenuItem onClick={() => navigate('/dashboard')}>Dashboard</MenuItem>
-                        <MenuItem onClick={() => navigate('/profile/edit')}>Profile</MenuItem>
-                        <MenuItem onClick={() => navigate('/password/change')}>Change Password</MenuItem>
+                        <MenuItem onClick={() => navigate("/dashboard")}>Dashboard</MenuItem>
+                        <MenuItem onClick={() => navigate("/profile/edit")}>Profile</MenuItem>
+                        <MenuItem onClick={() => navigate("/password/change")}>Change Password</MenuItem>
                         <MenuItem>Manage Property / Rooms</MenuItem>
                         <MenuItem>Transaction</MenuItem>
                         <MenuItem>Report</MenuItem>
@@ -236,7 +236,7 @@ export default function Navbar() {
                       </MenuList>
                       :
                       <MenuList zIndex={9999}>
-                        <MenuItem onClick={onOpen} maxH={'100vh'}>Login
+                        <MenuItem onClick={onOpen} maxH={"100vh"}>Login
                           <Modal onClose={onClose} isOpen={isOpen} scrollBehavior={scrollBehavior} >
                             <ModalOverlay />
                             <ModalContent>
@@ -249,7 +249,7 @@ export default function Navbar() {
                           </Modal>
                         </MenuItem>
                         <MenuItem
-                          onClick={() => navigate('/register/user')}
+                          onClick={() => navigate("/register/user")}
                         >Register</MenuItem>
                       </MenuList>
                 }

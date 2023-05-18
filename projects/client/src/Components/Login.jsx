@@ -1,16 +1,16 @@
-import { Flex, Box, FormControl, Divider, Image, Icon, Card, CardBody, FormLabel, Input, InputGroup, HStack, Center, InputRightElement, Stack, Button, Heading, Text, Link, useToast, FormErrorMessage } from '@chakra-ui/react';
-import React, { useState } from 'react';
-import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
-import { FcGoogle } from 'react-icons/fc';
+import { Flex, Box, FormControl, Divider, Image, Icon, Card, CardBody, FormLabel, Input, InputGroup, HStack, Center, InputRightElement, Stack, Button, Heading, Text, Link, useToast, FormErrorMessage } from "@chakra-ui/react";
+import React, { useState } from "react";
+import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
+import { FcGoogle } from "react-icons/fc";
 import { TbHomeHeart } from "react-icons/tb";
-import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import { API_URL } from '../helper';
-import { loginAction } from '../reducers/auth';
-import { useFormik } from 'formik';
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { API_URL } from "../helper";
+import { loginAction } from "../reducers/auth";
+import { useFormik } from "formik";
 import * as yup from "yup";
-import Logo from '../assets/logotempatku.png';
+import Logo from "../assets/logotempatku.png";
 
 export default function Login(props) {
     const [showPassword, setShowPassword] = useState(false);
@@ -32,35 +32,35 @@ export default function Login(props) {
                 password: formik.values.password
             });
             toast({
-                title: 'Login success',
-                status: 'success',
+                title: "Login success",
+                status: "success",
                 duration: 3000,
                 isClosable: true,
             });
             //simpen ke LOCALSTORAGE browser u/ KEEPLOGIN
-            localStorage.setItem('tempatku_login', response.data.token);
+            localStorage.setItem("tempatku_login", response.data.token);
             //simpen response.data ke reducer
             dispatch(loginAction(response.data))
             if (response.data.role == "User") {
-                navigate('/', { replace: true });
+                navigate("/", { replace: true });
             } else if (response.data.role == "Tenant") {
-                navigate('/dashboard', { replace: true });
+                navigate("/dashboard", { replace: true });
             } else {
-                navigate('/', { replace: true });
+                navigate("/", { replace: true });
             }
         } catch (error) {
             console.log("ini error dari onBtnLogin : ", error);
             if (error.response && !error.response.data.message) {
                 toast({
-                    title: 'Login failed',
-                    status: 'error',
+                    title: "Login failed",
+                    status: "error",
                     duration: 3000,
                     isClosable: true,
                 });
             } else {
                 toast({
                     title: error.response.data.message,
-                    status: 'error',
+                    status: "error",
                     duration: 3000,
                     isClosable: true,
                 });
@@ -77,7 +77,7 @@ export default function Login(props) {
         },
         onSubmit: onBtnLogin,
         validationSchema: yup.object().shape({
-            emailOrPhone: yup.string().required("Please enter a valid email address or phone number").test('valid-email-or-phone', 'Please enter a valid email address or phone number', function (value) {
+            emailOrPhone: yup.string().required("Please enter a valid email address or phone number").test("valid-email-or-phone", "Please enter a valid email address or phone number", function (value) {
                 const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
                 const phoneRegex = /^\+?[0-9]{8,14}$/;
                 return emailRegex.test(value) || phoneRegex.test(value);
@@ -97,65 +97,65 @@ export default function Login(props) {
     };
 
     const signInWithGoogle = () => {
-        window.open(`${API_URL}/auth/google`, "_self", 'toolbar=no, scrollbars=yes, resizable=no, width=1000, height=auto')
+        window.open(`${API_URL}/auth/google`, "_self", "toolbar=no, scrollbars=yes, resizable=no, width=1000, height=auto")
     };
 
     return (
         <Flex
-            maxH={'100vh'}
-            justify={'center'}
+            maxH={"100vh"}
+            justify={"center"}
         >
             <form onSubmit={formik.handleSubmit}>
-                <Stack mx={'auto'} minW={{ base: 'sm', md: 'md' }} px={6}>
+                <Stack mx={"auto"} minW={{ base: "sm", md: "md" }} px={6}>
                     <Box
-                        rounded={'lg'}
-                        bg={'white'}
+                        rounded={"lg"}
+                        bg={"white"}
                         px={4}
                     >
-                        <Stack mt='4' alignItems={'center'}>
-                            <Image src={Logo} alt='tempatku logo' boxSize='50px' />
+                        <Stack mt="4" alignItems={"center"}>
+                            <Image src={Logo} alt="tempatku logo" boxSize="50px" />
                         </Stack>
-                        <Stack mb='8'>
-                            <Text fontSize='3xl' fontWeight='semibold' style={{ display: 'flex' }} m='auto'>Login to tempatku</Text>
+                        <Stack mb="8">
+                            <Text fontSize="3xl" fontWeight="semibold" style={{ display: "flex" }} m="auto">Login to tempatku</Text>
                         </Stack>
                         <Stack spacing={4}>
                             <FormControl isInvalid={formik.errors.emailOrPhone}>
-                                <FormLabel size='sm'>Email or Phone Number</FormLabel>
+                                <FormLabel size="sm">Email or Phone Number</FormLabel>
                                 {/* Input Email or Phone Number */}
-                                <Input type="text" borderColor='#d0d7de'
+                                <Input type="text" borderColor="#d0d7de"
                                     onChange={handleForm}
                                     name="emailOrPhone" 
                                 />
-                                <FormErrorMessage fontSize='xs'>{formik.errors.emailOrPhone}</FormErrorMessage>
+                                <FormErrorMessage fontSize="xs">{formik.errors.emailOrPhone}</FormErrorMessage>
                             </FormControl>
                             <FormControl isInvalid={formik.errors.password}>
-                                <HStack justify='space-between'>
+                                <HStack justify="space-between">
                                     <FormLabel>Password</FormLabel>
                                     <Button
-                                        as='a'
-                                        variant='link'
-                                        size='xs'
-                                        color='#0969da'
-                                        fontWeight='500'
+                                        as="a"
+                                        variant="link"
+                                        size="xs"
+                                        color="#0969da"
+                                        fontWeight="500"
                                         onClick={() => {
                                             props.onCloseModal()
-                                            navigate('/password/forgot')
+                                            navigate("/password/forgot")
                                         }}
                                     >
                                         Forgot password?
                                     </Button>
                                 </HStack>
-                                <InputGroup borderColor='#d0d7de'>
+                                <InputGroup borderColor="#d0d7de">
                                     {/* Input Password */}
-                                    <Input type={showPassword ? 'text' : 'password'}
+                                    <Input type={showPassword ? "text" : "password"}
                                         onChange={handleForm}
                                         name="password" 
                                     />
-                                    <InputRightElement h={'full'}>
+                                    <InputRightElement h={"full"}>
                                         <Button
-                                            variant={'ghost'}
-                                            _hover={'none'}
-                                            _active={'none'}
+                                            variant={"ghost"}
+                                            _hover={"none"}
+                                            _active={"none"}
                                             onClick={() =>
                                                 setShowPassword((showPassword) => !showPassword)
                                             }>
@@ -163,20 +163,20 @@ export default function Login(props) {
                                         </Button>
                                     </InputRightElement>
                                 </InputGroup>
-                                <FormErrorMessage fontSize='xs'>{formik.errors.password}</FormErrorMessage>
+                                <FormErrorMessage fontSize="xs">{formik.errors.password}</FormErrorMessage>
                             </FormControl>
                             <Stack spacing={0}>
                             </Stack>
                             <Stack pb={0}>
                                 <Center>
-                                    <Stack spacing={2} align={'center'} maxW={'md'} w={'full'}>
+                                    <Stack spacing={2} align={"center"} maxW={"md"} w={"full"}>
                                         <Button
-                                            type='button'
-                                            w={'full'}
-                                            bg={'#D3212D'}
-                                            color={'white'}
+                                            type="button"
+                                            w={"full"}
+                                            bg={"#D3212D"}
+                                            color={"white"}
                                             _hover={{
-                                                bg: '#D3212D',
+                                                bg: "#D3212D",
                                             }}
                                             onClick={onBtnLogin}
                                             isLoading={loading}
@@ -185,30 +185,30 @@ export default function Login(props) {
                                         </Button>
                                         <Button
                                             onClick={signInWithGoogle}
-                                            w={'full'} variant={'outline'} leftIcon={<FcGoogle />} borderColor='#d0d7de' _hover={'none'}>
+                                            w={"full"} variant={"outline"} leftIcon={<FcGoogle />} borderColor="#d0d7de" _hover={"none"}>
                                             <Center>
                                                 <Text>Continue with Google</Text>
                                             </Center>
                                         </Button>
 
                                         <Stack
-                                            pb='2'
+                                            pb="2"
                                         >
                                             <Card
-                                                variant='none'
-                                                borderColor='#d0d7de'
+                                                variant="none"
+                                                borderColor="#d0d7de"
 
                                             >
                                                 <CardBody>
                                                     <Center>
-                                                        <HStack fontSize='sm' spacing='1'>
+                                                        <HStack fontSize="sm" spacing="1">
                                                             <Text>New to tempatku?</Text>
                                                             <Text onClick={() => {
                                                                 props.onCloseModal()
-                                                                navigate('/register/user')
+                                                                navigate("/register/user")
                                                             }
-                                                            } color='#0969da'
-                                                                cursor={'pointer'}
+                                                            } color="#0969da"
+                                                                cursor={"pointer"}
                                                             >
                                                                 Create an account.
                                                             </Text>
