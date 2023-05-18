@@ -45,11 +45,10 @@ export default function LandingNew() {
     const [showLocation, setShowLocation] = useState([]);
     const [recommendProperty, setRecommendProperty] = useState([]);
     const dispatch = useDispatch();
-    const [category, setCategory] = useState("");
 
 
 
-    //API to fetch search result (Location Search Bar)
+    //fetch search result (Location Search Bar)
     const onSearch = (searchTerm) => {
         setInputLocation(searchTerm); //if suggestion clicked, it will be put inside the input field
     };
@@ -90,15 +89,39 @@ export default function LandingNew() {
         setInputCheckOut("date");
     };
 
-    // For Search Button --> tambahin di Page FilteredProperty: category=${category || ""} di api call getAllProperty, sama const [category, setCategory] = useState(location.state?.category);
+    // For Searchbar Button 
     const handleSearch = () => {
-        navigate("/property", {
+        navigate("/property/", {
             state: {
                 inputLocation: inputLocation,
                 inputCheckIn: inputCheckIn,
                 inputCheckOut: inputCheckOut,
                 guest: guest,
-                category: category,
+            }
+        })
+    };
+
+    // For Browse by Property Type
+    const handleSearchCategory = (category) => {
+        navigate('/property/', {
+            state: {
+                inputLocation: inputLocation,
+                inputCheckIn: inputCheckIn,
+                inputCheckOut: inputCheckOut,
+                guest: guest,
+                category: category
+            }
+        })
+    };
+
+    // For Top Destinations
+    const handleSearchDestination = (inputLocation) => {
+        navigate('/property/', {
+            state: {
+                inputLocation: inputLocation,
+                inputCheckIn: inputCheckIn,
+                inputCheckOut: inputCheckOut,
+                guest: guest,
             }
         })
     };
@@ -250,7 +273,7 @@ export default function LandingNew() {
             // Find idx of the equals sign (=) and remove substring starting (=)
             var equalsIndex = cookieValue.indexOf("=");
             var token = cookieValue.substring(equalsIndex + 1);
-            localStorage.setItem("tempatku_login", token); 
+            localStorage.setItem("tempatku_login", token);
             dispatch(loginActionGoogle(response.data));
         } catch (error) {
             console.log("error googlelogin: ", error);
@@ -263,12 +286,12 @@ export default function LandingNew() {
 
     React.useEffect(() => {
         window.scrollTo(0, 0);
-      }, []);
+    }, []);
 
     return (
         <>
             {/* BANNER */}
-            <Box mb={{base:"40px",md:"80px"}}> 
+            <Box mb={{ base: "40px", md: "80px" }}>
                 <Flex
                     w="full"
                     h={{ base: "80vh", lg: "100vh" }}
@@ -290,7 +313,7 @@ export default function LandingNew() {
                                 Find Your Next Stay
                             </Text>
                             {/* SEARCH BAR */}
-                            <Box bg="white" w={{ base: "80vw", md: "45vw", lg: "80vw" }} m="30px auto" p="6px 10px 6px 25px" borderRadius="10px" py={{base:"4", lg:"1.5"}}>
+                            <Box bg="white" w={{ base: "80vw", md: "45vw", lg: "80vw" }} m="30px auto" p="6px 10px 6px 25px" borderRadius="10px" py={{ base: "4", lg: "1.5" }}>
                                 <Flex align={{ base: "left", lg: "center" }} justify={"space-between"} flexWrap={"wrap"} flexDirection={{ base: "column", lg: "row" }}>
                                     <Box
                                         flex="1.5"
@@ -307,7 +330,7 @@ export default function LandingNew() {
                                             <List>
                                                 {showLocation.filter(item => {
                                                     const searchTerm = inputLocation.toLowerCase(); //user write in input location
-                                                    const name = item.name.toLowerCase();  
+                                                    const name = item.name.toLowerCase();
                                                     return (searchTerm && name.includes(searchTerm) && name !== searchTerm);
                                                 }
                                                 ).slice(0, 4) //will show only first 4 items di location input field
@@ -322,7 +345,7 @@ export default function LandingNew() {
                                             </List>
                                         </Box>
                                     </Box>
-                                    <Box flex="1" py={{base:"4", sm:"1"}}>
+                                    <Box flex="1" py={{ base: "4", sm: "1" }}>
                                         <Text fontWeight="600">Check in</Text>
                                         <DatePicker
                                             selected={checkInDate}
@@ -344,7 +367,7 @@ export default function LandingNew() {
                                             shouldCloseOnSelect={false}
                                         />
                                     </Box>
-                                    <Box flex="1" py={{base:"4", sm:"1"}}>
+                                    <Box flex="1" py={{ base: "4", sm: "1" }}>
                                         <Text fontWeight="600">Duration</Text>
                                         <Text>{duration} days</Text>
                                     </Box>
@@ -397,14 +420,14 @@ export default function LandingNew() {
                             lineHeight={{ base: "4xl", md: "5.3vw" }}
                             mt="10px"
                         >
-                            <Text py={{base:"0",md:"2", lg:"0"}}>Special Offers</Text>
-                            <Text py={{base:"0",md:"2", lg:"0"}}>For You</Text>
+                            <Text py={{ base: "0", md: "2", lg: "0" }}>Special Offers</Text>
+                            <Text py={{ base: "0", md: "2", lg: "0" }}>For You</Text>
                         </Heading>
                     </Box>
                     <Box maxW={"xl"}>
-                    <Text fontSize={{base:"sm", sm:"18px"}} mt="10px">
-                    During our exclusive holiday sale, we are thrilled to present you with an array of special offers! Take advantage of this limited-time promotion, get the best prices on properties and rooms here.
-                    </Text>
+                        <Text fontSize={{ base: "sm", sm: "18px" }} mt="10px">
+                            During our exclusive holiday sale, we are thrilled to present you with an array of special offers! Take advantage of this limited-time promotion, get the best prices on properties and rooms here.
+                        </Text>
                     </Box>
                 </Box>
                 {/* PROPERTY TYPE */}
@@ -416,59 +439,47 @@ export default function LandingNew() {
                 >
                     Browse by Property Type
                 </Heading>
-                <Text fontWeight="700" align="center" mt="14px" fontSize={{base:"sm", lg:"md"}}>Enjoy your stay in our fine selection of properties</Text>
+                <Text fontWeight="700" align="center" mt="14px" fontSize={{ base: "sm", lg: "md" }}>Enjoy your stay in our fine selection of properties</Text>
                 <Box my={{ base: "40px", md: "80px" }} px={2}>
                     <Slider {...settingsCategory} prevArrow={<FaChevronLeft color="#E2E8F0" />} nextArrow={<FaChevronRight color="#E2E8F0" />}>
                         <Box p="2">
-                            <Link to={{
-                                pathname: "/property/",
-                                state: { category: "Hotel" }
-                            }} >
-                                <Box position="relative" overflow="hidden" borderRadius="10px" fontSize="18px"
-                                    transition="opacity 0.3s"
-                                    cursor="pointer"
-                                >
-                                    <Image src={Hotels1} _hover={{ transform: "scale(1.1)", transition: ".5s" }}
-                                        alt="Hotels" w="100%" borderRadius="10px" />
-                                    <Text position="absolute" top="50%" left="50%" transform="translate(-50%,-50%)" textAlign="center" color="white" fontSize={{ base: "sm", md: "20px", lg: "20px" }} fontWeight="500">
-                                        HOTELS
-                                    </Text>
-                                </Box>
-                            </Link>
+                            <Box position="relative" overflow="hidden" borderRadius="10px" fontSize="18px"
+                                transition="opacity 0.3s"
+                                cursor="pointer"
+                                onClick={() => handleSearchCategory("Hotel")}
+                            >
+                                <Image src={Hotels1} _hover={{ transform: "scale(1.1)", transition: ".5s" }}
+                                    alt="Hotels" w="100%" borderRadius="10px" />
+                                <Text position="absolute" top="50%" left="50%" transform="translate(-50%,-50%)" textAlign="center" color="white" fontSize={{ base: "sm", md: "20px", lg: "20px" }} fontWeight="500">
+                                    HOTELS
+                                </Text>
+                            </Box>
                         </Box>
                         <Box p="2">
-                            <Link to={{
-                                pathname: "/property/",
-                                state: { category: "Apartment" }
-                            }} >
-                                <Box position="relative" overflow="hidden" borderRadius="10px" fontSize="18px"
-                                    transition="opacity 0.3s"
-                                    cursor="pointer"
-                                >
-                                    <Image src={Apartment1} _hover={{ transform: "scale(1.1)", transition: ".5s" }}
-                                        alt="Hotels" w="100%" borderRadius="10px" />
-                                    <Text position="absolute" top="50%" left="50%" transform="translate(-50%,-50%)" textAlign="center" color="white" fontSize={{ base: "sm", md: "20px", lg: "20px" }} fontWeight="500">
-                                        APARTMENTS
-                                    </Text>
-                                </Box>
-                            </Link>
+                            <Box position="relative" overflow="hidden" borderRadius="10px" fontSize="18px"
+                                transition="opacity 0.3s"
+                                cursor="pointer"
+                                onClick={() => handleSearchCategory("Apartment")}
+                            >
+                                <Image src={Apartment1} _hover={{ transform: "scale(1.1)", transition: ".5s" }}
+                                    alt="Hotels" w="100%" borderRadius="10px" />
+                                <Text position="absolute" top="50%" left="50%" transform="translate(-50%,-50%)" textAlign="center" color="white" fontSize={{ base: "sm", md: "20px", lg: "20px" }} fontWeight="500">
+                                    APARTMENTS
+                                </Text>
+                            </Box>
                         </Box>
                         <Box p="2">
-                            <Link to={{
-                                pathname: "/property/",
-                                state: { category: "Villa" }
-                            }} >
-                                <Box position="relative" overflow="hidden" borderRadius="10px" fontSize="18px"
-                                    transition="opacity 0.3s"
-                                    cursor="pointer"
-                                >
-                                    <Image src={Villas1} _hover={{ transform: "scale(1.1)", transition: ".5s" }}
-                                        alt="Hotels" w="100%" borderRadius="10px" />
-                                    <Text position="absolute" top="50%" left="50%" transform="translate(-50%,-50%)" textAlign="center" color="white" fontSize={{ base: "sm", md: "20px", lg: "20px" }} fontWeight="500">
-                                        VILLAS
-                                    </Text>
-                                </Box>
-                            </Link>
+                            <Box position="relative" overflow="hidden" borderRadius="10px" fontSize="18px"
+                                transition="opacity 0.3s"
+                                cursor="pointer"
+                                onClick={() => handleSearchCategory("Villa")}
+                            >
+                                <Image src={Villas1} _hover={{ transform: "scale(1.1)", transition: ".5s" }}
+                                    alt="Hotels" w="100%" borderRadius="10px" />
+                                <Text position="absolute" top="50%" left="50%" transform="translate(-50%,-50%)" textAlign="center" color="white" fontSize={{ base: "sm", md: "20px", lg: "20px" }} fontWeight="500">
+                                    VILLAS
+                                </Text>
+                            </Box>
                         </Box>
                     </Slider>
                 </Box>
@@ -481,73 +492,58 @@ export default function LandingNew() {
                 >
                     Top Destinations
                 </Heading>
-                <Text fontWeight="700" align="center" mt="14px" fontSize={{base:"sm", lg:"md"}}>Discover our properties in big cities of Indonesia</Text>
+                <Text fontWeight="700" align="center" mt="14px" fontSize={{ base: "sm", lg: "md" }}>Discover our properties in big cities of Indonesia</Text>
                 <Box my={{ base: "40px", md: "80px" }} px={2}>
                     <Slider {...settingsDestinations} prevArrow={<FaChevronLeft color="#E2E8F0" />} nextArrow={<FaChevronRight color="#E2E8F0" />}>
                         <Box p="2">
-                            <Link to={{
-                                pathname: "/property/",
-                                state: { inputLocation: "KOTA DENPASAR" }
-                            }} >
-                                <Box position="relative" textAlign="center" overflow="hidden" borderRadius="10px" cursor="pointer" boxShadow={"xs"}>
-                                    <Image src={Kuta1} borderRadius="10px" _hover={{ transform: "scale(1.1)", transition: ".5s" }} />
-                                    <Text position="absolute" top="50%" left="50%" transform="translate(-50%,-50%)" color="#fff" fontSize={{ base: "sm", md: "20px", lg: "20px" }} fontWeight="500">
-                                        DENPASAR
-                                        </Text>
-                                </Box>
-                            </Link>
+                            <Box position="relative" textAlign="center" overflow="hidden" borderRadius="10px" cursor="pointer" boxShadow={"xs"}
+                                onClick={() => handleSearchDestination("BALI")}
+                            >
+                                <Image src={Kuta1} borderRadius="10px" _hover={{ transform: "scale(1.1)", transition: ".5s" }} />
+                                <Text position="absolute" top="50%" left="50%" transform="translate(-50%,-50%)" color="#fff" fontSize={{ base: "sm", md: "20px", lg: "20px" }} fontWeight="500">
+                                    BALI
+                                </Text>
+                            </Box>
                         </Box>
                         <Box p="2">
-                            <Link to={{
-                                pathname: "/property/",
-                                state: { inputLocation: "KOTA JAKARTA" }
-                            }} >
-                                <Box position="relative" textAlign="center" overflow="hidden" borderRadius="10px" cursor="pointer" boxShadow={"xs"}>
-                                    <Image src={Jakarta1} borderRadius="10px" _hover={{ transform: "scale(1.1)", transition: ".5s" }} />
-                                    <Text position="absolute" top="50%" left="50%" transform="translate(-50%,-50%)" color="#fff" fontSize={{ base: "sm", md: "20px", lg: "20px" }} fontWeight="500">
-                                        JAKARTA
-                                        </Text>
-                                </Box>
-                            </Link>
+                            <Box position="relative" textAlign="center" overflow="hidden" borderRadius="10px" cursor="pointer" boxShadow={"xs"}
+                                onClick={() => handleSearchDestination("DKI JAKARTA")}
+                            >
+                                <Image src={Jakarta1} borderRadius="10px" _hover={{ transform: "scale(1.1)", transition: ".5s" }} />
+                                <Text position="absolute" top="50%" left="50%" transform="translate(-50%,-50%)" color="#fff" fontSize={{ base: "sm", md: "20px", lg: "20px" }} fontWeight="500">
+                                    JAKARTA
+                                </Text>
+                            </Box>
                         </Box>
                         <Box p="2">
-                            <Link to={{
-                                pathname: "/property/",
-                                state: { inputLocation: "KOTA BOGOR" }
-                            }} >
-                                <Box position="relative" textAlign="center" overflow="hidden" borderRadius="10px" cursor="pointer" boxShadow={"xs"}>
-                                    <Image src={Uluwatu1} borderRadius="10px" _hover={{ transform: "scale(1.1)", transition: ".5s" }} />
-                                    <Text position="absolute" top="50%" left="50%" transform="translate(-50%,-50%)" color="#fff" fontSize={{ base: "sm", md: "20px", lg: "20px" }} fontWeight="500">
-                                        BOGOR
-                                        </Text>
-                                </Box>
-                            </Link>
+                            <Box position="relative" textAlign="center" overflow="hidden" borderRadius="10px" cursor="pointer" boxShadow={"xs"}
+                                onClick={() => handleSearchDestination("JAWA BARAT")}
+                            >
+                                <Image src={Uluwatu1} borderRadius="10px" _hover={{ transform: "scale(1.1)", transition: ".5s" }} />
+                                <Text position="absolute" top="50%" left="50%" transform="translate(-50%,-50%)" color="#fff" fontSize={{ base: "sm", md: "20px", lg: "20px" }} fontWeight="500">
+                                    BANDUNG
+                                </Text>
+                            </Box>
                         </Box>
                         <Box p="2">
-                            <Link to={{
-                                pathname: "/property/",
-                                state: { inputLocation: "KOTA BANDUNG" }
-                            }} >
-                                <Box position="relative" textAlign="center" overflow="hidden" borderRadius="10px" cursor="pointer" boxShadow={"xs"}>
-                                    <Image src={Ubud1} borderRadius="10px" _hover={{ transform: "scale(1.1)", transition: ".5s" }} />
-                                    <Text position="absolute" top="50%" left="50%" transform="translate(-50%,-50%)" color="#fff" fontSize={{ base: "sm", md: "20px", lg: "20px" }} fontWeight="500">
-                                        BANDUNG
-                                        </Text>
-                                </Box>
-                            </Link>
+                            <Box position="relative" textAlign="center" overflow="hidden" borderRadius="10px" cursor="pointer" boxShadow={"xs"}
+                                onClick={() => handleSearchDestination("BANTEN")}
+                            >
+                                <Image src={Ubud1} borderRadius="10px" _hover={{ transform: "scale(1.1)", transition: ".5s" }} />
+                                <Text position="absolute" top="50%" left="50%" transform="translate(-50%,-50%)" color="#fff" fontSize={{ base: "sm", md: "20px", lg: "20px" }} fontWeight="500">
+                                    TANGERANG
+                                </Text>
+                            </Box>
                         </Box>
                         <Box p="2">
-                            <Link to={{
-                                pathname: "/property/",
-                                state: { inputLocation: "KOTA YOGYAKARTA" }
-                            }} >
-                                <Box position="relative" textAlign="center" overflow="hidden" borderRadius="10px" cursor="pointer" boxShadow={"xs"}>
-                                    <Image src={Yogyakarta1} borderRadius="10px" _hover={{ transform: "scale(1.1)", transition: ".5s" }} />
-                                    <Text position="absolute" top="50%" left="50%" transform="translate(-50%,-50%)" color="#fff" fontSize={{ base: "sm", md: "20px", lg: "20px" }} fontWeight="500">
+                            <Box position="relative" textAlign="center" overflow="hidden" borderRadius="10px" cursor="pointer" boxShadow={"xs"}
+                                onClick={() => handleSearchDestination("DI YOGYAKARTA")}
+                            >
+                                <Image src={Yogyakarta1} borderRadius="10px" _hover={{ transform: "scale(1.1)", transition: ".5s" }} />
+                                <Text position="absolute" top="50%" left="50%" transform="translate(-50%,-50%)" color="#fff" fontSize={{ base: "sm", md: "20px", lg: "20px" }} fontWeight="500">
                                     YOGYAKARTA
-                                        </Text>
-                                </Box>
-                            </Link>
+                                </Text>
+                            </Box>
                         </Box>
                     </Slider>
                 </Box>
@@ -569,21 +565,21 @@ export default function LandingNew() {
                             lineHeight={{ base: "4xl", md: "5.3vw" }}
                             mt="10px"
                         >
-                            <Text py={{base:"0",md:"2", lg:"0"}}>Sharing</Text>
-                            <Text py={{base:"0",md:"2", lg:"0"}}>Is Earning Now</Text>
+                            <Text py={{ base: "0", md: "2", lg: "0" }}>Sharing</Text>
+                            <Text py={{ base: "0", md: "2", lg: "0" }}>Is Earning Now</Text>
                         </Heading>
                     </Box>
-                    <Text fontSize={{base:"sm", sm:"18px"}} mt="10px">
+                    <Text fontSize={{ base: "sm", sm: "18px" }} mt="10px">
                         Great opportunity to make money by sharing your extra space.
                     </Text>
                     <Button
                         bg="#D3212D"
                         borderRadius="8px"
                         color="#fff"
-                        fontSize={{base:"sm", sm:"18px"}}
+                        fontSize={{ base: "sm", sm: "18px" }}
                         marginTop="30px"
                         _hover={{ bg: "#fff", color: "#D3212D" }}
-                        p={{base:"3", sm:"6"}}
+                        p={{ base: "3", sm: "6" }}
                         textAlign="center"
                         onClick={() => navigate("/register/tenant")}
                     >
@@ -601,7 +597,7 @@ export default function LandingNew() {
                 >
                     Recommended for You
                 </Heading>
-                <Text fontWeight="700" align="center" mt="14px" fontSize={{base:"sm", lg:"md"}}>Discover our properties with the best ratings</Text>
+                <Text fontWeight="700" align="center" mt="14px" fontSize={{ base: "sm", lg: "md" }}>Discover our properties with the best ratings</Text>
                 <Box my={{ base: "40px", md: "80px" }} px={2}>
                     <Slider {...settingsRecommendation} prevArrow={<FaChevronLeft color="#E2E8F0" />} nextArrow={<FaChevronRight color="#E2E8F0" />}>
                         {printRecommendProperty()}
@@ -611,14 +607,14 @@ export default function LandingNew() {
                             bg="#D3212D"
                             borderRadius="8px"
                             bgColor="white"
-                            fontSize={{base:"sm", sm:"18px"}}
+                            fontSize={{ base: "sm", sm: "18px" }}
                             marginTop="30px"
                             variant="outline"
                             borderWidth="1px"
                             color="#D3212D"
                             borderColor="#D3212D"
                             _hover={{ bg: "#D3212D", color: "white" }}
-                            p={{base:"3", sm:"6"}}
+                            p={{ base: "3", sm: "6" }}
                             textAlign="center"
                             onClick={() => navigate("/property/")}
                         >
