@@ -146,10 +146,13 @@ function RoomConditionList(props) {
     };
 
     const printSpecialPriceData = () => {
+        const actualRowNumber = pageSpecialPrice * sizeSpecialPrice;
         return dataSpecialPrice.map((valSpecial, idxSpecial) => {
+            const rowNumber = actualRowNumber + idxSpecial + 1;
             return (
                 <SpecialPriceTable
-                    idxSpecial={idxSpecial + 1}
+                    key={idxSpecial}
+                    idxSpecial={rowNumber}
                     startDateSpecial={valSpecial.startDate}
                     endDateSpecial={valSpecial.endDate}
                     price={valSpecial.room.price}
@@ -163,10 +166,15 @@ function RoomConditionList(props) {
         });
     };
     const printMaintenanceData = () => {
+        const actualRowNumber = pageMaintenance * sizeMaintenance;
+
         return dataMaintenance.map((valMaintenance, idxMaintenance) => {
+            const rowNumber = actualRowNumber + idxMaintenance + 1;
+
             return (
                 <MaintenanceTable
-                    idxMaintenance={idxMaintenance + 1}
+                    key={idxMaintenance}
+                    idxMaintenance={rowNumber}
                     startDateMaintenance={valMaintenance.startDate}
                     endDateMaintenance={valMaintenance.endDate}
                     remarks={valMaintenance.remarks}
@@ -181,10 +189,10 @@ function RoomConditionList(props) {
 
     function SpecialPriceModal() {
         const { isOpen, onOpen, onClose } = useDisclosure();
-        const [price, setPrice] = useState("");
-        const [percentage, setPercentage] = useState("");
         const [specialStartDate, setSpecialStartDate] = useState(null);
         const [specialEndDate, setSpecialEndDate] = useState(null);
+        const [price, setPrice] = useState("");
+        const [percentage, setPercentage] = useState("");
 
         const handlePriceChange = (event) => {
             const inputPrice = event.target.value;
@@ -240,7 +248,7 @@ function RoomConditionList(props) {
                 );
                 if (add.data.success) {
                     toast({
-                        title: "Added Special Price",
+                        title: "Created Special Price",
                         description: `Created Special Price for ${roomName}`,
                         status: "success",
                         duration: 2000,
@@ -248,9 +256,21 @@ function RoomConditionList(props) {
                     });
                 }
                 onClose();
-                getSpecialPriceData()
             } catch (error) {
                 console.log(error);
+                toast({
+                    title: "Failed to add special price",
+                    description: `${roomName} special price already exists on the selected date.`,
+                    status: "error",
+                    duration: 4000,
+                    isClosable: true,
+                });
+            } finally {
+                getSpecialPriceData();
+                setPrice("");
+                setPercentage("");
+                setSpecialStartDate(null);
+                setSpecialEndDate(null);
             }
         };
         return (
@@ -319,6 +339,7 @@ function RoomConditionList(props) {
                                 onClick={handleSubmitSpecialPrice}
                                 textColor={"white"}
                                 mr={"4"}
+                                _hover=""
                             >
                                 Save
                             </Button>
@@ -334,9 +355,9 @@ function RoomConditionList(props) {
 
     function MaintenanceModal() {
         const { isOpen, onOpen, onClose } = useDisclosure();
-        const [remarks, setRemarks] = useState("");
         const [maintenanceStartDate, setMaintenanceStartDate] = useState(null);
         const [maintenanceEndDate, setMaintenanceEndDate] = useState(null);
+        const [remarks, setRemarks] = useState("");
 
         const handleRemarksChange = (event) => {
             const inputRemarks = event.target.value;
@@ -378,9 +399,20 @@ function RoomConditionList(props) {
                     });
                 }
                 onClose();
-                getMaintenanceData()
             } catch (error) {
                 console.log(error);
+                toast({
+                    title: "Failed to add maintenance",
+                    description: `${roomName} maintenance already exists on the selected date.`,
+                    status: "error",
+                    duration: 4000,
+                    isClosable: true,
+                });
+            } finally {
+                getMaintenanceData();
+                setMaintenanceStartDate(null);
+                setMaintenanceEndDate(null);
+                setRemarks("");
             }
         };
         return (
@@ -456,9 +488,9 @@ function RoomConditionList(props) {
         getMaintenanceData();
     }, [pageSpecialPrice, pageMaintenance]);
 
-    console.log("DataSpecialPrice:", dataSpecialPrice);
-    console.log("DataMaintenance:", dataMaintenance);
-    console.log("pageSpecialPrice:", pageSpecialPrice);
+    // console.log("DataSpecialPrice:", dataSpecialPrice);
+    // console.log("DataMaintenance:", dataMaintenance);
+    // console.log("pageSpecialPrice:", pageSpecialPrice);
 
     return (
         <Flex
@@ -471,7 +503,12 @@ function RoomConditionList(props) {
                 <Heading size={"2xl"} ml="8" mt={"4"}>{`${roomName}`}</Heading>
             </Box>
             <Box mt={"8"}>
-                <Tabs isFitted variant="line" defaultIndex={0}>
+                <Tabs
+                    isFitted
+                    variant="line"
+                    defaultIndex={0}
+                    colorScheme="red"
+                >
                     <TabList mb="4">
                         <Tab>
                             <Heading fontWeight={"bold"} size={"xl"} ml="4">
@@ -494,9 +531,14 @@ function RoomConditionList(props) {
                                 }}
                                 borderRadius={"2xl"}
                             >
-                                <Box w={"full"} h={"45vh"}>
+                                <Box
+                                    w={"full"}
+                                    h={"55vh"}
+                                    display={"flex"}
+                                    flexDir={"column"}
+                                    justifyContent={"space-between"}
+                                >
                                     <Flex
-                                        flexDir={"row"}
                                         justifyContent={"right"}
                                         alignContent={"center"}
                                         py={"4"}
@@ -504,7 +546,8 @@ function RoomConditionList(props) {
                                     >
                                         {SpecialPriceModal()}
                                     </Flex>
-                                    <TableContainer>
+
+                                    <TableContainer flex={"1"}>
                                         <Table
                                             variant="simple"
                                             color={"#EEEEEE"}
@@ -554,17 +597,13 @@ function RoomConditionList(props) {
                                         </Table>
                                     </TableContainer>
 
-                                    {
-                                        <Flex justify="center">
-                                            <Pagination
-                                                paginate={paginateSpecialPrice}
-                                                size={sizeSpecialPrice}
-                                                totalData={
-                                                    totalDataSpecialPrice
-                                                }
-                                            />
-                                        </Flex>
-                                    }
+                                    <Flex justify="center" pb="6">
+                                        <Pagination
+                                            paginate={paginateSpecialPrice}
+                                            size={sizeSpecialPrice}
+                                            totalData={totalDataSpecialPrice}
+                                        />
+                                    </Flex>
                                 </Box>
                             </Box>
                         </TabPanel>
@@ -577,7 +616,13 @@ function RoomConditionList(props) {
                                 }}
                                 borderRadius={"2xl"}
                             >
-                                <Box w={"full"} h={"45vh"}>
+                                <Box
+                                    w={"full"}
+                                    h={"55vh"}
+                                    display={"flex"}
+                                    flexDir={"column"}
+                                    justifyContent={"space-between"}
+                                >
                                     <Flex
                                         flexDir={"row"}
                                         justifyContent={"right"}
@@ -588,7 +633,7 @@ function RoomConditionList(props) {
                                         {MaintenanceModal()}
                                     </Flex>
 
-                                    <TableContainer>
+                                    <TableContainer flex={"1"}>
                                         <Table
                                             variant="simple"
                                             color={"#EEEEEE"}
@@ -633,15 +678,13 @@ function RoomConditionList(props) {
                                         </Table>
                                     </TableContainer>
 
-                                    {
-                                        <Flex justify="center">
-                                            <Pagination
-                                                paginate={paginateMaintenance}
-                                                size={sizeMaintenance}
-                                                totalData={totalDataMaintenance}
-                                            />
-                                        </Flex>
-                                    }
+                                    <Flex justify="center" pb="6">
+                                        <Pagination
+                                            paginate={paginateMaintenance}
+                                            size={sizeMaintenance}
+                                            totalData={totalDataMaintenance}
+                                        />
+                                    </Flex>
                                 </Box>
                             </Box>
                         </TabPanel>

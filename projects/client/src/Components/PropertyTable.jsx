@@ -31,7 +31,7 @@ function PropertyTable(props) {
 
         const deleteProperty = async () => {
             try {
-                let token = localStorage.getItem("tempatku_login")
+                let token = localStorage.getItem("tempatku_login");
                 let del = await axios.patch(
                     `${API_URL}/property/deleteproperty/${props.uuid}`,
                     {},
