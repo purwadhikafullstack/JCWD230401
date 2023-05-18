@@ -7,30 +7,54 @@ module.exports = {
     createMaintenance: async (req, res, next) => {
         const ormTransaction = await model.sequelize.transaction();
         try {
-            let get = await model.room.findOne({
+            let existingMaintenance = await model.maintenance.findAll({
                 where: {
-                    id: req.body.roomId,
-                },
-            });
-
-            let addMaintenance = await model.maintenance.create(
-                {
-                    uuid: uuidv4(),
-                    startDate: req.body.maintenanceStartDate,
-                    endDate: req.body.maintenanceEndDate,
-                    remarks: req.body.remarks,
                     roomId: req.body.roomId,
                 },
-                { transaction: ormTransaction }
+            });
+
+            const overlappingMaintenance = existingMaintenance.find(
+                (maintenance) => {
+                    const startDate = new Date(req.body.maintenanceStartDate);
+                    const endDate = new Date(req.body.maintenanceEndDate);
+                    const existingStartDate = new Date(maintenance.startDate);
+                    const existingEndDate = new Date(maintenance.endDate);
+
+                    return (
+                        (startDate >= existingStartDate &&
+                            startDate <= existingEndDate) ||
+                        (endDate >= existingStartDate &&
+                            endDate <= existingEndDate)
+                    );
+                }
             );
 
-            await ormTransaction.commit();
+            if (overlappingMaintenance) {
+                return res.status(400).send({
+                    success: false,
+                    message:
+                        "Invalid dates. Overlapping maintenance already exists.",
+                });
+            } else {
+                let addMaintenance = await model.maintenance.create(
+                    {
+                        uuid: uuidv4(),
+                        startDate: req.body.maintenanceStartDate,
+                        endDate: req.body.maintenanceEndDate,
+                        remarks: req.body.remarks,
+                        roomId: req.body.roomId,
+                    },
+                    { transaction: ormTransaction }
+                );
 
-            res.status(200).send({
-                success: true,
-                message: "Mainentenace Price created",
-                data: addMaintenance,
-            });
+                await ormTransaction.commit();
+
+                res.status(200).send({
+                    success: true,
+                    message: "Mainentenace Price created",
+                    data: addMaintenance,
+                });
+            }
         } catch (error) {
             await ormTransaction.rollback();
             console.log(error);
@@ -121,9 +145,7 @@ module.exports = {
                     uuid: req.params.uuid,
                 },
             });
-            console.log(
-                "get.dataValues[0].isActive", get.dataValues.isActive
-            );
+            console.log("get.dataValues[0].isActive", get.dataValues.isActive);
             if (get.dataValues.isActive === true) {
                 await model.maintenance.update(
                     {

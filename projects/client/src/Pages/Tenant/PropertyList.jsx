@@ -40,10 +40,13 @@ function PropertyList(props) {
     console.log("dataAllProperty:", dataAllProperty);
 
     const printPropertyData = () => {
+        const actualRowNumber = page * size;
         return dataAllProperty.map((val, idx) => {
+            const rowNumber = actualRowNumber + idx + 1;
             return (
                 <PropertyTable
-                    idx={idx + 1}
+                    key={val.uuid}
+                    idx={rowNumber}
                     property={val.property}
                     address={val.property_location.address}
                     uuid={val.uuid}

@@ -106,18 +106,12 @@ function RoomTable(props) {
                 </Td>
                 <Td display={"flex"} justifyContent={"space-evenly"}>
                     <Link to={`/specialconditions/${props.uuid}`}>
-                        <Button
-                        _hover=""
-                        bgColor={"green.400"}
-                        >
+                        <Button _hover="" bgColor={"green.400"}>
                             <Text textColor={"white"}>Special Conditions</Text>
                         </Button>
                     </Link>
                     <Link to={`/editroom/${props.uuid}`}>
-                        <Button
-                            _hover=""
-                            bgColor={"#fec20c"}
-                        >
+                        <Button _hover="" bgColor={"#fec20c"}>
                             <Text textColor={"white"}>Edit</Text>
                         </Button>
                     </Link>

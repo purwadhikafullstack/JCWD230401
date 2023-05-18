@@ -41,10 +41,13 @@ function RoomList(props) {
     console.log("dataAllRoom:", dataAllRoom);
 
     const printRoomData = () => {
+        const actualRowNumber = page * size;
         return dataAllRoom.map((val, idx) => {
+            const rowNumber = actualRowNumber + idx + 1;
             return (
                 <RoomTable
-                    idx={idx + 1}
+                    key={val.uuid}
+                    idx={rowNumber}
                     name={val.room_category.name}
                     capacity={val.capacity}
                     price={val.price}

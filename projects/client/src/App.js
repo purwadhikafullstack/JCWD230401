@@ -175,17 +175,26 @@ function App() {
                             }
                         />
                         <Route path="/" element={<Landing />} />
-                <Route path="/listing" element={<AddProperty />} />
-                <Route path="/editlisting/:uuid" element={<ManageProperty />} />
-                <Route path="/room" element={<AddRoom />} />
-                <Route path="/editroom/:uuid" element={<ManageRoom />} />
-                <Route path="/propertylist" element={<PropertyList />} />
-                <Route path="/roomlist/:uuid" element={<RoomList />} />
-                <Route
-                    path="/specialconditions/:uuid"
-                    element={<RoomConditionList />}
-                />
-                <Route path="/report" element={<SalesReport/>}/>
+                        <Route path="/listing" element={<AddProperty />} />
+                        <Route
+                            path="/editlisting/:uuid"
+                            element={<ManageProperty />}
+                        />
+                        <Route path="/room" element={<AddRoom />} />
+                        <Route
+                            path="/editroom/:uuid"
+                            element={<ManageRoom />}
+                        />
+                        <Route
+                            path="/propertylist"
+                            element={<PropertyList />}
+                        />
+                        <Route path="/roomlist/:uuid" element={<RoomList />} />
+                        <Route
+                            path="/specialconditions/:uuid"
+                            element={<RoomConditionList />}
+                        />
+                        <Route path="/report" element={<SalesReport />} />
                     </Routes>
                 ) : (
                     // Not logged in

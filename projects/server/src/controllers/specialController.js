@@ -7,29 +7,54 @@ module.exports = {
     createSpecialPrice: async (req, res, next) => {
         const ormTransaction = await model.sequelize.transaction();
         try {
-            let get = await model.room.findOne({
+            let existingSpecialPrices = await model.special_price.findAll({
                 where: {
-                    id: req.body.roomId,
-                },
-            });
-            let addSpecial = await model.special_price.create(
-                {
-                    uuid: uuidv4(),
-                    startDate: req.body.specialStartDate,
-                    endDate: req.body.specialEndDate,
-                    priceOnDate: req.body.price,
                     roomId: req.body.roomId,
                 },
-                { transaction: ormTransaction }
+            });
+
+            const overlappingSpecialPrice = existingSpecialPrices.find(
+                (specialPrice) => {
+                    const startDate = new Date(req.body.specialStartDate);
+                    const endDate = new Date(req.body.specialEndDate);
+                    const existingStartDate = new Date(specialPrice.startDate);
+                    const existingEndDate = new Date(specialPrice.endDate);
+
+                    return (
+                        (startDate >= existingStartDate &&
+                            startDate <= existingEndDate) ||
+                        (endDate >= existingStartDate &&
+                            endDate <= existingEndDate)
+                    );
+                }
             );
 
-            await ormTransaction.commit();
+            if (overlappingSpecialPrice) {
+                return res.status(400).send({
+                    success: false,
+                    message:
+                        "Invalid dates. Overlapping special price already exists.",
+                });
+            } else {
+                let addSpecial = await model.special_price.create(
+                    {
+                        uuid: uuidv4(),
+                        startDate: req.body.specialStartDate,
+                        endDate: req.body.specialEndDate,
+                        priceOnDate: req.body.price,
+                        roomId: req.body.roomId,
+                    },
+                    { transaction: ormTransaction }
+                );
 
-            res.status(200).send({
-                success: true,
-                message: "Special Price created",
-                data: addSpecial,
-            });
+                await ormTransaction.commit();
+
+                res.status(200).send({
+                    success: true,
+                    message: "Special Price created",
+                    data: addSpecial,
+                });
+            }
         } catch (error) {
             await ormTransaction.rollback();
             console.log(error);
@@ -160,7 +185,7 @@ module.exports = {
             // console.log("get", get);
             res.status(200).send({
                 success: true,
-                data: get
+                data: get,
             });
         } catch (error) {
             console.log(error);
