@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import React, { useState } from "react";
 import {
     Button,
     Flex,
@@ -137,7 +136,6 @@ export default function UserRegister() {
         >
             <Flex
                 p={{ base: "8", sm: "0" }}
-                p={{ base: "8", sm: "0" }}
                 flex={1}
                 align={"center"} justify={"center"}
             >
@@ -190,11 +188,7 @@ export default function UserRegister() {
                                     name="password"
                                 />
                                 <InputRightElement h={"full"}>
-                                <InputRightElement h={"full"}>
                                     <Button
-                                        variant={"ghost"}
-                                        _hover={"none"}
-                                        _active={"none"}
                                         variant={"ghost"}
                                         _hover={"none"}
                                         _active={"none"}
@@ -224,11 +218,7 @@ export default function UserRegister() {
                                     name="passwordConfirmation"
                                 />
                                 <InputRightElement h={"full"}>
-                                <InputRightElement h={"full"}>
                                     <Button
-                                        variant={"ghost"}
-                                        _hover={"none"}
-                                        _active={"none"}
                                         variant={"ghost"}
                                         _hover={"none"}
                                         _active={"none"}
@@ -255,7 +245,6 @@ export default function UserRegister() {
                     >
                         <Button bg={"#D3212D"} color={"white"} variant={"solid"}
                             _hover={{
-                                bg: "#D3212D",
                                 bg: "#D3212D",
                             }}
                             onClick={onBtnRegister}

@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
             // define association here
         }
     }
-  }
+  
   user_detail.init({
     uuid: DataTypes.STRING,
     name: DataTypes.STRING,

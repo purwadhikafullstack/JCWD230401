@@ -26,7 +26,7 @@ passport.use(
       clientID:
       process.env.GOOGLE_CLIENT_ID, //passing CLIENT ID
       clientSecret: process.env.GOOGLE_CLIENT_SECRET, //Passing CLIENT SECRET
-      callbackURL: "http://localhost:8000/api/auth/google/callback", //This means after signin on what route google should redirect
+      callbackURL: "http://localhost:2341/api/auth/google/callback", //This means after signin on what route google should redirect
       passReqToCallback: true,
     },
     async (request, accessToken, refreshToken, profile, done) => {
@@ -97,14 +97,14 @@ route.get(
     //If user exist
     if (req.user) {
       console.log("ini isi req.user google :", req.user[0]);
-      console.log(
-        "ini isi id dari req.user google :",
-        req.user[0].dataValues.id
-      );
-      console.log(
-        "ini isi role id dari req.user google :",
-        req.user[0].dataValues.roleId
-      );
+      // console.log(
+      //   "ini isi id dari req.user google :",
+      //   req.user[0].dataValues.id
+      // );
+      // console.log(
+      //   "ini isi role id dari req.user google :",
+      //   req.user[0].dataValues.roleId
+      // );
       let { id, roleId } = req.user[0].dataValues;
       const googleAuthToken = createToken({ id, roleId }, "24h");
       // console.log(
@@ -128,7 +128,7 @@ route.get("/login/success", async (req, res, next) => {
   const googleAuthToken = req.cookies.googleAuthToken;
   if (googleAuthToken) {
     try {
-      const decrypt = jwt.verify(googleAuthToken, "TEMPATKU");
+      const decrypt = jwt.verify(googleAuthToken, process.env.JWT_SECRET_TOKEN);
       // console.log("ini isi dari decrypt googleAuthToken :", decryptGoogle);
       // console.log(
       //   "ini isi dari decrypt googleAuthToken :",

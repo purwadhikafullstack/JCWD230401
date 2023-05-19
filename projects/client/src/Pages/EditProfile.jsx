@@ -1,5 +1,4 @@
 import React, { useRef, useState } from "react";
-import React, { useRef, useState } from "react";
 import {
     Button,
     Flex,
@@ -32,7 +31,10 @@ export default function EditProfile(props) {
     const modalProfileImage = useDisclosure();
     const [profileImage, setProfileImage] = useState(null);
     const inputFile = useRef(null);
-
+    const toast = useToast();
+    const [loading, setLoading] = React.useState(false);
+    const [loading1, setLoading1] = React.useState(false);
+    const [loading2, setLoading2] = React.useState(false);
 
     const handleGenderChange = (value) => {
         setGender(value);
@@ -308,7 +310,6 @@ export default function EditProfile(props) {
             >
                 <Stack
                     bg="white"
-                    bg="white"
                     spacing={4}
                     w={"full"}
                     maxW={"md"}
@@ -358,6 +359,7 @@ export default function EditProfile(props) {
                             <Box w="full">
                                 <Center w="full"
                                 >
+                                    {/* PROFILE PICTURE */}
                                     <Button w="full" onClick={() =>
                                         inputFile.current.click()}>Change Profile Photo
                                         <Input
@@ -450,6 +452,7 @@ export default function EditProfile(props) {
                         />
                         <FormErrorMessage fontSize="xs">{formik.errors.name}</FormErrorMessage>
                     </FormControl>
+                    {/* EMAIL */}
                     <FormControl id="email" isInvalid={formik.errors.email}>
                         <FormLabel>Email address</FormLabel>
                         <Input
@@ -461,9 +464,9 @@ export default function EditProfile(props) {
                         />
                         <FormErrorMessage fontSize="xs">{formik.errors.email}</FormErrorMessage>
                     </FormControl>
+                    {/* GENDER */}
                     <FormControl id="gender" isInvalid={formik.errors.gender}>
                         <FormLabel>Gender</FormLabel>
-                        <Box justifyContent="space-between">
                         <Box justifyContent="space-between">
                             <RadioGroup
                                 value={formik.values.gender}
@@ -478,6 +481,7 @@ export default function EditProfile(props) {
                         </Box>
                         <FormErrorMessage fontSize="xs">{formik.errors.gender}</FormErrorMessage>
                     </FormControl>
+                    {/* BIRTH */}
                     <FormControl id="birth" isInvalid={formik.errors.birth}>
                         <FormLabel>Birthdate</FormLabel>
                         <Input
@@ -507,6 +511,7 @@ export default function EditProfile(props) {
                                 >
                                     Save
                                 </Button>
+                                {/* SHOW KTP CARD PHOTO */}
                                 <Button
                                     variant={"outline"}
                                     color={"#D3212D"}

@@ -35,12 +35,16 @@ import { capitalizeFirstWord, formatRupiah } from "../../helper";
 import axios from "axios";
 import { useParams, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
-import RoomCard from "../../Components/RoomCard/RoomCard";
+import RoomCard from "../../Components/RoomCard";
 import Booking from "../../Components/Booking";
 import noimage from "../../assets/noimage.png";
 import Review from "../../Components/Review";
 
 export default function PropertyDetail() {
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
+
     let token = localStorage.getItem("tempatku_login");
 
     const params = useParams();

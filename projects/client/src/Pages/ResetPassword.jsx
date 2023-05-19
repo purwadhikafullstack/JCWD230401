@@ -131,11 +131,7 @@ export default function ResetPassword() {
                             name="newPassword"
                         />
                         <InputRightElement h={"full"}>
-                        <InputRightElement h={"full"}>
                             <Button
-                                variant={"ghost"}
-                                _hover={"none"}
-                                _active={"none"}
                                 variant={"ghost"}
                                 _hover={"none"}
                                 _active={"none"}
@@ -165,11 +161,7 @@ export default function ResetPassword() {
                             name="passwordConfirmation"
                         />
                         <InputRightElement h={"full"}>
-                        <InputRightElement h={"full"}>
                             <Button
-                                variant={"ghost"}
-                                _hover={"none"}
-                                _active={"none"}
                                 variant={"ghost"}
                                 _hover={"none"}
                                 _active={"none"}
@@ -202,13 +194,9 @@ export default function ResetPassword() {
                     <Button
                         bg={"#D3212D"}
                         color={"white"}
-                        bg={"#D3212D"}
-                        color={"white"}
                         _hover={{
                             bg: "#D3212D",
-                            bg: "#D3212D",
                         }}
-                        type="button"
                         type="button"
                         onClick={onBtnResetPassword}
                         isLoading={loading}

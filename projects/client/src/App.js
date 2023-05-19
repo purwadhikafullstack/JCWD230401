@@ -15,8 +15,6 @@ import TenantRegister from "./Pages/TenantRegister";
 import TenantDashboard from "./Pages/TenantDashboard/TenantDashboard";
 import NotFound from "./Pages/NotFound";
 import Verification from "./Pages/Verification";
-import ProductDetail from "./Pages/ProductDetail/ProductDetail";
-import TransactionPage from "./Pages/TransactionPage";
 import FilteredProperty from "./Pages/FilteredProperty/FilteredProperty";
 import PropertyDetail from "./Pages/PropertyDetail/PropertyDetail";
 import Payments from "./Pages/Payments/Payments";
@@ -41,11 +39,14 @@ function App() {
     try {
       let token = localStorage.getItem("tempatku_login");
       if (token) {
-        let response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/user/keep-login`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        let response = await axios.get(
+          `${process.env.REACT_APP_API_BASE_URL}/user/keep-login`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
         localStorage.setItem("tempatku_login", response.data.token);
         dispatch(loginAction(response.data));
       }
@@ -80,17 +81,11 @@ function App() {
               path="/profile/edit"
               element={<EditProfile keepLogin={() => dispatch(keepLogin())} />}
             />
-            <Route
-                            path="/property"
-                            element={<FilteredProperty />}
-                        />
-                        <Route
-                            path="/property/detail/:uuid"
-                            element={<PropertyDetail />}
-                        />
-                        <Route path="/payment/:uuid" element={<Payments />} />
-                        <Route path="/payment/detail/:uuid" element={<PaymentDetail />} />
-                        <Route path="/order/list" element={<OrderLists />} />
+            <Route path="/property" element={<FilteredProperty />} />
+            <Route path="/property/detail/:uuid" element={<PropertyDetail />} />
+            <Route path="/payment/:uuid" element={<Payments />} />
+            <Route path="/payment/detail/:uuid" element={<PaymentDetail />} />
+            <Route path="/order/list" element={<OrderLists />} />
           </Routes>
         ) : // Tenant
         role == "Tenant" ? (
@@ -105,31 +100,19 @@ function App() {
               path="/profile/edit"
               element={<EditProfile keepLogin={() => dispatch(keepLogin())} />}
             />
-              <Route
-                                path="/property/detail/:uuid"
-                                element={<PropertyDetail />}
-                            />
-                             <Route path="/listing" element={<AddProperty />} />
-                            <Route
-                                path="/editlisting/:uuid"
-                                element={<ManageProperty />}
-                            />
-                            <Route path="/room" element={<AddRoom />} />
-                            <Route
-                                path="/editroom/:uuid"
-                                element={<ManageRoom />}
-                            />
-                            <Route
-                                path="/propertylist"
-                                element={<PropertyList />}
-                            />
-                            <Route path="/roomlist/:uuid" element={<RoomList />} />
-                            <Route
-                                path="/specialconditions/:uuid"
-                                element={<RoomConditionList />}
-                            />
-                            <Route path="/report" element={<SalesReport />} />
-                            <Route path="/tenantorderlist" element={<OrderListTenant />} />
+            <Route path="/property/detail/:uuid" element={<PropertyDetail />} />
+            <Route path="/listing" element={<AddProperty />} />
+            <Route path="/editlisting/:uuid" element={<ManageProperty />} />
+            <Route path="/room" element={<AddRoom />} />
+            <Route path="/editroom/:uuid" element={<ManageRoom />} />
+            <Route path="/propertylist" element={<PropertyList />} />
+            <Route path="/roomlist/:uuid" element={<RoomList />} />
+            <Route
+              path="/specialconditions/:uuid"
+              element={<RoomConditionList />}
+            />
+            <Route path="/report" element={<SalesReport />} />
+            <Route path="/tenantorderlist" element={<OrderListTenant />} />
           </Routes>
         ) : (
           // Not logged in
@@ -145,20 +128,11 @@ function App() {
             />
             <Route path="/" element={<Landing />} />
             <Route path="*" element={<NotFound />} />
-            <Route
-                                path="/property"
-                                element={<FilteredProperty />}
-                            />
-                            <Route
-                                path="/property/detail/:uuid"
-                                element={<PropertyDetail />}
-                            />
-                            <Route path="/payment/:uuid" element={<Payments />} />
-                            <Route
-                                path="/payment/detail/:uuid"
-                                element={<PaymentDetail />}
-                            />
-                            <Route path="/order/list" element={<OrderLists />} />
+            <Route path="/property" element={<FilteredProperty />} />
+            <Route path="/property/detail/:uuid" element={<PropertyDetail />} />
+            <Route path="/payment/:uuid" element={<Payments />} />
+            <Route path="/payment/detail/:uuid" element={<PaymentDetail />} />
+            <Route path="/order/list" element={<OrderLists />} />
           </Routes>
         )
       }
@@ -166,6 +140,5 @@ function App() {
     </>
   );
 }
-
 
 export default App;

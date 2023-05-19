@@ -45,6 +45,7 @@ const authSlice = createSlice({
       state.gender = getuser[0].user_detail.gender;
       state.password = getuser[0].password;
     },
+  }
 });
 
 export const {loginAction, logoutAction, loginActionGoogle} = authSlice.actions;
