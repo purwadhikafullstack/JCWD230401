@@ -32,6 +32,7 @@ import BookingDetails from '../Components/BookingDetails';
 export default function PaymentDetail() {
     const params = useParams();
     let token = localStorage.getItem("tempatku_login");
+    const [isLoadingButton, setIsLoadingButton] = useState(false)
     // const [data, setData] = useState([])
     const [expiredAt, setExpiredAt] = useState('')
     const [createdAt, setCreatedAt] = useState(null)
@@ -83,6 +84,7 @@ export default function PaymentDetail() {
     const cancelRef = React.useRef()
     const [statusId, setStatusId] = useState(5)
     const cancelOrReject = async (req, res, next) => {
+        setIsLoadingButton(true)
         let update = await axios.patch(`${API_URL}/transaction/updatetransactionstatus`, {
             transaction_statusId: statusId,
             uuid: params.uuid
@@ -90,7 +92,9 @@ export default function PaymentDetail() {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
-        })
+        });
+        setIsLoadingButton(false)
+        getTransactionTimeAndBank();
     }
 
     // FIND TOTAL DAYS
@@ -354,6 +358,7 @@ export default function PaymentDetail() {
     const [message, setMessage] = useState('')
     const uploadImagePayment = async (imageFile) => {
         try {
+            setIsLoadingButton(true)
             let formData = new FormData();
             formData.append('images', imageFile)
 
@@ -367,6 +372,7 @@ export default function PaymentDetail() {
                 setMessage("Image Uploaded")
             }
             getTransactionTimeAndBank()
+            setIsLoadingButton(false)
         } catch (error) {
             console.log("upload image payment gagallll", error)
         }
@@ -471,28 +477,8 @@ export default function PaymentDetail() {
                                         </Box>
                                     </Flex>
                                 </ListItem>
-                                {/* <Box borderTop={'2px'} borderColor={'gray.300'}></Box>
-                                <ListItem>
-                                    <Flex alignItems="center" justify={'center'}>
-                                        <Box>
-                                        </Box>
-                                        <Box>
-                                            <Box>
-                                                <Text textAlign="center">
-                                                    Payment status
-                                                </Text>
-                                            </Box>
-                                            <Box>
-                                                <Text textAlign="center" fontWeight={'600'} fontSize="2xl">
-                                                    {transactionStatus}
-                                                </Text>
-                                            </Box>
-                                        </Box>
-                                    </Flex>
-                                </ListItem> */}
                             </List>
 
-                            {/* BUAT KONDISI KALO EXPIRED UDAH LEWAT BUTTON NYA ILANG */}
                             <Button
                                 mt={10}
                                 w={'full'}
@@ -508,6 +494,7 @@ export default function PaymentDetail() {
                                 }}
                                 leftIcon={<Icon as={FiUpload} fontSize={'xl'} />}
                                 onClick={() => inputImagePayment.current.click()}
+                                isLoading={isLoadingButton}
                             >
                                 <Input type={'file'} display='none' id='file' ref={inputImagePayment}
                                     onChange={onChangeImagePayment} />
@@ -528,6 +515,7 @@ export default function PaymentDetail() {
                                         bg: 'blue.500',
                                     }}
                                     leftIcon={<Icon as={AiOutlineEye} fontSize={'xl'} />}
+                                    isLoading={isLoadingButton}
                                 >
                                     See your order list
                                 </Button>
@@ -546,6 +534,7 @@ export default function PaymentDetail() {
                                 _focus={{
                                     bg: 'blue.500',
                                 }}
+                                isLoading={isLoadingButton}
                             >
                                 Cancel Order
                             </Button>

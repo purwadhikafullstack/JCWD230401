@@ -44,15 +44,15 @@ export default function FilteredProperty() {
     const [currentPage, setCurrentPage] = useState(1);
     const [sortBy, setSortBy] = useState("property");
     const [order, setOrder] = useState("ASC");
-    const [category, setCategory] = useState("");
     const [guest, setGuest] = useState(1);
     const [city, setCity] = useState(location.state?.inputLocation || '');
+    const [category, setCategory] = useState(location.state?.category);
 
     const getAllProperty = async () => {
         try {
             let token = localStorage.getItem("tempatku_login");
             let res = await axios.get(
-                `${API_URL}/property/available?sortby=${sortBy}&order=${order}&capacity=${guest}&start=${inputCheckIn || ''}&end=${inputCheckOut || ''}&name=${productName}&category=${category}&city=${city}&size=${size}&page=${page}`,
+                `${API_URL}/property/available?sortby=${sortBy}&order=${order}&capacity=${guest}&start=${inputCheckIn || ''}&end=${inputCheckOut || ''}&name=${productName}&category=${category || ''}&city=${city}&size=${size}&page=${page}`,
                 {
                     headers: {
                         Authorization: `Bearer ${token}`,

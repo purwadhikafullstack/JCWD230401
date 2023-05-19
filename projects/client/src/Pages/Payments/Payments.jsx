@@ -45,6 +45,7 @@ export default function Payments() {
     console.log("params : ", params);
     const [checkIn, setCheckIn] = useState(location?.state?.inputCheckIn)
     const [checkOut, setCheckOut] = useState(location?.state?.inputCheckOut)
+    const [price, setPrice] = useState(location?.state?.priceRoom)
     const [selectedPayment, setSelectedPayment] = useState('')
     console.log("payment method : ", selectedPayment)
 
@@ -72,7 +73,7 @@ export default function Payments() {
             let addTransaction = await axios.post(`${API_URL}/transaction/`, {
                 start: checkIn,
                 end: checkOut,
-                price: details.price, // INI DI KALI DAYS APA TIDAK ???
+                price: price,
                 roomId: details.id,
                 email: emailUser
             }, {
@@ -305,7 +306,7 @@ export default function Payments() {
                                         <Text>{formatDateIndo(checkIn)} -  {formatDateIndo(checkOut)}</Text>
                                         <Text>{days} night</Text>
                                     </Flex>
-                                    <Text>Price : {formatRupiah(details?.price)} / night</Text>
+                                    <Text>Price : {formatRupiah(price)} / night</Text>
                                 </Box>
                                 <hr />
 
@@ -320,7 +321,7 @@ export default function Payments() {
 
                                 {/* PRICE */}
                                 <Box my='3'>
-                                    <Text fontSize={'2xl'}>Total : {formatRupiah(details?.price * parseInt(days))}</Text>
+                                    <Text fontSize={'2xl'}>Total : {formatRupiah(price * parseInt(days))}</Text>
                                 </Box>
 
                                 {/* BUTTON */}

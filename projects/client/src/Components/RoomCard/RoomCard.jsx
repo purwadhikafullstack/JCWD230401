@@ -37,7 +37,7 @@ export default function RoomCard(props) {
                             <h4>{Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(props?.price || 0)}<span>/ day</span></h4>
                             <br />
                             {/* <p><BookingButton /></p> */}
-                            <Link to={`/payment/${props.uuid}`} state={{ inputCheckIn: props.inputCheckIn, inputCheckOut: props.inputCheckOut }}>
+                            <Link to={`/payment/${props.uuid}`} state={{ inputCheckIn: props.inputCheckIn, inputCheckOut: props.inputCheckOut, priceRoom: props.price }}>
                                 <Button colorScheme={'red'}>Book Now!</Button>
                             </Link>
                         </div>

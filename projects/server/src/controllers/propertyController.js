@@ -227,7 +227,7 @@ module.exports = {
                 include: [
                     {
                         model: model.room,
-                        attributes: ['price', 'uuid']
+                        attributes: ['id', 'price', 'uuid']
                     },
                     {
                         model: model.property_location, include: [{ model: model.regency }]
@@ -246,20 +246,40 @@ module.exports = {
                 },
 
             });
-            let getAvg = await model.review.findAll({
-                attributes: [[sequelize.fn('AVG', sequelize.col('rating')), 'avgRating']],
-                include: [
-                    {
-                        model: model.room, attributes: ['uuid'], required: true,
-                        include: [{
-                            model: model.property, attributes: ['property'], where: {
-                                uuid: req.query.uuid // pake uuid harusnya
-                            }
-                        }]
-                    }
-                ]
-            })
-            res.status(200).send(get)
+
+            const query = `
+                SELECT s.id, s.startDate, s.endDate, s.priceOnDate, s.isActive, s.roomId ,r.propertyId FROM special_prices s join rooms r
+                on s.roomId = r.id 
+                join properties p on r.propertyId = p.id
+                WHERE  '${req.query.start}' >= startDate 
+                AND (
+                    (startDate >= '${req.query.start}' and startDate <= '${req.query.end}') 
+                    or 
+                    (endDate >= '${req.query.start}' and endDate <= '${req.query.end}')
+                )
+                AND s.isActive = 1
+                AND p.uuid = '${req.query.uuid}'
+                ;
+            `
+
+            const special_prices = await con.query(query, {
+                type: sequelize.QueryTypes.SELECT
+            });
+
+            if (special_prices.length) {
+                let newRoomPrice = get[0].dataValues.rooms.map((val, idx) => {
+                    let special_price = special_prices.find((val2) => {
+                        return val2.roomId === val.dataValues.id
+                    })
+                    val.dataValues = { ...val.dataValues, price: special_price ? special_price.priceOnDate : val.dataValues.price }
+                    return val;
+                })
+                newRoomPrice = newRoomPrice.sort((a, b) => a.price - b.price)
+                return res.status(200).send({ ...get[0].dataValues, rooms: newRoomPrice })
+            } else {
+                get[0].dataValues.rooms.sort((a, b) => a.dataValues.price - b.dataValues.price)
+                res.status(200).send(get[0])
+            }
         } catch (error) {
             console.log(error);
             next(error);

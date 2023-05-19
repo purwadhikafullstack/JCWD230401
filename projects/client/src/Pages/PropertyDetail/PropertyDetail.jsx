@@ -38,16 +38,22 @@ export default function PropertyDetail() {
     const [regency, setRegency] = useState('');
     const [propertyPrice, setPropertyPrice] = useState(0)
     const [tenantEmail, setTenantEmail] = useState('')
+    const today = new Date().toISOString().split('T')[0]
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    const nextDay = tomorrow.toISOString().split('T')[0];
+    const [inputCheckIn, setInputCheckIn] = useState(location.state.inputCheckIn || today)
+    const [inputCheckOut, setInputCheckOut] = useState(location.state.inputCheckOut || nextDay)
     const getPropertyDetail = async () => {
-        let get = await axios.get(`${API_URL}/property/getpropertydetail?uuid=${params.uuid}`, {
+        let get = await axios.get(`${API_URL}/property/getpropertydetail?uuid=${params.uuid}&start=${inputCheckIn}&end=${inputCheckOut}`, {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
         });
-        setPropertyDetail(get.data[0]);
-        setRegency(get.data[0].property_location.regency.name);
-        setPropertyPrice(get.data[0].rooms[0].price)
-        setTenantEmail(get.data[0].user.email)
+        setPropertyDetail(get.data);
+        setRegency(get.data.property_location.regency.name);
+        setPropertyPrice(get.data.rooms[0].price)
+        setTenantEmail(get.data.user.email)
     }
     console.log("proeprtyy detaillll : ", propertyDetail);
 
@@ -68,12 +74,6 @@ export default function PropertyDetail() {
     const modalProperty = useDisclosure()
 
     // Get Room Available
-    const today = new Date().toISOString().split('T')[0]
-    const tomorrow = new Date();
-    tomorrow.setDate(tomorrow.getDate() + 1);
-    const nextDay = tomorrow.toISOString().split('T')[0];
-    const [inputCheckIn, setInputCheckIn] = useState(location.state.inputCheckIn || today)
-    const [inputCheckOut, setInputCheckOut] = useState(location.state.inputCheckOut || nextDay)
     const [roomAvailable, setRoomAvailable] = useState([])
     const getRoomAvailable = async () => {
         let get = await axios.get(`${API_URL}/property/getroomavailable?uuid=${params.uuid}&start=${inputCheckIn}&end=${inputCheckOut}`, {
@@ -136,6 +136,7 @@ export default function PropertyDetail() {
 
     useEffect(() => {
         getRoomAvailable();
+        getPropertyDetail();
     }, [inputCheckIn, inputCheckOut])
 
 

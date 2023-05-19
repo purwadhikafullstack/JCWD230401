@@ -43,7 +43,7 @@ module.exports = {
                 uuid: uuidv4(),
                 start_date: req.body.start,
                 end_date: req.body.end,
-                price: req.body.price,// kalo ada special price gimana ?
+                price: req.body.price,//
                 transactionId: transaksi.dataValues.id,
                 roomId: req.body.roomId
             },
@@ -116,8 +116,8 @@ module.exports = {
             const transporter = nodemailer.createTransport({
                 service: "gmail",
                 auth: {
-                    user: "noreply.tempatku@gmail.com",
-                    pass: "vjuuvolabsuuxqex",
+                    user: process.env.NODEMAILER_TRANSPORTER_USERNAME,
+                    pass: process.env.NODEMAILER_TRANSPORTER_PASSWORD,
                 },
             });
             transporter.use(
@@ -331,8 +331,8 @@ module.exports = {
             const transporter = nodemailer.createTransport({
                 service: "gmail",
                 auth: {
-                    user: "noreply.tempatku@gmail.com",
-                    pass: "vjuuvolabsuuxqex",
+                    user: process.env.NODEMAILER_TRANSPORTER_USERNAME,
+                    pass: process.env.NODEMAILER_TRANSPORTER_PASSWORD,
                 },
             });
             transporter.use(
@@ -409,8 +409,8 @@ module.exports = {
             const transporter = nodemailer.createTransport({
                 service: "gmail",
                 auth: {
-                    user: "noreply.tempatku@gmail.com",
-                    pass: "vjuuvolabsuuxqex",
+                    user: process.env.NODEMAILER_TRANSPORTER_USERNAME,
+                    pass: process.env.NODEMAILER_TRANSPORTER_PASSWORD,
                 },
             });
 
@@ -597,8 +597,8 @@ module.exports = {
             const transporter = nodemailer.createTransport({
                 service: "gmail",
                 auth: {
-                    user: "noreply.tempatku@gmail.com",
-                    pass: "vjuuvolabsuuxqex",
+                    user: process.env.NODEMAILER_TRANSPORTER_USERNAME,
+                    pass: process.env.NODEMAILER_TRANSPORTER_PASSWORD,
                 },
             });
             transporter.use(
