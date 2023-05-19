@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import React, { useState } from "react";
 import {
     Button,
     FormControl,
@@ -7,74 +8,142 @@ import {
     Input,
     Stack,
     Text,
-    useColorModeValue,
+    FormErrorMessage,
+    useToast,
+    Box,
+    HStack
 } from "@chakra-ui/react";
 import axios from "axios";
+import { useFormik } from "formik";
+import * as yup from "yup";
+import { useNavigate } from "react-router-dom";
+
 
 export default function ForgotPassword() {
-    const [email, setEmail] = React.useState("");
+    const [loading, setLoading] = React.useState(false);
+    const toast = useToast();
+    const navigate = useNavigate();
 
     const onBtnForgotPassword = async () => {
         try {
-            let response = await axios.post(
-                `${process.env.REACT_APP_API_BASE_URL}/user/forgotpw`,
-                {
-                    email: email,
-                }
-            );
-            console.log("ini hasil response onBtnForgotPassword :", response); //testing purposes
-            alert(response.data.message);
+            setLoading(true); 
+            await formik.validateForm();
+            if (!formik.isValid) {
+                return;
+            }
+            let response = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/user/forgot-password`, {
+                email: formik.values.email
+            });
+            toast({
+                title: response.data.message,
+                status: "success",
+                duration: 3000,
+                isClosable: true,
+            });
         } catch (error) {
-            console.log("ini error dari onBtnForgotPassword : ", error); //testing purposes
-            alert(error.response.data.message);
-            alert(error.response.data.error[0].msg);
+            console.log("ini error dari onBtnForgotPassword : ", error); 
+            if (error.response && !error.response.data.message) {
+                toast({
+                    title: "Request reset password failed",
+                    status: "error",
+                    duration: 3000,
+                    isClosable: true,
+                });
+            } else {
+                toast({
+                    title: error.response.data.message,
+                    status: "error",
+                    duration: 3000,
+                    isClosable: true,
+                });
+            }
+        } finally {
+            setLoading(false); 
         }
+    }
+
+    const formik = useFormik({
+        initialValues: {
+            email: "",
+        },
+        onSubmit: onBtnForgotPassword,
+        validationSchema: yup.object().shape({
+            email: yup
+                .string()
+                .required("Email is a required field")
+                .matches(
+                    /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                    "Please enter a valid email address"
+                ),
+        })
+    });
+
+    const handleForm = (event) => {
+        formik.setFieldValue(event.target.name, event.target.value);
     };
+
     return (
         <Flex
-            minH={"100vh"}
-            align={"center"}
+            minH={{base:"50vh", sm:"100vh"}}
+            align={{base:"none", sm:"center"}}
             justify={"center"}
-            bg={useColorModeValue("gray.50", "gray.800")}
+            bg={"white"}
         >
             <Stack
                 spacing={4}
                 w={"full"}
                 maxW={"md"}
-                bg={useColorModeValue("white", "gray.700")}
+                bg={"white"}
                 rounded={"xl"}
-                boxShadow={"lg"}
                 p={6}
                 my={12}
+                borderWidth={"1px"}
+                borderColor={{base:"white", sm:"gray.300"}}
             >
                 <Heading lineHeight={1.1} fontSize={{ base: "2xl", md: "3xl" }}>
                     Forgot your password?
                 </Heading>
                 <Text
                     fontSize={{ base: "sm", sm: "md" }}
-                    color={useColorModeValue("gray.800", "gray.400")}
-                >
+                    color={"gray.800"}>
                     You&apos;ll get an email with a reset link
                 </Text>
-                <FormControl id="email">
+                <FormControl id="email" isInvalid={formik.errors.email}>
                     <Input
-                        placeholder="your-email@example.com"
+                        placeholder="email@example.com"
                         _placeholder={{ color: "gray.500" }}
                         type="email"
-                        onChange={(e) => setEmail(e.target.value)}
+                        onChange={handleForm}
+                        name="email"
                     />
+                    <FormErrorMessage fontSize="xs">{formik.errors.email}</FormErrorMessage>
                 </FormControl>
                 <Stack spacing={6}>
                     <Button
                         bg={"#D3212D"}
                         color={"white"}
+                        bg={"#D3212D"}
+                        color={"white"}
                         _hover={{
+                            bg: "#D3212D",
                             bg: "#D3212D",
                         }}
                         onClick={onBtnForgotPassword}
+                        isLoading={loading}
                     >
                         Request Reset Password
                     </Button>
+                    <HStack fontSize="sm"
+                    >
+                        <Text>Return to</Text>
+                        <Text onClick={() => {
+                            navigate("/");
+                        }} color="#0969da"
+                            cursor={"pointer"}
+                        >
+                            Homepage
+                        </Text>
+                    </HStack>
                 </Stack>
             </Stack>
         </Flex>

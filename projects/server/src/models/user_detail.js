@@ -11,24 +11,21 @@ module.exports = (sequelize, DataTypes) => {
             // define association here
         }
     }
-    user_detail.init(
-        {
-            uuid: DataTypes.STRING,
-            name: DataTypes.STRING,
-            birth: DataTypes.DATEONLY,
-            gender: DataTypes.ENUM("Male", "Female"),
-            image_profile: DataTypes.STRING,
-            image_ktp: DataTypes.STRING,
-            account_number: DataTypes.STRING,
-            userId: DataTypes.INTEGER,
-        },
-        {
-            sequelize,
-            modelName: "user_detail",
-        }
-    );
-    user_detail.associate = (models) => {
-        user_detail.belongsTo(models.user, { foreignKey: "userId" });
-    };
-    return user_detail;
+  }
+  user_detail.init({
+    uuid: DataTypes.STRING,
+    name: DataTypes.STRING,
+    birth: DataTypes.DATEONLY,
+    gender: DataTypes.ENUM('Male', 'Female'),
+    image_profile: DataTypes.STRING,
+    image_ktp: DataTypes.BLOB,
+    userId: DataTypes.INTEGER
+  }, {
+    sequelize,
+    modelName: 'user_detail',
+  });
+  user_detail.associate = (models) => {
+    user_detail.belongsTo(models.user, { foreignKey: 'userId' })
+  }
+  return user_detail;
 };

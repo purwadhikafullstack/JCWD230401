@@ -1,31 +1,30 @@
 const { check, validationResult } = require("express-validator");
-const multer = require('multer');
 
 module.exports = {
   checkUser: async (req, res, next) => {
     try {
-      console.log("request path", req.path); //for testing DELETE later
+      console.log("request path", req.path); 
       if (req.path == "/register") {
         await check("name")
           .notEmpty()
           .isLength({ max: 255 })
           .withMessage(
-            "Name must not be empty and must be less than or equal to 255 characters"
+            "Name must not be empty and must be less than or equal to 255 characters."
           )
           .matches(/^[a-zA-Z ]+$/)
-          .withMessage("Name must only contain letters and spaces")
+          .withMessage("Name must only contain letters and spaces.")
           .run(req);
 
         await check("email")
           .notEmpty()
           .isEmail()
-          .withMessage("Invalid email address")
+          .withMessage("Invalid email address.")
           .run(req);
 
         await check("phone")
           .notEmpty()
           .isMobilePhone()
-          .withMessage("Invalid phone number")
+          .withMessage("Invalid phone number.")
           .run(req);
 
         await check("password")
@@ -38,7 +37,7 @@ module.exports = {
             minSymbols: 0,
           })
           .withMessage(
-            "Password must be at least 6 characters, includes a number, one uppercase letter, and one lowercase letter"
+            "Password must be at least 6 characters, includes a number, one uppercase letter, and one lowercase letter."
           )
           .run(req);
       } else if (req.path == "/auth") {
@@ -46,14 +45,14 @@ module.exports = {
           .if((value, { req }) => !req.body.phone)
           .notEmpty({ nullable: true })
           .isEmail()
-          .withMessage("Invalid email address")
+          .withMessage("Invalid email address.")
           .run(req);
 
         await check("phone")
           .if((value, { req }) => !req.body.email)
           .notEmpty({ nullable: true })
           .isMobilePhone()
-          .withMessage("Invalid phone number")
+          .withMessage("Invalid phone number.")
           .run(req);
 
         await check("password")
@@ -66,10 +65,10 @@ module.exports = {
             minSymbols: 0,
           })
           .withMessage(
-            "Password must be at least 6 characters, includes a number, one uppercase letter, and one lowercase letter"
+            "Password must be at least 6 characters, includes a number, one uppercase letter, and one lowercase letter."
           )
           .run(req);
-      } else if (req.path == "/changepw") {
+      } else if (req.path == "/change-password") {
         await check("password")
           .notEmpty()
           .isStrongPassword({
@@ -80,7 +79,7 @@ module.exports = {
             minSymbols: 0,
           })
           .withMessage(
-            "Password must be at least 6 characters, includes a number, one uppercase letter, and one lowercase letter"
+            "Password must be at least 6 characters, includes a number, one uppercase letter, and one lowercase letter."
           )
           .run(req);
 
@@ -94,7 +93,7 @@ module.exports = {
             minSymbols: 0,
           })
           .withMessage(
-            "Password must be at least 6 characters, includes a number, one uppercase letter, and one lowercase letter"
+            "Password must be at least 6 characters, includes a number, one uppercase letter, and one lowercase letter."
           )
           .run(req);
 
@@ -108,16 +107,16 @@ module.exports = {
             minSymbols: 0,
           })
           .withMessage(
-            "Password must be at least 6 characters, includes a number, one uppercase letter, and one lowercase letter"
+            "Password must be at least 6 characters, includes a number, one uppercase letter, and one lowercase letter."
           )
           .run(req);
-      } else if (req.path == "/forgotpw") {
+      } else if (req.path == "/forgot-password") {
         await check("email")
           .notEmpty()
           .isEmail()
-          .withMessage("Invalid email address")
+          .withMessage("Invalid email address.")
           .run(req);
-      } else if (req.path == "/resetpw") {
+      } else if (req.path == "/reset-password") {
         await check("newPassword")
           .notEmpty()
           .isStrongPassword({
@@ -128,7 +127,7 @@ module.exports = {
             minSymbols: 0,
           })
           .withMessage(
-            "Password must be at least 6 characters, includes a number, one uppercase letter, and one lowercase letter"
+            "Password must be at least 6 characters, includes a number, one uppercase letter, and one lowercase letter."
           )
           .run(req);
 
@@ -142,31 +141,30 @@ module.exports = {
             minSymbols: 0,
           })
           .withMessage(
-            "Password must be at least 6 characters, includes a number, one uppercase letter, and one lowercase letter"
+            "Password must be at least 6 characters, includes a number, one uppercase letter, and one lowercase letter."
           )
           .run(req);
-      } else if (req.path == "/registerastenant") {
-        // Modify the validation rules to match the form data field names
+      } else if (req.path == "/register-as-tenant") {
         await check("name")
           .notEmpty()
           .isLength({ max: 255 })
           .withMessage(
-            "Name must not be empty and must be less than or equal to 255 characters"
+            "Name must not be empty and must be less than or equal to 255 characters."
           )
           .matches(/^[a-zA-Z ]+$/)
-          .withMessage("Name must only contain letters and spaces")
+          .withMessage("Name must only contain letters and spaces.")
           .run(req);
 
         await check("email")
           .notEmpty()
           .isEmail()
-          .withMessage("Invalid email address")
+          .withMessage("Invalid email address.")
           .run(req);
 
         await check("phone")
           .notEmpty()
           .isMobilePhone()
-          .withMessage("Invalid phone number")
+          .withMessage("Invalid phone number.")
           .run(req);
 
         await check("password")
@@ -179,20 +177,19 @@ module.exports = {
             minSymbols: 0,
           })
           .withMessage(
-            "Password must be at least 6 characters, includes a number, one uppercase letter, and one lowercase letter"
+            "Password must be at least 6 characters, includes a number, one uppercase letter, and one lowercase letter."
           )
           .run(req);
-
-      } else if (req.path == "/editprofile") {
+      } else if (req.path == "/edit-profile") {
         if (req.body.name) {
           await check("name")
             .notEmpty()
             .isLength({ max: 255 })
             .withMessage(
-              "Name must not be empty and must be less than or equal to 255 characters"
+              "Name must not be empty and must be less than or equal to 255 characters."
             )
             .matches(/^[a-zA-Z ]+$/)
-            .withMessage("Name must only contain letters and spaces")
+            .withMessage("Name must only contain letters and spaces.")
             .run(req);
         }
 
@@ -200,7 +197,7 @@ module.exports = {
           await check("email")
             .notEmpty()
             .isEmail()
-            .withMessage("Invalid email address")
+            .withMessage("Invalid email address.")
             .run(req);
         }
 
@@ -208,7 +205,7 @@ module.exports = {
           await check("gender")
             .notEmpty()
             .isIn(["Male", "Female"])
-            .withMessage("Gender must not be empty")
+            .withMessage("Gender must not be empty.")
             .run(req);
         }
 
@@ -217,23 +214,33 @@ module.exports = {
             .notEmpty()
             .isISO8601()
             .withMessage("Birthdate must be a valid date in ISO8601 format.")
-            .isBefore("2023-01-01")
-            .withMessage("Birthdate cannot exceed 2022-12-31.")
+            .custom((value) => {
+              const currentDate = new Date();
+              const birthdate = new Date(value);
+              const minimumAgeDate = new Date(
+                currentDate.getFullYear() - 18,
+                currentDate.getMonth(),
+                currentDate.getDate()
+              );
+              if (birthdate > minimumAgeDate) {
+                throw new Error("You must be at least 18 years old.");
+              }
+              return true;
+            })
             .isAfter("1899-12-31")
-            .withMessage("Birthdate cannot be lower than 1900-01-01.")
+            .withMessage("Birth year cannot be lower than 1900-01-01.")
             .run(req);
         }
       }
 
       const validation = validationResult(req);
-      console.log("Validation result : ", validation); //for testing DELETE later
+      console.log("Validation result : ", validation); 
 
       if (validation.isEmpty()) {
         next();
       } else {
         return res.status(400).send({
           success: false,
-          // message: "Validation invalid",
           error: validation.errors,
         });
       }

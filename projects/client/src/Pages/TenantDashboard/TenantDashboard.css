@@ -1,0 +1,65 @@
+.fc-button-group {
+    font-size: 1rem;
+}
+
+.fc .fc-button-primary {
+font-size: 1rem;
+color: black;
+background-color: white;
+}
+
+.fc-h-event{
+  background-color: rgb(250, 162, 162);
+  border: 2px solid rgb(250, 162, 162);
+  
+}
+
+.fc-event-title-container{
+  background-color: rgb(250, 162, 162);
+  /* border: 1px solid #f04651; */
+  color:white;
+}
+
+.fc-event-title {
+  background-color: rgb(250, 162, 162);
+}
+
+.fc .fc-view-harness{
+  font-size: 0.7rem;
+}
+  
+  @media (max-width: 768px) {
+    .fc .fc-view-harness{
+        font-size: 0.7rem;
+    }
+    .fc-button-group {
+      font-size: 1rem; 
+      padding: 0.5rem;
+      
+    }
+    .fc .fc-button-primary {
+        font-size: 1rem;
+      }
+  }
+  
+  @media (max-width: 480px) {
+    .fc .fc-view-harness{
+        font-size: 0.5rem;
+    }
+    .fc .fc-toolbar-title {
+        font-size: 0.8rem;
+    }
+    .fc-button-group {
+      font-size: 0.7rem;
+      padding: 0.3rem;
+    }
+    .fc .fc-button-primary {
+        font-size: 0.7rem;
+        padding: 0.3rem;
+      }
+    /* .fc td {
+      padding: 0;
+      vertical-align: top;
+      height: 30vh;
+      } */
+  }

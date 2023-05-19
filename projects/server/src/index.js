@@ -1,10 +1,11 @@
 const { join } = require("path");
-require("dotenv/config");
-require("dotenv").config({ path: join(__dirname, ".env") });
-require("dotenv").config({ path: join(__dirname, ".env") });
+require('dotenv').config({path:join(__dirname,'../.env')});
 const express = require("express");
 const cors = require("cors");
 const bearerToken = require("express-bearer-token");
+const cookieSession = require("cookie-session");
+const passport = require("passport");
+const cookieParser = require('cookie-parser');
 
 // console.log("isi dari __dirname :" + __dirname);
 const PORT = process.env.PORT || 8000;
@@ -13,8 +14,25 @@ app.use(express.json());
 app.use(cors());
 app.use(bearerToken());
 app.use("/", express.static(__dirname + "/public"));
+app.use(cookieParser())
+
+// required middlewares google auth
+app.use(
+  cookieSession({
+    name: "authSession",
+    keys: ["askduhakdnkbiygvhbad7a6s*&^*S^D8asdbk"],
+    maxAge: 24 * 60 * 60 * 1000,
+    sameSite: "None",
+    secure: true,
+  })
+);
+app.use(passport.initialize());
+app.use(passport.session());
 
 //#region API ROUTES
+
+// ===========================
+// NOTE : Add your routes here
 const transactionRouter = require('./routers/transactionRouter');
 const categoryRouter = require('./routers/categoryRouter');
 const userRouter = require('./routers/userRouter');
@@ -26,6 +44,8 @@ const reviewRouter = require("./routers/reviewRouter");
 const specialRouter = require("./routers/specialRouter");
 const maintenanceRouter = require("./routers/maintenanceRouter");
 const reportRouter = require("./routers/reportRouter");
+const landingRouter = require("./routers/landingRouter");
+const passportRouter = require("./routers/passportRouter");
 const { reminderCheckInUser } = require("./helper/schedule");
 
 app.use('/api/user', userRouter);
@@ -39,7 +59,9 @@ app.use("/api/review", reviewRouter);
 app.use("/api/property", propertyRouter);
 app.use("/api/special", specialRouter);
 app.use("/api/maintenance", maintenanceRouter);
-app.use("/api/report", reportRouter)
+app.use("/api/report", reportRouter);
+app.use("/api/landing", landingRouter);
+app.use('/api/auth', passportRouter);
 // ==============================================
 // NOTE : Add your routes here
 app.get("/api", (req, res) => {

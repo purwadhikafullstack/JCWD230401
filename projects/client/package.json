@@ -27,6 +27,7 @@
     "recharts": "^2.6.2",
     "chart.js": "latest",
     "date-fns": "^2.29.3",
+    "formik": "^2.2.9",
     "framer-motion": "latest",
     "moment": "^2.29.4",
     "react": "^18.2.0",
@@ -37,13 +38,16 @@
     "react-icons": "latest",
     "react-paginate": "^8.2.0",
     "react-iframe": "^1.8.5",
+    "react-jwt": "^1.1.8",
     "react-redux": "latest",
     "react-router-dom": "latest",
     "react-scripts": "5.0.1",
     "react-slick": "^0.29.0",
     "slick-carousel": "^1.8.1",
     "swiper": "^9.2.0",
-    "web-vitals": "^2.1.4"
+    "slick-carousel": "^1.8.1",
+    "web-vitals": "^2.1.4",
+    "yup": "^1.1.1"
   },
   "eslintConfig": {
     "extends": [

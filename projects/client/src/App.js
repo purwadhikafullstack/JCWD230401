@@ -1,9 +1,9 @@
 import axios from "axios";
 import "./App.css";
-import { Route, Routes, useLocation } from "react-router-dom";
-import NavbarMobile from "./Components/NavbarMobile";
+import { Route, Routes } from "react-router-dom";
 import Navbar from "./Components/Navbar";
-import React, { useState } from "react";
+import Footer from "./Components/Footer";
+import React from "react";
 import UserRegister from "./Pages/UserRegister";
 import { useDispatch, useSelector } from "react-redux";
 import { loginAction } from "./reducers/auth";
@@ -12,7 +12,7 @@ import ForgotPassword from "./Pages/ForgotPassword";
 import ResetPassword from "./Pages/ResetPassword";
 import Landing from "./Pages/Landing/Landing";
 import TenantRegister from "./Pages/TenantRegister";
-import Dashboard from "./Pages/Dashboard/Dashboard";
+import TenantDashboard from "./Pages/TenantDashboard/TenantDashboard";
 import NotFound from "./Pages/NotFound";
 import Verification from "./Pages/Verification";
 import ProductDetail from "./Pages/ProductDetail/ProductDetail";
@@ -23,7 +23,6 @@ import Payments from "./Pages/Payments/Payments";
 import PaymentDetail from "./Pages/PaymentDetail";
 import OrderLists from "./Pages/OrderLists";
 import EditProfile from "./Pages/EditProfile";
-import TenantCalendar from "./Pages/TenantCalendar";
 import AddProperty from "./Pages/Tenant/AddProperty";
 import ManageProperty from "./Pages/Tenant/ManageProperty";
 import AddRoom from "./Pages/Tenant/AddRoom";
@@ -35,91 +34,53 @@ import SalesReport from "./Components/SalesReport";
 import OrderListTenant from "./Pages/TenantPages/OrderListTenant";
 
 function App() {
-    const location = useLocation();
-    const dispatch = useDispatch();
-    const roleId = useSelector((state) => state.authReducer.roleId);
-    // console.log("ini isi roleId dari useSelector di App.js : ", roleId);
+  const dispatch = useDispatch();
+  const role = useSelector((state) => state.authReducer.role);
 
-    const keeplogin = async () => {
-        try {
-            let token = localStorage.getItem("tempatku_login");
-            if (token) {
-                let response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/user/keeplogin`, {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                });
-                console.log("ini respon dari keeplogin :", response.data);
-                localStorage.setItem("tempatku_login", response.data.token);
-                dispatch(loginAction(response.data));
-            }
-        } catch (error) {
-            console.log("ini error dari keeplogin : ", error);
-        }
-    };
+  const keepLogin = async () => {
+    try {
+      let token = localStorage.getItem("tempatku_login");
+      if (token) {
+        let response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/user/keep-login`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        localStorage.setItem("tempatku_login", response.data.token);
+        dispatch(loginAction(response.data));
+      }
+    } catch (error) {
+      console.log("ini error dari keeplogin : ", error);
+    }
+  };
 
-    React.useEffect(() => {
-        keeplogin();
-    }, []);
-    React.useEffect(() => {
-        keeplogin();
-    }, []);
+  React.useEffect(() => {
+    keepLogin();
+  }, []);
 
-    return (
-        <>
-            {!location.pathname.includes("auth") ? (
-                <>
-                    <Navbar />
-                    <NavbarMobile />
-                </>
-            ) : null}
-            {
-                // User
-                roleId == 1 ? (
-                    <Routes>
-                        <Route
-                            path="/changepassword"
-                            element={<ChangePassword />}
-                        />
-                        <Route
-                            path="/userregister"
-                            element={<UserRegister />}
-                        />
-                        <Route
-                            path="/tenantregister"
-                            element={<TenantRegister />}
-                        />
-                        <Route
-                            path="/forgotpassword"
-                            element={<ForgotPassword />}
-                        />
-                        <Route
-                            path="/resetpassword/:token"
-                            element={<ResetPassword />}
-                        />
-                        <Route
-                            path="/verifyaccount/:token"
-                            element={<Verification />}
-                        />
-                        <Route path="/" element={<Landing />} />
-                        <Route path="*" element={<NotFound />} />
-                        <Route
-                            path="/productdetail"
-                            element={<ProductDetail />}
-                        />
-                        <Route
-                            path="/transactionpage"
-                            element={<TransactionPage />}
-                        />
-                        <Route
-                            path="/editprofile"
-                            element={
-                                <EditProfile
-                                    keeplogin={() => dispatch(keeplogin())}
-                                />
-                            }
-                        />
-                        <Route
+  return (
+    <>
+      <Navbar />
+      {
+        // User
+        role == "User" ? (
+          <Routes>
+            <Route path="/password/change" element={<ChangePassword />} />
+            <Route path="/register/user" element={<UserRegister />} />
+            <Route path="/register/tenant" element={<TenantRegister />} />
+            <Route path="/password/forgot" element={<ForgotPassword />} />
+            <Route path="/password/reset/:token" element={<ResetPassword />} />
+            <Route
+              path="/account/verification/:token"
+              element={<Verification />}
+            />
+            <Route path="/" element={<Landing />} />
+            <Route path="*" element={<NotFound />} />
+            <Route
+              path="/profile/edit"
+              element={<EditProfile keepLogin={() => dispatch(keepLogin())} />}
+            />
+            <Route
                             path="/property"
                             element={<FilteredProperty />}
                         />
@@ -130,55 +91,25 @@ function App() {
                         <Route path="/payment/:uuid" element={<Payments />} />
                         <Route path="/payment/detail/:uuid" element={<PaymentDetail />} />
                         <Route path="/order/list" element={<OrderLists />} />
-                    </Routes>
-                ) : // Tenant
-                    roleId == 2 ? (
-                        <Routes>
-                            <Route
-                                path="/changepassword"
-                                element={<ChangePassword />}
-                            />
-                            <Route
-                                path="/userregister"
-                                element={<UserRegister />}
-                            />
-                            <Route
-                                path="/tenantregister"
-                                element={<TenantRegister />}
-                            />
-                            <Route
-                                path="/forgotpassword"
-                                element={<ForgotPassword />}
-                            />
-                            <Route
-                                path="/resetpassword/:token"
-                                element={<ResetPassword />}
-                            />
-                            <Route
-                                path="/verifyaccount/:token"
-                                element={<Verification />}
-                            />
-                            <Route path="/dashboard" element={<Dashboard />} />
-                            <Route path="/" element={<Landing />} />
-                            <Route path="*" element={<NotFound />} />
-                            <Route
+          </Routes>
+        ) : // Tenant
+        role == "Tenant" ? (
+          <Routes>
+            <Route path="/password/change" element={<ChangePassword />} />
+            <Route path="/register/tenant" element={<TenantRegister />} />
+            <Route path="/password/forgot" element={<ForgotPassword />} />
+            <Route path="/password/reset/:token" element={<ResetPassword />} />
+            <Route path="/dashboard" element={<TenantDashboard />} />
+            <Route path="*" element={<NotFound />} />
+            <Route
+              path="/profile/edit"
+              element={<EditProfile keepLogin={() => dispatch(keepLogin())} />}
+            />
+              <Route
                                 path="/property/detail/:uuid"
                                 element={<PropertyDetail />}
                             />
-                            <Route
-                                path="/tenantcalendar"
-                                element={<TenantCalendar />}
-                            />
-                            <Route
-                                path="/editprofile"
-                                element={
-                                    <EditProfile
-                                        keeplogin={() => dispatch(keeplogin())}
-                                    />
-                                }
-                            />
-                            <Route path="/" element={<Landing />} />
-                            <Route path="/listing" element={<AddProperty />} />
+                             <Route path="/listing" element={<AddProperty />} />
                             <Route
                                 path="/editlisting/:uuid"
                                 element={<ManageProperty />}
@@ -199,38 +130,22 @@ function App() {
                             />
                             <Route path="/report" element={<SalesReport />} />
                             <Route path="/tenantorderlist" element={<OrderListTenant />} />
-                            
-                        </Routes>
-                    ) : (
-                        // Not logged in
-                        <Routes>
-                            <Route
-                                path="/auth/changepassword"
-                                element={<ChangePassword />}
-                            />
-                            <Route
-                                path="/auth/userregister"
-                                element={<UserRegister />}
-                            />
-                            <Route
-                                path="/auth/forgotpassword"
-                                element={<ForgotPassword />}
-                            />
-                            <Route
-                                path="/auth/resetpassword/:token"
-                                element={<ResetPassword />}
-                            />
-                            <Route
-                                path="/tenantregister"
-                                element={<TenantRegister />}
-                            />
-                            <Route
-                                path="/verifyaccount/:token"
-                                element={<Verification />}
-                            />
-                            <Route path="/" element={<Landing />} />
-                            <Route path="*" element={<NotFound />} />
-                            <Route
+          </Routes>
+        ) : (
+          // Not logged in
+          <Routes>
+            <Route path="/password/change" element={<ChangePassword />} />
+            <Route path="/register/user" element={<UserRegister />} />
+            <Route path="/register/tenant" element={<TenantRegister />} />
+            <Route path="/password/forgot" element={<ForgotPassword />} />
+            <Route path="/password/reset/:token" element={<ResetPassword />} />
+            <Route
+              path="/account/verification/:token"
+              element={<Verification />}
+            />
+            <Route path="/" element={<Landing />} />
+            <Route path="*" element={<NotFound />} />
+            <Route
                                 path="/property"
                                 element={<FilteredProperty />}
                             />
@@ -244,12 +159,12 @@ function App() {
                                 element={<PaymentDetail />}
                             />
                             <Route path="/order/list" element={<OrderLists />} />
-                        </Routes>
-                    )
-            }
-            {/* {location.pathname === "/" && <NavbarMobile />} */}
-        </>
-    );
+          </Routes>
+        )
+      }
+      <Footer />
+    </>
+  );
 }
 
 
