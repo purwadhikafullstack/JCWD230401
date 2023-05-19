@@ -5,26 +5,6 @@ const bcrypt = require("bcrypt");
 const { createToken } = require("../helper/jwt");
 
 module.exports = {
-    getDetailRoomTransaction: async (req, res, next) => {
-        let get = await model.room.findAll({
-            where: {
-                uuid: req.body.uuid
-            },
-            include: [
-                {
-                    model: model.property,
-                    include: [{
-                        model: model.property_location, attributes: ['country'],
-                        include: [{ model: model.regency, attributes: ['name'] }]
-                    }]
-                },
-                { model: model.room_category },
-                { model: model.picture_room },
-
-            ]
-        });
-        res.status(200).send(get)
-    },
     getPropertyNameAndIdByUserId: async (req, res, next) => {
         try {
             let get = await model.property.findAll({
@@ -42,6 +22,32 @@ module.exports = {
             console.log(error);
             next(error);
         }
+    },
+    getDetailRoomTransaction: async (req, res, next) => {
+        try {
+            let get = await model.room.findAll({
+                where: {
+                    uuid: req.query.uuid
+                },
+                include: [
+                    {
+                        model: model.property,
+                        include: [{
+                            model: model.property_location, attributes: ['country', 'address'],
+                            include: [{ model: model.regency, attributes: ['name'] }]
+                        }]
+                    },
+                    { model: model.room_category },
+                    { model: model.picture_room },
+
+                ]
+            });
+            res.status(200).send(get)
+        } catch (error) {
+            console.log(error);
+            next(error);
+        }
+
     },
     addRoom: async (req, res, next) => {
         const ormTransaction = await model.sequelize.transaction();
@@ -89,7 +95,6 @@ module.exports = {
             }
 
             await ormTransaction.commit();
-
             return res.status(200).send({
                 success: true,
                 data: addRoom,
@@ -250,27 +255,6 @@ module.exports = {
             if (!order) {
                 order = "ASC";
             }
-
-            // let get = await model.room_category.findAndCountAll({
-            //     offset: parseInt(page * size),
-            //     limit: parseInt(size),
-            //     include: [
-            //         {
-            //             model: model.room,
-            //             where: { isDeleted: false },
-            //             include: [
-            //                 {
-            //                     model: model.property,
-            //                     attributes: ["uuid"],
-            //                     where: {
-            //                         uuid: req.query.uuid,
-            //                     },
-            //                 },
-            //             ],
-            //         },
-            //     ],
-            //     order: [[sortby, order]],
-            // });
 
             let get = await model.room.findAndCountAll({
                 offset: parseInt(page * size),

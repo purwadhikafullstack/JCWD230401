@@ -2,6 +2,7 @@ const { roomController } = require("../controllers");
 const { readToken } = require("../helper/jwt");
 const route = require("express").Router();
 const uploader = require("../helper/uploader");
+route.get('/roompayment', roomController.getDetailRoomTransaction)
 
 route.get(
     "/getpropertynameandid",
@@ -24,7 +25,5 @@ route.patch(
 route.patch("/deleteimageroom", roomController.deleteRoomPicture);
 route.get("/getlistroom", roomController.listRoom);
 route.patch("/deleteroom/:uuid", readToken, roomController.deleteRoom);
-
-module.exports = route;
 
 module.exports = route;

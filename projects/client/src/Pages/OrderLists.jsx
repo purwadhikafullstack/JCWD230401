@@ -25,7 +25,7 @@ import { Link } from 'react-router-dom'
 import CardOrderList from '../Components/CardOrderList'
 import Pagination from '../Components/Pagination'
 import { API_URL } from '../helper'
-
+import { Rating } from '@smastrom/react-rating';
 
 
 export default function OrderLists() {
@@ -33,7 +33,7 @@ export default function OrderLists() {
 
     // PAGINATION
     const [page, setPage] = useState(1)
-    const [size, setSize] = useState(1)
+    const [size, setSize] = useState(3)
     const [transactionStatusId, setTransactionStatusId] = useState('')
     const [invoice, setInvoice] = useState('')
     const [sortBy, setSortBy] = useState('')
@@ -61,29 +61,69 @@ export default function OrderLists() {
     }
     console.log("order list", orderList.rows);
 
+    function getRating(rating) {
+        switch (rating) {
+            case 1:
+                return 'Poor';
+            case 2:
+                return 'Nothing special';
+            case 3:
+                return 'Average';
+            case 4:
+                return 'Very good';
+            case 5:
+                return 'Excellent';
+            default:
+                return 'None';
+        }
+    }
+
+    const [rating, setRating] = useState(5);
+    const [review, setReview] = useState(' ');
+    function RatingUser() {
+        const [hoveredRating, setHoveredRating] = useState(0);
+
+        return (
+            <Flex style={{ maxWidth: 200, width: '100%' }} gap='5' alignItems='center'>
+                <Box w='60%'>
+                    <Rating value={rating} onChange={setRating} onHoverChange={setHoveredRating} />
+                </Box>
+                <Box w={'40%'}>
+                    <Text fontSize={'sm'}>{`${getRating(rating)}`}</Text>
+                </Box>
+            </Flex>
+        );
+    }
+
+
     const printOrderList = () => {
         return orderList?.rows?.map((val, idx) => {
             return (
-                <Link to={`/payment/detail/${val.transaction.uuid}`}>
-                    <CardOrderList property={val.room.property.property} capacity={val.room.capacity} room={val.room.room_category.name} price={val.price} end_date={val.end_date} start_date={val.start_date} status={val.transaction.transaction_status.status} invoice={val.transaction.invoice_number} roomPicture={val.room.picture_rooms} />
-                </Link>
+                <CardOrderList property={val.room.property.property} capacity={val.room.capacity} room={val.room.room_category.name} price={val.price} end_date={val.end_date} start_date={val.start_date} status={val.transaction.transaction_status.status} invoice={val.transaction.invoice_number} roomPicture={val.room.picture_rooms} uuid={val.transaction.uuid} RatingUser={RatingUser} review={review} setReview={setReview} roomId={val.room.id} rating={rating} transactionId={val.transaction.id} isReview={val.transaction.review} getOrderList={getOrderList} />
             )
         })
     }
 
+
+
     useEffect(() => {
         getOrderList();
-    }, [page, size, sortBy, order, start, end, transactionStatusId, invoice])
+    }, [page, size, sortBy, order, start, end, transactionStatusId])
     return (
         <Container maxW={'7xl'}>
             {/* TITLE & FILTER */}
             <Flex justifyContent={'space-between'} alignItems='center' my='5'>
                 <Text fontWeight={'bold'} fontSize={'3xl'}>My order</Text>
                 <Flex gap='3'>
-                    <Input type='text' placeholder='Invoice number' onChange={(e) => setInvoice(e.target.value)} />
+                    <InputGroup>
+                        <Input type='text' placeholder='Invoice' onChange={(e) => setInvoice(e.target.value)} />
+                        <InputRightElement width='4.5rem'>
+                            <Button h='1.75rem' size='sm' onClick={getOrderList}>Find</Button>
+                        </InputRightElement>
+                    </InputGroup>
                     <Menu closeOnSelect={false}>
-                        <MenuButton as={Button}>
-                            Filter
+                        <MenuButton as={Button} w='100px' colorScheme='red'>
+                            <Text>Filter</Text>
                         </MenuButton>
                         <MenuList minWidth='240px'>
                             <MenuOptionGroup title='Filter by'>

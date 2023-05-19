@@ -55,12 +55,14 @@ export default function SearchBar(props) {
                     </div>
                     <div>
                         <label>Guest</label>
-                        <input type="number" placeholder="Add Guest" />
+                        <input onChange={(e) => props.setGuest(e.target.value)}
+                            type="number" placeholder="Add Guest" />
                     </div>
                     <button type="button"
                         onClick={() => {
-                            props.setPage(0);
+                            // props.setPage(0);
                             props.getAllProperty();
+                            // props.setGuest(1)
                             // props.setCity("")s
                         }}>
                         {/* <img src={Search} /> */}
