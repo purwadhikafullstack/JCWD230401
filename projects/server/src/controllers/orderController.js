@@ -3,7 +3,6 @@ const model = require("../models");
 const { v4: uuidv4 } = require("uuid");
 const bcrypt = require("bcrypt");
 const { createToken } = require("../helper/jwt");
-const transporter = require("../helper/nodemailer");
 
 module.exports = {
     getAllOrder: async (req, res, next) => {
