@@ -68,6 +68,7 @@ export default function ResetPassword() {
         }
     }
 
+    console.log("ini isi params :", params); //testing purposes
 
     const formik = useFormik({
         initialValues: {
@@ -130,14 +131,25 @@ export default function ResetPassword() {
                             name="newPassword"
                         />
                         <InputRightElement h={"full"}>
+                        <InputRightElement h={"full"}>
                             <Button
                                 variant={"ghost"}
                                 _hover={"none"}
                                 _active={"none"}
+                                variant={"ghost"}
+                                _hover={"none"}
+                                _active={"none"}
                                 onClick={() =>
-                                    setShowNewPassword((showNewPassword) => !showNewPassword)
-                                }>
-                                {showNewPassword ? <ViewIcon /> : <ViewOffIcon />}
+                                    setShowNewPassword(
+                                        (showNewPassword) => !showNewPassword
+                                    )
+                                }
+                            >
+                                {showNewPassword ? (
+                                    <ViewIcon />
+                                ) : (
+                                    <ViewOffIcon />
+                                )}
                             </Button>
                         </InputRightElement>
                     </InputGroup>
@@ -153,14 +165,26 @@ export default function ResetPassword() {
                             name="passwordConfirmation"
                         />
                         <InputRightElement h={"full"}>
+                        <InputRightElement h={"full"}>
                             <Button
                                 variant={"ghost"}
                                 _hover={"none"}
                                 _active={"none"}
+                                variant={"ghost"}
+                                _hover={"none"}
+                                _active={"none"}
                                 onClick={() =>
-                                    setShowPasswordConfirmation((showPasswordConfirmation) => !showPasswordConfirmation)
-                                }>
-                                {showPasswordConfirmation ? <ViewIcon /> : <ViewOffIcon />}
+                                    setShowPasswordConfirmation(
+                                        (showPasswordConfirmation) =>
+                                            !showPasswordConfirmation
+                                    )
+                                }
+                            >
+                                {showPasswordConfirmation ? (
+                                    <ViewIcon />
+                                ) : (
+                                    <ViewOffIcon />
+                                )}
                             </Button>
                         </InputRightElement>
                     </InputGroup>
@@ -178,9 +202,13 @@ export default function ResetPassword() {
                     <Button
                         bg={"#D3212D"}
                         color={"white"}
+                        bg={"#D3212D"}
+                        color={"white"}
                         _hover={{
                             bg: "#D3212D",
+                            bg: "#D3212D",
                         }}
+                        type="button"
                         type="button"
                         onClick={onBtnResetPassword}
                         isLoading={loading}

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import React, { useState } from "react";
 import {
     Button,
     Flex,
@@ -144,14 +145,25 @@ export default function ChangePassword() {
                             name="oldPassword"
                         />
                         <InputRightElement h={"full"}>
+                        <InputRightElement h={"full"}>
                             <Button
                                 variant={"ghost"}
                                 _hover={"none"}
                                 _active={"none"}
+                                variant={"ghost"}
+                                _hover={"none"}
+                                _active={"none"}
                                 onClick={() =>
-                                    setShowOldPassword((showOldPassword) => !showOldPassword)
-                                }>
-                                {showOldPassword ? <ViewIcon /> : <ViewOffIcon />}
+                                    setShowOldPassword(
+                                        (showOldPassword) => !showOldPassword
+                                    )
+                                }
+                            >
+                                {showOldPassword ? (
+                                    <ViewIcon />
+                                ) : (
+                                    <ViewOffIcon />
+                                )}
                             </Button>
                         </InputRightElement>
                     </InputGroup>
@@ -167,14 +179,25 @@ export default function ChangePassword() {
                             name="newPassword"
                         />
                         <InputRightElement h={"full"}>
+                        <InputRightElement h={"full"}>
                             <Button
                                 variant={"ghost"}
                                 _hover={"none"}
                                 _active={"none"}
+                                variant={"ghost"}
+                                _hover={"none"}
+                                _active={"none"}
                                 onClick={() =>
-                                    setShowNewPassword((showNewPassword) => !showNewPassword)
-                                }>
-                                {showNewPassword ? <ViewIcon /> : <ViewOffIcon />}
+                                    setShowNewPassword(
+                                        (showNewPassword) => !showNewPassword
+                                    )
+                                }
+                            >
+                                {showNewPassword ? (
+                                    <ViewIcon />
+                                ) : (
+                                    <ViewOffIcon />
+                                )}
                             </Button>
                         </InputRightElement>
                     </InputGroup>
@@ -190,14 +213,26 @@ export default function ChangePassword() {
                             name="passwordConfirmation"
                         />
                         <InputRightElement h={"full"}>
+                        <InputRightElement h={"full"}>
                             <Button
                                 variant={"ghost"}
                                 _hover={"none"}
                                 _active={"none"}
+                                variant={"ghost"}
+                                _hover={"none"}
+                                _active={"none"}
                                 onClick={() =>
-                                    setShowPasswordConfirmation((showPasswordConfirmation) => !showPasswordConfirmation)
-                                }>
-                                {showPasswordConfirmation ? <ViewIcon /> : <ViewOffIcon />}
+                                    setShowPasswordConfirmation(
+                                        (showPasswordConfirmation) =>
+                                            !showPasswordConfirmation
+                                    )
+                                }
+                            >
+                                {showPasswordConfirmation ? (
+                                    <ViewIcon />
+                                ) : (
+                                    <ViewOffIcon />
+                                )}
                             </Button>
                         </InputRightElement>
                     </InputGroup>
@@ -207,7 +242,10 @@ export default function ChangePassword() {
                     <Button
                         bg={"#D3212D"}
                         color={"white"}
+                        bg={"#D3212D"}
+                        color={"white"}
                         _hover={{
+                            bg: "#D3212D",
                             bg: "#D3212D",
                         }}
                         onClick={onBtnChangePassword}

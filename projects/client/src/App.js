@@ -17,7 +17,21 @@ import NotFound from "./Pages/NotFound";
 import Verification from "./Pages/Verification";
 import ProductDetail from "./Pages/ProductDetail/ProductDetail";
 import TransactionPage from "./Pages/TransactionPage";
+import FilteredProperty from "./Pages/FilteredProperty/FilteredProperty";
+import PropertyDetail from "./Pages/PropertyDetail/PropertyDetail";
+import Payments from "./Pages/Payments/Payments";
+import PaymentDetail from "./Pages/PaymentDetail";
+import OrderLists from "./Pages/OrderLists";
 import EditProfile from "./Pages/EditProfile";
+import AddProperty from "./Pages/Tenant/AddProperty";
+import ManageProperty from "./Pages/Tenant/ManageProperty";
+import AddRoom from "./Pages/Tenant/AddRoom";
+import ManageRoom from "./Pages/Tenant/ManageRoom";
+import PropertyList from "./Pages/Tenant/PropertyList";
+import RoomList from "./Pages/Tenant/RoomList";
+import RoomConditionList from "./Pages/Tenant/RoomConditionList";
+import SalesReport from "./Components/SalesReport";
+import OrderListTenant from "./Pages/TenantPages/OrderListTenant";
 
 function App() {
   const dispatch = useDispatch();
@@ -62,14 +76,21 @@ function App() {
             />
             <Route path="/" element={<Landing />} />
             <Route path="*" element={<NotFound />} />
-            <Route path="/productdetail" element={<ProductDetail />} />{" "}
-            {/* TESTING, DELETE LATER */}
-            <Route path="/transactionpage" element={<TransactionPage />} />{" "}
-            {/* TESTING, DELETE LATER */}
             <Route
               path="/profile/edit"
               element={<EditProfile keepLogin={() => dispatch(keepLogin())} />}
             />
+            <Route
+                            path="/property"
+                            element={<FilteredProperty />}
+                        />
+                        <Route
+                            path="/property/detail/:uuid"
+                            element={<PropertyDetail />}
+                        />
+                        <Route path="/payment/:uuid" element={<Payments />} />
+                        <Route path="/payment/detail/:uuid" element={<PaymentDetail />} />
+                        <Route path="/order/list" element={<OrderLists />} />
           </Routes>
         ) : // Tenant
         role == "Tenant" ? (
@@ -84,6 +105,31 @@ function App() {
               path="/profile/edit"
               element={<EditProfile keepLogin={() => dispatch(keepLogin())} />}
             />
+              <Route
+                                path="/property/detail/:uuid"
+                                element={<PropertyDetail />}
+                            />
+                             <Route path="/listing" element={<AddProperty />} />
+                            <Route
+                                path="/editlisting/:uuid"
+                                element={<ManageProperty />}
+                            />
+                            <Route path="/room" element={<AddRoom />} />
+                            <Route
+                                path="/editroom/:uuid"
+                                element={<ManageRoom />}
+                            />
+                            <Route
+                                path="/propertylist"
+                                element={<PropertyList />}
+                            />
+                            <Route path="/roomlist/:uuid" element={<RoomList />} />
+                            <Route
+                                path="/specialconditions/:uuid"
+                                element={<RoomConditionList />}
+                            />
+                            <Route path="/report" element={<SalesReport />} />
+                            <Route path="/tenantorderlist" element={<OrderListTenant />} />
           </Routes>
         ) : (
           // Not logged in
@@ -99,8 +145,20 @@ function App() {
             />
             <Route path="/" element={<Landing />} />
             <Route path="*" element={<NotFound />} />
-            <Route path="/productdetail" element={<ProductDetail />} />{" "}
-            {/* TESTING, DELETE LATER */}
+            <Route
+                                path="/property"
+                                element={<FilteredProperty />}
+                            />
+                            <Route
+                                path="/property/detail/:uuid"
+                                element={<PropertyDetail />}
+                            />
+                            <Route path="/payment/:uuid" element={<Payments />} />
+                            <Route
+                                path="/payment/detail/:uuid"
+                                element={<PaymentDetail />}
+                            />
+                            <Route path="/order/list" element={<OrderLists />} />
           </Routes>
         )
       }
@@ -108,5 +166,6 @@ function App() {
     </>
   );
 }
+
 
 export default App;

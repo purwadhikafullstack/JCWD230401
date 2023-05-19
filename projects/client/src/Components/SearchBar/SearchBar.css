@@ -1,0 +1,61 @@
+.search-bar-fp {
+    background: rgb(237, 235, 235);
+    width: 70%;
+    margin: 30px auto;
+    padding: 6px 10px 6px 30px;
+    border-radius: 10px;
+}
+
+.location-input-fp {
+    flex: 1;
+}
+
+.search-bar-fp form {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.search-bar-fp form input {
+    display: block;
+    border: 0;
+    outline: none;
+    background: transparent;
+    max-width: 160px;
+}
+
+.search-bar-fp form button {
+    background: #D3212D;
+    width: 55px;
+    height: 55px;
+    border-radius: 10%;
+    border: 0;
+    outline: none;
+    cursor: pointer;
+}
+
+.search-bar-fp form button img {
+    width: 15px;
+    margin-left: 20px;
+}
+
+.search-bar-fp form label {
+    font-weight: 600;
+}
+
+.dropdown-fp {
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    /* border: 1px solid gray; */
+}
+
+.dropdown-fp:empty {
+    border: none;
+}
+
+.dropdown-row {
+    cursor: pointer;
+    text-align: start;
+    margin: 2px 0;
+}

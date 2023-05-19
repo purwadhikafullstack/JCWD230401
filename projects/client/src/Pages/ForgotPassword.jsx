@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import React, { useState } from "react";
 import {
     Button,
     FormControl,
@@ -121,7 +122,10 @@ export default function ForgotPassword() {
                     <Button
                         bg={"#D3212D"}
                         color={"white"}
+                        bg={"#D3212D"}
+                        color={"white"}
                         _hover={{
+                            bg: "#D3212D",
                             bg: "#D3212D",
                         }}
                         onClick={onBtnForgotPassword}

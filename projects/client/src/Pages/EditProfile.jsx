@@ -1,4 +1,5 @@
 import React, { useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import {
     Button,
     Flex,
@@ -28,13 +29,9 @@ export default function EditProfile(props) {
     const isVerified = useSelector((state) => state.authReducer.isVerified);
     const [gender, setGender] = useState(currentGender);
     const [birth, setBirth] = useState(currentBirth);
-    const modalProfileImage = useDisclosure()
+    const modalProfileImage = useDisclosure();
     const [profileImage, setProfileImage] = useState(null);
     const inputFile = useRef(null);
-    const [loading, setLoading] = React.useState(false);
-    const [loading1, setLoading1] = useState(false);
-    const [loading2, setLoading2] = useState(false);
-    const toast = useToast();
 
 
     const handleGenderChange = (value) => {
@@ -73,11 +70,12 @@ export default function EditProfile(props) {
                     email: formik.values.email,
                     gender: gender,
                     birth: birth,
-                }, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
                 },
-            }
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
             );
             toast({
                 title: response.data.message,
@@ -208,7 +206,10 @@ export default function EditProfile(props) {
 
     //change state image profile
     const onChangeFile = (event) => {
-        console.log("ini isi dari event.target.files onchangefile :", event.target.files);
+        console.log(
+            "ini isi dari event.target.files onchangefile :",
+            event.target.files
+        );
         modalProfileImage.onOpen();
         setProfileImage(event.target.files[0]);
     };
@@ -224,9 +225,13 @@ export default function EditProfile(props) {
             }
             // image has to be .jpg .png .gif .jpeg
             if (
-                !["image/jpg", "image/png", "image/jpeg", "image/gif"].includes(profileImage.type)
+                !["image/jpg", "image/png", "image/jpeg", "image/gif"].includes(
+                    profileImage.type
+                )
             ) {
-                throw new Error("Only .jpg, .png, .gif, and .jpeg format allowed!");
+                throw new Error(
+                    "Only .jpg, .png, .gif, and .jpeg format allowed!"
+                );
             }
             formData.append("image_profile", profileImage);
             console.log("ini isi dari formData", formData);
@@ -302,6 +307,7 @@ export default function EditProfile(props) {
                 bg={"white"}
             >
                 <Stack
+                    bg="white"
                     bg="white"
                     spacing={4}
                     w={"full"}
@@ -405,7 +411,10 @@ export default function EditProfile(props) {
                             </Box>
                         </Stack>
                         {/* Modal Open */}
-                        <Modal isOpen={modalProfileImage.isOpen} onClose={modalProfileImage.onClose}>
+                        <Modal
+                            isOpen={modalProfileImage.isOpen}
+                            onClose={modalProfileImage.onClose}
+                        >
                             <ModalOverlay />
                             <ModalContent>
                                 <ModalHeader>Change Profile Photo</ModalHeader>
@@ -429,7 +438,6 @@ export default function EditProfile(props) {
                                 </ModalFooter>
                             </ModalContent>
                         </Modal>
-
                     </FormControl>
                     <FormControl id="Name" isInvalid={formik.errors.name}>
                         <FormLabel>Name</FormLabel>
@@ -456,12 +464,15 @@ export default function EditProfile(props) {
                     <FormControl id="gender" isInvalid={formik.errors.gender}>
                         <FormLabel>Gender</FormLabel>
                         <Box justifyContent="space-between">
+                        <Box justifyContent="space-between">
                             <RadioGroup
                                 value={formik.values.gender}
                                 onChange={handleGenderChange}
                                 name="gender"
                             >
-                                <Radio value="Male" mr={2}>Male</Radio>
+                                <Radio value="Male" mr={2}>
+                                    Male
+                                </Radio>
                                 <Radio value="Female">Female</Radio>
                             </RadioGroup>
                         </Box>
@@ -532,5 +543,5 @@ export default function EditProfile(props) {
                 </Stack>
             </Flex>
         </>
-    )
+    );
 }

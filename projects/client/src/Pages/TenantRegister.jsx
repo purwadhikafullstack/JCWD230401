@@ -1,4 +1,5 @@
 import React, { useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import {
     Button,
     Flex,
@@ -85,7 +86,7 @@ export default function TenantRegister() {
         } finally {
             setLoading(false);
         }
-    }
+    };
 
     const formik = useFormik({
         initialValues: {
@@ -169,6 +170,7 @@ export default function TenantRegister() {
         >
             <Flex
                 p={{ base: "8", sm: "0" }}
+                p={{ base: "8", sm: "0" }}
                 flex={1}
                 align={"center"} justify={"center"}
             >
@@ -221,14 +223,25 @@ export default function TenantRegister() {
                                     name="password"
                                 />
                                 <InputRightElement h={"full"}>
+                                <InputRightElement h={"full"}>
                                     <Button
                                         variant={"ghost"}
                                         _hover={"none"}
                                         _active={"none"}
+                                        variant={"ghost"}
+                                        _hover={"none"}
+                                        _active={"none"}
                                         onClick={() =>
-                                            setShowPassword((showPassword) => !showPassword)
-                                        }>
-                                        {showPassword ? <ViewIcon /> : <ViewOffIcon />}
+                                            setShowPassword(
+                                                (showPassword) => !showPassword
+                                            )
+                                        }
+                                    >
+                                        {showPassword ? (
+                                            <ViewIcon />
+                                        ) : (
+                                            <ViewOffIcon />
+                                        )}
                                     </Button>
                                 </InputRightElement>
                             </InputGroup>
@@ -243,14 +256,26 @@ export default function TenantRegister() {
                                     name="passwordConfirmation"
                                 />
                                 <InputRightElement h={"full"}>
+                                <InputRightElement h={"full"}>
                                     <Button
                                         variant={"ghost"}
                                         _hover={"none"}
                                         _active={"none"}
+                                        variant={"ghost"}
+                                        _hover={"none"}
+                                        _active={"none"}
                                         onClick={() =>
-                                            setShowPasswordConfirmation((showPasswordConfirmation) => !showPasswordConfirmation)
-                                        }>
-                                        {showPasswordConfirmation ? <ViewIcon /> : <ViewOffIcon />}
+                                            setShowPasswordConfirmation(
+                                                (showPasswordConfirmation) =>
+                                                    !showPasswordConfirmation
+                                            )
+                                        }
+                                    >
+                                        {showPasswordConfirmation ? (
+                                            <ViewIcon />
+                                        ) : (
+                                            <ViewOffIcon />
+                                        )}
                                     </Button>
                                 </InputRightElement>
                             </InputGroup>
@@ -301,6 +326,7 @@ export default function TenantRegister() {
                     >
                         <Button bg={"#D3212D"} color={"white"} variant={"solid"}
                             _hover={{
+                                bg: "#D3212D",
                                 bg: "#D3212D",
                             }}
                             onClick={onBtnRegister}

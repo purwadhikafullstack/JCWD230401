@@ -7,8 +7,9 @@ import { ChakraProvider } from "@chakra-ui/react";
 import { BrowserRouter } from "react-router-dom";
 import { globalStore } from "./reducers";
 import { Provider } from "react-redux";
-import theme from "../src/theme"
+import theme from '../src/theme'
 import "../src/theme/styles.css"
+import '@smastrom/react-rating/style.css'
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

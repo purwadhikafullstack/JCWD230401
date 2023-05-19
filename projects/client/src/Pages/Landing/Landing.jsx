@@ -625,5 +625,5 @@ export default function LandingNew() {
                 </Box>
             </Box>
         </>
-    )
+    );
 }

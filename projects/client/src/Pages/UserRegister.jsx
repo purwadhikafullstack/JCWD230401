@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import React, { useState } from "react";
 import {
     Button,
     Flex,
@@ -23,7 +24,8 @@ import * as yup from "yup";
 
 export default function UserRegister() {
     const [showPassword, setShowPassword] = useState(false);
-    const [showPasswordConfirmation, setShowPasswordConfirmation] = useState(false);
+    const [showPasswordConfirmation, setShowPasswordConfirmation] =
+        useState(false);
     const navigate = useNavigate();
     const [loading, setLoading] = React.useState(false);
     const toast = useToast();
@@ -135,6 +137,7 @@ export default function UserRegister() {
         >
             <Flex
                 p={{ base: "8", sm: "0" }}
+                p={{ base: "8", sm: "0" }}
                 flex={1}
                 align={"center"} justify={"center"}
             >
@@ -187,14 +190,25 @@ export default function UserRegister() {
                                     name="password"
                                 />
                                 <InputRightElement h={"full"}>
+                                <InputRightElement h={"full"}>
                                     <Button
                                         variant={"ghost"}
                                         _hover={"none"}
                                         _active={"none"}
+                                        variant={"ghost"}
+                                        _hover={"none"}
+                                        _active={"none"}
                                         onClick={() =>
-                                            setShowPassword((showPassword) => !showPassword)
-                                        }>
-                                        {showPassword ? <ViewIcon /> : <ViewOffIcon />}
+                                            setShowPassword(
+                                                (showPassword) => !showPassword
+                                            )
+                                        }
+                                    >
+                                        {showPassword ? (
+                                            <ViewIcon />
+                                        ) : (
+                                            <ViewOffIcon />
+                                        )}
                                     </Button>
                                 </InputRightElement>
                             </InputGroup>
@@ -210,14 +224,26 @@ export default function UserRegister() {
                                     name="passwordConfirmation"
                                 />
                                 <InputRightElement h={"full"}>
+                                <InputRightElement h={"full"}>
                                     <Button
                                         variant={"ghost"}
                                         _hover={"none"}
                                         _active={"none"}
+                                        variant={"ghost"}
+                                        _hover={"none"}
+                                        _active={"none"}
                                         onClick={() =>
-                                            setShowPasswordConfirmation((showPasswordConfirmation) => !showPasswordConfirmation)
-                                        }>
-                                        {showPasswordConfirmation ? <ViewIcon /> : <ViewOffIcon />}
+                                            setShowPasswordConfirmation(
+                                                (showPasswordConfirmation) =>
+                                                    !showPasswordConfirmation
+                                            )
+                                        }
+                                    >
+                                        {showPasswordConfirmation ? (
+                                            <ViewIcon />
+                                        ) : (
+                                            <ViewOffIcon />
+                                        )}
                                     </Button>
                                 </InputRightElement>
                             </InputGroup>
@@ -229,6 +255,7 @@ export default function UserRegister() {
                     >
                         <Button bg={"#D3212D"} color={"white"} variant={"solid"}
                             _hover={{
+                                bg: "#D3212D",
                                 bg: "#D3212D",
                             }}
                             onClick={onBtnRegister}

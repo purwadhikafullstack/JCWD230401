@@ -11,22 +11,22 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
     }
   }
-  review.init(
-    {
-      uuid: DataTypes.STRING,
-      review: DataTypes.STRING,
-      rating: DataTypes.DECIMAL(3, 2),
-      roomId: DataTypes.INTEGER,
-      userId: DataTypes.INTEGER,
-      transactionId: DataTypes.INTEGER,
-    },
-    {
-      sequelize,
-      modelName: "review",
-    }
-  );
+  review.init({
+    uuid: DataTypes.STRING,
+    review: DataTypes.STRING,
+    rating: DataTypes.DECIMAL(3, 2),
+    roomId: DataTypes.INTEGER,
+    userId: DataTypes.INTEGER,
+    transactionId: DataTypes.INTEGER,
+  }, {
+    sequelize,
+    modelName: 'review',
+  });
+
   review.associate = (models) => {
     review.belongsTo(models.room, { foreignKey: 'roomId' });
-   };
+    review.belongsTo(models.user, { foreignKey: 'userId' });
+    review.belongsTo(models.transaction, { foreignKey: 'transactionId' });
+  }
   return review;
 };
