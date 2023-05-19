@@ -26,6 +26,7 @@ import { AiOutlineEye } from "react-icons/ai";
 import { FiUpload } from "react-icons/fi";
 import { MdContentCopy } from "react-icons/md";
 import BookingDetails from "../Components/BookingDetails";
+import { formatRupiah } from "../helper";
 
 export default function PaymentDetail() {
     const params = useParams();
