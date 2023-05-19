@@ -55,7 +55,7 @@ export default function PropertyCard(props) {
                             height={{ base: '300px', lg: '230px' }}
                             // width={{ base: '400px', lg: '250px' }}
                             objectFit={'cover'}
-                            src={`${API_URL_IMG}${props.picture}`}
+                            src={`${process.env.REACT_APP_API_IMG_URL}${props.picture}`}
                         />
                     </Box>
                     <Box

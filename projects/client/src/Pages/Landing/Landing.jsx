@@ -7,7 +7,6 @@ import React, { useState, useEffect } from "react";
 import { SearchIcon } from "@chakra-ui/icons";
 import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
-import { API_URL } from "../../helper";
 import BannerImage from "./images/banner.png"
 import DatePicker from "react-datepicker";
 import SpecialDeals from "./images/banner-1.png";
@@ -55,7 +54,7 @@ export default function LandingNew() {
 
     const getAllLocations = async () => {
         try {
-            let response = await axios.post(`${API_URL}/landing/all-location`, {
+            let response = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/landing/all-location`, {
                 name: showLocation
             })
             setShowLocation(response.data);
@@ -128,7 +127,7 @@ export default function LandingNew() {
 
     const getRecommendProperty = async () => {
         try {
-            let response = await axios.get(`${API_URL}/landing/property-recommendation`);
+            let response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/landing/property-recommendation`);
             console.log("ini response dari getRecommendProperty :", response.data);
             setRecommendProperty(response.data);
         } catch (error) {
@@ -140,7 +139,7 @@ export default function LandingNew() {
     const printRecommendProperty = () => {
         return recommendProperty.map((val, idx) => {
             // capitalize 1st letter, lowercase rest
-            const regency = val.room.property.property_location.regency.name
+            const province = val.room.property.property_location.province.name
                 .toLowerCase()
                 .replace(/(^|\s)\S/g, (letter) => letter.toUpperCase());
             return <RecommendPropertyCard
@@ -148,7 +147,7 @@ export default function LandingNew() {
                 uuid={val.room.property.uuid}
                 picture={val.room.property.picture_properties[0]?.picture}
                 rating={parseFloat(val.average_rating).toFixed(2)}
-                regency={regency}
+                province={province}
                 country={val.room.property.property_location.country}
                 price={Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR" }).format(val.room?.lowest_price)}
             />
@@ -264,7 +263,7 @@ export default function LandingNew() {
 
     const googlelogin = async () => {
         try {
-            let response = await axios.get(`${API_URL}/auth/login/success`, {
+            let response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/auth/login/success`, {
                 withCredentials: true,
             });
             const cookieValue = document.cookie;

@@ -13,7 +13,6 @@ import {
     HStack
 } from "@chakra-ui/react";
 import axios from "axios";
-import { API_URL } from "../helper";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import { useNavigate } from "react-router-dom";
@@ -31,7 +30,7 @@ export default function ForgotPassword() {
             if (!formik.isValid) {
                 return;
             }
-            let response = await axios.post(`${API_URL}/user/forgot-password`, {
+            let response = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/user/forgot-password`, {
                 email: formik.values.email
             });
             toast({

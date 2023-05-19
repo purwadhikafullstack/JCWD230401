@@ -24,8 +24,8 @@ passport.use(
   new googleStrategy(
     {
       clientID:
-        "308432764826-9gi91q8c9d8ur2knl6icdemcjj1qrkt3.apps.googleusercontent.com", //passing CLIENT ID
-      clientSecret: "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", //Passing CLIENT SECRET
+      process.env.GOOGLE_CLIENT_ID, //passing CLIENT ID
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET, //Passing CLIENT SECRET
       callbackURL: "http://localhost:8000/api/auth/google/callback", //This means after signin on what route google should redirect
       passReqToCallback: true,
     },
@@ -105,7 +105,7 @@ route.get(
         "ini isi role id dari req.user google :",
         req.user[0].dataValues.roleId
       );
-      let { id, roleId } = req.user[0].dataValues; 
+      let { id, roleId } = req.user[0].dataValues;
       const googleAuthToken = createToken({ id, roleId }, "24h");
       // console.log(
       //   "ini isi dari googleAuthToken sblm jadi cookie :",
@@ -133,7 +133,7 @@ route.get("/login/success", async (req, res, next) => {
       // console.log(
       //   "ini isi dari decrypt googleAuthToken :",
       //   decrypt
-      // ); 
+      // );
       let getuser = await model.user.findAll({
         where: { id: decrypt.id },
         include: [

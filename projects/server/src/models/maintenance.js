@@ -18,6 +18,7 @@ module.exports = (sequelize, DataTypes) => {
     endDate: DataTypes.DATEONLY,
     remarks: DataTypes.STRING,
     isActive: DataTypes.BOOLEAN,
+    isDeleted: DataTypes.BOOLEAN,
     roomId: DataTypes.INTEGER
   }, {
     sequelize,

@@ -6,7 +6,6 @@ import { TbHomeHeart } from "react-icons/tb";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { API_URL } from "../helper";
 import { loginAction } from "../reducers/auth";
 import { useFormik } from "formik";
 import * as yup from "yup";
@@ -22,11 +21,11 @@ export default function Login(props) {
     const onBtnLogin = async () => {
         try {
             setLoading(true);
-            await formik.validateForm(); 
+            await formik.validateForm();
             if (!formik.isValid) {
                 return;
             }
-            let response = await axios.post(`${API_URL}/user/auth`, {
+            let response = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/user/auth`, {
                 email: formik.values.emailOrPhone,
                 phone: formik.values.emailOrPhone,
                 password: formik.values.password
@@ -97,7 +96,7 @@ export default function Login(props) {
     };
 
     const signInWithGoogle = () => {
-        window.open(`${API_URL}/auth/google`, "_self", "toolbar=no, scrollbars=yes, resizable=no, width=1000, height=auto")
+        window.open(`${process.env.REACT_APP_API_BASE_URL}/auth/google`, "_self", "toolbar=no, scrollbars=yes, resizable=no, width=1000, height=auto")
     };
 
     return (
@@ -124,7 +123,7 @@ export default function Login(props) {
                                 {/* Input Email or Phone Number */}
                                 <Input type="text" borderColor="#d0d7de"
                                     onChange={handleForm}
-                                    name="emailOrPhone" 
+                                    name="emailOrPhone"
                                 />
                                 <FormErrorMessage fontSize="xs">{formik.errors.emailOrPhone}</FormErrorMessage>
                             </FormControl>
@@ -149,7 +148,7 @@ export default function Login(props) {
                                     {/* Input Password */}
                                     <Input type={showPassword ? "text" : "password"}
                                         onChange={handleForm}
-                                        name="password" 
+                                        name="password"
                                     />
                                     <InputRightElement h={"full"}>
                                         <Button

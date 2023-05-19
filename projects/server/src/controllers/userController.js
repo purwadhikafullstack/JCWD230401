@@ -62,8 +62,8 @@ module.exports = {
           const transporter = nodemailer.createTransport({
             service: "gmail",
             auth: {
-              user: "noreply.tempatku@gmail.com",
-              pass: "vjuuvolabsuuxqex",
+              user: process.env.NODEMAILER_TRANSPORTER_USERNAME,
+              pass: process.env.NODEMAILER_TRANSPORTER_PASSWORD,
             },
           });
           transporter.use(
@@ -365,8 +365,8 @@ module.exports = {
         const transporter = nodemailer.createTransport({
           service: "gmail",
           auth: {
-            user: "noreply.tempatku@gmail.com",
-            pass: "vjuuvolabsuuxqex",
+            user: process.env.NODEMAILER_TRANSPORTER_USERNAME,
+            pass: process.env.NODEMAILER_TRANSPORTER_PASSWORD,
           },
         });
         transporter.use(
@@ -651,8 +651,8 @@ module.exports = {
           const transporter = nodemailer.createTransport({
             service: "gmail",
             auth: {
-              user: "noreply.tempatku@gmail.com",
-              pass: "vjuuvolabsuuxqex",
+              user: process.env.NODEMAILER_TRANSPORTER_USERNAME,
+              pass: process.env.NODEMAILER_TRANSPORTER_PASSWORD,
             },
           });
           transporter.use(

@@ -6,7 +6,6 @@ import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import { Box, Flex, Stack, Text, OrderedList, Heading, Modal, Button, ModalOverlay, ModalContent, Card, CardHeader, CardBody, ModalHeader, ModalBody, ModalFooter, StackDivider } from "@chakra-ui/react";
 import Sidebar from "../../Components/Sidebar";
-import { API_URL } from "../../helper";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import Slider from "react-slick";
@@ -29,7 +28,7 @@ function TenantDashboard() {
   const getRoomOrders = async () => {
     try {
       let token = localStorage.getItem("tempatku_login");
-      let response = await axios.post(`${API_URL}/calendar/room-orders`, {}, {
+      let response = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/calendar/room-orders`, {}, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -43,7 +42,7 @@ function TenantDashboard() {
   const getRoomMaintenances = async () => {
     try {
       let token = localStorage.getItem("tempatku_login");
-      let response = await axios.post(`${API_URL}/calendar/room-maintenances`, {}, {
+      let response = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/calendar/room-maintenances`, {}, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -120,7 +119,7 @@ function TenantDashboard() {
   const onBtnAvailableRooms = async () => {
     try {
       let token = localStorage.getItem("tempatku_login");
-      let response = await axios.post(`${API_URL}/calendar/available-rooms`, {
+      let response = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/calendar/available-rooms`, {
         date: selectedDate
       }, {
         headers: {
@@ -169,7 +168,7 @@ function TenantDashboard() {
   const getMyProperty = async () => {
     try {
       let token = localStorage.getItem("tempatku_login");
-      let response = await axios.get(`${API_URL}/calendar/property-listing`, {
+      let response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/calendar/property-listing`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

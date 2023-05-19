@@ -12,7 +12,6 @@ import {
     Center, Radio, RadioGroup, Box, useDisclosure, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, Text, FormErrorMessage
 } from "@chakra-ui/react";
 import { useSelector } from "react-redux";
-import { API_URL, API_URL_IMG } from "../helper";
 import axios from "axios";
 import { useFormik } from "formik";
 import * as yup from "yup";
@@ -68,7 +67,7 @@ export default function EditProfile(props) {
             if (!formik.isValid) {
                 return;
             }
-            let response = await axios.patch(`${API_URL}/user/edit-profile`,
+            let response = await axios.patch(`${process.env.REACT_APP_API_BASE_URL}/user/edit-profile`,
                 {
                     name: formik.values.name,
                     email: formik.values.email,
@@ -113,7 +112,7 @@ export default function EditProfile(props) {
         try {
             setLoading(true);
             let token = localStorage.getItem("tempatku_login");
-            let response = await axios.post(`${API_URL}/user/send-verification-email`, {}, {
+            let response = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/user/send-verification-email`, {}, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
@@ -232,7 +231,7 @@ export default function EditProfile(props) {
             formData.append("image_profile", profileImage);
             console.log("ini isi dari formData", formData);
             console.log("ini tipe dari image_profile :", profileImage.type)
-            let response = await axios.patch(`${API_URL}/user/update-profile-image`, formData,
+            let response = await axios.patch(`${process.env.REACT_APP_API_BASE_URL}/user/update-profile-image`, formData,
                 {
                     headers: {
                         Authorization: `Bearer ${token}`,
@@ -269,7 +268,7 @@ export default function EditProfile(props) {
     const onBtnShowKTP = async () => {
         try {
             let token = localStorage.getItem("tempatku_login");
-            let response = await axios.get(`${API_URL}/user/show-ktp`,
+            let response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/user/show-ktp`,
                 {
                     headers: {
                         Authorization: `Bearer ${token}`,
@@ -322,7 +321,7 @@ export default function EditProfile(props) {
                         >
                             <Center>
                                 <Avatar size="xl"
-                                    src={currentProfileImage == null ? "https://ionicframework.com/docs/img/demos/avatar.svg" : currentProfileImage && currentProfileImage.includes("http") ? currentProfileImage : `${API_URL_IMG}${currentProfileImage}` ? `${API_URL_IMG}${currentProfileImage}` : "https://ionicframework.com/docs/img/demos/avatar.svg"}
+                                    src={currentProfileImage == null ? "https://ionicframework.com/docs/img/demos/avatar.svg" : currentProfileImage && currentProfileImage.includes("http") ? currentProfileImage : `${process.env.REACT_APP_API_IMG_URL}${currentProfileImage}` ? `${process.env.REACT_APP_API_IMG_URL}${currentProfileImage}` : "https://ionicframework.com/docs/img/demos/avatar.svg"}
                                 >
                                     {!isVerified && role == "User" ?
                                         <AvatarBadge

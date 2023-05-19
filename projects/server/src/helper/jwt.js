@@ -1,12 +1,12 @@
 const jwt = require('jsonwebtoken');
 
 module.exports = {
-    createToken: (payload, exp='24h') => jwt.sign(payload, 'TEMPATKU', {
+    createToken: (payload, exp='24h') => jwt.sign(payload, process.env.JWT_SECRET_TOKEN, {
         expiresIn: exp
     }),
     readToken: (req, res, next) => {
         console.log("ini dari helper readToken req.token:", req.token);
-        jwt.verify(req.token, 'TEMPATKU', (error, decrypt) => {
+        jwt.verify(req.token, process.env.JWT_SECRET_TOKEN, (error, decrypt) => {
             if(error){ 
                 console.log(error);
                 return res.status(401).send({
@@ -18,5 +18,5 @@ module.exports = {
             next(); 
         })
     },
-    createTokenForKTP: (payload) => jwt.sign(payload, 'TEMPATKU'),
+    createTokenForKTP: (payload) => jwt.sign(payload, process.env.JWT_SECRET_TOKEN),
 }

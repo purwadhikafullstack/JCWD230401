@@ -18,6 +18,7 @@ module.exports = (sequelize, DataTypes) => {
       rating: DataTypes.DECIMAL(3, 2),
       roomId: DataTypes.INTEGER,
       userId: DataTypes.INTEGER,
+      transactionId: DataTypes.INTEGER,
     },
     {
       sequelize,

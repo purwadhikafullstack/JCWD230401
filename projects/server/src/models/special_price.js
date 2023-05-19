@@ -19,7 +19,8 @@ module.exports = (sequelize, DataTypes) => {
     endDate: DataTypes.DATEONLY,
     priceOnDate: DataTypes.INTEGER,
     isActive: DataTypes.BOOLEAN,
-    roomId: DataTypes.INTEGER
+    roomId: DataTypes.INTEGER,
+    isDeleted: DataTypes.BOOLEAN,
   }, {
     sequelize,
     modelName: 'special_price',

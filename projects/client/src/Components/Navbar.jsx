@@ -24,7 +24,6 @@ import Login from "./Login";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { logoutAction } from "../reducers/auth";
-import { API_URL, API_URL_IMG } from "../helper";
 import axios from "axios";
 import Logo from "../assets/logotempatku.png";
 import { Route, Routes, useLocation } from "react-router-dom";
@@ -35,7 +34,7 @@ export default function Navbar() {
   const [scrollBehavior, setScrollBehavior] = React.useState("outside");
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const imageProfile = useSelector((state) => state.authReducer.image_profile);
+  const imageProfile = useSelector((state) => state.authReducer?.image_profile);
   const role = useSelector((state) => state.authReducer.role);
   const password = useSelector((state) => state.authReducer.password);
   const { pathname } = useLocation();
@@ -68,7 +67,7 @@ export default function Navbar() {
   const onBtnLogoutGoogle = async () => {
     try {
       const cookieValue = document.cookie;
-      let response = await axios.get(`${API_URL}/auth/logout`, {
+      let response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/auth/logout`, {
         headers: {
           Cookie: cookieValue,
         }
@@ -180,14 +179,14 @@ export default function Navbar() {
                     role == "User" ?
                       <Avatar
                         size={"sm"}
-                        src={imageProfile == null ? "https://ionicframework.com/docs/img/demos/avatar.svg" : imageProfile && imageProfile.includes("http") ? imageProfile : `${API_URL_IMG}${imageProfile}` ? `${API_URL_IMG}${imageProfile}` : "https://ionicframework.com/docs/img/demos/avatar.svg"}
+                        src={imageProfile == null ? "https://ionicframework.com/docs/img/demos/avatar.svg" : imageProfile && imageProfile.includes("http") ? imageProfile : `${process.env.REACT_APP_API_IMG_URL}${imageProfile}` ? `${process.env.REACT_APP_API_IMG_URL}${imageProfile}` : "https://ionicframework.com/docs/img/demos/avatar.svg"}
                       />
                       :
                       // Tenant
                       role == "Tenant" ?
                         <Avatar
                           size={"sm"}
-                          src={imageProfile == null ? "https://ionicframework.com/docs/img/demos/avatar.svg" : imageProfile && imageProfile.includes("http") ? imageProfile : `${API_URL_IMG}${imageProfile}` ? `${API_URL_IMG}${imageProfile}` : "https://ionicframework.com/docs/img/demos/avatar.svg"}
+                          src={imageProfile == null ? "https://ionicframework.com/docs/img/demos/avatar.svg" : imageProfile && imageProfile.includes("http") ? imageProfile : `${process.env.REACT_APP_API_IMG_URL}${imageProfile}` ? `${process.env.REACT_APP_API_IMG_URL}${imageProfile}` : "https://ionicframework.com/docs/img/demos/avatar.svg"}
                         />
                         :
                         <Avatar

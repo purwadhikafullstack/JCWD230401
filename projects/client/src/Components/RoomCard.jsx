@@ -17,8 +17,7 @@ import {
 import React from 'react';
 import Swiper from "swiper";
 import SwiperCarousel from "../SwiperCarousel/SwiperCarousel";
-import noimage from '../../assets/noimage.png'
-import { API_URL, API_URL_IMG } from "../../helper";
+import noimage from '../../assets/noimage.png';
 import { Link } from "react-router-dom";
 import { StarIcon } from "@chakra-ui/icons";
 import { useNavigate } from 'react-router-dom';
@@ -43,7 +42,7 @@ export default function RoomCard(props) {
         try {
             setLoading(true);
             let token = localStorage.getItem("tempatku_login");
-            let response = await axios.post(`${API_URL}/user/send-verification-email`, {}, {
+            let response = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/user/send-verification-email`, {}, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
@@ -109,7 +108,7 @@ export default function RoomCard(props) {
                             zIndex={1}
                         >
                             <Image
-                                src={!props.picture?.length ? noimage : `${API_URL_IMG}${props?.picture[0].picture}`}
+                                src={!props.picture?.length ? noimage : `${process.env.REACT_APP_API_IMG_URL}${props?.picture[0].picture}`}
                                 alt="Your Image"
                                 w="100%"
                                 h="100%"

@@ -6,7 +6,6 @@ import {
     Image, Flex
 } from "@chakra-ui/react";
 import axios from "axios";
-import { API_URL, API_URL_IMG } from "../helper";
 import { StarIcon } from "@chakra-ui/icons";
 import noimage from "../assets/noimage.png";
 import { Link } from "react-router-dom";
@@ -40,7 +39,7 @@ export default function CalendarPropertyCard(props) {
                             rounded={"lg"}
                             height={{ base: "300px", lg: "230px" }}
                             objectFit={"cover"}
-                            src={!props.picture ? noimage : `${API_URL_IMG}${props.picture}`}
+                            src={!props.picture ? noimage : `${process.env.REACT_APP_API_IMG_URL}${props.picture}`}
                             aspectRatio={1}
                         />
                     </Box>

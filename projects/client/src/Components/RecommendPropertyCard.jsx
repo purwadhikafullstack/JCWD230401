@@ -6,7 +6,6 @@ import {
     Image, Flex
 } from "@chakra-ui/react";
 import axios from "axios";
-import { API_URL, API_URL_IMG } from "../helper";
 import { StarIcon } from "@chakra-ui/icons";
 import noimage from "../assets/noimage.png";
 import { Link } from "react-router-dom";
@@ -32,6 +31,7 @@ export default function RecommendPropertyCard(props) {
                     rounded={"lg"}
                     pos={"relative"}
                     zIndex={0}
+                    overflow='hidden'
                 >
                     <Box
                         rounded={"lg"}
@@ -42,7 +42,7 @@ export default function RecommendPropertyCard(props) {
                             rounded={"lg"}
                             height={{ base: "300px", lg: "230px" }}
                             objectFit={"cover"}
-                            src={!props.picture ? noimage : `${API_URL_IMG}${props.picture}`}
+                            src={!props.picture ? noimage : `${process.env.REACT_APP_API_IMG_URL}${props.picture}`}
                             aspectRatio={1}
                         />
                     </Box>
@@ -51,11 +51,13 @@ export default function RecommendPropertyCard(props) {
                         px="2"
                         align={"start"}
                     >
-                        <Text fontWeight={600} fontSize={{ base: "lg", lg: "sm" }} isTruncated>
+                        <Text fontWeight={600} fontSize={{ base: "lg", lg: "sm" }} isTruncated
+                         noOfLines={1}
+                        >
                             {props.property}
                         </Text>
                         <Text fontWeight={"normal"} fontSize={{ base: "sm", lg: "xs" }} color="gray.500">
-                            {props.regency}, {props.country}
+                            {props.province}, {props.country}
                         </Text>
                         <Flex justifyContent={"space-between"}>
                             <Text fontWeight={600} fontSize={{ base: "sm", lg: "xs" }} textAlign={"left"} display="flex">

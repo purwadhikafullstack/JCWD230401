@@ -14,7 +14,6 @@ import {
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { API_URL } from "../helper";
 import userRegisterBanner from "../assets/user-register-banner.jpg";
 import { FcGoogle } from "react-icons/fc";
 import { useFormik } from "formik";
@@ -36,7 +35,7 @@ export default function UserRegister() {
             if (!formik.isValid) {
                 return;
             }
-            let response = await axios.post(`${API_URL}/user/register`, {
+            let response = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/user/register`, {
                 name: formik.values.name,
                 phone: formik.values.phone,
                 email: formik.values.email,
@@ -127,7 +126,7 @@ export default function UserRegister() {
     };
 
     const signInWithGoogle = () => {
-        window.open(`${API_URL}/auth/google`, "_self", "toolbar=no, scrollbars=yes, resizable=no, width=1000, height=auto")
+        window.open(`${process.env.REACT_APP_API_BASE_URL}/auth/google`, "_self", "toolbar=no, scrollbars=yes, resizable=no, width=1000, height=auto")
     };
 
     return (

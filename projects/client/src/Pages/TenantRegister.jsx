@@ -14,7 +14,6 @@ import {
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { API_URL } from "../helper";
 import { FiUpload } from "react-icons/fi";
 import { useFormik } from "formik";
 import * as yup from "yup";
@@ -56,7 +55,7 @@ export default function TenantRegister() {
             if (!formik.isValid) {
                 return;
             }
-            let response = await axios.post(`${API_URL}/user/register-as-tenant`,
+            let response = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/user/register-as-tenant`,
                 formData
             );
             toast({

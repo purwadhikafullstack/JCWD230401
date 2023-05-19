@@ -12,7 +12,6 @@ import {
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { API_URL } from "../helper";
 import { useFormik } from "formik";
 import * as yup from "yup";
 
@@ -32,7 +31,7 @@ export default function ChangePassword() {
             if (!formik.isValid) {
                 return;
             }
-            let response = await axios.patch(`${API_URL}/user/change-password`,
+            let response = await axios.patch(`${process.env.REACT_APP_API_BASE_URL}/user/change-password`,
                 {
                     password: formik.values.oldPassword,
                     newPassword: formik.values.newPassword,

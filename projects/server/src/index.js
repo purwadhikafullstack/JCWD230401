@@ -1,6 +1,5 @@
 const { join } = require("path");
-require("dotenv/config");
-require("dotenv").config({ path: join(__dirname, ".env") });
+require('dotenv').config({path:join(__dirname,'../.env')});
 const express = require("express");
 const cors = require("cors");
 const bearerToken = require("express-bearer-token");
@@ -35,12 +34,12 @@ app.use(passport.session());
 //#region API ROUTES
 
 const userRouter = require("./routers/userRouter");
-app.use("/api/user", userRouter);
 const calendarRouter = require("./routers/calendarRouter");
-app.use("/api/calendar", calendarRouter);
 const landingRouter = require("./routers/landingRouter");
-app.use("/api/landing", landingRouter);
 const passportRouter = require("./routers/passportRouter");
+app.use("/api/user", userRouter);
+app.use("/api/calendar", calendarRouter);
+app.use("/api/landing", landingRouter);
 app.use('/api/auth', passportRouter);
 // ===========================
 // NOTE : Add your routes here

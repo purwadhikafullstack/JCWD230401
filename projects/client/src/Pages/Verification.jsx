@@ -10,7 +10,6 @@ import {
   FormLabel, FormErrorMessage, useToast, Text
 } from "@chakra-ui/react";
 import { useNavigate, useParams } from "react-router-dom";
-import { API_URL } from "../helper";
 import axios from "axios";
 import { useFormik } from "formik";
 import * as yup from "yup";
@@ -28,7 +27,7 @@ export default function Verification() {
   const onBtnSendVerifyEmail = async () => {
     try {
       setLoading2(true);
-      let response = await axios.post(`${API_URL}/user/send-verification-email`, {}, {
+      let response = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/user/send-verification-email`, {}, {
         headers: {
           Authorization: `Bearer ${params.token}`
         }
@@ -79,7 +78,7 @@ export default function Verification() {
       if (!formik.isValid) {
         return;
       }
-      let response = await axios.patch(`${API_URL}/user/verify-account`,
+      let response = await axios.patch(`${process.env.REACT_APP_API_BASE_URL}/user/verify-account`,
         {
           otp: formik.values.verificationCode
         }
