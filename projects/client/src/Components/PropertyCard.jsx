@@ -9,7 +9,7 @@ import {
 } from '@chakra-ui/react';
 import { BsStarFill } from "react-icons/bs";
 import { Link } from 'react-router-dom';
-import { API_URL, API_URL_IMG } from '../helper';
+import { API_URL, API_URL_IMG, capitalizeFirstWord, formatRupiah } from '../helper';
 import Carousel from './Carousel';
 
 const IMAGE =
@@ -70,16 +70,16 @@ export default function PropertyCard(props) {
                             </Text>
                             <Flex>
                                 <BsStarFill />
-                                <Text fontWeight={600} fontSize={'md'} textAlign={'left'} pl='1' mt='-1'>
-                                    5.0
+                                <Text fontWeight={600} fontSize={'md'} textAlign={'left'} pl='1' mt='-1' >
+                                    {props.rating ? parseFloat(props.rating).toFixed(1) : <Text>No Rating</Text>}
                                 </Text>
                             </Flex>
                         </HStack>
                         <Text fontWeight={'normal'} fontSize={'sm'} >
-                            {props.location?.province?.name}, {props.location?.country}
+                            {capitalizeFirstWord(props.location)}, {props.country}
                         </Text>
                         <Text fontWeight={600} fontSize={'md'} textAlign={'left'} display='flex'>
-                            Rp {props.price}
+                            {formatRupiah(props.price)}
                             <Text fontWeight={'normal'} pl='1' fontSize={'sm'} mt='0.5'>
                                 / night
                             </Text>

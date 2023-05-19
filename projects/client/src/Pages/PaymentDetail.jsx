@@ -10,142 +10,359 @@ import {
     ListIcon,
     useColorModeValue,
     Icon,
-    HStack,
-    Img,
-    Heading,
-    Center,
+    useDisclosure,
+    AlertDialog,
+    AlertDialogOverlay,
+    AlertDialogContent,
+    AlertDialogHeader,
+    AlertDialogBody,
+    AlertDialogFooter
 } from '@chakra-ui/react'
 import React, { useEffect, useState, useRef } from 'react'
-import { BiTimeFive } from "react-icons/bi";
 import Countdown, { zeroPad } from "react-countdown";
 import axios from 'axios';
-import { API_URL } from '../helper';
+import { API_URL, formatRupiah } from '../helper';
 import { Link, useParams } from 'react-router-dom';
 import { AiOutlineEye } from 'react-icons/ai';
 import { FiUpload } from 'react-icons/fi';
 import { MdContentCopy } from 'react-icons/md';
+import BookingDetails from '../Components/BookingDetails';
 
 
 export default function PaymentDetail() {
-    // console.log(Date.now())
-    // console.log(Date.now())
     const params = useParams();
     let token = localStorage.getItem("tempatku_login");
-    const [data, setData] = useState([])
-    const [expiredTime, setExpiredTime] = useState(null)
+    const [isLoadingButton, setIsLoadingButton] = useState(false)
+    // const [data, setData] = useState([])
+    const [expiredAt, setExpiredAt] = useState('')
+    const [createdAt, setCreatedAt] = useState(null)
+    const [invoiceNumber, setInvoiceNumber] = useState('')
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
     const [price, setPrice] = useState(0)
     const [bank, setBank] = useState(null)
-    const [transactionStatus, setTransactionStatus] = useState(null)
+    const [transactionStatus, setTransactionStatus] = useState("")
+    const [customer, setCustomer] = useState('')
+    const [roomName, setRoomName] = useState('')
+    const [propertyName, setPropertyName] = useState('')
+    const [propertyAddress, setPropertyAddress] = useState('')
+    const [propertyRegency, setPropertyRegency] = useState('')
+    const [propertyCountry, setPropertyCountry] = useState('')
     const getTransactionTimeAndBank = async () => {
-        let get = await axios.post(`${API_URL}/transaction/detail`, {
+        let get = await axios.get(`${API_URL}/transaction/detail?uuid=${params.uuid}`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+        console.log("get time bank", get);
+        setExpiredAt(get.data.timeAndPrice[0].expiredAt)
+        setRoomName(get.data.timeAndPrice[0].orders[0].room.room_category.name)
+        setCustomer(get.data.timeAndPrice[0].user.user_detail.name)
+        setCreatedAt(get.data.timeAndPrice[0].createdAt)
+        setInvoiceNumber(get.data.timeAndPrice[0].invoice_number)
+        setStartDate(get.data.timeAndPrice[0].orders[0].start_date)
+        setEndDate(get.data.timeAndPrice[0].orders[0].end_date)
+        setPrice(get.data.timeAndPrice[0].orders[0].price)
+        setBank(get.data.bank[0].user_detail)
+        setTransactionStatus(get.data.timeAndPrice[0].transaction_status.status)
+
+        let getOther = await axios.get(`${API_URL}/room/roompayment?uuid=${get.data.timeAndPrice[0].orders[0].room.uuid}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
+        console.log("get other detail", getOther)
+        setPropertyName(getOther.data[0].property.property)
+        setPropertyAddress(getOther.data[0].property.property_location.address)
+        setPropertyRegency(getOther.data[0].property.property_location.regency.name)
+        setPropertyCountry(getOther.data[0].property.property_location.country)
+
+    }
+
+    // CANCEL BUTTON
+    const { isOpen, onOpen, onClose } = useDisclosure()
+    const cancelRef = React.useRef()
+    const [statusId, setStatusId] = useState(5)
+    const cancelOrReject = async (req, res, next) => {
+        setIsLoadingButton(true)
+        let update = await axios.patch(`${API_URL}/transaction/updatetransactionstatus`, {
+            transaction_statusId: statusId,
             uuid: params.uuid
         }, {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
         });
-        console.log("getttttt", get)
-        setData(get.data);
-        setExpiredTime(get.data.timeAndPrice[0].createdAt)
-        setStartDate(get.data.timeAndPrice[0].orders[0].start_date)
-        setEndDate(get.data.timeAndPrice[0].orders[0].end_date)
-        setPrice(get.data.timeAndPrice[0].orders[0].price)
-        setBank(get.data.bank[0].user_detail)
-        setTransactionStatus(get.data.timeAndPrice[0].transaction_status.status)
+        setIsLoadingButton(false)
+        getTransactionTimeAndBank();
     }
 
+    // FIND TOTAL DAYS
     const diff = new Date(endDate) - new Date(startDate)
     const days = (diff / 86400000);
 
-    const addTwoHours = new Date(expiredTime).getTime() + 7200000
-    console.log("addTwoHours", new Date(addTwoHours).toISOString())
+    // ADD 2 HOUR FOR COUNTDOWN
+    const addTwoHours = new Date(createdAt).getTime() + 7200000
 
-
-    // BUAT API LAGI UNTUK CEK SAAT COMPLETED TRANSACTIONNYA UDAH DI BAYAR APA BELOM
-    // KALO BELOM, EXECUTE API UNTUK UPDATE transaction_statusId di tabel transaction
-    console.log("dataa", data);
-    console.log("timeee", expiredTime);
+    // COUNTDOWN
+    const [countStop, setCountStop] = useState(true)
     const renderer = ({ hours, minutes, seconds, completed }) => {
         if (completed) {
-            return (
-                <Stack
-                    textAlign={'center'}
-                    p={6}
-                    align={'center'}>
-                    <Text
-                        fontSize={'sm'}
-                        fontWeight={500}
-                        p={2}
-                        px={3}
-                        color={'green.500'}
-                        rounded={'full'}>
-                        Your Payment...
-                    </Text>
-                    <Stack direction={'column'} align={'center'} justify={'center'}>
-                        <Text fontSize={{ base: '2xl', md: '4xl' }} fontWeight={800}>
-                            Transaction time has expired!
+            if (countStop) {
+                getTransactionTimeAndBank();
+                setCountStop(false)
+            }
+            console.log("transactionStatus", transactionStatus)
+            if (transactionStatus === 'Waiting for payment') {
+                // cancelOrReject();
+                return (
+                    <Stack
+                        textAlign={'center'}
+                        p={3}
+                        align={'center'}>
+                        <Text
+                            fontSize={'xs'}
+                            fontWeight={500}
+                            p={2}
+                            px={3}
+                            color={'green.500'}
+                            rounded={'full'}>
+                            Your Payment...
                         </Text>
-                        <Text fontSize={{ base: 'xl', md: '2xl' }}>{new Date(addTwoHours).toString('en-US', { timeZone: 'Asia/Jakarta' }).split('G')[0]}</Text>
+                        <Stack direction={'column'} align={'center'} justify={'center'}>
+                            <Text fontSize={{ base: 'xl' }} fontWeight={800}>
+                                Transaction time has expired!
+                            </Text>
+                            <Text fontSize={{ base: 'sm' }}>{new Date(addTwoHours).toString('en-US', { timeZone: 'Asia/Jakarta' }).split('G')[0]}</Text>
+                        </Stack>
                     </Stack>
-                </Stack>
-            )
+                )
+            } else if (transactionStatus === 'Paid') {
+                return (
+                    <Stack
+                        textAlign={'center'}
+                        p={3}
+                        align={'center'}>
+                        <Text
+                            fontSize={'xs'}
+                            fontWeight={500}
+                            p={2}
+                            px={3}
+                            color={'green.500'}
+                            rounded={'full'}>
+                            Your Payment...
+                        </Text>
+                        <Stack direction={'column'} align={'center'} justify={'center'}>
+                            <Text fontSize={{ base: 'xl' }} fontWeight={800}>
+                                Payment confirm by tenant
+                            </Text>
+                        </Stack>
+                    </Stack>
+                )
+            } else if (transactionStatus === 'Waiting for confirmation') {
+                return (
+                    <Stack
+                        textAlign={'center'}
+                        p={3}
+                        align={'center'}>
+                        <Text
+                            fontSize={'xs'}
+                            fontWeight={500}
+                            p={2}
+                            px={3}
+                            color={'green.500'}
+                            rounded={'full'}>
+                            Your Payment...
+                        </Text>
+                        <Stack direction={'column'} align={'center'} justify={'center'}>
+                            <Text fontSize={{ base: 'xl' }} fontWeight={800}>
+                                Waiting for confirmation
+                            </Text>
+                        </Stack>
+                    </Stack>
+                )
+            } else if (transactionStatus === 'Reject') {
+                return (
+                    <Stack
+                        textAlign={'center'}
+                        p={3}
+                        align={'center'}>
+                        <Text
+                            fontSize={'xs'}
+                            fontWeight={500}
+                            p={2}
+                            px={3}
+                            color={'green.500'}
+                            rounded={'full'}>
+                            Your Payment...
+                        </Text>
+                        <Stack direction={'column'} align={'center'} justify={'center'}>
+                            <Text fontSize={{ base: 'xl' }} fontWeight={800}>
+                                Rejected, please upload a new payment image.
+                            </Text>
+                            <Text fontSize={{ base: 'sm' }}>Will expire in :</Text>
+                            <Text fontSize={{ base: 'sm' }}>{new Date(expiredAt).toString('en-US', { timeZone: 'Asia/Jakarta' }).split('G')[0]}</Text>
+                        </Stack>
+                    </Stack>
+                )
+            } else {
+                return (
+                    <Stack
+                        textAlign={'center'}
+                        p={3}
+                        align={'center'}>
+                        <Text
+                            fontSize={'xs'}
+                            fontWeight={500}
+                            p={2}
+                            px={3}
+                            color={'green.500'}
+                            rounded={'full'}>
+                            Your Payment...
+                        </Text>
+                        <Stack direction={'column'} align={'center'} justify={'center'}>
+                            <Text fontSize={{ base: 'xl' }} fontWeight={800}>
+                                Canceled
+                            </Text>
+                        </Stack>
+                    </Stack>
+                )
+            }
         } else {
-            return (
-                // <Box>
-                //     <Flex justify={'center'} alignItems='center' flexDir={'column'}>
-                //         <Text fontSize='8xl'><BiTimeFive /></Text>
-                //         <Text fontSize='2xl'>Waiting For Your Payment...</Text>
-                //         <Text color={'red'} fontSize='2xl'>
-                //             {zeroPad(hours, [2])}:{zeroPad(minutes, [2])}:{zeroPad(seconds, [2])}
-                //         </Text>
-                //     </Flex>
-                // </Box>
-
-                <Stack
-                    textAlign={'center'}
-                    p={6}
-                    align={'center'}>
-                    <Text
-                        fontSize={'sm'}
-                        fontWeight={500}
-                        p={2}
-                        px={3}
-                        color={'green.500'}
-                        rounded={'full'}>
-                        Waiting For Your Payment...
-                    </Text>
-                    <Stack direction={'column'} align={'center'} justify={'center'}>
-                        <Text fontSize={{ base: 'xl', md: '2xl' }}>Will expire in :</Text>
-                        <Text fontSize={{ base: '4xl', md: '6xl' }} fontWeight={800}>
-                            {zeroPad(hours, [2])}:{zeroPad(minutes, [2])}:{zeroPad(seconds, [2])}
+            if (transactionStatus === 'Canceled') {
+                // completed = true
+                return (
+                    <Stack
+                        textAlign={'center'}
+                        p={3}
+                        align={'center'}>
+                        <Text
+                            fontSize={'xs'}
+                            fontWeight={500}
+                            p={2}
+                            px={3}
+                            color={'green.500'}
+                            rounded={'full'}>
+                            Your Payment...
                         </Text>
-                        <Text fontSize={{ base: 'xl', md: '2xl' }}>{new Date(addTwoHours).toString('en-US', { timeZone: 'Asia/Jakarta' }).split('G')[0]}</Text>
+                        <Stack direction={'column'} align={'center'} justify={'center'}>
+                            <Text fontSize={{ base: 'xl' }}>Canceled</Text>
+                        </Stack>
                     </Stack>
-                </Stack>
-            );
+                );
+            } else if (transactionStatus === 'Waiting for confirmation') {
+                return (
+                    <Stack
+                        textAlign={'center'}
+                        p={3}
+                        align={'center'}>
+                        <Text
+                            fontSize={'xs'}
+                            fontWeight={500}
+                            p={2}
+                            px={3}
+                            color={'green.500'}
+                            rounded={'full'}>
+                            Your Payment...
+                        </Text>
+                        <Stack direction={'column'} align={'center'} justify={'center'}>
+                            <Text fontSize={{ base: 'xl' }} fontWeight={800}>
+                                Waiting for confirmation
+                            </Text>
+                        </Stack>
+                    </Stack>
+                )
+            } else if (transactionStatus === 'Paid') {
+                return (
+                    <Stack
+                        textAlign={'center'}
+                        p={3}
+                        align={'center'}>
+                        <Text
+                            fontSize={'xs'}
+                            fontWeight={500}
+                            p={2}
+                            px={3}
+                            color={'green.500'}
+                            rounded={'full'}>
+                            Your Payment...
+                        </Text>
+                        <Stack direction={'column'} align={'center'} justify={'center'}>
+                            <Text fontSize={{ base: 'xl' }} fontWeight={800}>
+                                Payment confirm by tenant
+                            </Text>
+                        </Stack>
+                    </Stack>
+                )
+            } else if (transactionStatus === 'Reject') {
+                return (
+                    <Stack
+                        textAlign={'center'}
+                        p={3}
+                        align={'center'}>
+                        <Text
+                            fontSize={'xs'}
+                            fontWeight={500}
+                            p={2}
+                            px={3}
+                            color={'green.500'}
+                            rounded={'full'}>
+                            Your Payment...
+                        </Text>
+                        <Stack direction={'column'} align={'center'} justify={'center'}>
+                            <Text fontSize={{ base: 'xl' }} fontWeight={800}>
+                                Rejected, please upload a new payment image.
+                            </Text>
+                            <Text fontSize={{ base: 'sm' }}>Will expire in :</Text>
+                            <Text fontSize={{ base: 'sm' }}>{new Date(expiredAt).toString('en-US', { timeZone: 'Asia/Jakarta' }).split('G')[0]}</Text>
+                        </Stack>
+                    </Stack>
+                )
+            } else {
+                return (
+                    <Stack
+                        textAlign={'center'}
+                        p={3}
+                        align={'center'}>
+                        <Text
+                            fontSize={'xs'}
+                            fontWeight={500}
+                            p={2}
+                            px={3}
+                            color={'green.500'}
+                            rounded={'full'}>
+                            Waiting For Your Payment...
+                        </Text>
+                        <Stack direction={'column'} align={'center'} justify={'center'}>
+                            <Text fontSize={{ base: 'sm' }}>Will expire in :</Text>
+                            <Text fontSize={{ base: 'xl' }} fontWeight={800}>
+                                {zeroPad(hours, [2])}:{zeroPad(minutes, [2])}:{zeroPad(seconds, [2])}
+                            </Text>
+                            <Text fontSize={{ base: 'sm' }}>{new Date(addTwoHours).toString('en-US', { timeZone: 'Asia/Jakarta' }).split('G')[0]}</Text>
+                        </Stack>
+                    </Stack>
+                );
+            }
         }
     };
-
     const CountDownWrapper = () => <Countdown
-        date={new Date(expiredTime).getTime() + 7200000}
+        date={new Date(createdAt).getTime() + 7200000}
         renderer={renderer}
         zeroPadDays={2}
     />
     const MemoCountDown = React.memo(CountDownWrapper)
 
+    // UPLOAD PAYMENT IMAGE
     const inputImagePayment = useRef()
     const [fileImagePayment, setFileImagePayment] = useState(null)
-
-    console.log("fileImagePayment", fileImagePayment)
     const [message, setMessage] = useState('')
-    const uploadImagePayment = async () => { // TANYA CARA GABUNGIN FUNGSI INI DI ONCLICK INPUT GMN ???
+    const uploadImagePayment = async (imageFile) => {
         try {
+            setIsLoadingButton(true)
             let formData = new FormData();
-            formData.append('images', fileImagePayment)
+            formData.append('images', imageFile)
 
-            let add = await axios.post(`${API_URL}/transaction/uploadimagepayment/${params.uuid}`, formData, {
+            let add = await axios.patch(`${API_URL}/transaction/uploadimagepayment/${params.uuid}`, formData, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -154,20 +371,23 @@ export default function PaymentDetail() {
                 // setFileImagePayment(null);
                 setMessage("Image Uploaded")
             }
+            getTransactionTimeAndBank()
+            setIsLoadingButton(false)
         } catch (error) {
-
+            console.log("upload image payment gagallll", error)
         }
     }
-
     const onChangeImagePayment = (event) => {
-        const maxSize = 1 * 1024 * 1024;
+        const maxSize = 1 * 1024 * 1024; // 1MB
         if (event.target.files[0].size > maxSize) {
             alert("You can only upload files that are lower than 1MB in size.")
         } else {
             setFileImagePayment(event.target.files[0]);
-            uploadImagePayment();
+            uploadImagePayment(event.target.files[0]);
         }
     }
+    // console.log("fileImagePayment", fileImagePayment)
+
 
 
     useEffect(() => {
@@ -175,186 +395,188 @@ export default function PaymentDetail() {
     }, [])
     // const []
     return (
-        // <Box mt='3'>
-        //     {/* COUNTDOWN */}
-        //     <MemoCountDown />
-        //     <Box border={'1px solid black'} maxWidth='xl' mx='auto' h='sm'>
-        //         <Flex justifyContent={'center'} alignItems='center' flexDir={'column'} gap='5' h='full'>
-        //             <Text>Total payment : {days * price}</Text>
-        //             <Text>Nama rek : {bank?.name}</Text>
-        //             <Text>No rek : {bank?.account_number}</Text>
-        //             <Button
-        //                 colorScheme={'red'}
-        //                 variant='link'
-        //                 onClick={() => inputImagePayment.current.click()}>
-        //                 <Input type={'file'} display='none' id='file' ref={inputImagePayment}
-        //                     onChange={onChangeImagePayment} />
-        //                 Upload photo
-        //             </Button>
-        //             {message == '' ? null : <Text>{message}</Text>}
-        //             <Link to='/order/list'>
-        //                 <Button>See your order list</Button>
-        //             </Link>
-        //         </Flex>
-        //     </Box>
-        // </Box>
-
         <Box
+            // minH={'100vh'}
+            // align={'center'}
+            // justify={'center'}
+            // bg={useColorModeValue('gray.50', 'gray.800')}
+            // p={5}
+
             minH={'100vh'}
             align={'center'}
             justify={'center'}
+            display={{ base: 'block', lg: 'flex' }} //responsive
             bg={useColorModeValue('gray.50', 'gray.800')}
-            p={5}
+            p={{ lg: '12' }}
+            pt={'12'}
+            style={{ justifyContent: 'center', alignItems: 'center' }}
         >
 
-            {/* Waiting for payment page */}
-            <Box
-                maxW={'500px'}
-                w={'full'}
-                bg={useColorModeValue('white', 'gray.800')}
-                boxShadow={'lg'}
-                rounded={'md'}
-                overflow={'hidden'}
-            >
-                {/* <Stack
-                    textAlign={'center'}
-                    p={6}
-                    color={useColorModeValue('gray.800', 'white')}
-                    align={'center'}>
-                    <Text
-                        fontSize={'sm'}
-                        fontWeight={500}
-                        bg={useColorModeValue('green.50', 'green.900')}
-                        p={2}
-                        px={3}
-                        color={'green.500'}
-                        rounded={'full'}>
-                        Waiting For Your Payment...
-                    </Text>
-                    <Stack direction={'column'} align={'center'} justify={'center'}>
-                        <Text fontSize={{ base: 'xl', md: '2xl' }}>Will expire in :</Text>
-                        <Text fontSize={{ base: '4xl', md: '6xl' }} fontWeight={800}>
-                            02 : 57 : 45
-                        </Text>
-                        <Text fontSize={{ base: 'xl', md: '2xl' }}>Sunday, 16 Aug 2020 12:50 AM</Text>
-                    </Stack>
-                </Stack> */}
-                <MemoCountDown />
-                <Box bg={useColorModeValue('gray.50', 'gray.900')} px={6} py={5}>
-                    <List spacing={6}>
-                        <ListItem>
-                            <Text textAlign="center">
-                                Account Name
-                            </Text>
-                            <Text textAlign="center" fontWeight={'600'} fontSize="2xl">
-                                {bank?.name}
-                            </Text>
-                        </ListItem>
-                        <Box borderTop={'2px'} borderColor={'gray.300'}></Box>
-                        <ListItem>
-                            {/* BUAT USECLIPBOARD UNTUK TOMBOL COPY */}
-                            <Flex alignItems="center" justify={'center'}>
-                                <Box>
-                                </Box>
-                                <Box>
-                                    <Box>
-                                        <Text textAlign="center">
-                                            Account Number
-                                        </Text>
-                                    </Box>
-                                    <Box>
-                                        <Text textAlign="center" fontWeight={'600'} fontSize="2xl">
-                                            <ListIcon as={MdContentCopy} color="green.400" fontSize={'2xl'} />
-                                            {bank?.account_number}
-                                        </Text>
-                                    </Box>
-                                </Box>
-                            </Flex>
-                        </ListItem>
-                        <Box borderTop={'2px'} borderColor={'gray.300'}></Box>
-                        <ListItem>
-                            <Flex alignItems="center" justify={'center'}>
-                                <Box>
-                                </Box>
-                                <Box>
-                                    <Box>
-                                        <Text textAlign="center">
-                                            Payment Nominal
-                                        </Text>
-                                    </Box>
-                                    <Box>
-                                        <Text textAlign="center" fontWeight={'600'} fontSize="2xl">
-                                            <ListIcon as={MdContentCopy} color="green.400" fontSize={'2xl'} />
-                                            IDR {days * price}
-                                        </Text>
-                                    </Box>
-                                </Box>
-                            </Flex>
-                        </ListItem>
-                        <Box borderTop={'2px'} borderColor={'gray.300'}></Box>
-                        <ListItem>
-                            <Flex alignItems="center" justify={'center'}>
-                                <Box>
-                                </Box>
-                                <Box>
-                                    <Box>
-                                        <Text textAlign="center">
-                                            Payment status
-                                        </Text>
-                                    </Box>
-                                    <Box>
-                                        <Text textAlign="center" fontWeight={'600'} fontSize="2xl">
-                                            {transactionStatus}
-                                        </Text>
-                                    </Box>
-                                </Box>
-                            </Flex>
-                        </ListItem>
-                    </List>
-
-                    {/* BUAT KONDISI KALO EXPIRED UDAH LEWAT BUTTON NYA ILANG */}
-                    <Button
-                        mt={10}
+            <Box w='full' display='flex' flexDirection={['column', 'column', 'column', 'row']}>
+                <Box order={[2, 2, 2, 1]} w='full' m='auto'>
+                    <BookingDetails invoiceNumber={invoiceNumber} startDate={startDate} endDate={endDate} total={days * price} status={transactionStatus} customer={customer} propertyName={propertyName} propertyAddress={propertyAddress} propertyRegency={propertyRegency} propertyCountry={propertyCountry} roomName={roomName} />
+                </Box>
+                <Box order={[1, 1, 1, 2]} m='auto' mb='0'>
+                    <Box
+                        maxW={'400px'}
                         w={'full'}
-                        bg={'green.400'}
-                        color={'white'}
-                        // rounded={'xl'}
-                        _hover={{
-                            bg: 'green.500',
-                        }}
-                        _focus={{
-                            bg: 'green.500',
-                        }}
-                        leftIcon={<Icon as={FiUpload} fontSize={'xl'} />}
-                        onClick={() => inputImagePayment.current.click()}
+                        bg={useColorModeValue('white', 'gray.800')}
+                        boxShadow={'lg'}
+                        rounded={'md'}
+                        overflow={'hidden'}
                     >
-                        <Input type={'file'} display='none' id='file' ref={inputImagePayment}
-                            onChange={onChangeImagePayment} />
-                        Upload Payment Receipt
-                    </Button>
+                        <MemoCountDown />
+                        <Box bg={useColorModeValue('gray.50', 'gray.900')} px={6} py={6}>
+                            <List spacing={3}>
+                                <ListItem>
+                                    <Text textAlign="center" fontSize="sm">
+                                        Account Name
+                                    </Text>
+                                    <Text textAlign="center" fontWeight={'600'} fontSize="md">
+                                        {bank?.name}
+                                    </Text>
+                                </ListItem>
+                                <Box borderTop={'2px'} borderColor={'gray.300'}></Box>
+                                <ListItem>
+                                    {/* BUAT USECLIPBOARD UNTUK TOMBOL COPY */}
+                                    <Flex alignItems="center" justify={'center'}>
+                                        <Box>
+                                        </Box>
+                                        <Box>
+                                            <Box>
+                                                <Text textAlign="center" fontSize="sm">
+                                                    Account Number
+                                                </Text>
+                                            </Box>
+                                            <Box>
+                                                <Text textAlign="center" fontWeight={'600'} fontSize="md">
+                                                    <ListIcon as={MdContentCopy} color="green.400" fontSize={'2xl'} />
+                                                    {bank?.account_number}
+                                                </Text>
+                                            </Box>
+                                        </Box>
+                                    </Flex>
+                                </ListItem>
+                                <Box borderTop={'2px'} borderColor={'gray.300'}></Box>
+                                <ListItem>
+                                    <Flex alignItems="center" justify={'center'}>
+                                        <Box>
+                                        </Box>
+                                        <Box>
+                                            <Box>
+                                                <Text textAlign="center" fontSize="sm">
+                                                    Payment Nominal
+                                                </Text>
+                                            </Box>
+                                            <Box>
+                                                <Text textAlign="center" fontWeight={'600'} fontSize="md">
+                                                    <ListIcon as={MdContentCopy} color="green.400" fontSize={'2xl'} />
+                                                    {formatRupiah(days * price)}
+                                                </Text>
+                                            </Box>
+                                        </Box>
+                                    </Flex>
+                                </ListItem>
+                            </List>
 
-                    {message == '' ? null : <Text>{message}</Text>}
+                            <Button
+                                mt={10}
+                                w={'full'}
+                                bg={'green.400'}
+                                color={'white'}
+                                // rounded={'xl'}
+                                isDisabled={transactionStatus === 'Waiting for payment' || transactionStatus === 'Reject' ? false : true}
+                                _hover={{
+                                    bg: 'green.500',
+                                }}
+                                _focus={{
+                                    bg: 'green.500',
+                                }}
+                                leftIcon={<Icon as={FiUpload} fontSize={'xl'} />}
+                                onClick={() => inputImagePayment.current.click()}
+                                isLoading={isLoadingButton}
+                            >
+                                <Input type={'file'} display='none' id='file' ref={inputImagePayment}
+                                    onChange={onChangeImagePayment} />
+                                {transactionStatus !== 'Waiting for payment' || fileImagePayment ? 'Image Uploaded' : 'Upload Payment Receipt'}
+                            </Button>
 
-                    <Link to='/order/list'>
-                        <Button
-                            mt={2}
-                            w={'full'}
-                            bg={'blue.400'}
-                            color={'white'}
-                            // rounded={'xl'}
-                            _hover={{
-                                bg: 'blue.500',
-                            }}
-                            _focus={{
-                                bg: 'blue.500',
-                            }}
-                            leftIcon={<Icon as={AiOutlineEye} fontSize={'xl'} />}
-                        >
-                            See your order details
-                        </Button>
-                    </Link>
+                            <Link to='/order/list'>
+                                <Button
+                                    mt={2}
+                                    w={'full'}
+                                    bg={'blue.400'}
+                                    color={'white'}
+                                    // rounded={'xl'}
+                                    _hover={{
+                                        bg: 'blue.500',
+                                    }}
+                                    _focus={{
+                                        bg: 'blue.500',
+                                    }}
+                                    leftIcon={<Icon as={AiOutlineEye} fontSize={'xl'} />}
+                                    isLoading={isLoadingButton}
+                                >
+                                    See your order list
+                                </Button>
+                            </Link>
+                            {/* CANCEL ORDER BUTTON SEMENTARA */}
+                            <Button
+                                onClick={onOpen}
+                                isDisabled={transactionStatus !== 'Waiting for payment' || fileImagePayment ? true : false}
+                                mt={2}
+                                w={'full'}
+                                bg={'red.400'}
+                                color={'white'}
+                                _hover={{
+                                    bg: 'blue.500',
+                                }}
+                                _focus={{
+                                    bg: 'blue.500',
+                                }}
+                                isLoading={isLoadingButton}
+                            >
+                                Cancel Order
+                            </Button>
+
+                            <AlertDialog
+                                isOpen={isOpen}
+                                leastDestructiveRef={cancelRef}
+                                onClose={onClose}
+                            >
+                                <AlertDialogOverlay>
+                                    <AlertDialogContent>
+                                        <AlertDialogHeader fontSize='lg' fontWeight='bold'>
+                                            Cancel Order
+                                        </AlertDialogHeader>
+
+                                        <AlertDialogBody>
+                                            Are you sure? You can't undo this action afterwards.
+                                        </AlertDialogBody>
+
+                                        <AlertDialogFooter>
+                                            <Button ref={cancelRef} onClick={onClose}>
+                                                Cancel
+                                            </Button>
+                                            <Button colorScheme='red' ml={3}
+                                                onClick={() => {
+                                                    cancelOrReject();
+                                                    // setCompletedCountdown(true)
+                                                    getTransactionTimeAndBank();
+                                                    onClose();
+                                                }}
+                                            >
+                                                Save
+                                            </Button>
+                                        </AlertDialogFooter>
+                                    </AlertDialogContent>
+                                </AlertDialogOverlay>
+                            </AlertDialog>
+                        </Box>
+                    </Box>
                 </Box>
             </Box>
-        </Box>
+
+        </Box >
     )
 }

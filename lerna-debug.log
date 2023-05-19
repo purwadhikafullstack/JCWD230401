@@ -1,26 +1,21 @@
 0 silly argv {
-0 silly argv   _: [ 'add' ],
-0 silly argv   scope: 'client',
-0 silly argv   globs: [],
+0 silly argv   _: [ 'bootstrap' ],
+0 silly argv   hoist: true,
 0 silly argv   lernaVersion: '5.4.0',
-0 silly argv   '$0': 'node_modules\\lerna\\cli.js',
-0 silly argv   pkg: 'chart.js'
+0 silly argv   '$0': 'node_modules\\lerna\\cli.js'
 0 silly argv }
 1 notice cli v5.4.0
-2 verbose rootPath C:\Users\butar\Documents\FULLSTACK WEBDEV\FinProJCWD2304\JCWD230401
-3 notice filter including "client"
-4 info filter [ 'client' ]
-5 error TypeError: Invalid comparator: latest
-5 error     at Comparator.parse (C:\Users\butar\Documents\FULLSTACK WEBDEV\FinProJCWD2304\JCWD230401\node_modules\semver\classes\comparator.js:38:13)
-5 error     at new Comparator (C:\Users\butar\Documents\FULLSTACK WEBDEV\FinProJCWD2304\JCWD230401\node_modules\semver\classes\comparator.js:22:10)
-5 error     at C:\Users\butar\Documents\FULLSTACK WEBDEV\FinProJCWD2304\JCWD230401\node_modules\semver\classes\range.js:133:47
-5 error     at Array.map (<anonymous>)
-5 error     at Range.parseRange (C:\Users\butar\Documents\FULLSTACK WEBDEV\FinProJCWD2304\JCWD230401\node_modules\semver\classes\range.js:133:35)
-5 error     at C:\Users\butar\Documents\FULLSTACK WEBDEV\FinProJCWD2304\JCWD230401\node_modules\semver\classes\range.js:34:22
-5 error     at Array.map (<anonymous>)
-5 error     at new Range (C:\Users\butar\Documents\FULLSTACK WEBDEV\FinProJCWD2304\JCWD230401\node_modules\semver\classes\range.js:34:8)
-5 error     at Object.intersects (C:\Users\butar\Documents\FULLSTACK WEBDEV\FinProJCWD2304\JCWD230401\node_modules\semver\ranges\intersects.js:3:8)
-5 error     at getRangeToReference (C:\Users\butar\Documents\FULLSTACK WEBDEV\FinProJCWD2304\JCWD230401\node_modules\@lerna\add\lib\get-range-to-reference.js:27:35)
-5 error     at C:\Users\butar\Documents\FULLSTACK WEBDEV\FinProJCWD2304\JCWD230401\node_modules\@lerna\add\index.js:152:14
-5 error     at Array.filter (<anonymous>)
-5 error     at AddCommand.collectPackagesToChange (C:\Users\butar\Documents\FULLSTACK WEBDEV\FinProJCWD2304\JCWD230401\node_modules\@lerna\add\index.js:144:21)
+2 verbose rootPath D:\1. PURWADHIKA\FInal Project\JCWD230401
+3 error JSONError: Unexpected token "<" (0x3C) in JSON at position 1247 while parsing near "...iframe\": \"^1.8.5\",\r\n<<<<<<< HEAD\r\n    \"r..." in projects\client\package.json
+3 error
+3 error [0m [90m 38 |[39m     [32m"react-paginate"[39m[33m:[39m [32m"^8.2.0"[39m[33m,[39m[0m
+3 error [0m [90m 39 |[39m     [32m"react-iframe"[39m[33m:[39m [32m"^1.8.5"[39m[33m,[39m[0m
+3 error [0m[31m[1m>[22m[39m[90m 40 |[39m [33m<<[39m[33m<<[39m[33m<<[39m[33m<[39m [33mHEAD[39m[0m
+3 error [0m [90m    |[39m [31m[1m^[22m[39m[0m
+3 error [0m [90m 41 |[39m     [32m"react-upload-in"[39m[33m:[39m [32m"^0.1.0"[39m[33m,[39m[0m
+3 error [0m [90m 42 |[39m     [32m"react-nice-dates"[39m[33m:[39m [32m"^3.1.0"[39m[33m,[39m[0m
+3 error [0m [90m 43 |[39m     [32m"react-paginate"[39m[33m:[39m [32m"^8.1.5"[39m[33m,[39m[0m
+3 error
+3 error     at parseJson (D:\1. PURWADHIKA\FInal Project\JCWD230401\node_modules\parse-json\index.js:29:21)
+3 error     at parse (D:\1. PURWADHIKA\FInal Project\JCWD230401\node_modules\load-json-file\index.js:15:9)
+3 error     at module.exports (D:\1. PURWADHIKA\FInal Project\JCWD230401\node_modules\load-json-file\index.js:18:47)
