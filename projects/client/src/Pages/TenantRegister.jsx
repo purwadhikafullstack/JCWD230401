@@ -56,7 +56,7 @@ export default function TenantRegister() {
             if (response.data.success) {
                 alert(response.data.message);
             }
-            navigate('/', { replace: true });
+            // navigate('/', { replace: true });
         } catch (error) {
             console.log("ini error dari onBtnRegister : ", error); //testing purposes
             alert(error.response.data.message);

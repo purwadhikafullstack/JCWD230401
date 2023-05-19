@@ -118,16 +118,10 @@ export default function Landing() {
 
     const printAllProperty = () => {
         return allProperty.map((val, idx) => {
-            return (
-                <PropertyCard
-                    property={val.property}
-                    picture={val.picture_properties[0]?.picture}
-                    location={val.property_location}
-                    price={val.rooms[0]?.price}
-                />
-            );
-        });
-    };
+            return <PropertyCard property={val.property} picture={val.picture_properties[0]?.picture}
+                location={val.property_location} price={val.rooms[0]?.price} uuid={val.uuid} />
+        })
+    }
 
     const handleSearch = () => {
         navigate("/property", {
@@ -214,9 +208,9 @@ export default function Landing() {
                                     minDate={
                                         checkInDate
                                             ? new Date(
-                                                  checkInDate.getTime() +
-                                                      24 * 60 * 60 * 1000
-                                              )
+                                                checkInDate.getTime() +
+                                                24 * 60 * 60 * 1000
+                                            )
                                             : undefined
                                     }
                                     // highlightDates={highlightDates}
@@ -321,14 +315,10 @@ export default function Landing() {
                 <Heading as="h2">Recommended for you</Heading>
                 {/* PROPERTY RECOMMENDATIONS */}
                 <br />
-                <div className="recommendations">{printAllProperty()}</div>
-                <button
-                    onClick={() => navigate("/property")}
-                    type="button"
-                    className="see-more-btn"
-                >
-                    See more properties
-                </button>
+                <div className="recommendations">
+                    {/* {printAllProperty()} */}
+                </div>
+                <button onClick={() => navigate('/property')} type='button' className="see-more-btn">See more properties</button>
             </Box>
             <br />
             <br />

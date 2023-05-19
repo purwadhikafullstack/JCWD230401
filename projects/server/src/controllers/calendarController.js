@@ -29,7 +29,7 @@ module.exports = {
         },
       ],
     });
-    console.log("ini isi dari getdata: ", getdata[0].dataValues);
+    // console.log("ini isi dari getdata: ", getdata[0].dataValues);
     res.status(200).send(getdata);
     try {
     } catch (error) {
@@ -58,7 +58,7 @@ module.exports = {
           },
         ],
       });
-      console.log("ini isi dari getdata: ", getdata[0].dataValues);
+      // console.log("ini isi dari getdata: ", getdata[0].dataValues);
       res.status(200).send(getdata);
     } catch (error) {
       console.log(error);

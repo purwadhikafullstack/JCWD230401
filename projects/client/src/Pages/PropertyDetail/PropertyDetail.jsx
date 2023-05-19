@@ -16,7 +16,7 @@ import SwiperCarousel from '../../Components/SwiperCarousel/SwiperCarousel'
 
 import "./PropertyDetail.css";
 import { FaHome, FaPaintBrush, FaMapMarkerAlt, FaHeart, FaStar } from 'react-icons/fa';
-import { API_URL, API_URL_IMG } from '../../helper';
+import { API_URL, API_URL_IMG, capitalizeFirstWord, formatRupiah } from '../../helper';
 import axios from 'axios';
 import { useParams, useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
@@ -27,37 +27,59 @@ import Review from '../../Components/Review';
 
 
 export default function PropertyDetail() {
-    // const [startDate, setStartDate] = useState(new Date());
-    // const [endDate, setEndDate] = useState(null);
-    // const { isOpen, onToggle } = useDisclosure()
+    let token = localStorage.getItem("tempatku_login");
 
     const params = useParams();
     const location = useLocation();
     console.log("paramssss", params)
     console.log("useLocation property detail", location)
 
-    const [propertyDetail, setPropertyDetail] = useState(null);
+    const [propertyDetail, setPropertyDetail] = useState([]);
+    const [regency, setRegency] = useState('');
+    const [propertyPrice, setPropertyPrice] = useState(0)
+    const [tenantEmail, setTenantEmail] = useState('')
+    const today = new Date().toISOString().split('T')[0]
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    const nextDay = tomorrow.toISOString().split('T')[0];
+    const [inputCheckIn, setInputCheckIn] = useState(location.state.inputCheckIn || today)
+    const [inputCheckOut, setInputCheckOut] = useState(location.state.inputCheckOut || nextDay)
     const getPropertyDetail = async () => {
-        let get = await axios.post(`${API_URL}/property/getpropertydetail`, {
-            uuid: params.uuid
+        let get = await axios.get(`${API_URL}/property/getpropertydetail?uuid=${params.uuid}&start=${inputCheckIn}&end=${inputCheckOut}`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
         });
-        setPropertyDetail(get.data[0]);
+        setPropertyDetail(get.data);
+        setRegency(get.data.property_location.regency.name);
+        setPropertyPrice(get.data.rooms[0].price)
+        setTenantEmail(get.data.user.email)
     }
-
     console.log("proeprtyy detaillll : ", propertyDetail);
+
+    const [average, setAverage] = useState(0)
+    const getAverage = async () => {
+        let get = await axios.get(`${API_URL}/review/average?uuid=${params.uuid}`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        })
+        setAverage(get.data.avg_rating)
+        console.log('average', get.data.avg_rating);
+    }
+    console.log('average', average);
+    console.log('average', typeof (average));
 
     // MODAL
     const modalProperty = useDisclosure()
 
     // Get Room Available
-    const [inputCheckIn, setInputCheckIn] = useState(location.state.inputCheckIn)
-    const [inputCheckOut, setInputCheckOut] = useState(location.state.inputCheckOut)
     const [roomAvailable, setRoomAvailable] = useState([])
     const getRoomAvailable = async () => {
-        let get = await axios.post(`${API_URL}/property/getroomavailable`, {
-            uuid: params.uuid,
-            start: inputCheckIn,
-            end: inputCheckOut
+        let get = await axios.get(`${API_URL}/property/getroomavailable?uuid=${params.uuid}&start=${inputCheckIn}&end=${inputCheckOut}`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
         });
         setRoomAvailable(get.data);
     }
@@ -65,24 +87,58 @@ export default function PropertyDetail() {
 
     const printRoomCard = () => {
         return roomAvailable.map((val, idx) => {
-            return <RoomCard name={val.room_category.name} description={val.description} price={val.price} capacity={val.capacity} picture={val.picture_rooms} uuid={val.uuid} inputCheckIn={inputCheckIn} inputCheckOut={inputCheckOut} />
+            return <RoomCard name={val.room_category.name} description={val.description} price={val.price} // kalo ada special price gimana ?
+                capacity={val.capacity} picture={val.picture_rooms} uuid={val.uuid}
+                inputCheckIn={inputCheckIn} inputCheckOut={inputCheckOut} />
         })
     }
 
     const [pictureProperty, setPictureProperty] = useState([])
     const getPictureProperty = async () => {
-        let get = await axios.post(`${API_URL}/property/getpictureproperty`, {
-            uuid: params.uuid
+        let get = await axios.get(`${API_URL}/property/getpictureproperty?uuid=${params.uuid}`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
         })
         setPictureProperty(get.data);
         console.log("picture property", get);
+    }
+
+    const [reviews, setReviews] = useState([]);
+    const getReviews = async () => {
+        let review = await axios.get(`${API_URL}/review?uuid=${params.uuid}`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        })
+        console.log("review", review);
+        setReviews(review.data)
+    }
+    console.log("state reviews", reviews);
+
+    const printReviews = () => {
+        if (reviews.length) {
+            return reviews.map((val, idx) => {
+                return <Review value={val.rating} profile={val.user.user_detail.image_profile} name={val.user.user_detail.name} createdAt={val.createdAt} comment={val.review} />
+            })
+        } else {
+            return <Text>No review cekguuu</Text>
+        }
     }
 
     useEffect(() => {
         getPropertyDetail();
         getRoomAvailable();
         getPictureProperty();
+        getReviews();
+        getAverage();
     }, [])
+
+    useEffect(() => {
+        getRoomAvailable();
+        getPropertyDetail();
+    }, [inputCheckIn, inputCheckOut])
+
 
 
     return (
@@ -92,16 +148,18 @@ export default function PropertyDetail() {
                     <h1>{propertyDetail?.property}</h1>
                     <div className="row">
                         <div>
-                            <FaStar />
+                            <FaStar color='orange' />
                         </div>
                         <div>
-                            <p>&nbsp;5.0</p>
+                            <p>&nbsp;{average === null ? 'No Rating' : parseFloat(average).toFixed(1)}</p>
                         </div>
                         <div>
                             <span>57 Reviews</span>
                         </div>
                         <div>
-                            <p>Location: {propertyDetail?.property_location?.regency.name}, {propertyDetail?.property_location?.country}</p>
+                            <p>Location:
+                                {capitalizeFirstWord(regency)}
+                                , {propertyDetail?.property_location?.country}</p>
                         </div>
                     </div>
                 </div>
@@ -142,8 +200,7 @@ export default function PropertyDetail() {
                 <div className="small-details">
                     <h2>Hosted by {propertyDetail?.user?.user_detail?.name}</h2>
                     <p>Facility .........</p>
-                    <h4>{Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(propertyDetail?.rooms[0].price || 0)}
-                        / day</h4>
+                    <h4>{formatRupiah(propertyPrice)} / day</h4>
                 </div>
                 <Flex w='full'>
                     <Box w='full'>
@@ -186,29 +243,26 @@ export default function PropertyDetail() {
                 <div className="map">
                     <h3>Location on map</h3>
                     <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d31541.345788385628!2d115.05704101562502!3d-8.817205999999993!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2dd24ffebe892cdd%3A0xb7a1edced2ee4c50!2sPuri%20Uluwatu%20Villas!5e0!3m2!1sen!2sid!4v1680459004192!5m2!1sen!2sid" width="600" height="450" style={{ border: "0" }} allowFullScreen="" loading="lazy"></iframe>
-                    <b>{propertyDetail?.property_location?.regency.name}, {propertyDetail?.property_location?.country}</b>
+                    <b>{capitalizeFirstWord(regency)}, {propertyDetail?.property_location?.country}</b>
                     <p>It's like a home away from home.</p>
                 </div>
 
                 <hr className="line" />
                 <div className="tenant">
                     {/* Di database belom ada isinya jd sementara pake image ini */}
-                    <img style={{ width: '70px', height: '70px', objectFit: 'cover' }} src={'https://images.unsplash.com/photo-1599566150163-29194dcaad36?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80'} />
+                    <img style={{ width: '70px', height: '70px', objectFit: 'cover' }} src={propertyDetail?.user?.user_detail?.image_profile || ''} />
                     <div>
                         <h2>Hosted by {propertyDetail?.user?.user_detail?.name}</h2>
                         <p>
                             <div className="row">
                                 <div>
-                                    <FaStar />
-                                </div>
-                                <div>
-                                    <p>&nbsp;5.0</p>
+                                    <p>{tenantEmail}</p>
                                 </div>
                             </div>
                         </p>
                     </div>
                 </div>
-                <a href="#" className="contact-tenant">Contact Tenant</a>
+                <a href={`mailto:${tenantEmail}`} className="contact-tenant">Contact Tenant</a>
 
                 <hr className="line" />
 
@@ -218,12 +272,7 @@ export default function PropertyDetail() {
                         Review
                     </Text>
                     <Flex gap='5' wrap={'wrap'}>
-                        <Review />
-                        <Review />
-                        <Review />
-                        <Review />
-                        <Review />
-                        <Review />
+                        {printReviews()}
                     </Flex>
                 </Box>
             </div>

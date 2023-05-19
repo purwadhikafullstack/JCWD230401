@@ -15,25 +15,31 @@ app.use(bearerToken());
 app.use("/", express.static(__dirname + "/public"));
 
 //#region API ROUTES
-const categoryRouter = require("./routers/categoryRouter");
-app.use("/api/category", categoryRouter);
-
+const transactionRouter = require('./routers/transactionRouter');
+const categoryRouter = require('./routers/categoryRouter');
+const userRouter = require('./routers/userRouter');
+const propertyRouter = require('./routers/propertyRouter');
+const orderRouter = require('./routers/orderRouter');
+const roomRouter = require('./routers/roomRouter');
+const calendarRouter = require("./routers/calendarRouter");
+const reviewRouter = require("./routers/reviewRouter");
 const propertyRouter = require("./routers/propertyRouter");
-app.use("/api/property", propertyRouter);
-
-const roomRouter = require("./routers/roomRouter");
-app.use("/api/room", roomRouter);
-
-const userRouter = require("./routers/userRouter");
-app.use("/api/user", userRouter);
-
 const specialRouter = require("./routers/specialRouter");
-app.use("/api/special", specialRouter);
-
 const maintenanceRouter = require("./routers/maintenanceRouter");
-app.use("/api/maintenance", maintenanceRouter);
-
 const reportRouter = require("./routers/reportRouter");
+const { reminderCheckInUser } = require("./helper/schedule");
+
+app.use('/api/user', userRouter);
+app.use('/api/transaction', transactionRouter)
+app.use('/api/category', categoryRouter)
+app.use('/api/property', propertyRouter)
+app.use('/api/order', orderRouter)
+app.use('/api/room', roomRouter)
+app.use("/api/calendar", calendarRouter);
+app.use("/api/review", reviewRouter);
+app.use("/api/property", propertyRouter);
+app.use("/api/special", specialRouter);
+app.use("/api/maintenance", maintenanceRouter);
 app.use("/api/report", reportRouter)
 // ==============================================
 // NOTE : Add your routes here
@@ -60,6 +66,14 @@ app.use((req, res, next) => {
         next();
     }
 });
+
+// reminderCheckInUser()
+
+const value = 25000;
+const displayedValue = (value / 1000).toFixed(0); // '500'
+console.log("displayedValue", displayedValue); // Output: 500
+
+
 
 // error
 app.use((err, req, res, next) => {

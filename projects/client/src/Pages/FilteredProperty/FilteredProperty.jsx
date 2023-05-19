@@ -37,23 +37,22 @@ export default function FilteredProperty() {
     // Get Property and Pagination
 
     const [showProducts, setShowProducts] = useState([]);
-    const [page, setPage] = useState(0);
+    const [page, setPage] = useState(1);
     const [size, setSize] = useState(3);
     const [productName, setProductName] = useState("");
     const [totalData, setTotalData] = useState(0);
     const [currentPage, setCurrentPage] = useState(1);
     const [sortBy, setSortBy] = useState("property");
     const [order, setOrder] = useState("ASC");
-    const [category, setCategory] = useState("");
-    const [guest, setGuest] = useState(0);
-    const [city, setCity] = useState(location.state?.inputLocation);
+    const [guest, setGuest] = useState(1);
+    const [city, setCity] = useState(location.state?.inputLocation || '');
+    const [category, setCategory] = useState(location.state?.category);
 
     const getAllProperty = async () => {
         try {
             let token = localStorage.getItem("tempatku_login");
-            let res = await axios.post(
-                `${API_URL}/property/filter?start=${inputCheckIn  || ''}&end=${inputCheckOut  || ''}&page=${page}&size=${size}&name=${productName}&sortby=${sortBy}&order=${order}&category=${category}&city=${city || ''}`,
-                {},
+            let res = await axios.get(
+                `${API_URL}/property/available?sortby=${sortBy}&order=${order}&capacity=${guest}&start=${inputCheckIn || ''}&end=${inputCheckOut || ''}&name=${productName}&category=${category || ''}&city=${city}&size=${size}&page=${page}`,
                 {
                     headers: {
                         Authorization: `Bearer ${token}`,
@@ -61,7 +60,7 @@ export default function FilteredProperty() {
                 }
             );
             console.log("ress dari filter propertyyyy", res)
-            setTotalData(res.data.datanum);
+            setTotalData(res.data.total_data);
             setShowProducts(res.data.data);
         } catch (error) {
             console.log(error);
@@ -75,18 +74,18 @@ export default function FilteredProperty() {
 
     const printAllProperty = () => {
         return showProducts.map((val, idx) => {
-            return <PropertyCard property={val.property} price={val.rooms[0].price} picture={val.picture_properties[0].picture} uuid={val.uuid} inputCheckIn={inputCheckIn} inputCheckOut={inputCheckOut} location={val.property_location}/>
+            return <PropertyCard property={val.property_name} price={val.property_price} picture={val.picture} uuid={val.uuid} inputCheckIn={inputCheckIn || ''} inputCheckOut={inputCheckOut || ''} location={val.province_name} country={val.country} rating={val.rating} />
         })
     }
 
     const paginate = (pageNumber) => {
-        setPage(pageNumber.selected)
-        console.log(pageNumber.selected)
+        setPage(pageNumber.selected + 1)
+        console.log("page : ", pageNumber.selected + 1)
     }
 
     useEffect(() => {
         getAllProperty()
-    }, [page, sortBy, order, category])
+    }, [page, sortBy, order, category, inputCheckIn, inputCheckOut])
 
     return (
         <Box>
@@ -97,7 +96,7 @@ export default function FilteredProperty() {
                     setInputCheckIn={setInputCheckIn} inputCheckOut={inputCheckOut} setInputCheckOut={setInputCheckOut}
                     setPage={setPage} getAllProperty={getAllProperty} setProductName={setProductName}
                     setCity={setCity} stateUseLocation={location.state} setSortBy={setSortBy}
-                    setOrder={setOrder}
+                    setOrder={setOrder} setGuest={setGuest} guest={guest}
                 />
             </Box>
             <Box className='container-fp'>
