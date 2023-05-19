@@ -16,8 +16,8 @@ import {
 } from "@chakra-ui/react";
 import React from 'react';
 import Swiper from "swiper";
-import SwiperCarousel from "../SwiperCarousel/SwiperCarousel";
-import noimage from '../../assets/noimage.png';
+import SwiperCarousel from "../Components/SwiperCarousel/SwiperCarousel";
+import noimage from '../assets/noimage.png';
 import { Link } from "react-router-dom";
 import { StarIcon } from "@chakra-ui/icons";
 import { useNavigate } from 'react-router-dom';
@@ -106,6 +106,8 @@ export default function RoomCard(props) {
                             position="relative"
                             onClick={onOpen}
                             zIndex={1}
+                            maxW={{ base: '350px', md: '330px', lg: '330px' }}
+                            maxH={{ base: '150px', md: '200px', lg: '200px' }}
                         >
                             <Image
                                 src={!props.picture?.length ? noimage : `${process.env.REACT_APP_API_IMG_URL}${props?.picture[0].picture}`}

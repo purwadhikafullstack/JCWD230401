@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import React, { useState } from "react";
 import {
     Button,
     Flex,
@@ -15,6 +14,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import * as yup from "yup";
+import { useSelector } from "react-redux";
 
 export default function ChangePassword() {
     const [showOldPassword, setShowOldPassword] = useState(false);
@@ -23,6 +23,8 @@ export default function ChangePassword() {
     const navigate = useNavigate();
     const [loading, setLoading] = React.useState(false);
     const toast = useToast();
+    const role = useSelector((state) => state.authReducer.role);
+
 
     const onBtnChangePassword = async () => {
         try {
@@ -49,9 +51,16 @@ export default function ChangePassword() {
                 duration: 3000,
                 isClosable: true,
             });
-            navigate("/");
+            // navigate("/");
+            if (role == "User") {
+                navigate("/", { replace: true });
+            } else if (role == "Tenant") {
+                navigate("/dashboard", { replace: true });
+            } else {
+                navigate("/", { replace: true });
+            }
         } catch (error) {
-            console.log("ini error dari onBtnChangePassword : ", error); 
+            console.log("ini error dari onBtnChangePassword : ", error);
             if (error.response && !error.response.data.message) {
                 toast({
                     title: "Change password failed",
@@ -118,8 +127,8 @@ export default function ChangePassword() {
 
     return (
         <Flex
-            minH={{base:"50vh", sm:"100vh"}}
-            align={{base:"none", sm:"center"}}
+            minH={{ base: "50vh", sm: "100vh" }}
+            align={{ base: "none", sm: "center" }}
             justify={"center"}
             bg={"white"}>
             <Stack
@@ -129,7 +138,7 @@ export default function ChangePassword() {
                 bg={"white"}
                 rounded={"xl"}
                 borderWidth={"1px"}
-                borderColor={{base:"white", sm:"gray.300"}}
+                borderColor={{ base: "white", sm: "gray.300" }}
                 p={6}
                 my={12}>
                 <Heading lineHeight={1.1} fontSize={{ base: "2xl", md: "3xl" }}>
@@ -145,11 +154,7 @@ export default function ChangePassword() {
                             name="oldPassword"
                         />
                         <InputRightElement h={"full"}>
-                        <InputRightElement h={"full"}>
                             <Button
-                                variant={"ghost"}
-                                _hover={"none"}
-                                _active={"none"}
                                 variant={"ghost"}
                                 _hover={"none"}
                                 _active={"none"}
@@ -179,11 +184,7 @@ export default function ChangePassword() {
                             name="newPassword"
                         />
                         <InputRightElement h={"full"}>
-                        <InputRightElement h={"full"}>
                             <Button
-                                variant={"ghost"}
-                                _hover={"none"}
-                                _active={"none"}
                                 variant={"ghost"}
                                 _hover={"none"}
                                 _active={"none"}
@@ -213,11 +214,7 @@ export default function ChangePassword() {
                             name="passwordConfirmation"
                         />
                         <InputRightElement h={"full"}>
-                        <InputRightElement h={"full"}>
                             <Button
-                                variant={"ghost"}
-                                _hover={"none"}
-                                _active={"none"}
                                 variant={"ghost"}
                                 _hover={"none"}
                                 _active={"none"}
@@ -242,10 +239,7 @@ export default function ChangePassword() {
                     <Button
                         bg={"#D3212D"}
                         color={"white"}
-                        bg={"#D3212D"}
-                        color={"white"}
                         _hover={{
-                            bg: "#D3212D",
                             bg: "#D3212D",
                         }}
                         onClick={onBtnChangePassword}

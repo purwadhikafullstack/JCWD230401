@@ -13,7 +13,6 @@ import {
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import Footer from "../../Components/Footer";
 import Pagination from "../../Components/Pagination";
 import PropertyCard from "../../Components/PropertyCard";
 import SearchBar from "../../Components/SearchBar/SearchBar";
@@ -114,7 +113,7 @@ export default function FilteredProperty() {
     }, [page, sortBy, order, category, inputCheckIn, inputCheckOut]);
 
     return (
-        <Box>
+        <Box minH={"100vh"}>
             <Box className="container-fp">
                 <SearchBar
                     setInputLocation={setInputLocation}
@@ -208,7 +207,6 @@ export default function FilteredProperty() {
                     paginate={paginate}
                 />
             </Flex>
-            <Footer />
         </Box>
     );
 }

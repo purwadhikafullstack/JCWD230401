@@ -8,7 +8,7 @@ const passport = require("passport");
 const cookieParser = require('cookie-parser');
 
 // console.log("isi dari __dirname :" + __dirname);
-const PORT = process.env.PORT || 8000;
+const PORT = process.env.PORT || 2341;
 const app = express();
 app.use(express.json());
 app.use(cors());
@@ -19,8 +19,8 @@ app.use(cookieParser())
 // required middlewares google auth
 app.use(
   cookieSession({
-    name: "authSession",
-    keys: ["askduhakdnkbiygvhbad7a6s*&^*S^D8asdbk"],
+    name: process.env.SESSION_NAME,
+    keys: [process.env.SESSION_KEYS],
     maxAge: 24 * 60 * 60 * 1000,
     sameSite: "None",
     secure: true,
