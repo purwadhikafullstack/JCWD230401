@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
 import axios from "axios";
-import { API_URL, API_URL_IMG } from "../../helper";
 import {
     Box,
     Button,
@@ -53,7 +52,7 @@ function ManageRoom() {
         try {
             let token = localStorage.getItem("tempatku_login");
             let get = await axios.get(
-                `${API_URL}/room/getroomdata/${params.uuid}`,
+                `${process.env.REACT_APP_API_BASE_URL}/room/getroomdata/${params.uuid}`,
                 {
                     headers: {
                         Authorization: `Bearer ${token}`,
@@ -80,7 +79,7 @@ function ManageRoom() {
             formData.append("images", imageFile);
 
             let edit = await axios.patch(
-                `${API_URL}/room/updateimageroom?id=${id}&roomId=${roomData.id}`,
+                `${process.env.REACT_APP_API_BASE_URL}/room/updateimageroom?id=${id}&roomId=${roomData.id}`,
                 formData,
                 {
                     headers: {
@@ -106,7 +105,7 @@ function ManageRoom() {
         try {
             let token = localStorage.getItem("tempatku_login");
             let del = await axios.patch(
-                `${API_URL}/room/deleteimageroom?id=${id}`,
+                `${process.env.REACT_APP_API_BASE_URL}/room/deleteimageroom?id=${id}`,
                 {
                     headers: {
                         Authorization: `Bearer ${token}`,
@@ -213,7 +212,7 @@ function ManageRoom() {
             let token = localStorage.getItem("tempatku_login");
 
             let edit = await axios.patch(
-                `${API_URL}/room/editroom/${params.uuid}`,
+                `${process.env.REACT_APP_API_BASE_URL}/room/editroom/${params.uuid}`,
                 {
                     name: roomName,
                     description: description,
@@ -351,7 +350,7 @@ function ManageRoom() {
                                                                         ? URL.createObjectURL(
                                                                               fileRoomEdit1
                                                                           )
-                                                                        : `${API_URL_IMG}${fileRoomEdit1.picture}`
+                                                                        : `${process.env.REACT_APP_API_IMG_URL}${fileRoomEdit1.picture}`
                                                                 }
                                                                 w={"100px"}
                                                                 h={"100px"}
@@ -488,7 +487,7 @@ function ManageRoom() {
                                                                         ? URL.createObjectURL(
                                                                               fileRoomEdit2
                                                                           )
-                                                                        : `${API_URL_IMG}${fileRoomEdit2.picture}`
+                                                                        : `${process.env.REACT_APP_API_IMG_URL}${fileRoomEdit2.picture}`
                                                                 }
                                                                 w={"100px"}
                                                                 h={"100px"}
@@ -624,7 +623,7 @@ function ManageRoom() {
                                                                         ? URL.createObjectURL(
                                                                               fileRoomEdit3
                                                                           )
-                                                                        : `${API_URL_IMG}${fileRoomEdit3.picture}`
+                                                                        : `${process.env.REACT_APP_API_IMG_URL}${fileRoomEdit3.picture}`
                                                                 }
                                                                 w={"100px"}
                                                                 h={"100px"}
@@ -760,7 +759,7 @@ function ManageRoom() {
                                                                         ? URL.createObjectURL(
                                                                               fileRoomEdit4
                                                                           )
-                                                                        : `${API_URL_IMG}${fileRoomEdit4.picture}`
+                                                                        : `${process.env.REACT_APP_API_IMG_URL}${fileRoomEdit4.picture}`
                                                                 }
                                                                 w={"100px"}
                                                                 h={"100px"}
@@ -896,7 +895,7 @@ function ManageRoom() {
                                                                         ? URL.createObjectURL(
                                                                               fileRoomEdit5
                                                                           )
-                                                                        : `${API_URL_IMG}${fileRoomEdit5.picture}`
+                                                                        : `${process.env.REACT_APP_API_IMG_URL}${fileRoomEdit5.picture}`
                                                                 }
                                                                 w={"100px"}
                                                                 h={"100px"}

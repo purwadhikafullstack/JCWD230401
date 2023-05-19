@@ -11,9 +11,6 @@ import "./SwiperCarousel.css";
 
 // import required modules
 import { FreeMode, Navigation, Thumbs } from "swiper";
-import { API_URL, API_URL_IMG } from "../../helper";
-
-
 
 export default function SwiperCarousel(props) {
     const [thumbsSwiper, setThumbsSwiper] = useState(null);
@@ -32,20 +29,24 @@ export default function SwiperCarousel(props) {
                 modules={[FreeMode, Navigation, Thumbs]}
                 className="mySwiper2"
             >
-                {
-                    props?.pictureProperty?.map((val, idx) => {
-                        return <SwiperSlide>
-                            <img src={`${API_URL_IMG}${val.picture}`} />
+                {props?.pictureProperty?.map((val, idx) => {
+                    return (
+                        <SwiperSlide>
+                            <img
+                                src={`${process.env.REACT_APP_API_IMG_URL}${val.picture}`}
+                            />
                         </SwiperSlide>
-                    })
-                }
-                {
-                    props?.pictureRoom?.map((val, idx) => {
-                        return <SwiperSlide>
-                            <img src={`${API_URL_IMG}${val.picture}`} />
+                    );
+                })}
+                {props?.pictureRoom?.map((val, idx) => {
+                    return (
+                        <SwiperSlide>
+                            <img
+                                src={`${process.env.REACT_APP_API_IMG_URL}${val.picture}`}
+                            />
                         </SwiperSlide>
-                    })
-                }
+                    );
+                })}
             </Swiper>
             <Swiper
                 onSwiper={setThumbsSwiper}
@@ -57,21 +58,24 @@ export default function SwiperCarousel(props) {
                 modules={[FreeMode, Navigation, Thumbs]}
                 className="mySwiper"
             >
-                {
-                    props?.pictureProperty?.map((val, idx) => {
-                        return <SwiperSlide>
-                            <img src={`${API_URL_IMG}${val.picture}`} />
+                {props?.pictureProperty?.map((val, idx) => {
+                    return (
+                        <SwiperSlide>
+                            <img
+                                src={`${process.env.REACT_APP_API_IMG_URL}${val.picture}`}
+                            />
                         </SwiperSlide>
-                    })
-                }
-                {
-                    props?.pictureRoom?.map((val, idx) => {
-                        return <SwiperSlide>
-                            <img src={`${API_URL_IMG}${val.picture}`} />
+                    );
+                })}
+                {props?.pictureRoom?.map((val, idx) => {
+                    return (
+                        <SwiperSlide>
+                            <img
+                                src={`${process.env.REACT_APP_API_IMG_URL}${val.picture}`}
+                            />
                         </SwiperSlide>
-                    })
-                }
-
+                    );
+                })}
             </Swiper>
         </>
     );

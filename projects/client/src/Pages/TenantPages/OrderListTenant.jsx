@@ -1,84 +1,132 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect } from "react";
 import {
-    Flex, Text, Box, Heading, Link, Stack, useColorModeValue, Input, Button, FormControl, TableContainer, Table, TableCaption, Thead, Tr, Th, Tbody, Td, Tfoot,
-    Menu, MenuButton, MenuList, MenuOptionGroup, MenuItemOption, MenuDivider,
+    Flex,
+    Text,
+    Box,
+    Heading,
+    Link,
+    Stack,
+    useColorModeValue,
+    Input,
+    Button,
+    FormControl,
+    TableContainer,
+    Table,
+    TableCaption,
+    Thead,
+    Tr,
+    Th,
+    Tbody,
+    Td,
+    Tfoot,
+    Menu,
+    MenuButton,
+    MenuList,
+    MenuOptionGroup,
+    MenuItemOption,
+    MenuDivider,
     AlertDialog,
     AlertDialogBody,
     AlertDialogFooter,
     AlertDialogHeader,
     AlertDialogContent,
     AlertDialogOverlay,
-    useDisclosure
-} from '@chakra-ui/react';
+    useDisclosure,
+} from "@chakra-ui/react";
 // import Sidebar from '../../Components/Sidebar/Sidebar'
 // import CardOrderListTenant from '../../Components/TenantComponents/CardOrderListTenant'
-import axios from 'axios'
-import { API_URL, countDays, formatDateIndo, formatRupiah } from '../../helper'
-import Sidebar from '../../Components/Sidebar';
-import OrderListCardTenant from '../../Components/TenantComponents/OrderListCardTenant';
-import { FaFilter } from 'react-icons/fa';
-import Pagination from '../../Components/Pagination';
-import AlertDialogTenant from '../../Components/AlertDialogTenant';
-
+import axios from "axios";
+import { countDays, formatDateIndo, formatRupiah } from "../../helper";
+import Sidebar from "../../Components/Sidebar";
+import OrderListCardTenant from "../../Components/TenantComponents/OrderListCardTenant";
+import { FaFilter } from "react-icons/fa";
+import Pagination from "../../Components/Pagination";
+import AlertDialogTenant from "../../Components/AlertDialogTenant";
 
 export default function OrderListTenant() {
     // TOKEN
     let token = localStorage.getItem("tempatku_login");
 
     // PAGINATION ACTIONS NEEDED
-    const [page, setPage] = useState(1)
-    const [size, setSize] = useState(5)
-    const [sortBy, setSortBy] = useState('id')
-    const [order, setOrder] = useState('DESC')
-    const [totalData, setTotalData] = useState(0)
+    const [page, setPage] = useState(1);
+    const [size, setSize] = useState(5);
+    const [sortBy, setSortBy] = useState("id");
+    const [order, setOrder] = useState("DESC");
+    const [totalData, setTotalData] = useState(0);
     const paginate = (pageNumber) => {
-        setPage(pageNumber.selected + 1)
-    }
+        setPage(pageNumber.selected + 1);
+    };
 
     // DATA FROM getActionsNeeded
-    const [actionsNeeded, setActionsNeeded] = useState([]) // all response
+    const [actionsNeeded, setActionsNeeded] = useState([]); // all response
     const getActionsNeeded = async () => {
-        let get = await axios.get(`${API_URL}/order/getactionsneeded?page=${page}&size=${size}&sortby=${sortBy}&order=${order}`, {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        });
+        let get = await axios.get(
+            `${process.env.REACT_APP_API_BASE_URL}/order/getactionsneeded?page=${page}&size=${size}&sortby=${sortBy}&order=${order}`,
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            }
+        );
         setActionsNeeded(get.data.rows);
         setTotalData(get.data.count);
-    }
+    };
     console.log("actionsNeeded", actionsNeeded);
 
     const printCardOrderList = () => {
         return actionsNeeded.map((val, idx) => {
-            return <Box p='2' key={idx}>
-                <OrderListCardTenant username={val.transaction.user.user_detail.name} userPicture={val.transaction.user.user_detail.image_profile} createdAtTransaction={val.transaction.createdAt} propertyName={val.room.property.property} roomName={val.room.room_category.name} regency={val.room.property.property_location.regency.name} country={val.room.property.property_location.country} startDate={val.start_date} endDate={val.end_date} roomPrice={val.price} uuidTransaction={val.transaction.uuid} getActionsNeeded={getActionsNeeded} getSummary={getSummary} image_payment={val.transaction.image_payment} />
-            </Box>
-        })
-    }
+            return (
+                <Box p="2" key={idx}>
+                    <OrderListCardTenant
+                        username={val.transaction.user.user_detail.name}
+                        userPicture={
+                            val.transaction.user.user_detail.image_profile
+                        }
+                        createdAtTransaction={val.transaction.createdAt}
+                        propertyName={val.room.property.property}
+                        roomName={val.room.room_category.name}
+                        regency={
+                            val.room.property.property_location.regency.name
+                        }
+                        country={val.room.property.property_location.country}
+                        startDate={val.start_date}
+                        endDate={val.end_date}
+                        roomPrice={val.price}
+                        uuidTransaction={val.transaction.uuid}
+                        getActionsNeeded={getActionsNeeded}
+                        getSummary={getSummary}
+                        image_payment={val.transaction.image_payment}
+                    />
+                </Box>
+            );
+        });
+    };
 
     // PAGINATION SUMMARY
-    const [pageSummary, setPageSummary] = useState(1)
-    const [sizeSummary, setSizeSummary] = useState(4)
-    const [sortBySummary, setSortBySummary] = useState('id')
-    const [orderSummary, setOrderSummary] = useState('DESC')
-    const [totalDataSummary, setTotalDataSummary] = useState(0)
+    const [pageSummary, setPageSummary] = useState(1);
+    const [sizeSummary, setSizeSummary] = useState(4);
+    const [sortBySummary, setSortBySummary] = useState("id");
+    const [orderSummary, setOrderSummary] = useState("DESC");
+    const [totalDataSummary, setTotalDataSummary] = useState(0);
     const paginateSummary = (pageNumber) => {
-        setPageSummary(pageNumber.selected + 1)
-    }
+        setPageSummary(pageNumber.selected + 1);
+    };
 
-    const [dataSummary, setDataSummary] = useState([])
+    const [dataSummary, setDataSummary] = useState([]);
     const getSummary = async () => {
-        let get = await axios.get(`${API_URL}/order/getsummary?page=${pageSummary}&size=${sizeSummary}&sortby=${sortBySummary}&order=${orderSummary}`, {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        });
+        let get = await axios.get(
+            `${process.env.REACT_APP_API_BASE_URL}/order/getsummary?page=${pageSummary}&size=${sizeSummary}&sortby=${sortBySummary}&order=${orderSummary}`,
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            }
+        );
         setDataSummary(get.data.rows);
         setTotalDataSummary(get.data.count);
         console.log("SUMMARY count", get.data.count);
-    }
+    };
     console.log("SUMMARY", dataSummary);
-
 
     const printTableSummary = () => {
         return dataSummary.map((val, idx) => {
@@ -90,23 +138,36 @@ export default function OrderListTenant() {
                     <Td>{val.room.room_category.name}</Td>
                     <Td>{formatDateIndo(val.start_date)}</Td>
                     <Td>{countDays(val.start_date, val.end_date)}</Td>
-                    <Td>{formatRupiah(val.price * countDays(val.start_date, val.end_date))}</Td>
+                    <Td>
+                        {formatRupiah(
+                            val.price * countDays(val.start_date, val.end_date)
+                        )}
+                    </Td>
                     <Td>{val.transaction.transaction_status.status}</Td>
-                    <Td>{<AlertDialogTenant uuidTransaction={val.transaction.uuid} getActionsNeeded={getActionsNeeded} getSummary={getSummary} status={val.transaction.transaction_status.status} />}</Td>
+                    <Td>
+                        {
+                            <AlertDialogTenant
+                                uuidTransaction={val.transaction.uuid}
+                                getActionsNeeded={getActionsNeeded}
+                                getSummary={getSummary}
+                                status={
+                                    val.transaction.transaction_status.status
+                                }
+                            />
+                        }
+                    </Td>
                 </Tr>
-            )
-        })
-    }
-
-
+            );
+        });
+    };
 
     useEffect(() => {
         getActionsNeeded();
-    }, [page, size, sortBy, order])
+    }, [page, size, sortBy, order]);
 
     useEffect(() => {
         getSummary();
-    }, [pageSummary, sizeSummary, sortBySummary, orderSummary])
+    }, [pageSummary, sizeSummary, sortBySummary, orderSummary]);
     return (
         // <Flex>
         //     {/* SIDEBAR */}
@@ -138,50 +199,60 @@ export default function OrderListTenant() {
 
         <>
             <Flex
-                minH={'100vh'}
-            // align={'center'}
-            // justify={'center'}
-            // p={12}
+                minH={"100vh"}
+                // align={'center'}
+                // justify={'center'}
+                // p={12}
             >
                 {/* Left Content */}
                 <Box>
                     <Sidebar />
                 </Box>
                 {/* Right Content */}
-                <Box w='full' flex='5' px={{ base: "1", sm: "4" }} mt='5'>
-                    <Heading lineHeight={1.1} mb='5' fontSize={{ base: '2xl', md: '3xl' }} textAlign={{ base: 'center', sm: 'start' }} >
+                <Box w="full" flex="5" px={{ base: "1", sm: "4" }} mt="5">
+                    <Heading
+                        lineHeight={1.1}
+                        mb="5"
+                        fontSize={{ base: "2xl", md: "3xl" }}
+                        textAlign={{ base: "center", sm: "start" }}
+                    >
                         Order List
                     </Heading>
                     {/* Actions Needed */}
-                    <Box w='full'>
+                    <Box w="full">
                         <Stack
                             spacing={4}
-                            w={'full'}
-                            maxW={'1000px'}
-                            rounded={'xl'}
-                            boxShadow={'lg'}
-                            border='1px'
-                            borderColor='gray.300'
+                            w={"full"}
+                            maxW={"1000px"}
+                            rounded={"xl"}
+                            boxShadow={"lg"}
+                            border="1px"
+                            borderColor="gray.300"
                             p={6}
                             my={2}
-
                         >
-                            <Heading lineHeight={1.1} fontSize={{ base: '2xl', md: '3xl' }}>
+                            <Heading
+                                lineHeight={1.1}
+                                fontSize={{ base: "2xl", md: "3xl" }}
+                            >
                                 Action(s) Needed
                             </Heading>
-                            <Flex align={'center'} overflowX={'auto'}>
+                            <Flex align={"center"} overflowX={"auto"}>
                                 {/* Client Order List Card */}
-                                {actionsNeeded.length ? printCardOrderList() : <Text>Takdee Orderann cekguu</Text>}
+                                {actionsNeeded.length ? (
+                                    printCardOrderList()
+                                ) : (
+                                    <Text>Takdee Orderann cekguu</Text>
+                                )}
                             </Flex>
-                            <Flex justify={'center'}>
-                                {
-                                    totalData === 0 ?
-                                        null
-                                        :
-                                        <Pagination size={size}
-                                            totalData={totalData}
-                                            paginate={paginate} />
-                                }
+                            <Flex justify={"center"}>
+                                {totalData === 0 ? null : (
+                                    <Pagination
+                                        size={size}
+                                        totalData={totalData}
+                                        paginate={paginate}
+                                    />
+                                )}
                             </Flex>
                         </Stack>
                     </Box>
@@ -189,52 +260,71 @@ export default function OrderListTenant() {
                     <Box>
                         <Stack
                             spacing={4}
-                            w={'full'}
-                            maxW={'1000px'}
-                            rounded={'xl'}
-                            boxShadow={'lg'}
-                            border='1px'
-                            borderColor='gray.300'
+                            w={"full"}
+                            maxW={"1000px"}
+                            rounded={"xl"}
+                            boxShadow={"lg"}
+                            border="1px"
+                            borderColor="gray.300"
                             p={6}
                             my={2}
                         >
-                            <Stack align={'center'} justify={'space-between'} direction={'row'} >
-                                <Heading lineHeight={1.1} fontSize={{ base: '2xl', md: '3xl' }}>
+                            <Stack
+                                align={"center"}
+                                justify={"space-between"}
+                                direction={"row"}
+                            >
+                                <Heading
+                                    lineHeight={1.1}
+                                    fontSize={{ base: "2xl", md: "3xl" }}
+                                >
                                     Summary
                                 </Heading>
                                 <Menu closeOnSelect={false}>
-                                    <MenuButton as={Button}
-                                        bg={'#D3212D'}
-                                        color={'white'}
+                                    <MenuButton
+                                        as={Button}
+                                        bg={"#D3212D"}
+                                        color={"white"}
                                         _hover={{
-                                            bg: '#D3212D',
+                                            bg: "#D3212D",
                                         }}
-                                        leftIcon={<FaFilter />} >
+                                        leftIcon={<FaFilter />}
+                                    >
                                         Filter
                                     </MenuButton>
-                                    <MenuList minWidth='240px'>
-                                        <MenuOptionGroup defaultValue='desc' title='Order' type='radio'>
-                                            <MenuItemOption value='desc'
+                                    <MenuList minWidth="240px">
+                                        <MenuOptionGroup
+                                            defaultValue="desc"
+                                            title="Order"
+                                            type="radio"
+                                        >
+                                            <MenuItemOption
+                                                value="desc"
                                                 onClick={() => {
                                                     setSortBySummary("id");
                                                     setOrderSummary("DESC");
-                                                }} >
+                                                }}
+                                            >
                                                 Newest
                                             </MenuItemOption>
-                                            <MenuItemOption value='asc'
+                                            <MenuItemOption
+                                                value="asc"
                                                 onClick={() => {
                                                     setSortBySummary("id");
                                                     setOrderSummary("ASC");
-                                                }} >
+                                                }}
+                                            >
                                                 Oldest
                                             </MenuItemOption>
-
                                         </MenuOptionGroup>
                                     </MenuList>
                                 </Menu>
                             </Stack>
-                            <TableContainer overflowX={'auto'} overflowY={'auto'}>
-                                <Table variant='striped' >
+                            <TableContainer
+                                overflowX={"auto"}
+                                overflowY={"auto"}
+                            >
+                                <Table variant="striped">
                                     <Thead>
                                         <Tr>
                                             <Th>Invoice Number</Th>
@@ -248,28 +338,22 @@ export default function OrderListTenant() {
                                             <Th>Edit</Th>
                                         </Tr>
                                     </Thead>
-                                    <Tbody>
-                                        {printTableSummary()}
-                                    </Tbody>
+                                    <Tbody>{printTableSummary()}</Tbody>
                                 </Table>
                             </TableContainer>
-                            <Flex justify={'center'}>
-                                {
-                                    totalDataSummary === 0 ?
-                                        null
-                                        :
-                                        <Pagination
-                                            size={sizeSummary}
-                                            totalData={totalDataSummary}
-                                            paginate={paginateSummary} />
-
-                                }
+                            <Flex justify={"center"}>
+                                {totalDataSummary === 0 ? null : (
+                                    <Pagination
+                                        size={sizeSummary}
+                                        totalData={totalDataSummary}
+                                        paginate={paginateSummary}
+                                    />
+                                )}
                             </Flex>
                         </Stack>
                     </Box>
                 </Box>
             </Flex>
         </>
-
-    )
+    );
 }

@@ -1,7 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import { API_URL, API_URL_IMG } from "../../helper";
 import {
     Box,
     Button,
@@ -45,7 +44,6 @@ function ManageProperty(props) {
     const [country, setCountry] = useState("");
     const [mapsUrl, setMapsUrl] = useState("");
 
-
     const [allRegency, setAllRegency] = useState([]);
     const [activeButton, setActiveButton] = useState(null);
     const [allProvince, setAllProvince] = useState([]);
@@ -60,7 +58,7 @@ function ManageProperty(props) {
         try {
             let token = localStorage.getItem("tempatku_login");
             let get = await axios.get(
-                `${API_URL}/property/getpropertydata/${params.uuid}`,
+                `${process.env.REACT_APP_API_BASE_URL}/property/getpropertydata/${params.uuid}`,
                 {
                     headers: {
                         Authorization: `Bearer ${token}`,
@@ -88,7 +86,7 @@ function ManageProperty(props) {
             formData.append("images", imageFile);
 
             let edit = await axios.patch(
-                `${API_URL}/property/updateimageproperty?id=${id}&propertyId=${propertyData.id}`,
+                `${process.env.REACT_APP_API_BASE_URL}/property/updateimageproperty?id=${id}&propertyId=${propertyData.id}`,
                 formData,
                 {
                     headers: {
@@ -114,7 +112,7 @@ function ManageProperty(props) {
         try {
             let token = localStorage.getItem("tempatku_login");
             let del = await axios.patch(
-                `${API_URL}/property/deleteimageproperty?id=${id}`,
+                `${process.env.REACT_APP_API_BASE_URL}/property/deleteimageproperty?id=${id}`,
                 {
                     headers: {
                         Authorization: `Bearer ${token}`,
@@ -223,7 +221,7 @@ function ManageProperty(props) {
 
     const getProvince = async () => {
         try {
-            let get = await axios.get(`${API_URL}/property/getprovince`);
+            let get = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/property/getprovince`);
             console.log("get allprovince", get.data);
             setAllProvince(get.data);
         } catch (error) {
@@ -240,7 +238,7 @@ function ManageProperty(props) {
 
     const getRegencyById = async () => {
         try {
-            let get = await axios.post(`${API_URL}/property/getregencybyid`, {
+            let get = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/property/getregencybyid`, {
                 province_id: province.value,
             });
             setAllRegency(get.data);
@@ -254,7 +252,7 @@ function ManageProperty(props) {
             let token = localStorage.getItem("tempatku_login");
 
             let edit = await axios.patch(
-                `${API_URL}/property/editproperty/${params.uuid}`,
+                `${process.env.REACT_APP_API_BASE_URL}/property/editproperty/${params.uuid}`,
                 {
                     category: category,
                     property: property,
@@ -265,7 +263,6 @@ function ManageProperty(props) {
                     regencyId: regency,
                     provinceId: province,
                     gmaps: mapsUrl,
-
                 },
                 {
                     headers: {
@@ -574,7 +571,7 @@ function ManageProperty(props) {
                                                                         ? URL.createObjectURL(
                                                                               filePropertyEdit1
                                                                           )
-                                                                        : `${API_URL_IMG}${filePropertyEdit1.picture}`
+                                                                        : `${process.env.REACT_APP_API_IMG_URL}${filePropertyEdit1.picture}`
                                                                 }
                                                                 w={"100px"}
                                                                 h={"100px"}
@@ -711,7 +708,7 @@ function ManageProperty(props) {
                                                                         ? URL.createObjectURL(
                                                                               filePropertyEdit2
                                                                           )
-                                                                        : `${API_URL_IMG}${filePropertyEdit2.picture}`
+                                                                        : `${process.env.REACT_APP_API_IMG_URL}${filePropertyEdit2.picture}`
                                                                 }
                                                                 w={"100px"}
                                                                 h={"100px"}
@@ -847,7 +844,7 @@ function ManageProperty(props) {
                                                                         ? URL.createObjectURL(
                                                                               filePropertyEdit3
                                                                           )
-                                                                        : `${API_URL_IMG}${filePropertyEdit3.picture}`
+                                                                        : `${process.env.REACT_APP_API_IMG_URL}${filePropertyEdit3.picture}`
                                                                 }
                                                                 w={"100px"}
                                                                 h={"100px"}
@@ -983,7 +980,7 @@ function ManageProperty(props) {
                                                                         ? URL.createObjectURL(
                                                                               filePropertyEdit4
                                                                           )
-                                                                        : `${API_URL_IMG}${filePropertyEdit4.picture}`
+                                                                        : `${process.env.REACT_APP_API_IMG_URL}${filePropertyEdit4.picture}`
                                                                 }
                                                                 w={"100px"}
                                                                 h={"100px"}
@@ -1119,7 +1116,7 @@ function ManageProperty(props) {
                                                                         ? URL.createObjectURL(
                                                                               filePropertyEdit5
                                                                           )
-                                                                        : `${API_URL_IMG}${filePropertyEdit5.picture}`
+                                                                        : `${process.env.REACT_APP_API_IMG_URL}${filePropertyEdit5.picture}`
                                                                 }
                                                                 w={"100px"}
                                                                 h={"100px"}
@@ -1380,7 +1377,9 @@ function ManageProperty(props) {
                                     type="url"
                                     placeholder="Enter Google Maps Link"
                                     mb={"2"}
-                                    defaultValue={propertyData?.property_location.gmaps}
+                                    defaultValue={
+                                        propertyData?.property_location.gmaps
+                                    }
                                     onChange={(e) => {
                                         setMapsUrl(e.target.value);
                                     }}

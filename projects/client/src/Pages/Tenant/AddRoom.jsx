@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
 import axios from "axios";
-import { API_URL } from "../../helper";
 import {
     Box,
     Button,
@@ -53,8 +52,8 @@ function AddRoom(props) {
         const files = [...event.target.files];
         const overSize = checkFileSize(files);
         const fileAmount = files.length;
-        console.log("files:",files);
-        console.log("event.target.files:",event.target.files);
+        console.log("files:", files);
+        console.log("event.target.files:", event.target.files);
         if (overSize) {
             toast({
                 title: "Error occured",
@@ -86,7 +85,9 @@ function AddRoom(props) {
 
     const getPropertyNameAndId = async () => {
         try {
-            let get = await axios.get(`${API_URL}/room/getpropertynameandid`);
+            let get = await axios.get(
+                `${process.env.REACT_APP_API_BASE_URL}/room/getpropertynameandid`
+            );
             setAllPropertyByUserId(get.data);
         } catch (error) {
             console.log(error);
@@ -129,11 +130,15 @@ function AddRoom(props) {
             }
 
             console.log("FormData:", formData);
-            let add = await axios.post(`${API_URL}/room/addroom`, formData, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            });
+            let add = await axios.post(
+                `${process.env.REACT_APP_API_BASE_URL}/room/addroom`,
+                formData,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
             // console.log(add);
             if (add.data.success) {
                 setProperty(null);

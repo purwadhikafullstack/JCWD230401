@@ -22,7 +22,6 @@ import {
     useToast,
 } from "@chakra-ui/react";
 import axios from "axios";
-import { API_URL } from "../helper";
 import { Link } from "react-router-dom";
 
 function MaintenanceTable(props) {
@@ -36,7 +35,7 @@ function MaintenanceTable(props) {
             try {
                 let token = localStorage.getItem("tempatku_login");
                 let del = await axios.patch(
-                    `${API_URL}/maintenance/deletemaintenance`,
+                    `${process.env.REACT_APP_API_BASE_URL}/maintenance/deletemaintenance`,
                     { uuid: props.uuidMaintenance },
                     {
                         headers: {
@@ -113,7 +112,7 @@ function MaintenanceTable(props) {
     const editIsActiveMaintenance = async () => {
         let token = localStorage.getItem("tempatku_login");
         let edit = await axios.patch(
-            `${API_URL}/maintenance/editactive/${props.uuidMaintenance}`,
+            `${process.env.REACT_APP_API_BASE_URL}/maintenance/editactive/${props.uuidMaintenance}`,
             {},
             {
                 headers: { Authorization: `Bearer ${token}` },

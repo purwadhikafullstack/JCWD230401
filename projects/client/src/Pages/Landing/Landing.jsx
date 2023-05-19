@@ -19,7 +19,6 @@ import Bandung1 from "./images/bandung-1.jpg";
 import Bali1 from "./images/bali-1.png";
 import NusaPenida1 from "./images/nusapenida-1.png";
 import axios from "axios";
-import { API_URL, API_URL_IMG } from "../../helper";
 import { useNavigate } from "react-router-dom";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -55,9 +54,12 @@ export default function Landing() {
 
     const getAllLocations = async () => {
         try {
-            let response = await axios.get(`${API_URL}/location/list`, {
-                city: showLocation,
-            });
+            let response = await axios.get(
+                `${process.env.REACT_APP_API_BASE_URL}/location/list`,
+                {
+                    city: showLocation,
+                }
+            );
             // console.log("ini response.data dari getAllLocations 🪶 : ", response.data.data);
             setShowLocation(response.data.data);
         } catch (error) {
@@ -88,11 +90,14 @@ export default function Landing() {
     //   };
 
     const getAllCategory = async () => {
-        let get = await axios.get(`${API_URL}/category`, {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        });
+        let get = await axios.get(
+            `${process.env.REACT_APP_API_BASE_URL}/category`,
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            }
+        );
         setAllCategory(get.data);
     };
 
@@ -101,7 +106,9 @@ export default function Landing() {
         return allCategory.map((val, idx) => {
             return (
                 <div>
-                    <img src={`${API_URL_IMG}${val.picture}`} />
+                    <img
+                        src={`${process.env.REACT_APP_API_IMG_URL}${val.picture}`}
+                    />
                     <span>
                         <h3>{val.category}</h3>
                     </span>
@@ -111,17 +118,26 @@ export default function Landing() {
     };
 
     const getAllProperty = async () => {
-        let get = await axios.get(`${API_URL}/property`);
+        let get = await axios.get(
+            `${process.env.REACT_APP_API_BASE_URL}/property`
+        );
         console.log("get all property", get);
         setAllProperty(get.data);
     };
 
     const printAllProperty = () => {
         return allProperty.map((val, idx) => {
-            return <PropertyCard property={val.property} picture={val.picture_properties[0]?.picture}
-                location={val.property_location} price={val.rooms[0]?.price} uuid={val.uuid} />
-        })
-    }
+            return (
+                <PropertyCard
+                    property={val.property}
+                    picture={val.picture_properties[0]?.picture}
+                    location={val.property_location}
+                    price={val.rooms[0]?.price}
+                    uuid={val.uuid}
+                />
+            );
+        });
+    };
 
     const handleSearch = () => {
         navigate("/property", {
@@ -208,9 +224,9 @@ export default function Landing() {
                                     minDate={
                                         checkInDate
                                             ? new Date(
-                                                checkInDate.getTime() +
-                                                24 * 60 * 60 * 1000
-                                            )
+                                                  checkInDate.getTime() +
+                                                      24 * 60 * 60 * 1000
+                                              )
                                             : undefined
                                     }
                                     // highlightDates={highlightDates}
@@ -318,7 +334,13 @@ export default function Landing() {
                 <div className="recommendations">
                     {/* {printAllProperty()} */}
                 </div>
-                <button onClick={() => navigate('/property')} type='button' className="see-more-btn">See more properties</button>
+                <button
+                    onClick={() => navigate("/property")}
+                    type="button"
+                    className="see-more-btn"
+                >
+                    See more properties
+                </button>
             </Box>
             <br />
             <br />

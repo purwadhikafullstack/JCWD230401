@@ -10,16 +10,23 @@ import {
     Link,
     Stack,
     Image,
-    Text, Icon, HStack, Box, Divider, Center, Card, CardBody, InputGroup, InputRightElement, useDisclosure
-} from '@chakra-ui/react';
-import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import { API_URL } from '../helper';
-import Userregisterbanner from '../assets/userregisterbanner.jpg';
-import { FcGoogle } from 'react-icons/fc';
-
-
+    Text,
+    Icon,
+    HStack,
+    Box,
+    Divider,
+    Center,
+    Card,
+    CardBody,
+    InputGroup,
+    InputRightElement,
+    useDisclosure,
+} from "@chakra-ui/react";
+import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import Userregisterbanner from "../assets/userregisterbanner.jpg";
+import { FcGoogle } from "react-icons/fc";
 
 export default function UserRegister() {
     const [showPassword, setShowPassword] = useState(false);
@@ -35,13 +42,16 @@ export default function UserRegister() {
 
     const onBtnRegister = async () => {
         try {
-            let response = await axios.post(`${API_URL}/user/register`, {
-                name: name,
-                phone: phone,
-                email: email,
-                password: password,
-                confirmationPassword: passwordConfirmation,
-            });
+            let response = await axios.post(
+                `${process.env.REACT_APP_API_BASE_URL}/user/register`,
+                {
+                    name: name,
+                    phone: phone,
+                    email: email,
+                    password: password,
+                    confirmationPassword: passwordConfirmation,
+                }
+            );
             console.log("ini hasil response onbtnregister :", response); //testing purposes
             console.log(
                 "ini hasil response onbtnregister message from be :",
@@ -50,7 +60,7 @@ export default function UserRegister() {
             if (response.data.success) {
                 alert(response.data.message);
             }
-            navigate('/', { replace: true });
+            navigate("/", { replace: true });
         } catch (error) {
             console.log("ini error dari onBtnRegister : ", error); //testing purposes
             alert(error.response.data.message);
@@ -177,10 +187,11 @@ export default function UserRegister() {
                             </InputGroup>
                         </FormControl>
                     </Stack>
-                    <Stack
-                        pt='8'
-                    >
-                        <Button bg={'#D3212D'} color={'white'} variant={'solid'}
+                    <Stack pt="8">
+                        <Button
+                            bg={"#D3212D"}
+                            color={"white"}
+                            variant={"solid"}
                             _hover={{
                                 bg: "#D3212D",
                             }}
@@ -188,25 +199,29 @@ export default function UserRegister() {
                         >
                             Register
                         </Button>
-                        <Flex alignItems="center" w='full' py='4'>
+                        <Flex alignItems="center" w="full" py="4">
                             <Divider color="black" thickness="2px" />
-                            <Text mx="2" fontSize="sm">or</Text>
+                            <Text mx="2" fontSize="sm">
+                                or
+                            </Text>
                             <Divider color="black" thickness="2px" />
                         </Flex>
                         {/* Google */}
                         <Button
-                            w={'full'} variant={'outline'} leftIcon={<FcGoogle />} borderColor='#d0d7de' _hover={'none'}>
+                            w={"full"}
+                            variant={"outline"}
+                            leftIcon={<FcGoogle />}
+                            borderColor="#d0d7de"
+                            _hover={"none"}
+                        >
                             <Center>
                                 <Text>Continue with Google</Text>
                             </Center>
                         </Button>
                         {/* Login */}
                     </Stack>
-                    <Stack
-                        pb='6'
-                        px='10'
-                    >
-                        <Card variant='none' borderColor='#d0d7de' mt='2'>
+                    <Stack pb="6" px="10">
+                        <Card variant="none" borderColor="#d0d7de" mt="2">
                             <CardBody>
                                 <Center>
                                     <HStack fontSize="sm">
@@ -231,10 +246,9 @@ export default function UserRegister() {
             </Flex>
             <Flex flex={1} display={{ base: "flex", sm: "flex" }}>
                 <Image
-                    alt={'User Register Page Image'}
-                    objectFit={'cover'}
+                    alt={"User Register Page Image"}
+                    objectFit={"cover"}
                     src={Userregisterbanner}
-
                 />
             </Flex>
         </Stack>

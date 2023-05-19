@@ -1,5 +1,3 @@
-export const API_URL = 'http://localhost:2341/api';
-export const API_URL_IMG = 'http://localhost:2341';
 export const capitalizeFirstWord = (phrase) => {
     return phrase
         .toLowerCase()

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { API_URL } from "../../helper";
 import {
     Flex,
     Table,
@@ -107,7 +106,7 @@ function RoomConditionList(props) {
         try {
             let token = localStorage.getItem("tempatku_login");
             let get = await axios.get(
-                `${API_URL}/special/getspecialpricebyroomuuid/${params1.uuid}?page=${pageSpecialPrice}&size=${sizeSpecialPrice}&sortby=${sortbySpecialPrice}&order=${orderSpecialPrice}`,
+                `${process.env.REACT_APP_API_BASE_URL}/special/getspecialpricebyroomuuid/${params1.uuid}?page=${pageSpecialPrice}&size=${sizeSpecialPrice}&sortby=${sortbySpecialPrice}&order=${orderSpecialPrice}`,
                 {
                     headers: {
                         Authorization: `Bearer ${token}`,
@@ -128,7 +127,7 @@ function RoomConditionList(props) {
         try {
             let token = localStorage.getItem("tempatku_login");
             let get = await axios.get(
-                `${API_URL}/maintenance/getmaintenancebyroomuuid/${params1.uuid}?page=${pageMaintenance}&size=${sizeMaintenance}&sortby=${sortbyMaintenance}&order${orderMaintenance}`,
+                `${process.env.REACT_APP_API_BASE_URL}/maintenance/getmaintenancebyroomuuid/${params1.uuid}?page=${pageMaintenance}&size=${sizeMaintenance}&sortby=${sortbyMaintenance}&order${orderMaintenance}`,
                 {
                     headers: {
                         Authorization: `Bearer ${token}`,
@@ -233,7 +232,7 @@ function RoomConditionList(props) {
             try {
                 let token = localStorage.getItem("tempatku_login");
                 let add = await axios.post(
-                    `${API_URL}/special/addspecialprice`,
+                    `${process.env.REACT_APP_API_BASE_URL}/special/addspecialprice`,
                     {
                         specialStartDate: specialStartDate,
                         specialEndDate: specialEndDate,
@@ -376,7 +375,7 @@ function RoomConditionList(props) {
             try {
                 let token = localStorage.getItem("tempatku_login");
                 let add = await axios.post(
-                    `${API_URL}/maintenance/addmaintenance`,
+                    `${process.env.REACT_APP_API_BASE_URL}/maintenance/addmaintenance`,
                     {
                         maintenanceStartDate: maintenanceStartDate,
                         maintenanceEndDate: maintenanceEndDate,

@@ -29,7 +29,6 @@ import {
     useDisclosure,
 } from "@chakra-ui/react";
 import axios from "axios";
-import { API_URL } from "../helper";
 import { Link } from "react-router-dom";
 
 function SpecialPriceTable(props) {
@@ -41,7 +40,7 @@ function SpecialPriceTable(props) {
             try {
                 let token = localStorage.getItem("tempatku_login");
                 let del = await axios.patch(
-                    `${API_URL}/special/deletespecialprice`,
+                    `${process.env.REACT_APP_API_BASE_URL}/special/deletespecialprice`,
                     { uuid: props.uuidSpecial },
                     {
                         headers: {
@@ -134,7 +133,7 @@ function SpecialPriceTable(props) {
     const editIsActiveSpecial = async () => {
         let token = localStorage.getItem("tempatku_login");
         let update = await axios.patch(
-            `${API_URL}/special/editactive/${props.uuidSpecial}`,
+            `${process.env.REACT_APP_API_BASE_URL}/special/editactive/${props.uuidSpecial}`,
             {},
             {
                 headers: { Authorization: `Bearer ${token}` },

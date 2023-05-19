@@ -21,7 +21,6 @@ import {
     useDisclosure,
 } from "@chakra-ui/react";
 import axios from "axios";
-import { API_URL } from "../helper";
 import { Link } from "react-router-dom";
 
 function PropertyTable(props) {
@@ -33,7 +32,7 @@ function PropertyTable(props) {
             try {
                 let token = localStorage.getItem("tempatku_login");
                 let del = await axios.patch(
-                    `${API_URL}/property/deleteproperty/${props.uuid}`,
+                    `${process.env.REACT_APP_API_BASE_URL}/property/deleteproperty/${props.uuid}`,
                     {},
                     {
                         headers: {

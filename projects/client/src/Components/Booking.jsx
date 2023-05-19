@@ -25,7 +25,6 @@ import {
 } from '@chakra-ui/react';
 import { BsStarFill } from "react-icons/bs";
 import { useNavigate } from 'react-router-dom';
-import { API_URL } from '../helper';
 import axios from 'axios';
 import { useSelector } from "react-redux";
 import DatePicker from 'react-datepicker';

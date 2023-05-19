@@ -7,7 +7,6 @@ import React, { useState } from "react";
 import UserRegister from "./Pages/UserRegister";
 import { useDispatch, useSelector } from "react-redux";
 import { loginAction } from "./reducers/auth";
-import { API_URL } from "./helper";
 import ChangePassword from "./Pages/ChangePassword";
 import ForgotPassword from "./Pages/ForgotPassword";
 import ResetPassword from "./Pages/ResetPassword";
@@ -45,7 +44,7 @@ function App() {
         try {
             let token = localStorage.getItem("tempatku_login");
             if (token) {
-                let response = await axios.get(`${API_URL}/user/keeplogin`, {
+                let response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/user/keeplogin`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },

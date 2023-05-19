@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
 import axios from "axios";
-import { API_URL } from "../../helper";
 import {
     Box,
     Button,
@@ -75,7 +74,9 @@ function AddProperty(props) {
 
     const getProvince = async () => {
         try {
-            let get = await axios.get(`${API_URL}/property/getprovince`);
+            let get = await axios.get(
+                `${process.env.REACT_APP_API_BASE_URL}/property/getprovince`
+            );
             setAllProvince(get.data);
         } catch (error) {
             console.log(error);
@@ -95,9 +96,12 @@ function AddProperty(props) {
 
     const getRegencyById = async () => {
         try {
-            let get = await axios.post(`${API_URL}/property/getregencybyid`, {
-                province_id: province.value,
-            });
+            let get = await axios.post(
+                `${process.env.REACT_APP_API_BASE_URL}/property/getregencybyid`,
+                {
+                    province_id: province.value,
+                }
+            );
             setAllRegency(get.data);
         } catch (error) {
             console.log(error);
@@ -161,7 +165,7 @@ function AddProperty(props) {
                 }
 
                 let add = await axios.post(
-                    `${API_URL}/property/addproperty`,
+                    `${process.env.REACT_APP_API_BASE_URL}/property/addproperty`,
                     formData,
                     {
                         headers: {

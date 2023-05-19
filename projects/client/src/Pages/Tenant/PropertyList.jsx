@@ -1,6 +1,5 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { API_URL } from "../../helper";
 import PropertyTable from "../../Components/PropertyTable";
 import {
     Flex,
@@ -60,7 +59,7 @@ function PropertyList(props) {
         try {
             let token = localStorage.getItem("tempatku_login");
             let get = await axios.get(
-                `${API_URL}/property/getlistproperty?page=${page}&size=${size}&sortby=${property}&order=${order}&property=${filter}`,
+                `${process.env.REACT_APP_API_BASE_URL}/property/getlistproperty?page=${page}&size=${size}&sortby=${property}&order=${order}&property=${filter}`,
                 {
                     headers: {
                         Authorization: `Bearer ${token}`,

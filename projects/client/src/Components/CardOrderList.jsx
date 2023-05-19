@@ -19,7 +19,7 @@ import { AiOutlineRight } from "react-icons/ai"
 import { FcLock } from 'react-icons/fc';
 import { Link } from "react-router-dom";
 import noimage from '../assets/noimage.png';
-import { API_URL, API_URL_IMG, formatDateIndo, formatRupiah } from "../helper";
+import { formatDateIndo, formatRupiah } from "../helper";
 import { Rating } from '@smastrom/react-rating';
 import { useState } from "react";
 import axios from "axios";
@@ -47,7 +47,7 @@ export default function CardOrderList(props) {
     function ModalReview() {
         const { isOpen, onOpen, onClose } = useDisclosure()
         const btnReview = async () => {
-            let review = await axios.post(`${API_URL}/review/`, {
+            let review = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/review/`, {
                 rating: props.rating,
                 review: props.review,
                 roomId: props.roomId,
@@ -120,7 +120,7 @@ export default function CardOrderList(props) {
                     <Box display={{ base: 'block', sm: 'flex' }}>
                         <Image rounded='xl'
                             boxSize={{ base: 'max-content', sm: '200px', lg: '200px' }}
-                            src={!props.roomPicture[0] ? noimage : `${API_URL_IMG}${props.roomPicture[0].picture}`}
+                            src={!props.roomPicture[0] ? noimage : `${process.env.REACT_APP_API_IMG_URL}${props.roomPicture[0].picture}`}
                         />
 
                         <Text fontSize={{ base: 'sm' }} textAlign={'left'} maxW={'4xl'} px='4'>

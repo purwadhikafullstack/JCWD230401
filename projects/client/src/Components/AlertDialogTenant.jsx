@@ -10,7 +10,6 @@ import {
     useDisclosure
 } from '@chakra-ui/react'
 import axios from 'axios'
-import { API_URL } from '../helper';
 
 export default function AlertDialogTenant(props) {
     let token = localStorage.getItem("tempatku_login");
@@ -19,7 +18,7 @@ export default function AlertDialogTenant(props) {
     const cancelRef = React.useRef()
 
     const updateTransactionStatus = async () => {
-        let update = await axios.patch(`${API_URL}/transaction/updatetransactionstatus`, {
+        let update = await axios.patch(`${process.env.REACT_APP_API_BASE_URL}/transaction/updatetransactionstatus`, {
             transaction_statusId: 5, // 5 = cancel
             uuid: props.uuidTransaction
         }, {
