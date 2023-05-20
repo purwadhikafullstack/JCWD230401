@@ -12,6 +12,7 @@ const authSlice = createSlice({
     birth: "",
     gender: "",
     password: "",
+    uuid: "",
   },
 
   reducers: {
@@ -23,6 +24,7 @@ const authSlice = createSlice({
         state.image_profile = action.payload.image_profile;
         state.birth = action.payload.birth;
         state.gender = action.payload.gender;
+        state.uuid = action.payload.uuid;
     },
     logoutAction: (state) => {
         state.name = "";
@@ -32,7 +34,8 @@ const authSlice = createSlice({
         state.isVerified = "";
         state.birth = "";
         state.gender = "";
-        state.password= "";
+        state.password = "";
+        state.uuid = "";
     },
     loginActionGoogle: (state, action) => {
       const { getuser } = action.payload;
@@ -44,6 +47,7 @@ const authSlice = createSlice({
       state.birth = getuser[0].user_detail.birth;
       state.gender = getuser[0].user_detail.gender;
       state.password = getuser[0].password;
+      state.uuid = getuser[0].uuid;
     },
   }
 });

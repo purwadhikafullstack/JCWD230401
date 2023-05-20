@@ -171,6 +171,7 @@ module.exports = {
               image_profile,
               gender,
               birth,
+              uuid
             });
           } else {
             //jika salah passwordnya attempt + 1 sampe 5 kali nanti akun suspended
@@ -253,6 +254,7 @@ module.exports = {
         image_profile,
         gender,
         birth,
+        uuid
       });
     } catch (error) {
       console.log(error);

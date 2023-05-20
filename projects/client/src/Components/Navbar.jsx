@@ -39,6 +39,8 @@ export default function Navbar() {
   const password = useSelector((state) => state.authReducer.password);
   const { pathname } = useLocation();
   const [modalIsOpen, setModalIsOpen] = React.useState(false);
+  const uuid = useSelector((state) => state.authReducer.uuid); //testing only 
+  console.log("ini uuid yang lagi login :", uuid); //testing only 
 
 
   // Login Page Modal
