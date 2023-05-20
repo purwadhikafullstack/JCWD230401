@@ -1,4 +1,26 @@
-import { Flex, Box, FormControl, Divider, Image, Icon, Card, CardBody, FormLabel, Input, InputGroup, HStack, Center, InputRightElement, Stack, Button, Heading, Text, Link, useToast, FormErrorMessage } from "@chakra-ui/react";
+import {
+    Flex,
+    Box,
+    FormControl,
+    Divider,
+    Image,
+    Icon,
+    Card,
+    CardBody,
+    FormLabel,
+    Input,
+    InputGroup,
+    HStack,
+    Center,
+    InputRightElement,
+    Stack,
+    Button,
+    Heading,
+    Text,
+    Link,
+    useToast,
+    FormErrorMessage,
+} from "@chakra-ui/react";
 import React, { useState } from "react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import { FcGoogle } from "react-icons/fc";
@@ -25,11 +47,14 @@ export default function Login(props) {
             if (!formik.isValid) {
                 return;
             }
-            let response = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/user/auth`, {
-                email: formik.values.emailOrPhone,
-                phone: formik.values.emailOrPhone,
-                password: formik.values.password
-            });
+            let response = await axios.post(
+                `${process.env.REACT_APP_API_BASE_URL}/user/auth`,
+                {
+                    email: formik.values.emailOrPhone,
+                    phone: formik.values.emailOrPhone,
+                    password: formik.values.password,
+                }
+            );
             toast({
                 title: "Login success",
                 status: "success",
@@ -39,7 +64,7 @@ export default function Login(props) {
             //simpen ke LOCALSTORAGE browser u/ KEEPLOGIN
             localStorage.setItem("tempatku_login", response.data.token);
             //simpen response.data ke reducer
-            dispatch(loginAction(response.data))
+            dispatch(loginAction(response.data));
             if (response.data.role == "User") {
                 navigate("/", { replace: true });
             } else if (response.data.role == "Tenant") {
@@ -72,15 +97,23 @@ export default function Login(props) {
     const formik = useFormik({
         initialValues: {
             emailOrPhone: "",
-            password: ""
+            password: "",
         },
         onSubmit: onBtnLogin,
         validationSchema: yup.object().shape({
-            emailOrPhone: yup.string().required("Please enter a valid email address or phone number").test("valid-email-or-phone", "Please enter a valid email address or phone number", function (value) {
-                const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
-                const phoneRegex = /^\+?[0-9]{8,14}$/;
-                return emailRegex.test(value) || phoneRegex.test(value);
-            }),
+            emailOrPhone: yup
+                .string()
+                .required("Please enter a valid email address or phone number")
+                .test(
+                    "valid-email-or-phone",
+                    "Please enter a valid email address or phone number",
+                    function (value) {
+                        const emailRegex =
+                            /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
+                        const phoneRegex = /^\+?[0-9]{8,14}$/;
+                        return emailRegex.test(value) || phoneRegex.test(value);
+                    }
+                ),
             password: yup
                 .string()
                 .required("Password is a required field")
@@ -88,7 +121,7 @@ export default function Login(props) {
                     /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{6,})/,
                     "Password must be at least 6 characters includes 1 number, 1 uppercase, and 1 lowercase letter"
                 ),
-        })
+        }),
     });
 
     const handleForm = (event) => {
@@ -96,36 +129,50 @@ export default function Login(props) {
     };
 
     const signInWithGoogle = () => {
-        window.open(`${process.env.REACT_APP_API_BASE_URL}/auth/google`, "_self", "toolbar=no, scrollbars=yes, resizable=no, width=1000, height=auto")
+        window.open(
+            `${process.env.REACT_APP_API_BASE_URL}/auth/google`,
+            "_self",
+            "toolbar=no, scrollbars=yes, resizable=no, width=1000, height=auto"
+        );
     };
 
     return (
-        <Flex
-            maxH={"100vh"}
-            justify={"center"}
-        >
+        <Flex maxH={"100vh"} justify={"center"}>
             <form onSubmit={formik.handleSubmit}>
                 <Stack mx={"auto"} minW={{ base: "sm", md: "md" }} px={6}>
-                    <Box
-                        rounded={"lg"}
-                        bg={"white"}
-                        px={4}
-                    >
+                    <Box rounded={"lg"} bg={"white"} px={4}>
                         <Stack mt="4" alignItems={"center"}>
-                            <Image src={Logo} alt="tempatku logo" boxSize="50px" />
+                            <Image
+                                src={Logo}
+                                alt="tempatku logo"
+                                boxSize="50px"
+                            />
                         </Stack>
                         <Stack mb="8">
-                            <Text fontSize="3xl" fontWeight="semibold" style={{ display: "flex" }} m="auto">Login to tempatku</Text>
+                            <Text
+                                fontSize="3xl"
+                                fontWeight="semibold"
+                                style={{ display: "flex" }}
+                                m="auto"
+                            >
+                                Login to tempatku
+                            </Text>
                         </Stack>
                         <Stack spacing={4}>
                             <FormControl isInvalid={formik.errors.emailOrPhone}>
-                                <FormLabel size="sm">Email or Phone Number</FormLabel>
+                                <FormLabel size="sm">
+                                    Email or Phone Number
+                                </FormLabel>
                                 {/* Input Email or Phone Number */}
-                                <Input type="text" borderColor="#d0d7de"
+                                <Input
+                                    type="text"
+                                    borderColor="#d0d7de"
                                     onChange={handleForm}
                                     name="emailOrPhone"
                                 />
-                                <FormErrorMessage fontSize="xs">{formik.errors.emailOrPhone}</FormErrorMessage>
+                                <FormErrorMessage fontSize="xs">
+                                    {formik.errors.emailOrPhone}
+                                </FormErrorMessage>
                             </FormControl>
                             <FormControl isInvalid={formik.errors.password}>
                                 <HStack justify="space-between">
@@ -137,8 +184,8 @@ export default function Login(props) {
                                         color="#0969da"
                                         fontWeight="500"
                                         onClick={() => {
-                                            props.onCloseModal()
-                                            navigate("/password/forgot")
+                                            props.onCloseModal();
+                                            navigate("/password/forgot");
                                         }}
                                     >
                                         Forgot password?
@@ -146,7 +193,10 @@ export default function Login(props) {
                                 </HStack>
                                 <InputGroup borderColor="#d0d7de">
                                     {/* Input Password */}
-                                    <Input type={showPassword ? "text" : "password"}
+                                    <Input
+                                        type={
+                                            showPassword ? "text" : "password"
+                                        }
                                         onChange={handleForm}
                                         name="password"
                                     />
@@ -156,19 +206,33 @@ export default function Login(props) {
                                             _hover={"none"}
                                             _active={"none"}
                                             onClick={() =>
-                                                setShowPassword((showPassword) => !showPassword)
-                                            }>
-                                            {showPassword ? <ViewIcon /> : <ViewOffIcon />}
+                                                setShowPassword(
+                                                    (showPassword) =>
+                                                        !showPassword
+                                                )
+                                            }
+                                        >
+                                            {showPassword ? (
+                                                <ViewIcon />
+                                            ) : (
+                                                <ViewOffIcon />
+                                            )}
                                         </Button>
                                     </InputRightElement>
                                 </InputGroup>
-                                <FormErrorMessage fontSize="xs">{formik.errors.password}</FormErrorMessage>
+                                <FormErrorMessage fontSize="xs">
+                                    {formik.errors.password}
+                                </FormErrorMessage>
                             </FormControl>
-                            <Stack spacing={0}>
-                            </Stack>
+                            <Stack spacing={0}></Stack>
                             <Stack pb={0}>
                                 <Center>
-                                    <Stack spacing={2} align={"center"} maxW={"md"} w={"full"}>
+                                    <Stack
+                                        spacing={2}
+                                        align={"center"}
+                                        maxW={"md"}
+                                        w={"full"}
+                                    >
                                         <Button
                                             type="button"
                                             w={"full"}
@@ -184,32 +248,47 @@ export default function Login(props) {
                                         </Button>
                                         <Button
                                             onClick={signInWithGoogle}
-                                            w={"full"} variant={"outline"} leftIcon={<FcGoogle />} borderColor="#d0d7de" _hover={"none"}>
+                                            w={"full"}
+                                            variant={"outline"}
+                                            leftIcon={<FcGoogle />}
+                                            borderColor="#d0d7de"
+                                            _hover={"none"}
+                                        >
                                             <Center>
-                                                <Text>Continue with Google</Text>
+                                                <Text>
+                                                    Continue with Google
+                                                </Text>
                                             </Center>
                                         </Button>
 
-                                        <Stack
-                                            pb="2"
-                                        >
+                                        <Stack pb="2">
                                             <Card
                                                 variant="none"
                                                 borderColor="#d0d7de"
-
                                             >
                                                 <CardBody>
                                                     <Center>
-                                                        <HStack fontSize="sm" spacing="1">
-                                                            <Text>New to tempatku?</Text>
-                                                            <Text onClick={() => {
-                                                                props.onCloseModal()
-                                                                navigate("/register/user")
-                                                            }
-                                                            } color="#0969da"
-                                                                cursor={"pointer"}
+                                                        <HStack
+                                                            fontSize="sm"
+                                                            spacing="1"
+                                                        >
+                                                            <Text>
+                                                                New to tempatku?
+                                                            </Text>
+                                                            <Text
+                                                                onClick={() => {
+                                                                    props.onCloseModal();
+                                                                    navigate(
+                                                                        "/register/user"
+                                                                    );
+                                                                }}
+                                                                color="#0969da"
+                                                                cursor={
+                                                                    "pointer"
+                                                                }
                                                             >
-                                                                Create an account.
+                                                                Create an
+                                                                account.
                                                             </Text>
                                                         </HStack>
                                                     </Center>

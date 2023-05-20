@@ -47,17 +47,19 @@ function PropertyChart(props) {
             {
                 label: "Value",
                 data: props.propertydatachart.total,
-                barPercentage: 0.3 ,
+                barPercentage: 0.3,
                 backgroundColor: "#66BB6A",
-                borderRadius: 5 ,
+                borderRadius: 5,
                 borderCapStyle: "",
                 borderDashOffset: 0.0,
             },
         ],
     };
-
-    // console.log("property chart:",props.propertyDataChart.date);
-    return <Bar options={options} data={data} {...props} />;
+    return (
+        <>
+            <Bar options={options} data={data} {...props} />
+        </>
+    );
 }
 
 export default PropertyChart;

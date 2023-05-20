@@ -32,7 +32,7 @@ function AddRoom(props) {
     const [descriptionLength, setDescriptionLength] = useState(0);
     const [roomCapacity, setRoomCapacity] = useState("");
     const [roomPrice, setRoomPrice] = useState("");
-    const [fileRoom, setFileRoom] = useState([]);
+    const [fileRoom, setFileRoom] = useState(null);
     const [allPropertyByUserId, setAllPropertyByUserId] = useState([]);
     const [property, setProperty] = useState(null);
 
@@ -165,7 +165,7 @@ function AddRoom(props) {
     return (
         <Container
             my={"4"}
-            h={"100vh"}
+            h={"100%"}
             w={"100%"}
             maxW={"1300px"}
             display={"flex"}
@@ -330,14 +330,18 @@ function AddRoom(props) {
                                                                 )}
                                                                 style={{
                                                                     maxWidth:
-                                                                        "75px",
+                                                                        "100px",
                                                                     maxHeight:
-                                                                        "75px",
-                                                                    margin: "10px",
+                                                                        "100px",
+                                                                    margin: "8px",
                                                                     aspectRatio:
                                                                         "1/1",
                                                                     objectFit:
                                                                         "cover",
+                                                                    borderRadius:
+                                                                        "6px",
+                                                                    boxShadow:
+                                                                        "2px 2px 5px gray",
                                                                 }}
                                                             />
                                                         ))
@@ -356,6 +360,7 @@ function AddRoom(props) {
                                                     w={"35px"}
                                                     variant="outline"
                                                     alignItems={"center"}
+                                                    alignSelf={"center"}
                                                     onClick={() =>
                                                         setFileRoom(null)
                                                     }

@@ -107,10 +107,10 @@ module.exports = {
 
             const query = `
             Select r.*, o.start_date, o.end_date, t.transaction_statusId FROM rooms r left join orders o on r.id=o.roomId 
-            left join transactions t on o.transactionId = t.id WHERE start_date is null OR start_date < '${start}' OR start_date > '${end}' OR end_date < '${start}' OR end_date > '${end}' OR t.transaction_statusId = 5 order by r.propertyId;`
+            left join transactions t on o.transactionId = t.id WHERE start_date is null OR start_date < '${start}' OR start_date > '${end}' OR end_date < '${start}' OR end_date > '${end}' OR t.transaction_statusId = 5 order by r.propertyId;`;
 
             // const query = `
-            // Select r.*, o.start_date, o.end_date, t.transaction_statusId FROM rooms r left join orders o on r.id=o.roomId 
+            // Select r.*, o.start_date, o.end_date, t.transaction_statusId FROM rooms r left join orders o on r.id=o.roomId
             // left join transactions t on o.transactionId = t.id WHERE (start_date >= '${start}' AND start_date <= '${end}' AND t.transaction_statusId = 5) OR (end_date >= '${start}' AND end_date <= '${end}' AND t.transaction_statusId = 5) OR start_date is null `
 
             const getAvailable = await con.query(query, {
@@ -152,20 +152,22 @@ module.exports = {
     getRoomAvailable: async (req, res, next) => {
         try {
             if (!req.query.start) {
-                req.query.start = new Date().toISOString().split('T')[0];
+                req.query.start = new Date().toISOString().split("T")[0];
             }
 
             if (!req.query.end) {
-                req.query.end = new Date()
+                req.query.end = new Date();
                 let oneDayInMs = 24 * 60 * 60 * 1000; // 1 day in milliseconds
-                req.query.end = new Date(req.query.end.getTime() + oneDayInMs).toISOString().split('T')[0];
+                req.query.end = new Date(req.query.end.getTime() + oneDayInMs)
+                    .toISOString()
+                    .split("T")[0];
                 console.log("endd", req.query.end);
             }
 
             let getPropertyId = await model.property.findAll({
                 where: {
-                    uuid: req.query.uuid
-                }
+                    uuid: req.query.uuid,
+                },
             });
 
             let get = await model.room.findAll({
@@ -183,9 +185,9 @@ module.exports = {
                                         (end_date >= '${req.query.start}' AND end_date <= '${req.query.end}')
                                         ) 
                                         AND transactions.transaction_statusId IN (1,2,3,4)) 
-                                        `)
-                                ]
-                            }
+                                        `),
+                                ],
+                            },
                         },
                         {
                             id: {
@@ -195,12 +197,11 @@ module.exports = {
                                     (maintenances.startDate >= '${req.query.start}' and maintenances.startDate <= '${req.query.end}') 
                                     or 
                                     (maintenances.endDate >= '${req.query.start}' and maintenances.endDate <= '${req.query.end}') 
-                                        `)
+                                        `),
                                 ],
                             },
-                        }
-                    ]
-
+                        },
+                    ],
                 },
                 include: [
                     { model: model.room_category, attributes: ["name"] },
@@ -220,26 +221,29 @@ module.exports = {
                 AND 
                 isActive = 1
                 ;
-            `
+            `;
 
             const special_prices = await con.query(query, {
-                type: sequelize.QueryTypes.SELECT
+                type: sequelize.QueryTypes.SELECT,
             });
 
-
-
             const final = get.map((val1) => {
-                let special_price = special_prices.find((val2) => val2.roomId === val1.dataValues.id)
+                let special_price = special_prices.find(
+                    (val2) => val2.roomId === val1.dataValues.id
+                );
                 if (special_price) {
-                    return { ...val1.dataValues, price: special_price.priceOnDate }
+                    return {
+                        ...val1.dataValues,
+                        price: special_price.priceOnDate,
+                    };
                 } else {
-                    return val1
+                    return val1;
                 }
-            })
+            });
 
             console.log("get room available", final);
 
-            res.status(200).send(final)
+            res.status(200).send(final);
         } catch (error) {
             console.log(error);
             next(error);
@@ -424,24 +428,29 @@ module.exports = {
                 include: [
                     {
                         model: model.room,
-                        attributes: ['id', 'price', 'uuid']
+                        attributes: ["id", "price", "uuid"],
                     },
                     {
-                        model: model.property_location, include: [{ model: model.regency }]
+                        model: model.property_location,
+                        include: [{ model: model.regency }],
                     },
                     {
-                        model: model.picture_property
+                        model: model.picture_property,
                     },
                     {
-                        model: model.user, include: [{ model: model.user_detail, attributes: ['name', 'image_profile'] }]
+                        model: model.user,
+                        include: [
+                            {
+                                model: model.user_detail,
+                                attributes: ["name", "image_profile"],
+                            },
+                        ],
                     },
-
                 ],
-                order: [[model.room, 'price', 'asc']],
+                order: [[model.room, "price", "asc"]],
                 where: {
-                    uuid: req.query.uuid
+                    uuid: req.query.uuid,
                 },
-
             });
 
             const query = `
@@ -457,32 +466,40 @@ module.exports = {
                 AND s.isActive = 1
                 AND p.uuid = '${req.query.uuid}'
                 ;
-            `
+            `;
 
             const special_prices = await con.query(query, {
-                type: sequelize.QueryTypes.SELECT
+                type: sequelize.QueryTypes.SELECT,
             });
             console.log("sssss", get[0]);
 
             if (special_prices.length) {
                 let newRoomPrice = get[0].dataValues.rooms.map((val, idx) => {
                     let special_price = special_prices.find((val2) => {
-                        return val2.roomId === val.dataValues.id
-                    })
-                    val.dataValues = { ...val.dataValues, price: special_price ? special_price.priceOnDate : val.dataValues.price }
+                        return val2.roomId === val.dataValues.id;
+                    });
+                    val.dataValues = {
+                        ...val.dataValues,
+                        price: special_price
+                            ? special_price.priceOnDate
+                            : val.dataValues.price,
+                    };
                     return val;
-                })
-                newRoomPrice = newRoomPrice.sort((a, b) => a.price - b.price)
-                return res.status(200).send({ ...get[0].dataValues, rooms: newRoomPrice })
+                });
+                newRoomPrice = newRoomPrice.sort((a, b) => a.price - b.price);
+                return res
+                    .status(200)
+                    .send({ ...get[0].dataValues, rooms: newRoomPrice });
             } else {
-                get[0].dataValues.rooms.sort((a, b) => a.dataValues.price - b.dataValues.price)
-                res.status(200).send(get[0])
+                get[0].dataValues.rooms.sort(
+                    (a, b) => a.dataValues.price - b.dataValues.price
+                );
+                res.status(200).send(get[0]);
             }
         } catch (error) {
             console.log(error);
             next(error);
         }
-
     },
     editProperty: async (req, res, next) => {
         const ormTransaction = await model.sequelize.transaction();
@@ -617,7 +634,7 @@ module.exports = {
                 page = 0;
             }
             if (!size) {
-                size = 10;
+                size = 8;
             }
             if (!sortby) {
                 sortby = "property";
@@ -625,6 +642,13 @@ module.exports = {
             if (!order) {
                 order = "ASC";
             }
+
+            let getUserUuid = await model.user.findAll({
+                attributes: ["id"],
+                where: {
+                    id: req.decrypt.id,
+                },
+            });
 
             let get = await model.property.findAndCountAll({
                 offset: parseInt(page * size),
@@ -634,6 +658,7 @@ module.exports = {
                         [sequelize.Op.like]: `%${req.query.property}%`,
                     },
                     isDeleted: false,
+                    userId: getUserUuid[0].dataValues.id,
                 },
                 include: [
                     {
@@ -680,16 +705,16 @@ module.exports = {
         try {
             let getProperty = await model.property.findAll({
                 where: {
-                    uuid: req.query.uuid
-                }
+                    uuid: req.query.uuid,
+                },
             });
             let getPictureProperty = await model.picture_property.findAll({
                 where: {
-                    propertyId: getProperty[0].dataValues.id
-                }
+                    propertyId: getProperty[0].dataValues.id,
+                },
             });
 
-            res.status(200).send(getPictureProperty)
+            res.status(200).send(getPictureProperty);
             console.log("getPictureProperty", getPictureProperty);
         } catch (error) {
             console.log(error);
@@ -697,20 +722,24 @@ module.exports = {
         }
     },
     getAvailableProperty: async (req, res, next) => {
-        let today = new Date().toISOString().split('T')[0]
+        let today = new Date().toISOString().split("T")[0];
         let tomorrow = new Date(today);
         tomorrow.setDate(tomorrow.getDate() + 1);
 
-        let name = req.query.name || ''
-        let start = req.query.start || today
-        let end = req.query.end || new Date(tomorrow).toISOString().split('T')[0]
-        let capacity = req.query.capacity || ''
-        let category = req.query.category || ''
-        let sortby = req.query.sortby || 'property'
-        let order = req.query.order || "DESC"
-        let city = req.query.city || ''
-        let limit = parseInt(parseInt(req.query.size) || 3)
-        let offset = parseInt(((parseInt(req.query.page) || 1) - 1) * (parseInt(req.query.size) || 3))
+        let name = req.query.name || "";
+        let start = req.query.start || today;
+        let end =
+            req.query.end || new Date(tomorrow).toISOString().split("T")[0];
+        let capacity = req.query.capacity || "";
+        let category = req.query.category || "";
+        let sortby = req.query.sortby || "property";
+        let order = req.query.order || "DESC";
+        let city = req.query.city || "";
+        let limit = parseInt(parseInt(req.query.size) || 3);
+        let offset = parseInt(
+            ((parseInt(req.query.page) || 1) - 1) *
+                (parseInt(req.query.size) || 3)
+        );
 
         // Available Property
         const query1 = `select properties.id, 
@@ -752,7 +781,7 @@ module.exports = {
         regencies.name
         order by properties.property ${order} 
         limit ${limit} offset ${offset}
-        ;`
+        ;`;
 
         // Special Price
         const query2 = `
@@ -766,7 +795,7 @@ module.exports = {
         )
         AND 
         isActive = 1
-        ;`
+        ;`;
 
         // Total Data (count)
         const query3 = `select 
@@ -798,54 +827,63 @@ module.exports = {
         ) AND categories.category LIKE '%${category}%' AND provinces.name LIKE '%${city}%'
         group by properties.id, properties.property, picture_properties.picture, provinces.name, 
         regencies.name 
-        ;`
+        ;`;
 
         const room_available = await con.query(query1, {
-            type: sequelize.QueryTypes.SELECT
-        })
+            type: sequelize.QueryTypes.SELECT,
+        });
 
         const special_prices = await con.query(query2, {
-            type: sequelize.QueryTypes.SELECT
-        })
+            type: sequelize.QueryTypes.SELECT,
+        });
 
         const total_data = await con.query(query3, {
-            type: sequelize.QueryTypes.SELECT
-        })
+            type: sequelize.QueryTypes.SELECT,
+        });
         console.log("room_available", room_available);
 
         // function sort by
         const sortbyFunc = (result) => {
-            if (sortby === 'price' && order === 'ASC') {
-                return result.sort((a, b) => a.property_price - b.property_price)
-            } else if (sortby === 'price' && order === 'DESC') {
-                return result.sort((a, b) => b.property_price - a.property_price)
+            if (sortby === "price" && order === "ASC") {
+                return result.sort(
+                    (a, b) => a.property_price - b.property_price
+                );
+            } else if (sortby === "price" && order === "DESC") {
+                return result.sort(
+                    (a, b) => b.property_price - a.property_price
+                );
             } else {
-                return result
+                return result;
             }
-        }
+        };
 
         if (special_prices.length) {
             const final_result = room_available.map((val1) => {
-                let special_price = special_prices.find((val2) => val2.propertyId === val1.id)
+                let special_price = special_prices.find(
+                    (val2) => val2.propertyId === val1.id
+                );
                 if (special_price) {
-                    return { ...val1, property_price: special_price.priceOnDate }
+                    return {
+                        ...val1,
+                        property_price: special_price.priceOnDate,
+                    };
                 } else {
-                    return val1
+                    return val1;
                 }
-            })
+            });
             console.log("final result");
             res.status(200).send({
                 success: true,
                 data: sortbyFunc(final_result),
-                total_data: total_data.length
-            })
+                total_data: total_data.length,
+            });
         } else {
             console.log("room_available");
             res.status(200).send({
                 success: true,
                 data: sortbyFunc(room_available),
-                total_data: total_data.length
-            })
+                total_data: total_data.length,
+            });
         }
-    }
-}
+    },
+};

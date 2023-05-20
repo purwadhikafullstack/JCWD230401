@@ -4,9 +4,9 @@ const { readToken } = require("../helper/jwt");
 const { checkUser } = require("../helper/validator");
 const uploader = require("../helper/uploader");
 
-route.get('/', propertyController.getAllProperty)
-route.get('/filter', propertyController.filterProperty)
-route.get('/getroomavailable', propertyController.getRoomAvailable)
+route.get("/", propertyController.getAllProperty);
+route.get("/filter", propertyController.filterProperty);
+route.get("/getroomavailable", propertyController.getRoomAvailable);
 route.get("/getpropertydetail", propertyController.getPropertyDetail);
 route.get("/getpictureproperty", propertyController.getPicturePropertyDetail);
 route.get("/getallpropertytenant", propertyController.getAllPropertyTenant);
@@ -25,13 +25,13 @@ route.patch(
     readToken,
     propertyController.deleteProperty
 );
-route.get("/getlistproperty", readToken, propertyController.listProperty);
+route.get("/list", readToken, propertyController.listProperty);
 route.patch(
     "/updateimageproperty",
     uploader("/ImgProperty", "PTY").array("images", 1),
     propertyController.updateImageProperty
 );
 route.patch("/deleteimageproperty", propertyController.deletePropertyPicture);
-route.get('/available', propertyController.getAvailableProperty)
+route.get("/available", propertyController.getAvailableProperty);
 
 module.exports = route;
