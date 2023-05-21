@@ -41,6 +41,7 @@ import SpecialPriceTable from "../../Components/SpecialPriceTable";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import MaintenanceTable from "../../Components/MaintenanceTable";
+import Sidebar from "../../Components/Sidebar";
 
 function RoomConditionList(props) {
     const location = useLocation();
@@ -492,205 +493,290 @@ function RoomConditionList(props) {
     // console.log("pageSpecialPrice:", pageSpecialPrice);
 
     return (
-        <Flex
-            flexDir={"column"}
-            justifyItems={"center"}
-            mx={"auto"}
-            maxW={"75%"}
-        >
-            <Box>
-                <Heading size={"2xl"} ml="8" mt={"4"}>{`${roomName}`}</Heading>
-            </Box>
-            <Box mt={"8"}>
-                <Tabs
-                    isFitted
-                    variant="line"
-                    defaultIndex={0}
-                    colorScheme="red"
-                >
-                    <TabList mb="4">
-                        <Tab>
-                            <Heading fontWeight={"bold"} size={"xl"} ml="4">
-                                <Text alignSelf={"center"}>Special Price</Text>
-                            </Heading>
-                        </Tab>
-                        <Tab>
-                            <Heading fontWeight={"bold"} size={"xl"} ml="4">
-                                <Text>Maintenance</Text>
-                            </Heading>
-                        </Tab>
-                    </TabList>
-                    <TabPanels>
-                        <TabPanel>
-                            {/* TABLE SPECIAL PRICE */}
-                            <Box
-                                style={{
-                                    borderRadius: "10px",
-                                    boxShadow: "4px 4px 20px gray",
-                                }}
-                                borderRadius={"2xl"}
+        <>
+            <Flex minH={"93vh"}>
+                <Box>
+                    <Sidebar />
+                </Box>
+                <Box w="full" flex={"5"} px={{ base: "1", sm: "4" }} mt="5">
+                    <Flex>
+                        <Heading
+                            lineHeight={1.1}
+                            fontSize={{ base: "2xl", md: "3xl" }}
+                            textAlign={{ base: "center", sm: "start" }}
+                            mb={"5"}
+                        >
+                            Special Conditions:{` ${roomName}`}
+                        </Heading>
+                    </Flex>
+                    <Flex
+                        flexDir={"column"}
+                        justifyItems={"center"}
+                        mx={"auto"}
+                    >
+                        <Box>
+                            <Tabs
+                                isFitted
+                                variant="line"
+                                defaultIndex={0}
+                                colorScheme="red"
                             >
-                                <Box
-                                    w={"full"}
-                                    h={"55vh"}
-                                    display={"flex"}
-                                    flexDir={"column"}
-                                    justifyContent={"space-between"}
-                                >
-                                    <Flex
-                                        justifyContent={"right"}
-                                        alignContent={"center"}
-                                        py={"4"}
-                                        mr={"4"}
-                                    >
-                                        {SpecialPriceModal()}
-                                    </Flex>
-
-                                    <TableContainer flex={"1"}>
-                                        <Table
-                                            variant="simple"
-                                            color={"#EEEEEE"}
+                                <TabList mb="4">
+                                    <Tab>
+                                        <Heading
+                                            fontWeight={"bold"}
+                                            size={"xl"}
+                                            ml="4"
                                         >
-                                            <Thead>
-                                                <Tr>
-                                                    <Th
-                                                        fontSize={"xl"}
-                                                        fontWeight={"bold"}
-                                                    >
-                                                        No
-                                                    </Th>
-                                                    <Th
-                                                        fontSize={"xl"}
-                                                        fontWeight={"bold"}
-                                                    >
-                                                        Start Date
-                                                    </Th>
-                                                    <Th
-                                                        fontSize={"xl"}
-                                                        fontWeight={"bold"}
-                                                    >
-                                                        End Date
-                                                    </Th>
-                                                    <Th
-                                                        fontSize={"xl"}
-                                                        fontWeight={"bold"}
-                                                    >
-                                                        Normal Price
-                                                    </Th>
-                                                    <Th
-                                                        fontSize={"xl"}
-                                                        fontWeight={"bold"}
-                                                    >
-                                                        Special Price
-                                                    </Th>
-                                                    <Th
-                                                        fontSize={"xl"}
-                                                        fontWeight={"bold"}
-                                                        textAlign={"center"}
-                                                    >
-                                                        Controls
-                                                    </Th>
-                                                </Tr>
-                                            </Thead>
-                                            {printSpecialPriceData()}
-                                        </Table>
-                                    </TableContainer>
-
-                                    <Flex justify="center" pb="6">
-                                        <Pagination
-                                            paginate={paginateSpecialPrice}
-                                            size={sizeSpecialPrice}
-                                            totalData={totalDataSpecialPrice}
-                                        />
-                                    </Flex>
-                                </Box>
-                            </Box>
-                        </TabPanel>
-                        <TabPanel>
-                            {/* TABLE MAINTENANCE */}
-                            <Box
-                                style={{
-                                    borderRadius: "10px",
-                                    boxShadow: "4px 4px 20px gray",
-                                }}
-                                borderRadius={"2xl"}
-                            >
-                                <Box
-                                    w={"full"}
-                                    h={"55vh"}
-                                    display={"flex"}
-                                    flexDir={"column"}
-                                    justifyContent={"space-between"}
-                                >
-                                    <Flex
-                                        flexDir={"row"}
-                                        justifyContent={"right"}
-                                        alignContent={"center"}
-                                        py={"4"}
-                                        mr="4"
-                                    >
-                                        {MaintenanceModal()}
-                                    </Flex>
-
-                                    <TableContainer flex={"1"}>
-                                        <Table
-                                            variant="simple"
-                                            color={"#EEEEEE"}
+                                            <Text alignSelf={"center"}>
+                                                Special Price
+                                            </Text>
+                                        </Heading>
+                                    </Tab>
+                                    <Tab>
+                                        <Heading
+                                            fontWeight={"bold"}
+                                            size={"xl"}
+                                            ml="4"
                                         >
-                                            <Thead>
-                                                <Tr>
-                                                    <Th
-                                                        fontSize={"xl"}
-                                                        fontWeight={"bold"}
-                                                    >
-                                                        No
-                                                    </Th>
-                                                    <Th
-                                                        fontSize={"xl"}
-                                                        fontWeight={"bold"}
-                                                    >
-                                                        Start Date
-                                                    </Th>
-                                                    <Th
-                                                        fontSize={"xl"}
-                                                        fontWeight={"bold"}
-                                                    >
-                                                        End Date
-                                                    </Th>
-                                                    <Th
-                                                        fontSize={"xl"}
-                                                        fontWeight={"bold"}
-                                                    >
-                                                        Remarks
-                                                    </Th>
+                                            <Text>Maintenance</Text>
+                                        </Heading>
+                                    </Tab>
+                                </TabList>
+                                <TabPanels>
+                                    <TabPanel>
+                                        {/* TABLE SPECIAL PRICE */}
+                                        <Box
+                                            style={{
+                                                borderRadius: "10px",
+                                                boxShadow: "4px 4px 20px gray",
+                                            }}
+                                            borderRadius={"2xl"}
+                                        >
+                                            <Box
+                                                w={"full"}
+                                                h={"55vh"}
+                                                display={"flex"}
+                                                flexDir={"column"}
+                                                justifyContent={"space-between"}
+                                            >
+                                                <Flex
+                                                    justifyContent={"right"}
+                                                    alignContent={"center"}
+                                                    py={"4"}
+                                                    mr={"4"}
+                                                >
+                                                    {SpecialPriceModal()}
+                                                </Flex>
 
-                                                    <Th
-                                                        fontSize={"xl"}
-                                                        fontWeight={"bold"}
-                                                        textAlign={"center"}
+                                                <TableContainer flex={"1"}>
+                                                    <Table
+                                                        variant="simple"
+                                                        color={"#EEEEEE"}
                                                     >
-                                                        Controls
-                                                    </Th>
-                                                </Tr>
-                                            </Thead>
-                                            {printMaintenanceData()}
-                                        </Table>
-                                    </TableContainer>
+                                                        <Thead>
+                                                            <Tr>
+                                                                <Th
+                                                                    fontSize={
+                                                                        "xl"
+                                                                    }
+                                                                    fontWeight={
+                                                                        "bold"
+                                                                    }
+                                                                >
+                                                                    No
+                                                                </Th>
+                                                                <Th
+                                                                    fontSize={
+                                                                        "xl"
+                                                                    }
+                                                                    fontWeight={
+                                                                        "bold"
+                                                                    }
+                                                                >
+                                                                    Start Date
+                                                                </Th>
+                                                                <Th
+                                                                    fontSize={
+                                                                        "xl"
+                                                                    }
+                                                                    fontWeight={
+                                                                        "bold"
+                                                                    }
+                                                                >
+                                                                    End Date
+                                                                </Th>
+                                                                <Th
+                                                                    fontSize={
+                                                                        "xl"
+                                                                    }
+                                                                    fontWeight={
+                                                                        "bold"
+                                                                    }
+                                                                >
+                                                                    Normal Price
+                                                                </Th>
+                                                                <Th
+                                                                    fontSize={
+                                                                        "xl"
+                                                                    }
+                                                                    fontWeight={
+                                                                        "bold"
+                                                                    }
+                                                                >
+                                                                    Special
+                                                                    Price
+                                                                </Th>
+                                                                <Th
+                                                                    fontSize={
+                                                                        "xl"
+                                                                    }
+                                                                    fontWeight={
+                                                                        "bold"
+                                                                    }
+                                                                    textAlign={
+                                                                        "center"
+                                                                    }
+                                                                >
+                                                                    Controls
+                                                                </Th>
+                                                            </Tr>
+                                                        </Thead>
+                                                        {printSpecialPriceData()}
+                                                    </Table>
+                                                </TableContainer>
 
-                                    <Flex justify="center" pb="6">
-                                        <Pagination
-                                            paginate={paginateMaintenance}
-                                            size={sizeMaintenance}
-                                            totalData={totalDataMaintenance}
-                                        />
-                                    </Flex>
-                                </Box>
-                            </Box>
-                        </TabPanel>
-                    </TabPanels>
-                </Tabs>
-            </Box>
-        </Flex>
+                                                <Flex justify="center">
+                                                    <Pagination
+                                                        paginate={
+                                                            paginateSpecialPrice
+                                                        }
+                                                        size={sizeSpecialPrice}
+                                                        totalData={
+                                                            totalDataSpecialPrice
+                                                        }
+                                                    />
+                                                </Flex>
+                                            </Box>
+                                        </Box>
+                                    </TabPanel>
+                                    <TabPanel>
+                                        {/* TABLE MAINTENANCE */}
+                                        <Box
+                                            style={{
+                                                borderRadius: "10px",
+                                                boxShadow: "4px 4px 20px gray",
+                                            }}
+                                            borderRadius={"2xl"}
+                                        >
+                                            <Box
+                                                w={"full"}
+                                                h={"55vh"}
+                                                display={"flex"}
+                                                flexDir={"column"}
+                                                justifyContent={"space-between"}
+                                            >
+                                                <Flex
+                                                    flexDir={"row"}
+                                                    justifyContent={"right"}
+                                                    alignContent={"center"}
+                                                    py={"4"}
+                                                    mr="4"
+                                                >
+                                                    {MaintenanceModal()}
+                                                </Flex>
+
+                                                <TableContainer flex={"1"}>
+                                                    <Table
+                                                        variant="simple"
+                                                        color={"#EEEEEE"}
+                                                    >
+                                                        <Thead>
+                                                            <Tr>
+                                                                <Th
+                                                                    fontSize={
+                                                                        "xl"
+                                                                    }
+                                                                    fontWeight={
+                                                                        "bold"
+                                                                    }
+                                                                >
+                                                                    No
+                                                                </Th>
+                                                                <Th
+                                                                    fontSize={
+                                                                        "xl"
+                                                                    }
+                                                                    fontWeight={
+                                                                        "bold"
+                                                                    }
+                                                                >
+                                                                    Start Date
+                                                                </Th>
+                                                                <Th
+                                                                    fontSize={
+                                                                        "xl"
+                                                                    }
+                                                                    fontWeight={
+                                                                        "bold"
+                                                                    }
+                                                                >
+                                                                    End Date
+                                                                </Th>
+                                                                <Th
+                                                                    fontSize={
+                                                                        "xl"
+                                                                    }
+                                                                    fontWeight={
+                                                                        "bold"
+                                                                    }
+                                                                >
+                                                                    Remarks
+                                                                </Th>
+
+                                                                <Th
+                                                                    fontSize={
+                                                                        "xl"
+                                                                    }
+                                                                    fontWeight={
+                                                                        "bold"
+                                                                    }
+                                                                    textAlign={
+                                                                        "center"
+                                                                    }
+                                                                >
+                                                                    Controls
+                                                                </Th>
+                                                            </Tr>
+                                                        </Thead>
+                                                        {printMaintenanceData()}
+                                                    </Table>
+                                                </TableContainer>
+
+                                                <Flex
+                                                    justify="center"
+                                                    align={"center"}
+                                                >
+                                                    <Pagination
+                                                        paginate={
+                                                            paginateMaintenance
+                                                        }
+                                                        size={sizeMaintenance}
+                                                        totalData={
+                                                            totalDataMaintenance
+                                                        }
+                                                    />
+                                                </Flex>
+                                            </Box>
+                                        </Box>
+                                    </TabPanel>
+                                </TabPanels>
+                            </Tabs>
+                        </Box>
+                    </Flex>
+                </Box>
+            </Flex>
+        </>
     );
 }
 

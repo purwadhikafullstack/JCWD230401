@@ -19,6 +19,8 @@ import {
     AlertDialogContent,
     AlertDialogOverlay,
     useDisclosure,
+    Box,
+    Flex,
 } from "@chakra-ui/react";
 import axios from "axios";
 import { Link } from "react-router-dom";
@@ -90,31 +92,41 @@ function RoomTable(props) {
 
     return (
         <Tbody>
-            <Tr>
-                <Td textColor={"black"} fontSize={"md"}>
+            <Tr h="80px">
+                <Td textColor={"black"} fontSize={"md"} textAlign={"center"}>
                     {props.idx}
                 </Td>
-                <Td textColor={"black"} fontSize={"md"}>
+                <Td textColor={"black"} fontSize={"md"} textAlign={"center"}>
                     {props.name}
                 </Td>
-                <Td textColor={"black"} fontSize={"md"}>
+                <Td textColor={"black"} fontSize={"md"} textAlign={"center"}>
                     {props.capacity}
                 </Td>
-                <Td textColor={"black"} fontSize={"md"}>
+                <Td textColor={"black"} fontSize={"md"} textAlign={"center"}>
                     {props.price}
                 </Td>
-                <Td display={"flex"} justifyContent={"space-evenly"}>
-                    <Link to={`/specialconditions/${props.uuid}`}>
-                        <Button _hover="" bgColor={"green.400"}>
-                            <Text textColor={"white"}>Special Conditions</Text>
-                        </Button>
-                    </Link>
-                    <Link to={`/editroom/${props.uuid}`}>
-                        <Button _hover="" bgColor={"#fec20c"}>
-                            <Text textColor={"white"}>Edit</Text>
-                        </Button>
-                    </Link>
-                    {BtnDelete()}
+                <Td alignContent={"center"}>
+                    <Flex justifyContent={"space-evenly"}>
+                        <Box display={"flex"} my={"auto"}>
+                            <Link to={`/special/${props.uuid}`}>
+                                <Button _hover="" bgColor={"green.400"}>
+                                    <Text textColor={"white"}>
+                                        Special Conditions
+                                    </Text>
+                                </Button>
+                            </Link>
+                        </Box>
+                        <Box display={"flex"} my={"auto"}>
+                            <Link to={`/room/edit/${props.uuid}`}>
+                                <Button _hover="" bgColor={"#fec20c"}>
+                                    <Text textColor={"white"}>Edit</Text>
+                                </Button>
+                            </Link>
+                        </Box>
+                        <Box display={"flex"} my={"auto"}>
+                            {BtnDelete()}
+                        </Box>
+                    </Flex>
                 </Td>
             </Tr>
         </Tbody>

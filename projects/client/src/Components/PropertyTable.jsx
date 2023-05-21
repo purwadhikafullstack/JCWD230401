@@ -10,7 +10,6 @@ import {
     TableCaption,
     TableContainer,
     Button,
-    Switch,
     Text,
     AlertDialog,
     AlertDialogBody,
@@ -19,6 +18,8 @@ import {
     AlertDialogContent,
     AlertDialogOverlay,
     useDisclosure,
+    Box,
+    Flex,
 } from "@chakra-ui/react";
 import axios from "axios";
 import { Link } from "react-router-dom";
@@ -49,9 +50,11 @@ function PropertyTable(props) {
 
         return (
             <>
-                <Button colorScheme="red" onClick={onOpen}>
-                    Delete Property
-                </Button>
+                <Box>
+                    <Button colorScheme="red" onClick={onOpen}>
+                        Delete Property
+                    </Button>
+                </Box>
 
                 <AlertDialog
                     isOpen={isOpen}
@@ -90,33 +93,41 @@ function PropertyTable(props) {
 
     return (
         <Tbody>
-            <Tr>
-                <Td textColor={"black"} fontSize={"md"}>
+            <Tr h="80px">
+                <Td textColor={"black"} fontSize={"md"} textAlign={"center"}>
                     {props.idx}
                 </Td>
-                <Td textColor={"black"} fontSize={"md"}>
+                <Td textColor={"black"} fontSize={"md"} textAlign={"center"}>
                     {props.property}
                 </Td>
-                <Td textColor={"black"} fontSize={"md"}>
+                <Td textColor={"black"} fontSize={"md"} textAlign={"center"}>
                     {props.address}
                 </Td>
-                {/* Button View Property Rooms */}
-                <Td display={"flex"} justifyContent={"space-evenly"}>
-                    <Link to={`/roomlist/${props.uuid}`}>
-                        <Button _hover="" bgColor={"green.400"}>
-                            <Text textColor={"white"}>View Rooms</Text>
-                        </Button>
-                    </Link>
+                <Td alignContent={"center"}>
+                    {/* Button View Property Rooms */}
+                    <Flex justifyContent={"space-evenly"}>
+                        <Box display={"flex"} my={"auto"}>
+                            <Link to={`/rooms/${props.uuid}`}>
+                                <Button _hover="" bgColor={"green.400"}>
+                                    <Text textColor={"white"}>View Rooms</Text>
+                                </Button>
+                            </Link>
+                        </Box>
 
-                    {/* Button Edit */}
-                    <Link to={`/editlisting/${props.uuid}`}>
-                        <Button _hover="" bgColor={"#fec20c"}>
-                            <Text textColor={"white"}>Edit</Text>
-                        </Button>
-                    </Link>
+                        {/* Button Edit */}
+                        <Box display={"flex"} my={"auto"}>
+                            <Link to={`/listing/edit/${props.uuid}`}>
+                                <Button _hover="" bgColor={"#fec20c"}>
+                                    <Text textColor={"white"}>Edit</Text>
+                                </Button>
+                            </Link>
+                        </Box>
 
-                    {/* Button Delete */}
-                    {BtnDeleteProperty()}
+                        {/* Button Delete */}
+                        <Box display={"flex"} my={"auto"}>
+                            {BtnDeleteProperty()}
+                        </Box>
+                    </Flex>
                 </Td>
             </Tr>
         </Tbody>

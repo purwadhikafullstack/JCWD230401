@@ -250,7 +250,7 @@ function ManageRoom() {
     return (
         <Container
             my={"4"}
-            h={"100vh"}
+            h={"100%"}
             w={"100%"}
             maxW={"1300px"}
             display={"flex"}
