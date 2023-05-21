@@ -142,7 +142,7 @@ export default function Verification() {
       justify={"center"}
       bg={"white"}>
       <Stack
-        spacing={4}
+        spacing={6}
         w={"full"}
         maxW={"sm"}
         bg={"white"}
@@ -169,14 +169,14 @@ export default function Verification() {
                   onChange={handleForm}
                   name="verificationCode"
                 />
-                <FormErrorMessage fontSize="xs">{formik.errors.verificationCode}</FormErrorMessage>
+                <FormErrorMessage fontSize="xs" style={{ position: "absolute", top: "100%", marginTop: "0.30rem" }}>{formik.errors.verificationCode}</FormErrorMessage>
               </FormControl>
             </HStack>
           </Center>
           <Center
             fontSize={{ base: "xs", sm: "sm" }}
             fontWeight="thin"
-            my={2}
+            mt={6}
           >
             the code is valid for 24 hours
           </Center>

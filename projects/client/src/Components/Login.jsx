@@ -104,7 +104,6 @@ export default function Login(props) {
             maxH={"100vh"}
             justify={"center"}
         >
-            <form onSubmit={formik.handleSubmit}>
                 <Stack mx={"auto"} minW={{ base: "sm", md: "md" }} px={6}>
                     <Box
                         rounded={"lg"}
@@ -117,17 +116,19 @@ export default function Login(props) {
                         <Stack mb="8">
                             <Text fontSize="3xl" fontWeight="semibold" style={{ display: "flex" }} m="auto">Login to tempatku</Text>
                         </Stack>
-                        <Stack spacing={4}>
-                            <FormControl isInvalid={formik.errors.emailOrPhone}>
+                        <Stack spacing={6}>
+                            <FormControl id="emailOrPhone" isInvalid={formik.errors.emailOrPhone}>
                                 <FormLabel size="sm">Email or Phone Number</FormLabel>
                                 {/* Input Email or Phone Number */}
                                 <Input type="text" borderColor="#d0d7de"
                                     onChange={handleForm}
                                     name="emailOrPhone"
                                 />
-                                <FormErrorMessage fontSize="xs">{formik.errors.emailOrPhone}</FormErrorMessage>
+                                <FormErrorMessage fontSize="xs"
+                                style={{ position: "absolute", top: "100%", marginTop: "0.30rem" }}
+                                >{formik.errors.emailOrPhone}</FormErrorMessage>
                             </FormControl>
-                            <FormControl isInvalid={formik.errors.password}>
+                            <FormControl id="password" isInvalid={formik.errors.password}>
                                 <HStack justify="space-between">
                                     <FormLabel>Password</FormLabel>
                                     <Button
@@ -162,7 +163,9 @@ export default function Login(props) {
                                         </Button>
                                     </InputRightElement>
                                 </InputGroup>
-                                <FormErrorMessage fontSize="xs">{formik.errors.password}</FormErrorMessage>
+                                <FormErrorMessage fontSize="xs"
+                                style={{ position: "absolute", top: "100%", marginTop: "0.30rem" }}
+                                >{formik.errors.password}</FormErrorMessage>
                             </FormControl>
                             <Stack spacing={0}>
                             </Stack>
@@ -222,7 +225,6 @@ export default function Login(props) {
                         </Stack>
                     </Box>
                 </Stack>
-            </form>
         </Flex>
     );
 }

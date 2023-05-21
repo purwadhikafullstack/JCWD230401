@@ -131,7 +131,7 @@ export default function ChangePassword() {
             justify={"center"}
             bg={"white"}>
             <Stack
-                spacing={4}
+                spacing={6}
                 w={"full"}
                 maxW={"md"}
                 bg={"white"}
@@ -171,7 +171,7 @@ export default function ChangePassword() {
                             </Button>
                         </InputRightElement>
                     </InputGroup>
-                    <FormErrorMessage fontSize="xs">{formik.errors.oldPassword}</FormErrorMessage>
+                    <FormErrorMessage fontSize="xs" style={{ position: "absolute", top: "100%", marginTop: "0.30rem" }}>{formik.errors.oldPassword}</FormErrorMessage>
                 </FormControl>
                 {/* New Password Field */}
                 <FormControl id="newpassword" isInvalid={formik.errors.newPassword}>
@@ -201,7 +201,7 @@ export default function ChangePassword() {
                             </Button>
                         </InputRightElement>
                     </InputGroup>
-                    <FormErrorMessage fontSize="xs">{formik.errors.newPassword}</FormErrorMessage>
+                    <FormErrorMessage fontSize="xs" style={{ position: "absolute", top: "100%", marginTop: "0.30rem" }}>{formik.errors.newPassword}</FormErrorMessage>
                 </FormControl>
                 {/* Confirm New Password  */}
                 <FormControl id="confirmation_password" isInvalid={formik.errors.passwordConfirmation}>
@@ -232,9 +232,9 @@ export default function ChangePassword() {
                             </Button>
                         </InputRightElement>
                     </InputGroup>
-                    <FormErrorMessage fontSize="xs">{formik.errors.passwordConfirmation}</FormErrorMessage>
+                    <FormErrorMessage fontSize="xs" style={{ position: "absolute", top: "100%", marginTop: "0.30rem" }}>{formik.errors.passwordConfirmation}</FormErrorMessage>
                 </FormControl>
-                <Stack spacing={6}>
+                <Stack pt="4">
                     <Button
                         bg={"#D3212D"}
                         color={"white"}

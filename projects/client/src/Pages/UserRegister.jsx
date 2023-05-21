@@ -52,7 +52,7 @@ export default function UserRegister() {
             });
             navigate("/", { replace: true });
         } catch (error) {
-            console.log("ini error dari onBtnRegister : ", error); 
+            console.log("ini error dari onBtnRegister : ", error);
             if (error.response && !error.response.data.message) {
                 toast({
                     title: "Register failed",
@@ -143,7 +143,7 @@ export default function UserRegister() {
                     <Heading fontSize={"3xl"} fontWeight="semibold"
                         my="8"
                     >Register to tempatku</Heading>
-                    <Stack spacing={2}>
+                    <Stack spacing={6}>
                         <HStack>
                             <Box>
                                 {/* NAME */}
@@ -153,7 +153,7 @@ export default function UserRegister() {
                                         onChange={handleForm}
                                         name="name"
                                     />
-                                    <FormErrorMessage fontSize="xs">{formik.errors.name}</FormErrorMessage>
+                                    <FormErrorMessage fontSize="xs" style={{ position: "absolute", top: "100%", marginTop: "0.30rem" }}>{formik.errors.name}</FormErrorMessage>
                                 </FormControl>
                             </Box>
                             <Box>
@@ -164,7 +164,7 @@ export default function UserRegister() {
                                         onChange={handleForm}
                                         name="phone"
                                     />
-                                    <FormErrorMessage fontSize="xs">{formik.errors.phone}</FormErrorMessage>
+                                    <FormErrorMessage fontSize="xs" style={{ position: "absolute", top: "100%", marginTop: "0.30rem" }}>{formik.errors.phone}</FormErrorMessage>
                                 </FormControl>
                             </Box>
                         </HStack>
@@ -175,7 +175,7 @@ export default function UserRegister() {
                                 onChange={handleForm}
                                 name="email"
                             />
-                            <FormErrorMessage fontSize="xs">{formik.errors.email}</FormErrorMessage>
+                            <FormErrorMessage fontSize="xs" style={{ position: "absolute", top: "100%", marginTop: "0.30rem" }}>{formik.errors.email}</FormErrorMessage>
                         </FormControl>
                         {/* PASSWORD */}
                         <FormControl id="password" isInvalid={formik.errors.password}>
@@ -206,7 +206,7 @@ export default function UserRegister() {
                                     </Button>
                                 </InputRightElement>
                             </InputGroup>
-                            <FormErrorMessage fontSize="xs">{formik.errors.password}</FormErrorMessage>
+                            <FormErrorMessage fontSize="xs" style={{ position: "absolute", top: "100%", marginTop: "0.30rem" }}>{formik.errors.password}</FormErrorMessage>
                         </FormControl>
                         <FormControl id="confirmation_password" isInvalid={formik.errors.passwordConfirmation}>
                             <FormLabel>Confirmation Password</FormLabel>
@@ -237,11 +237,11 @@ export default function UserRegister() {
                                     </Button>
                                 </InputRightElement>
                             </InputGroup>
-                            <FormErrorMessage fontSize="xs">{formik.errors.passwordConfirmation}</FormErrorMessage>
+                            <FormErrorMessage fontSize="xs" style={{ position: "absolute", top: "100%", marginTop: "0.30rem" }}>{formik.errors.passwordConfirmation}</FormErrorMessage>
                         </FormControl>
                     </Stack>
                     <Stack
-                        pt="8"
+                        pt="10"
                     >
                         <Button bg={"#D3212D"} color={"white"} variant={"solid"}
                             _hover={{

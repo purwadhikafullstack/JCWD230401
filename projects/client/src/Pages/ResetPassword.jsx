@@ -55,6 +55,15 @@ export default function ResetPassword() {
                     duration: 3000,
                     isClosable: true,
                 });
+            }
+            if (error.response && error.response.status === 401) {
+                toast({
+                    title: "Your code has expired. Please resend reset password request email for your account.",
+                    status: "error",
+                    duration: 3000,
+                    isClosable: true,
+                });
+                navigate("/", { replace: true });
             } else {
                 toast({
                     title: error.response.data.message,
@@ -104,18 +113,18 @@ export default function ResetPassword() {
 
     return (
         <Flex
-            minH={{base:"50vh", sm:"100vh"}}
-            align={{base:"none", sm:"center"}}
+            minH={{ base: "50vh", sm: "100vh" }}
+            align={{ base: "none", sm: "center" }}
             justify={"center"}
             bg={"white"}>
             <Stack
-                spacing={4}
+                spacing={6}
                 w={"full"}
                 maxW={"md"}
                 bg={"white"}
                 rounded={"xl"}
                 borderWidth={"1px"}
-                borderColor={{base:"white", sm:"gray.300"}}
+                borderColor={{ base: "white", sm: "gray.300" }}
                 p={6}
                 my={12}>
                 <Heading lineHeight={1.1} fontSize={{ base: "2xl", md: "3xl" }}>
@@ -149,7 +158,7 @@ export default function ResetPassword() {
                             </Button>
                         </InputRightElement>
                     </InputGroup>
-                    <FormErrorMessage fontSize="xs">{formik.errors.newPassword}</FormErrorMessage>
+                    <FormErrorMessage fontSize="xs" style={{ position: "absolute", top: "100%", marginTop: "0.30rem" }}>{formik.errors.newPassword}</FormErrorMessage>
                 </FormControl>
                 {/* Confirm New Password  */}
                 <FormControl id="confirmation_password" isInvalid={formik.errors.passwordConfirmation}>
@@ -180,7 +189,7 @@ export default function ResetPassword() {
                             </Button>
                         </InputRightElement>
                     </InputGroup>
-                    <FormErrorMessage fontSize="xs">{formik.errors.passwordConfirmation}</FormErrorMessage>
+                    <FormErrorMessage fontSize="xs" style={{ position: "absolute", top: "100%", marginTop: "0.30rem" }}>{formik.errors.passwordConfirmation}</FormErrorMessage>
                 </FormControl>
                 <FormControl isInvalid={formik.errors.verificationCode}>
                     <FormLabel>To complete your password reset, please enter the OTP code sent to your email below :</FormLabel>
@@ -188,9 +197,9 @@ export default function ResetPassword() {
                         onChange={handleForm}
                         name="verificationCode"
                     />
-                    <FormErrorMessage fontSize="xs">{formik.errors.verificationCode}</FormErrorMessage>
+                    <FormErrorMessage fontSize="xs" style={{ position: "absolute", top: "100%", marginTop: "0.30rem" }}>{formik.errors.verificationCode}</FormErrorMessage>
                 </FormControl>
-                <Stack spacing={6}>
+                <Stack pt="4">
                     <Button
                         bg={"#D3212D"}
                         color={"white"}
