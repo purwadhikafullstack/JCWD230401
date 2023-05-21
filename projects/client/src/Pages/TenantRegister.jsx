@@ -176,7 +176,7 @@ export default function TenantRegister() {
                     <Heading fontSize={"3xl"} fontWeight="semibold"
                         my="8"
                     >Register as a Tenant</Heading>
-                    <Stack spacing={2}>
+                    <Stack spacing={6}>
                         <HStack>
                             <Box>
                                 {/* NAME */}
@@ -186,7 +186,7 @@ export default function TenantRegister() {
                                         onChange={handleForm}
                                         name="name"
                                     />
-                                    <FormErrorMessage fontSize="xs">{formik.errors.name}</FormErrorMessage>
+                                    <FormErrorMessage fontSize="xs" style={{ position: "absolute", top: "100%", marginTop: "0.30rem" }}>{formik.errors.name}</FormErrorMessage>
                                 </FormControl>
                             </Box>
                             <Box>
@@ -197,7 +197,7 @@ export default function TenantRegister() {
                                         onChange={handleForm}
                                         name="phone"
                                     />
-                                    <FormErrorMessage fontSize="xs">{formik.errors.phone}</FormErrorMessage>
+                                    <FormErrorMessage fontSize="xs" style={{ position: "absolute", top: "100%", marginTop: "0.30rem" }}>{formik.errors.phone}</FormErrorMessage>
                                 </FormControl>
                             </Box>
                         </HStack>
@@ -208,7 +208,7 @@ export default function TenantRegister() {
                                 onChange={handleForm}
                                 name="email"
                             />
-                            <FormErrorMessage fontSize="xs">{formik.errors.email}</FormErrorMessage>
+                            <FormErrorMessage fontSize="xs" style={{ position: "absolute", top: "100%", marginTop: "0.30rem" }}>{formik.errors.email}</FormErrorMessage>
                         </FormControl>
                         {/* PASSWORD */}
                         <FormControl isInvalid={formik.errors.password}>
@@ -239,7 +239,7 @@ export default function TenantRegister() {
                                     </Button>
                                 </InputRightElement>
                             </InputGroup>
-                            <FormErrorMessage fontSize="xs">{formik.errors.password}</FormErrorMessage>
+                            <FormErrorMessage fontSize="xs" style={{ position: "absolute", top: "100%", marginTop: "0.30rem" }}>{formik.errors.password}</FormErrorMessage>
                         </FormControl>
                         <FormControl isInvalid={formik.errors.passwordConfirmation}>
                             <FormLabel>Confirmation Password</FormLabel>
@@ -269,7 +269,7 @@ export default function TenantRegister() {
                                     </Button>
                                 </InputRightElement>
                             </InputGroup>
-                            <FormErrorMessage fontSize="xs">{formik.errors.passwordConfirmation}</FormErrorMessage>
+                            <FormErrorMessage fontSize="xs" style={{ position: "absolute", top: "100%", marginTop: "0.30rem" }}>{formik.errors.passwordConfirmation}</FormErrorMessage>
                         </FormControl>
                         {/* UPLOAD ID CARD */}
                         <FormControl isInvalid={formik.errors.fileImage}>
@@ -310,11 +310,11 @@ export default function TenantRegister() {
                                     p="1"
                                 ></Input>
                             </Button>
-                            <FormErrorMessage fontSize="xs">{formik.errors.fileImage}</FormErrorMessage>
+                            <FormErrorMessage fontSize="xs" style={{ position: "absolute", top: "100%", marginTop: "0.30rem" }}>{formik.errors.fileImage}</FormErrorMessage>
                         </FormControl>
                     </Stack>
                     <Stack
-                        pt="8"
+                        pt="10"
                     >
                         <Button bg={"#D3212D"} color={"white"} variant={"solid"}
                             _hover={{

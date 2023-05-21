@@ -137,8 +137,10 @@ export default function Login(props) {
     };
 
     return (
-        <Flex maxH={"100vh"} justify={"center"}>
-            <form onSubmit={formik.handleSubmit}>
+        <Flex
+            maxH={"100vh"}
+            justify={"center"}
+        >
                 <Stack mx={"auto"} minW={{ base: "sm", md: "md" }} px={6}>
                     <Box rounded={"lg"} bg={"white"} px={4}>
                         <Stack mt="4" alignItems={"center"}>
@@ -158,11 +160,9 @@ export default function Login(props) {
                                 Login to tempatku
                             </Text>
                         </Stack>
-                        <Stack spacing={4}>
-                            <FormControl isInvalid={formik.errors.emailOrPhone}>
-                                <FormLabel size="sm">
-                                    Email or Phone Number
-                                </FormLabel>
+                        <Stack spacing={6}>
+                            <FormControl id="emailOrPhone" isInvalid={formik.errors.emailOrPhone}>
+                                <FormLabel size="sm">Email or Phone Number</FormLabel>
                                 {/* Input Email or Phone Number */}
                                 <Input
                                     type="text"
@@ -170,11 +170,11 @@ export default function Login(props) {
                                     onChange={handleForm}
                                     name="emailOrPhone"
                                 />
-                                <FormErrorMessage fontSize="xs">
-                                    {formik.errors.emailOrPhone}
-                                </FormErrorMessage>
+                                <FormErrorMessage fontSize="xs"
+                                style={{ position: "absolute", top: "100%", marginTop: "0.30rem" }}
+                                >{formik.errors.emailOrPhone}</FormErrorMessage>
                             </FormControl>
-                            <FormControl isInvalid={formik.errors.password}>
+                            <FormControl id="password" isInvalid={formik.errors.password}>
                                 <HStack justify="space-between">
                                     <FormLabel>Password</FormLabel>
                                     <Button
@@ -220,9 +220,9 @@ export default function Login(props) {
                                         </Button>
                                     </InputRightElement>
                                 </InputGroup>
-                                <FormErrorMessage fontSize="xs">
-                                    {formik.errors.password}
-                                </FormErrorMessage>
+                                <FormErrorMessage fontSize="xs"
+                                style={{ position: "absolute", top: "100%", marginTop: "0.30rem" }}
+                                >{formik.errors.password}</FormErrorMessage>
                             </FormControl>
                             <Stack spacing={0}></Stack>
                             <Stack pb={0}>
@@ -301,7 +301,6 @@ export default function Login(props) {
                         </Stack>
                     </Box>
                 </Stack>
-            </form>
         </Flex>
     );
 }

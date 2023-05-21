@@ -302,7 +302,7 @@ export default function EditProfile(props) {
             >
                 <Stack
                     bg="white"
-                    spacing={4}
+                    spacing={6}
                     w={"full"}
                     maxW={"md"}
                     rounded={"xl"}
@@ -440,7 +440,7 @@ export default function EditProfile(props) {
                             onChange={handleForm}
                             name="name"
                         />
-                        <FormErrorMessage fontSize="xs">{formik.errors.name}</FormErrorMessage>
+                        <FormErrorMessage fontSize="xs" style={{ position: "absolute", top: "100%", marginTop: "0.30rem" }}>{formik.errors.name}</FormErrorMessage>
                     </FormControl>
                     {/* EMAIL */}
                     <FormControl id="email" isInvalid={formik.errors.email}>
@@ -452,7 +452,7 @@ export default function EditProfile(props) {
                             onChange={handleForm}
                             name="email"
                         />
-                        <FormErrorMessage fontSize="xs">{formik.errors.email}</FormErrorMessage>
+                        <FormErrorMessage fontSize="xs" style={{ position: "absolute", top: "100%", marginTop: "0.30rem" }}>{formik.errors.email}</FormErrorMessage>
                     </FormControl>
                     {/* GENDER */}
                     <FormControl id="gender" isInvalid={formik.errors.gender}>
@@ -469,7 +469,7 @@ export default function EditProfile(props) {
                                 <Radio value="Female">Female</Radio>
                             </RadioGroup>
                         </Box>
-                        <FormErrorMessage fontSize="xs">{formik.errors.gender}</FormErrorMessage>
+                        <FormErrorMessage fontSize="xs" style={{ position: "absolute", top: "100%", marginTop: "0.30rem" }}>{formik.errors.gender}</FormErrorMessage>
                     </FormControl>
                     {/* BIRTH */}
                     <FormControl id="birth" isInvalid={formik.errors.birth}>
@@ -482,12 +482,12 @@ export default function EditProfile(props) {
                             onChange={handleBirthChange}
                             name="birth"
                         />
-                        <FormErrorMessage fontSize="xs">{formik.errors.birth}</FormErrorMessage>
+                        <FormErrorMessage fontSize="xs" style={{ position: "absolute", top: "100%", marginTop: "0.30rem" }}>{formik.errors.birth}</FormErrorMessage>
                     </FormControl>
                     {
                         // Tenant
                         role == "Tenant" ? (
-                            <Stack spacing={3} direction={["column"]}>
+                            <Stack spacing={3} direction={["column"]} pt="4">
                                 <Button
                                     bg={"#D3212D"}
                                     color={"white"}
@@ -518,7 +518,7 @@ export default function EditProfile(props) {
                             </Stack>
                         ) : (
                             // User
-                            <Stack spacing={3} direction={["column"]}>
+                            <Stack spacing={3} direction={["column"]} pt="4">
                                 <Button
                                     bg={"#D3212D"}
                                     color={"white"}

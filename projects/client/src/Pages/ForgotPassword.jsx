@@ -115,9 +115,9 @@ export default function ForgotPassword() {
                         onChange={handleForm}
                         name="email"
                     />
-                    <FormErrorMessage fontSize="xs">{formik.errors.email}</FormErrorMessage>
+                    <FormErrorMessage fontSize="xs" style={{ position: "absolute", top: "100%", marginTop: "0.30rem" }}>{formik.errors.email}</FormErrorMessage>
                 </FormControl>
-                <Stack spacing={6}>
+                <Stack spacing={6} pt='6'>
                     <Button
                         bg={"#D3212D"}
                         color={"white"}
