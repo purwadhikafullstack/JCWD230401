@@ -95,7 +95,7 @@ export default function Sidebar() {
             >
                 <Divider display={{ base: "none", lg: "flex" }} />
                 <Flex mt={4} align="center" display={{ base: "none", lg: "flex" }}>
-                    <Heading as="h3" size="sm">Hi, {name} 👋</Heading>
+                    <Heading as="h3" size="sm">Logged in as : {name}</Heading>
                 </Flex>
             </Flex>
         </Flex>

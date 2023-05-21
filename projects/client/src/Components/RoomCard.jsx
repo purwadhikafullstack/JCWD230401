@@ -42,7 +42,7 @@ export default function RoomCard(props) {
         try {
             setLoading(true);
             let token = localStorage.getItem("tempatku_login");
-            let response = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/user/send-verification-email`, {}, {
+            let response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/user/send-verification-email`, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
@@ -56,14 +56,6 @@ export default function RoomCard(props) {
             })
         } catch (error) {
             console.log("ini error dari onBtnSendVerifyEmail :", error);
-            if (error.response && error.response.data.message === "You have reached the maximum limit of OTP resend requests for today.") {
-                toast({
-                    title: 'You have reached the maximum limit of OTP resend requests for today. Please try again tomorrow.',
-                    status: 'error',
-                    duration: 3000,
-                    isClosable: true,
-                });
-            }
             if (error.response && error.response.status === 401) {
                 toast({
                     title: 'Your code has expired. Please log in again to resend email to verify your account.',
@@ -123,9 +115,9 @@ export default function RoomCard(props) {
                                 right="0%"
                                 transform="translate(-50%, -50%)"
                                 onClick={() => {
-                                    setBookingModalOpen(false); 
+                                    setBookingModalOpen(false);
                                     onOpen();
-                                  }}
+                                }}
                             >
                                 <FcGallery size={30} />
                             </Box>
@@ -166,14 +158,14 @@ export default function RoomCard(props) {
                                                     bg: '#D3212D',
                                                 }}
                                                 type='button'
-                                                onClick={() => setBookingModalOpen(true)} 
+                                                onClick={() => setBookingModalOpen(true)}
                                             >
                                                 Book now
                                             </Button>
-                                            <Modal 
-                                            onClose={() => setBookingModalOpen(false)} 
-                                            isOpen={isBookingModalOpen}
-                                            isCentered>
+                                            <Modal
+                                                onClose={() => setBookingModalOpen(false)}
+                                                isOpen={isBookingModalOpen}
+                                                isCentered>
                                                 <ModalOverlay />
                                                 <ModalContent>
                                                     <ModalHeader>Please verify your account!</ModalHeader>
@@ -234,14 +226,14 @@ export default function RoomCard(props) {
                                                     bg: 'red.500',
                                                 }}
                                                 type='button'
-                                                onClick={() => setBookingModalOpen(true)} 
+                                                onClick={() => setBookingModalOpen(true)}
                                             >
                                                 Book now
                                             </Button>
-                                            <Modal 
-                                              onClose={() => setBookingModalOpen(false)} 
-                                            isOpen={isBookingModalOpen}
-                                            isCentered>
+                                            <Modal
+                                                onClose={() => setBookingModalOpen(false)}
+                                                isOpen={isBookingModalOpen}
+                                                isCentered>
                                                 <ModalOverlay />
                                                 <ModalContent>
                                                     <ModalHeader>Please login to continue</ModalHeader>

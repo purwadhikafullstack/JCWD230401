@@ -685,15 +685,14 @@ module.exports = {
           return res.status(200).send({
             success: true,
             message: `You received an email to verify your account. Please check your email.
-              OTP sent today : ${otpCount + 1}.
-              Today's date : ${otpCountDate}.`,
+              OTP sent today : ${otpCount + 1}.`,
             checkverifieduser, 
           });
         } else {
           res.status(400).send({
             success: false,
             message:
-              "You have reached the maximum limit of OTP resend requests for today.",
+              "You have reached the maximum limit of OTP resend requests for today. Please try again tomorrow.",
           });
         }
       } else {

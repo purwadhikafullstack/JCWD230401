@@ -159,7 +159,7 @@ export default function TenantRegister() {
     //untuk upload ktp
     const onChangeFile = (event) => {
         console.log("ini isi dari event.target.files onchangefile :", event.target.files);
-        formik.setFieldValue(event.target.name, event.target.files[0]); 
+        formik.setFieldValue(event.target.name, event.target.files[0]);
     };
 
 
@@ -286,9 +286,10 @@ export default function TenantRegister() {
                                     : image}
                                 w="full"
                                 borderRadius="8px 8px 0 0"
+                                border="1px solid #CBD5E0"
                             />
                             <Button fontFamily={"heading"} bg={"gray.200"} color={"gray.800"} w="full"
-                                leftIcon={<Icon as={FiUpload} ml={{base:"4", sm:"8"}} fontSize={"2xl"} />}
+                                leftIcon={<Icon as={FiUpload} ml={{ base: "4", sm: "8" }} fontSize={"2xl"} />}
                                 variant={"link"}
                                 onClick={() =>
                                     inputFile.current.click()
@@ -298,7 +299,7 @@ export default function TenantRegister() {
                                 {/* Upload your id card */}
                                 <Input
                                     my="4"
-                                    ml={{base:"3", sm:"6"}}
+                                    ml={{ base: "3", sm: "6" }}
                                     type="file"
                                     id="file"
                                     ref={inputFile}
@@ -306,6 +307,7 @@ export default function TenantRegister() {
                                     accept="image/*"
                                     variant="unstyled"
                                     name="fileImage"
+                                    p="1"
                                 ></Input>
                             </Button>
                             <FormErrorMessage fontSize="xs">{formik.errors.fileImage}</FormErrorMessage>
@@ -316,7 +318,6 @@ export default function TenantRegister() {
                     >
                         <Button bg={"#D3212D"} color={"white"} variant={"solid"}
                             _hover={{
-                                bg: "#D3212D",
                                 bg: "#D3212D",
                             }}
                             onClick={onBtnRegister}
@@ -358,7 +359,7 @@ export default function TenantRegister() {
                     alt={"User Register Page Image"}
                     objectFit={"cover"}
                     src={tenantRegisterBanner}
-                    h={{base:"30vh", sm:"50vh", lg:"full"}}
+                    h={{ base: "30vh", sm: "50vh", lg: "full" }}
                     w="full"
                 />
             </Flex>

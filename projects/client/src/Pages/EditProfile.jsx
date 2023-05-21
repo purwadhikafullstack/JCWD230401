@@ -87,7 +87,7 @@ export default function EditProfile(props) {
             });
             props.keepLogin(); //refresh once updated
         } catch (error) {
-            console.log("ini error dari onBtnEditProfile : ", error); 
+            console.log("ini error dari onBtnEditProfile : ", error);
             if (error.response && !error.response.data.error) {
                 toast({
                     title: error.response.data.message,
@@ -112,7 +112,7 @@ export default function EditProfile(props) {
         try {
             setLoading(true);
             let token = localStorage.getItem("tempatku_login");
-            let response = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/user/send-verification-email`, {}, {
+            let response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/user/send-verification-email`, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
@@ -126,14 +126,6 @@ export default function EditProfile(props) {
             })
         } catch (error) {
             console.log("ini error dari onBtnSendVerifyEmail :", error);
-            if (error.response && error.response.data.message === "You have reached the maximum limit of OTP resend requests for today.") {
-                toast({
-                    title: "You have reached the maximum limit of OTP resend requests for today. Please try again tomorrow.",
-                    status: "error",
-                    duration: 3000,
-                    isClosable: true,
-                });
-            }
             if (error.response && error.response.status === 401) {
                 toast({
                     title: "Your code has expired. Please log in again to resend email to verify your account.",
@@ -338,7 +330,6 @@ export default function EditProfile(props) {
                                             bottom="-1px"
                                             right="-3px"
                                             colorScheme="red"
-                                            aria-label="remove Image"
                                             icon={<BsShieldExclamation />}
                                         /> :
                                         isVerified && role == "User" ?
@@ -349,7 +340,6 @@ export default function EditProfile(props) {
                                                 bottom="-1px"
                                                 right="-3px"
                                                 colorScheme="green"
-                                                aria-label="remove Image"
                                                 icon={<BsShieldCheck />}
                                             /> :
                                             <AvatarBadge display={{ base: "none" }} />
@@ -485,7 +475,7 @@ export default function EditProfile(props) {
                     <FormControl id="birth" isInvalid={formik.errors.birth}>
                         <FormLabel>Birthdate</FormLabel>
                         <Input
-                            placeholder={currentBirth} 
+                            placeholder={currentBirth}
                             _placeholder={{ color: "gray.800" }}
                             type="date"
                             value={formik.values.birth}
