@@ -122,14 +122,8 @@ export default function Sidebar() {
 
             <Flex p="5%" flexDir="column" w="100%" alignItems="center" mb={4}>
                 <Divider display={{ base: "none", lg: "flex" }} />
-                <Flex
-                    mt={4}
-                    align="center"
-                    display={{ base: "none", lg: "flex" }}
-                >
-                    <Heading as="h3" size="sm">
-                        Hi, {name} 👋
-                    </Heading>
+                <Flex mt={4} align="center" display={{ base: "none", lg: "flex" }}>
+                    <Heading as="h3" size="sm">Logged in as : {name}</Heading>
                 </Flex>
             </Flex>
         </Flex>

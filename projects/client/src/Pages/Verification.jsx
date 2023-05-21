@@ -27,7 +27,7 @@ export default function Verification() {
   const onBtnSendVerifyEmail = async () => {
     try {
       setLoading2(true);
-      let response = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/user/send-verification-email`, {}, {
+      let response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/user/send-verification-email`, {
         headers: {
           Authorization: `Bearer ${params.token}`
         }
@@ -42,14 +42,7 @@ export default function Verification() {
       });
     } catch (error) {
       console.log("ini error dari onBtnSendVerifyEmail :", error);
-      if (error.response && error.response.data.message === "You have reached the maximum limit of OTP resend requests for today.") {
-        toast({
-          title: "You have reached the maximum limit of OTP resend requests for today. Please try again tomorrow.",
-          status: "error",
-          duration: 3000,
-          isClosable: true,
-        });
-      } else if (error.response && error.response.status === 401) {
+      if (error.response && error.response.status === 401) {
         toast({
           title: "Your session has expired. Please log in again to resend email to verify your account.",
           status: "error",
@@ -88,7 +81,7 @@ export default function Verification() {
           }
         }
       );
-      console.log("ini hasil response onbtnverify :", response); 
+      console.log("ini hasil response onbtnverify :", response);
       toast({
         title: response.data.message,
         status: "success",
@@ -144,8 +137,8 @@ export default function Verification() {
 
   return (
     <Flex
-      minH={{base:"50vh", sm:"100vh"}}
-      align={{base:"none", sm:"center"}}
+      minH={{ base: "50vh", sm: "100vh" }}
+      align={{ base: "none", sm: "center" }}
       justify={"center"}
       bg={"white"}>
       <Stack
@@ -155,12 +148,12 @@ export default function Verification() {
         bg={"white"}
         rounded={"xl"}
         borderWidth={"1px"}
-        borderColor={{base:"white", sm:"gray.300"}}
+        borderColor={{ base: "white", sm: "gray.300" }}
         p={6}
         my={10}>
-          <Heading lineHeight={1.1} fontSize={{ base: "2xl", md: "3xl" }}>
-            Verify your Account
-          </Heading>
+        <Heading lineHeight={1.1} fontSize={{ base: "2xl", md: "3xl" }}>
+          Verify your Account
+        </Heading>
         <Text
           fontSize={{ base: "sm", sm: "md" }}
         >

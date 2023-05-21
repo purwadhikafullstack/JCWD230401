@@ -51,7 +51,6 @@ export default function ChangePassword() {
                 duration: 3000,
                 isClosable: true,
             });
-            // navigate("/");
             if (role == "User") {
                 navigate("/", { replace: true });
             } else if (role == "Tenant") {

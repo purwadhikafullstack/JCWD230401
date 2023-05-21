@@ -28,7 +28,7 @@ function TenantDashboard() {
   const getRoomOrders = async () => {
     try {
       let token = localStorage.getItem("tempatku_login");
-      let response = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/calendar/room-orders`, {}, {
+      let response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/calendar/room-orders`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -42,7 +42,7 @@ function TenantDashboard() {
   const getRoomMaintenances = async () => {
     try {
       let token = localStorage.getItem("tempatku_login");
-      let response = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/calendar/room-maintenances`, {}, {
+      let response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/calendar/room-maintenances`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -153,11 +153,11 @@ function TenantDashboard() {
     setSelectedDate(selectedDate);
     openModal();
   };
-  
+
   React.useEffect(() => {
     onBtnAvailableRooms();
   }, [selectedDate]);
-  
+
   // Date Click calendar 
   const openModal = () => {
     setModalIsOpen(true);
@@ -198,7 +198,7 @@ function TenantDashboard() {
       />
     })
   };
- 
+
   React.useEffect(() => {
     getMyProperty();
   }, []);
@@ -305,51 +305,55 @@ function TenantDashboard() {
               </ModalHeader>
               <ModalBody>
                 <OrderedList p="4" m="auto">
-                  {printAvailableRooms().map((val, idx) => {
-                    return (
-                      <Card mb="2" borderColor={"gray.300"} borderWidth={"1px"} boxShadow={"none"}>
-                        <CardHeader>
-                          <Heading size="md">{val.property}</Heading>
-                        </CardHeader>
-                        <CardBody>
-                          <Stack divider={<StackDivider />} spacing="4">
-                            <Box>
-                              <Heading size="xs" textTransform="uppercase">
-                                Room Name
-                              </Heading>
-                              <Text pt="2" fontSize="sm">
-                                {val.name}
-                              </Text>
-                            </Box>
-                            <Box>
-                              <Heading size="xs" textTransform="uppercase">
-                                Price
-                              </Heading>
-                              <Text pt="2" fontSize="sm">
-                                {val.price}
-                              </Text>
-                            </Box>
-                            <Box>
-                              <Heading size="xs" textTransform="uppercase">
-                                Capacity
-                              </Heading>
-                              <Text pt="2" fontSize="sm">
-                                {val.capacity} adults
-                              </Text>
-                            </Box>
-                            <Box>
-                              <Heading size="xs" textTransform="uppercase">
-                                Description
-                              </Heading>
-                              <Text pt="2" fontSize="sm">
-                                {val.description}
-                              </Text>
-                            </Box>
-                          </Stack>
-                        </CardBody>
-                      </Card>
-                    );
-                  })}
+                  {availableRooms.length === 0 ? (
+                    <Text>There are currently no available property & rooms</Text>
+                  ) : (
+                      printAvailableRooms().map((val, idx) => {
+                        return (
+                          <Card mb="2" borderColor={"gray.300"} borderWidth={"1px"} boxShadow={"none"}>
+                            <CardHeader>
+                              <Heading size="md">{val.property}</Heading>
+                            </CardHeader>
+                            <CardBody>
+                              <Stack divider={<StackDivider />} spacing="4">
+                                <Box>
+                                  <Heading size="xs" textTransform="uppercase">
+                                    Room Name
+                                  </Heading>
+                                  <Text pt="2" fontSize="sm">
+                                    {val.name}
+                                  </Text>
+                                </Box>
+                                <Box>
+                                  <Heading size="xs" textTransform="uppercase">
+                                    Price
+                                  </Heading>
+                                  <Text pt="2" fontSize="sm">
+                                    {val.price}
+                                  </Text>
+                                </Box>
+                                <Box>
+                                  <Heading size="xs" textTransform="uppercase">
+                                    Capacity
+                                  </Heading>
+                                  <Text pt="2" fontSize="sm">
+                                    {val.capacity} adults
+                                  </Text>
+                                </Box>
+                                <Box>
+                                  <Heading size="xs" textTransform="uppercase">
+                                    Description
+                                  </Heading>
+                                  <Text pt="2" fontSize="sm">
+                                    {val.description}
+                                  </Text>
+                                </Box>
+                              </Stack>
+                            </CardBody>
+                          </Card>
+                        );
+                      })
+                  )}
                 </OrderedList>
               </ModalBody>
               <ModalFooter>

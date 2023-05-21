@@ -39,8 +39,6 @@ export default function Navbar() {
   const password = useSelector((state) => state.authReducer.password);
   const { pathname } = useLocation();
   const [modalIsOpen, setModalIsOpen] = React.useState(false);
-  const uuid = useSelector((state) => state.authReducer.uuid); //testing only 
-  console.log("ini uuid yang lagi login :", uuid); //testing only 
 
 
   // Login Page Modal
@@ -181,14 +179,30 @@ export default function Navbar() {
                     role == "User" ?
                       <Avatar
                         size={"sm"}
-                        src={imageProfile == null ? "https://ionicframework.com/docs/img/demos/avatar.svg" : imageProfile && imageProfile.includes("http") ? imageProfile : `${process.env.REACT_APP_API_IMG_URL}${imageProfile}` ? `${process.env.REACT_APP_API_IMG_URL}${imageProfile}` : "https://ionicframework.com/docs/img/demos/avatar.svg"}
+                        src={
+                          imageProfile == null
+                            ? "https://ionicframework.com/docs/img/demos/avatar.svg"
+                            : imageProfile && imageProfile.includes("http")
+                            ? imageProfile
+                            : `${process.env.REACT_APP_API_IMG_URL}${imageProfile}`
+                            ? `${process.env.REACT_APP_API_IMG_URL}${imageProfile}`
+                            : "https://ionicframework.com/docs/img/demos/avatar.svg"
+                        }
                       />
                       :
                       // Tenant
                       role == "Tenant" ?
                         <Avatar
                           size={"sm"}
-                          src={imageProfile == null ? "https://ionicframework.com/docs/img/demos/avatar.svg" : imageProfile && imageProfile.includes("http") ? imageProfile : `${process.env.REACT_APP_API_IMG_URL}${imageProfile}` ? `${process.env.REACT_APP_API_IMG_URL}${imageProfile}` : "https://ionicframework.com/docs/img/demos/avatar.svg"}
+                          src={
+                            imageProfile == null
+                              ? "https://ionicframework.com/docs/img/demos/avatar.svg"
+                              : imageProfile && imageProfile.includes("http")
+                              ? imageProfile
+                              : `${process.env.REACT_APP_API_IMG_URL}${imageProfile}`
+                              ? `${process.env.REACT_APP_API_IMG_URL}${imageProfile}`
+                              : "https://ionicframework.com/docs/img/demos/avatar.svg"
+                          }
                         />
                         :
                         <Avatar

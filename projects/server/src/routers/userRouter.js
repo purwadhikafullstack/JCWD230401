@@ -25,7 +25,7 @@ route.post("/forgot-password", checkUser, forgotPassword);
 route.patch("/reset-password", readToken, checkUser, resetPassword);
 route.post("/register-as-tenant", uploader("/imgIdCard", "IDC").array("images", 1), checkUser, registerAsTenant);
 route.patch("/verify-account", readToken, verify);
-route.post("/send-verification-email", readToken, sendVerificationEmail);
+route.get("/send-verification-email", readToken, sendVerificationEmail);
 route.patch("/edit-profile", readToken, checkUser, editProfile);
 route.patch("/update-profile-image", readToken, uploader("/profileImage", "PRF").array("image_profile", 1), updateProfileImage);
 route.get("/show-ktp", readToken, showKTP);
