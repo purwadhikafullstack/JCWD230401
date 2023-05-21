@@ -26,6 +26,8 @@ module.exports = {
     },
     transactionChart: async (req, res, next) => {
         try {
+            const { start, end } = req.query;
+
             let endDate = new Date().toISOString().split("T")[0];
             let tempDate = new Date() - 604800000;
             let sevenDaysAgo = new Date(tempDate).toISOString().split("T")[0];
@@ -43,8 +45,8 @@ module.exports = {
 
                 where: {
                     createdAt: {
-                        [sequelize.Op.gte]: sevenDaysAgo,
-                        [sequelize.Op.lte]: endDate,
+                        [sequelize.Op.gte]: start,
+                        [sequelize.Op.lte]: end,
                     },
                 },
 
@@ -83,12 +85,11 @@ module.exports = {
             next(error);
         }
     },
-    getPropertyIncome: async (req, res, next) => {
-        const { start, end } = req.query;
-    },
     propertyChart: async (req, res, next) => {
         try {
             const { idProperty } = req.params;
+
+            const { start, end } = req.query;
 
             let endDate = new Date().toISOString().split("T")[0];
             let tempDate = new Date() - 604800000;
@@ -102,26 +103,12 @@ module.exports = {
             let dateArr = [];
             let totalArr = [];
 
-            // let getRoomIdByProperty = await model.room.findAll({
-            //     attributes: ["id"],
-            //     where: {
-            //         propertyId,
-            //     },
-            //     raw: true,
-            // });
-
-            // console.log("getRoomId by Property id:", getRoomIdByProperty);
-
-            // let rooms = getRoomIdByProperty.map((room) => room.id);
-
-            // console.log("rooms after map:", rooms);
-
             let chart = await model.order.findAll({
                 attributes: ["price", "createdAt"],
                 where: {
                     createdAt: {
-                        [sequelize.Op.gte]: sevenDaysAgo,
-                        [sequelize.Op.lte]: endDate,
+                        [sequelize.Op.gte]: start,
+                        [sequelize.Op.lte]: end,
                     },
                 },
                 include: [
@@ -190,6 +177,8 @@ module.exports = {
     },
     userChart: async (req, res, next) => {
         try {
+            const { start, end } = req.query;
+
             endDate = new Date().toISOString().split("T")[0];
             let tempDate = new Date() - 604800000;
             let sevenDaysAgo = new Date(tempDate).toISOString().split("T")[0];
@@ -207,8 +196,8 @@ module.exports = {
                 ],
                 where: {
                     createdAt: {
-                        [sequelize.Op.gte]: sevenDaysAgo,
-                        [sequelize.Op.lte]: endDate,
+                        [sequelize.Op.gte]: start,
+                        [sequelize.Op.lte]: end,
                     },
                 },
                 include: [

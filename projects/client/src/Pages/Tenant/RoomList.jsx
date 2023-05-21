@@ -13,9 +13,13 @@ import {
     TableCaption,
     TableContainer,
     Box,
+    Heading,
+    Text,
+    Button,
 } from "@chakra-ui/react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import Pagination from "../../Components/Pagination";
+import Sidebar from "../../Components/Sidebar";
 
 function RoomList(props) {
     const location = useLocation();
@@ -91,34 +95,132 @@ function RoomList(props) {
     }, []);
 
     return (
-        <Flex>
-            <Box mt="4" w={"full"}>
-                <TableContainer>
-                    <Table variant="simple" color={"#EEEEEE"}>
-                        <Thead>
-                            <Tr>
-                                <Th fontSize={"lg"}>No</Th>
-                                <Th fontSize={"lg"}>Room</Th>
-                                <Th fontSize={"lg"}>Capacity</Th>
-                                <Th fontSize={"lg"}>Price</Th>
-                                <Th fontSize={"lg"}></Th>
-                            </Tr>
-                        </Thead>
-                        {printRoomData()}
-                    </Table>
-                </TableContainer>
-
-                {
-                    <Flex justify="center">
-                        <Pagination
-                            paginate={paginate}
-                            size={size}
-                            totalData={totalData}
-                        />
+        <>
+            <Flex minH={"93vh"}>
+                <Box>
+                    <Sidebar />
+                </Box>
+                <Box w="full" flex={"5"} px={{ base: "1", sm: "4" }} mt="5">
+                    <Flex justifyContent={"space-between"}>
+                        <Heading
+                            lineHeight={1.1}
+                            fontSize={{ base: "2xl", md: "3xl" }}
+                            textAlign={{ base: "center", sm: "start" }}
+                            mb={"5"}
+                        >
+                            Rooms
+                        </Heading>
+                        <Button
+                            color="#D3212D"
+                            variant={"outline"}
+                            onClick={() => navigate("/room")}
+                        >
+                            New Room
+                        </Button>
                     </Flex>
-                }
-            </Box>
-        </Flex>
+
+                    <Box mt="4" w={"full"}>
+                        {dataAllRoom.length ? (
+                            <TableContainer>
+                                <Table variant="simple" color={"#EEEEEE"}>
+                                    <Thead>
+                                        <Tr>
+                                            <Th
+                                                fontSize={"lg"}
+                                                textAlign={"center"}
+                                            >
+                                                No
+                                            </Th>
+                                            <Th
+                                                fontSize={"lg"}
+                                                textAlign={"center"}
+                                            >
+                                                Room
+                                            </Th>
+                                            <Th
+                                                fontSize={"lg"}
+                                                textAlign={"center"}
+                                            >
+                                                Capacity
+                                            </Th>
+                                            <Th
+                                                fontSize={"lg"}
+                                                textAlign={"center"}
+                                            >
+                                                Price
+                                            </Th>
+                                            <Th
+                                                fontSize={"lg"}
+                                                textAlign={"center"}
+                                            >
+                                                Controls
+                                            </Th>
+                                        </Tr>
+                                    </Thead>
+                                    {printRoomData()}
+                                </Table>
+                            </TableContainer>
+                        ) : (
+                            <>
+                                <Text>
+                                    This Property doesn't have any rooms. Click
+                                    "New Room" to add a new room.
+                                </Text>
+                                <TableContainer>
+                                    <Table variant="simple" color={"#EEEEEE"}>
+                                        <Thead>
+                                            <Tr>
+                                                <Th
+                                                    fontSize={"lg"}
+                                                    textAlign={"center"}
+                                                >
+                                                    No
+                                                </Th>
+                                                <Th
+                                                    fontSize={"lg"}
+                                                    textAlign={"center"}
+                                                >
+                                                    Room
+                                                </Th>
+                                                <Th
+                                                    fontSize={"lg"}
+                                                    textAlign={"center"}
+                                                >
+                                                    Capacity
+                                                </Th>
+                                                <Th
+                                                    fontSize={"lg"}
+                                                    textAlign={"center"}
+                                                >
+                                                    Price
+                                                </Th>
+                                                <Th
+                                                    fontSize={"lg"}
+                                                    textAlign={"center"}
+                                                >
+                                                    Controls
+                                                </Th>
+                                            </Tr>
+                                        </Thead>
+                                        {printRoomData()}
+                                    </Table>
+                                </TableContainer>
+                            </>
+                        )}
+
+                        {
+                            <Flex justify="center">
+                                <Pagination
+                                    paginate={paginate}
+                                    size={size}
+                                    totalData={totalData}
+                                />
+                            </Flex>
+                        }
+                    </Box>
+                </Box>
+            </Flex>
+        </>
     );
 }
 

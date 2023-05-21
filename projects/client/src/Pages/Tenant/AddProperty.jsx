@@ -209,7 +209,6 @@ function AddProperty(props) {
     }, []);
 
     useEffect(() => {
-        // console.log("UseEffect get regency");
         getRegencyById();
     }, [province]);
 
@@ -224,7 +223,7 @@ function AddProperty(props) {
     return (
         <Container
             my={"4"}
-            h={"100vh"}
+            h={"100%"}
             w={"100%"}
             maxW={"1300px"}
             display={"flex"}
@@ -467,7 +466,7 @@ function AddProperty(props) {
                                             onChange={onChangeFile}
                                         />
                                         <Text textAlign={"center"}>
-                                            Upload picture
+                                            Upload picture/s
                                         </Text>
                                     </Button>
                                     <Flex

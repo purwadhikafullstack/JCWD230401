@@ -76,7 +76,11 @@ function TransactionChart(props) {
             },
         ],
     };
-    return <Line options={options} data={data} {...props} />;
+    return (
+        <>
+            <Line options={options} data={data} {...props} />
+        </>
+    );
 }
 
 export default TransactionChart;

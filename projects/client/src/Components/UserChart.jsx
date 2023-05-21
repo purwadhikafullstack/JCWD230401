@@ -55,7 +55,11 @@ function UserChart(props) {
             },
         ],
     };
-    return <Bar options={options} data={data} {...props} />;
+    return (
+        <>
+            <Bar options={options} data={data} {...props} />
+        </>
+    );
 }
 
 export default UserChart;
