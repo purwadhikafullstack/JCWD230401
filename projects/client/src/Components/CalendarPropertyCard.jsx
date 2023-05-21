@@ -16,7 +16,7 @@ export default function CalendarPropertyCard(props) {
         <Center
             p="1"
         >
-            <Link to={`/property/detail/${props.uuid}`}>
+            <Link to="#">
                 <Box
                     role={"group"}
                     px={{ base: "2", md: "2", lg: "2" }}
