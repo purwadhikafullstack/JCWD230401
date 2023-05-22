@@ -34,9 +34,12 @@ import OrderListTenant from "./Pages/TenantPages/OrderListTenant";
 function App() {
     const dispatch = useDispatch();
     const role = useSelector((state) => state.authReducer.role);
+  const [isLoading, setIsLoading] = React.useState(false);
+
 
     const keepLogin = async () => {
         try {
+            setIsLoading(true);
             let token = localStorage.getItem("tempatku_login");
             if (token) {
                 let response = await axios.get(
@@ -52,7 +55,9 @@ function App() {
             }
         } catch (error) {
             console.log("ini error dari keeplogin : ", error);
-        }
+        } finally {
+            setIsLoading(false);
+          }
     };
 
     React.useEffect(() => {
@@ -61,7 +66,7 @@ function App() {
 
     return (
         <>
-            <Navbar />
+            <Navbar isLoading={isLoading} />
             {
                 // User
                 role == "User" ? (
@@ -97,6 +102,7 @@ function App() {
                             element={
                                 <EditProfile
                                     keepLogin={() => dispatch(keepLogin())}
+                                    isLoading={isLoading}
                                 />
                             }
                         />
@@ -144,6 +150,7 @@ function App() {
                             element={
                                 <EditProfile
                                     keepLogin={() => dispatch(keepLogin())}
+                                    isLoading={isLoading}
                                 />
                             }
                         />
