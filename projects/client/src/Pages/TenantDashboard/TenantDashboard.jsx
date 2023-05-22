@@ -198,6 +198,7 @@ function TenantDashboard() {
       console.log("ini error dari getmyproperty:", error);
     } finally {
       setLoading(false);
+      setLoadingPage(false);
     }
   };
 
