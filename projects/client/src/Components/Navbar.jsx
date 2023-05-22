@@ -110,15 +110,45 @@ export default function Navbar() {
                     :
                     <Image src={Logo} alt="tempatku logo" boxSize="50px" onClick={() => navigate("/")} />
               }
-              <Text
-                display={{
-                  base: "none", sm: "none", md: "block"
-                }}
-                fontSize="23px"
-                fontWeight="600"
-              >
-                tempatku
-              </Text>
+              {
+                role == "User" ?
+                  <Text
+                    display={{
+                      base: "none", sm: "none", md: "block"
+                    }}
+                    fontSize="23px"
+                    fontWeight="600"
+                    onClick={() => navigate("/")}
+                    cursor={"pointer"}
+                  >
+                    tempatku
+                  </Text>
+                  :
+                  role == "Tenant" ?
+                    <Text
+                      display={{
+                        base: "none", sm: "none", md: "block"
+                      }}
+                      fontSize="23px"
+                      fontWeight="600"
+                      onClick={() => navigate("/dashboard")}
+                      cursor={"pointer"}
+                    >
+                      tempatku
+                    </Text>
+                    :
+                    <Text
+                      display={{
+                        base: "none", sm: "none", md: "block"
+                      }}
+                      fontSize="23px"
+                      fontWeight="600"
+                      onClick={() => navigate("/")}
+                      cursor={"pointer"}
+                    >
+                      tempatku
+                    </Text>
+              }
               <HStack
                 as={"nav"}
                 spacing={4}
@@ -191,10 +221,10 @@ export default function Navbar() {
                           imageProfile == null
                             ? "https://ionicframework.com/docs/img/demos/avatar.svg"
                             : imageProfile && imageProfile.includes("http")
-                            ? imageProfile
-                            : `${process.env.REACT_APP_API_IMG_URL}${imageProfile}`
-                            ? `${process.env.REACT_APP_API_IMG_URL}${imageProfile}`
-                            : "https://ionicframework.com/docs/img/demos/avatar.svg"
+                              ? imageProfile
+                              : `${process.env.REACT_APP_API_IMG_URL}${imageProfile}`
+                                ? `${process.env.REACT_APP_API_IMG_URL}${imageProfile}`
+                                : "https://ionicframework.com/docs/img/demos/avatar.svg"
                         }
                       />
                       :
@@ -206,10 +236,10 @@ export default function Navbar() {
                             imageProfile == null
                               ? "https://ionicframework.com/docs/img/demos/avatar.svg"
                               : imageProfile && imageProfile.includes("http")
-                              ? imageProfile
-                              : `${process.env.REACT_APP_API_IMG_URL}${imageProfile}`
-                              ? `${process.env.REACT_APP_API_IMG_URL}${imageProfile}`
-                              : "https://ionicframework.com/docs/img/demos/avatar.svg"
+                                ? imageProfile
+                                : `${process.env.REACT_APP_API_IMG_URL}${imageProfile}`
+                                  ? `${process.env.REACT_APP_API_IMG_URL}${imageProfile}`
+                                  : "https://ionicframework.com/docs/img/demos/avatar.svg"
                           }
                         />
                         :
@@ -266,12 +296,12 @@ export default function Navbar() {
                               <ModalCloseButton onClose={onCloseModal} />
                               <ModalBody>
                                 {/* login modal */}
-                                <Login 
-                                onOpenModal={onOpenModal} 
-                                onCloseModal={onCloseModal}
-                                initialRef={initialRef}
-                                finalRef={finalRef}
-                                 />
+                                <Login
+                                  onOpenModal={onOpenModal}
+                                  onCloseModal={onCloseModal}
+                                  initialRef={initialRef}
+                                  finalRef={finalRef}
+                                />
                               </ModalBody>
                             </ModalContent>
                           </Modal>
