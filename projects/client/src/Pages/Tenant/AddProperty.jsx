@@ -36,6 +36,8 @@ function AddProperty(props) {
     const [activeButton, setActiveButton] = useState(null);
     const [fileProperty, setFileProperty] = useState(null);
     const [mapsUrl, setMapsUrl] = useState(""); // useState link maps
+    const [loading, setLoading] = useState(false);
+
     const toast = useToast();
 
     // For Each untuk check size per file (max 2mb)
@@ -57,9 +59,22 @@ function AddProperty(props) {
         const overSize = checkFileSize(files);
         const fileAmount = files.length;
         if (overSize) {
-            alert(`You can only upload files that are lower than 2MB in size.`);
+            toast({
+                title: "File/s too large!",
+                description:
+                    "You can only upload files that are lower than 2MB in size.",
+                status: "error",
+                duration: 3500,
+                isClosable: true,
+            });
         } else if (fileAmount > 5) {
-            alert(`You can only upload up to 5 pictures.`);
+            toast({
+                title: "Too many Files!",
+                description: "You can only upload up to 5 files.",
+                status: "error",
+                duration: 3500,
+                isClosable: true,
+            });
         } else {
             setFileProperty(event.target.files);
         }
@@ -119,6 +134,7 @@ function AddProperty(props) {
     // Button Save + Create Property
     const btnAddProperty = async () => {
         try {
+            setLoading(true);
             let token = localStorage.getItem("tempatku_login");
 
             if (
@@ -174,18 +190,6 @@ function AddProperty(props) {
                     }
                 );
                 if (add.data.success) {
-                    setFileProperty(null);
-                    setCategory("");
-                    setProperty("");
-                    setDescription("");
-                    setDescriptionLength(0);
-                    setAddress("");
-                    setRegency("");
-                    setProvince("");
-                    setZipcode("");
-                    setCountry("");
-                    setMapsUrl("");
-                    setActiveButton(null);
                     toast({
                         title: "Property successfully created",
                         status: "success",
@@ -196,6 +200,20 @@ function AddProperty(props) {
             }
         } catch (error) {
             console.log(error);
+        } finally {
+            setFileProperty(null);
+            setCategory("");
+            setProperty("");
+            setDescription("");
+            setDescriptionLength(0);
+            setAddress("");
+            setRegency("");
+            setProvince("");
+            setZipcode("");
+            setCountry("");
+            setMapsUrl("");
+            setActiveButton(null);
+            setLoading(false);
         }
     };
 
@@ -209,7 +227,9 @@ function AddProperty(props) {
     }, []);
 
     useEffect(() => {
-        getRegencyById();
+        if (province) {
+            getRegencyById();
+        }
     }, [province]);
 
     console.log("allProvince", allProvince);
@@ -433,6 +453,11 @@ function AddProperty(props) {
                                     borderColor={"gray.200"}
                                     borderRadius={"lg"}
                                     p={"4"}
+                                    minW={{
+                                        base: "",
+                                        md: "511px",
+                                        lg: "871px",
+                                    }}
                                 >
                                     <Button
                                         type="button"
@@ -440,7 +465,11 @@ function AddProperty(props) {
                                         display={"flex"}
                                         flexDir="column"
                                         size="md"
-                                        w={"800px"}
+                                        w={{
+                                            base: "",
+                                            md: "440px",
+                                            lg: "800px",
+                                        }}
                                         h={"100px"}
                                         textAlign="center"
                                         my={"4"}
@@ -724,6 +753,7 @@ function AddProperty(props) {
                         rounded={"3xl"}
                         bgColor="#D3212D"
                         onClick={btnAddProperty}
+                        isLoading={loading}
                     >
                         <Text color={"white"}>Save</Text>
                     </Button>

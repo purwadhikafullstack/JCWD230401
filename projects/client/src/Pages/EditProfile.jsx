@@ -7,7 +7,7 @@ import {
     Heading,
     Input,
     Stack,
-    Avatar,
+    Avatar, Spinner,
     useToast, AvatarBadge, IconButton, Link, Divider,
     Center, Radio, RadioGroup, Box, useDisclosure, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, Text, FormErrorMessage
 } from "@chakra-ui/react";
@@ -35,6 +35,7 @@ export default function EditProfile(props) {
     const [loading, setLoading] = React.useState(false);
     const [loading1, setLoading1] = React.useState(false);
     const [loading2, setLoading2] = React.useState(false);
+    const [loading3, setLoading3] = React.useState(false);
 
     const handleGenderChange = (value) => {
         setGender(value);
@@ -266,6 +267,7 @@ export default function EditProfile(props) {
 
     const onBtnShowKTP = async () => {
         try {
+            setLoading3(true);
             let token = localStorage.getItem("tempatku_login");
             let response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/user/show-ktp`,
                 {
@@ -274,7 +276,6 @@ export default function EditProfile(props) {
                     },
                 }
             );
-
             //decode Base64 string into binary data into an array of numeric values
             const decryptbase64 = decodeToken(response.data);
             const binaryData = atob(decryptbase64.base64Data);
@@ -289,6 +290,8 @@ export default function EditProfile(props) {
         } catch (error) {
             console.log("ini error dari onBtnShowKTP : ", error);
             alert(error.message)
+        } finally {
+            setLoading3(false);
         }
     };
 
@@ -319,32 +322,38 @@ export default function EditProfile(props) {
                             spacing={6}
                         >
                             <Center>
-                                <Avatar size="xl"
-                                    src={currentProfileImage == null ? "https://ionicframework.com/docs/img/demos/avatar.svg" : currentProfileImage && currentProfileImage.includes("http") ? currentProfileImage : `${process.env.REACT_APP_API_IMG_URL}${currentProfileImage}` ? `${process.env.REACT_APP_API_IMG_URL}${currentProfileImage}` : "https://ionicframework.com/docs/img/demos/avatar.svg"}
-                                >
-                                    {!isVerified && role == "User" ?
-                                        <AvatarBadge
-                                            as={IconButton}
-                                            size="sm"
-                                            rounded="full"
-                                            bottom="-1px"
-                                            right="-3px"
-                                            colorScheme="red"
-                                            icon={<BsShieldExclamation />}
-                                        /> :
-                                        isVerified && role == "User" ?
-                                            <AvatarBadge
-                                                as={IconButton}
-                                                size="sm"
-                                                rounded="full"
-                                                bottom="-1px"
-                                                right="-3px"
-                                                colorScheme="green"
-                                                icon={<BsShieldCheck />}
-                                            /> :
-                                            <AvatarBadge display={{ base: "none" }} />
-                                    }
-                                </Avatar>
+                                {
+                                    props.isLoading ? (
+                                        <Text textAlign="center"><Spinner color='red.500' /></Text>
+                                    ) : (
+                                        <Avatar size="xl"
+                                            src={currentProfileImage == null ? "https://ionicframework.com/docs/img/demos/avatar.svg" : currentProfileImage && currentProfileImage.includes("http") ? currentProfileImage : `${process.env.REACT_APP_API_IMG_URL}${currentProfileImage}` ? `${process.env.REACT_APP_API_IMG_URL}${currentProfileImage}` : "https://ionicframework.com/docs/img/demos/avatar.svg"}
+                                        >
+                                            {!isVerified && role == "User" ?
+                                                <AvatarBadge
+                                                    as={IconButton}
+                                                    size="sm"
+                                                    rounded="full"
+                                                    bottom="-1px"
+                                                    right="-3px"
+                                                    colorScheme="red"
+                                                    icon={<BsShieldExclamation />}
+                                                /> :
+                                                isVerified && role == "User" ?
+                                                    <AvatarBadge
+                                                        as={IconButton}
+                                                        size="sm"
+                                                        rounded="full"
+                                                        bottom="-1px"
+                                                        right="-3px"
+                                                        colorScheme="green"
+                                                        icon={<BsShieldCheck />}
+                                                    /> :
+                                                    <AvatarBadge display={{ base: "none" }} />
+                                            }
+                                        </Avatar>
+
+                                    )}
                             </Center>
                             <Box w="full">
                                 <Center w="full"
@@ -512,6 +521,7 @@ export default function EditProfile(props) {
                                     w="full"
                                     borderColor="#D3212D"
                                     onClick={onBtnShowKTP}
+                                    isLoading={loading3}
                                 >
                                     Show KTP Photo
                                 </Button>

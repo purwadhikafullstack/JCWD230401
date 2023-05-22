@@ -41,7 +41,10 @@ module.exports = {
             let totalArr = [];
 
             let chart = await model.order.findAll({
-                attributes: ["price", "createdAt"],
+                attributes: [
+                    [sequelize.fn("sum", sequelize.col("price")), "price"],
+                    "createdAt",
+                ],
 
                 where: {
                     createdAt: {
@@ -58,6 +61,7 @@ module.exports = {
                         },
                     },
                 ],
+                group: ["createdAt"],
                 order: [["createdAt", "ASC"]],
             });
 
@@ -104,7 +108,10 @@ module.exports = {
             let totalArr = [];
 
             let chart = await model.order.findAll({
-                attributes: ["price", "createdAt"],
+                attributes: [
+                    [sequelize.fn("sum", sequelize.col("price")), "price"],
+                    "createdAt",
+                ],
                 where: {
                     createdAt: {
                         [sequelize.Op.gte]: start,
@@ -126,6 +133,7 @@ module.exports = {
                         },
                     },
                 ],
+                group: ["createdAt"],
                 order: [["createdAt", "ASC"]],
             });
             console.log("chart:", chart);

@@ -41,8 +41,6 @@ function PropertyList(props) {
     const [order, setOrder] = React.useState(defaultOrder);
     const [filter, setFilter] = React.useState(defaultFilter);
 
-    const uuidUser = useSelector((state) => state.authReducer.uuid);
-
     const printPropertyData = () => {
         const actualRowNumber = page * size;
         return dataAllProperty.map((val, idx) => {

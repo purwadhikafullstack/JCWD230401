@@ -1,7 +1,7 @@
 import {
     Flex, Text, Box, Heading, Stack, Button, VStack, useBreakpointValue,
     Image, Input,
-    List, ListItem
+    List, ListItem, Spinner
 } from "@chakra-ui/react";
 import React, { useState, useEffect } from "react";
 import { SearchIcon } from "@chakra-ui/icons";
@@ -26,6 +26,7 @@ import "slick-carousel/slick/slick-theme.css";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { useDispatch } from "react-redux";
 import { loginActionGoogle } from "../../reducers/auth";
+import { formatRupiah } from "../../helper";
 
 
 export default function LandingNew() {
@@ -44,7 +45,8 @@ export default function LandingNew() {
     const [showLocation, setShowLocation] = useState([]);
     const [recommendProperty, setRecommendProperty] = useState([]);
     const dispatch = useDispatch();
-
+    const [loading, setLoading] = useState(false);
+    const [loading2, setLoading2] = useState(false);
 
 
     //fetch search result (Location Search Bar)
@@ -54,12 +56,15 @@ export default function LandingNew() {
 
     const getAllLocations = async () => {
         try {
+            setLoading(true);
             let response = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/landing/all-location`, {
                 name: showLocation
             })
             setShowLocation(response.data);
         } catch (error) {
             console.log("ini error dari getAllLocations:", error);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -127,11 +132,14 @@ export default function LandingNew() {
 
     const getRecommendProperty = async () => {
         try {
+            setLoading2(true);
             let response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/landing/property-recommendation`);
             console.log("ini response dari getRecommendProperty :", response.data);
             setRecommendProperty(response.data);
         } catch (error) {
             console.log("ini error dari getRecommendProperty:", error);
+        } finally {
+            setLoading2(false);
         }
     };
     console.log("ini isi RecommendProperty:", recommendProperty);
@@ -149,7 +157,7 @@ export default function LandingNew() {
                 rating={parseFloat(val.average_rating).toFixed(2)}
                 province={province}
                 country={val.room.property.property_location.country}
-                price={Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR" }).format(val.room?.lowest_price)}
+                price={formatRupiah(val.room?.lowest_price)}
             />
         })
     };
@@ -228,9 +236,19 @@ export default function LandingNew() {
     };
 
     //react-slick slider property recommendation
+    const numberOfProperties = recommendProperty.length;
+    let slidesToShowValue = 4;
+    if (numberOfProperties === 1) {
+        slidesToShowValue = 1;
+    } else if (numberOfProperties === 2) {
+        slidesToShowValue = 2;
+    } else if (numberOfProperties === 3) {
+        slidesToShowValue = 3;
+    };
+
     const settingsRecommendation = {
         infinite: true,
-        slidesToShow: 4,
+        slidesToShow: slidesToShowValue,
         slidesToScroll: 1,
         initialSlide: 0,
         responsive: [
@@ -327,20 +345,28 @@ export default function LandingNew() {
                                         {/* DROP DOWN */}
                                         <Box position="absolute" top="100%" left="0%" bgColor={"white"} borderBottomLeftRadius={"lg"} borderBottomRightRadius={"lg"} zIndex={9999} cursor="pointer">
                                             <List>
-                                                {showLocation.filter(item => {
-                                                    const searchTerm = inputLocation.toLowerCase(); //user write in input location
-                                                    const name = item.name.toLowerCase();
-                                                    return (searchTerm && name.includes(searchTerm) && name !== searchTerm);
+                                                {
+                                                    loading ? (
+                                                        <Text textAlign="center"><Spinner color='red.500' /></Text>
+                                                    ) : (
+
+                                                        showLocation.filter(item => {
+                                                            const searchTerm = inputLocation.toLowerCase(); //user write in input location
+                                                            const name = item.name.toLowerCase();
+                                                            return (searchTerm && name.includes(searchTerm) && name !== searchTerm);
+                                                        }
+                                                        ).slice(0, 4) //will show only first 4 items di location input field
+                                                            .map((item) =>
+                                                            (<ListItem py="2" px="6"
+                                                                onClick={() => onSearch(item.name
+                                                                    .toLowerCase().replace(/(^|\s)\S/g, (letter) => letter.toUpperCase()))}
+                                                                className="dropdown-row"
+                                                                key={item.id} //each drop down has an unique identifier
+                                                            >{item.name
+                                                                .toLowerCase().replace(/(^|\s)\S/g, (letter) => letter.toUpperCase())}</ListItem>))
+
+                                                    )
                                                 }
-                                                ).slice(0, 4) //will show only first 4 items di location input field
-                                                    .map((item) =>
-                                                    (<ListItem py="2" px="6"
-                                                        onClick={() => onSearch(item.name
-                                                            .toLowerCase().replace(/(^|\s)\S/g, (letter) => letter.toUpperCase()))}
-                                                        className="dropdown-row"
-                                                        key={item.id} //each drop down has an unique identifier
-                                                    >{item.name
-                                                        .toLowerCase().replace(/(^|\s)\S/g, (letter) => letter.toUpperCase())}</ListItem>))}
                                             </List>
                                         </Box>
                                     </Box>
@@ -598,9 +624,14 @@ export default function LandingNew() {
                 </Heading>
                 <Text fontWeight="700" align="center" mt="14px" fontSize={{ base: "sm", lg: "md" }}>Discover our properties with the best ratings</Text>
                 <Box my={{ base: "40px", md: "80px" }} px={2}>
-                    <Slider {...settingsRecommendation} prevArrow={<FaChevronLeft color="#E2E8F0" />} nextArrow={<FaChevronRight color="#E2E8F0" />}>
-                        {printRecommendProperty()}
-                    </Slider>
+                    {
+                        loading2 ? (
+                            <Text textAlign="center"><Spinner color='red.500' /></Text>
+                        ) : (
+                            <Slider {...settingsRecommendation} prevArrow={<FaChevronLeft color="#E2E8F0" />} nextArrow={<FaChevronRight color="#E2E8F0" />}>
+                                {printRecommendProperty()}
+                            </Slider>
+                        )}
                     <Box align="center">
                         <Button
                             bg="#D3212D"

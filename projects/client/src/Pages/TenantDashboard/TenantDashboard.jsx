@@ -4,7 +4,7 @@ import Fullcalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
-import { Box, Flex, Stack, Text, OrderedList, Heading, Modal, Button, ModalOverlay, ModalContent, Card, CardHeader, CardBody, ModalHeader, ModalBody, ModalFooter, StackDivider } from "@chakra-ui/react";
+import { Box, Flex, Stack, Text, OrderedList, Heading, Modal, Button, ModalOverlay, ModalContent, Card, CardHeader, CardBody, ModalHeader, ModalBody, ModalFooter, StackDivider, Spinner } from "@chakra-ui/react";
 import Sidebar from "../../Components/Sidebar";
 import axios from "axios";
 import { useSelector } from "react-redux";
@@ -13,6 +13,8 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import CalendarPropertyCard from "../../Components/CalendarPropertyCard";
+import { formatRupiah } from "../../helper";
+
 
 function TenantDashboard() {
   const name = useSelector((state) => state.authReducer.name);
@@ -23,10 +25,15 @@ function TenantDashboard() {
   const [formatSelectedDate, setFormatSelectedDate] = useState("");
   const [availableRooms, setAvailableRooms] = useState([]);
   const [propertyListing, setPropertyListing] = useState([]);
+  const [loadingOrder, setLoadingOrder] = useState(false);
+  const [loadingMaintenance, setLoadingMaintenance] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [loading2, setLoading2] = useState(false);
 
   //get booked and under maintenance rooms
   const getRoomOrders = async () => {
     try {
+      setLoadingOrder(true);
       let token = localStorage.getItem("tempatku_login");
       let response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/calendar/room-orders`, {
         headers: {
@@ -36,11 +43,14 @@ function TenantDashboard() {
       setRoomOrders(response.data)
     } catch (error) {
       console.log("ini error dari getRoomOrders :", error);
+    } finally {
+      setLoadingOrder(false);
     }
   };
 
   const getRoomMaintenances = async () => {
     try {
+      setLoadingMaintenance(true);
       let token = localStorage.getItem("tempatku_login");
       let response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/calendar/room-maintenances`, {
         headers: {
@@ -50,6 +60,8 @@ function TenantDashboard() {
       setRoomMaintenances(response.data)
     } catch (error) {
       console.log("ini error dari getRoomMaintenances :", error);
+    } finally {
+      setLoadingMaintenance(false);
     }
   };
 
@@ -118,6 +130,7 @@ function TenantDashboard() {
   //get available rooms
   const onBtnAvailableRooms = async () => {
     try {
+      setLoading2(true);
       let token = localStorage.getItem("tempatku_login");
       let response = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/calendar/available-rooms`, {
         date: selectedDate
@@ -129,6 +142,8 @@ function TenantDashboard() {
       setAvailableRooms(response.data);
     } catch (error) {
       console.log("ini error dari onBtnAvailableRooms :", error);
+    } finally {
+      setLoading2(false);
     }
   };
 
@@ -138,7 +153,7 @@ function TenantDashboard() {
         property: val.property.property,
         name: val.room_category.name,
         description: val.description,
-        price: Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR" }).format(val.price),
+        price: formatRupiah(val.price),
         capacity: val.capacity,
       };
     });
@@ -167,6 +182,7 @@ function TenantDashboard() {
   //get property listings
   const getMyProperty = async () => {
     try {
+      setLoading(true);
       let token = localStorage.getItem("tempatku_login");
       let response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/calendar/property-listing`, {
         headers: {
@@ -177,12 +193,14 @@ function TenantDashboard() {
       setPropertyListing(response.data);
     } catch (error) {
       console.log("ini error dari getmyproperty:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
   const printMyProperty = () => {
     return propertyListing.map((val, idx) => {
-      const regency = val.property_location?.regency.name
+      const province = val.property_location?.province.name
         .toLowerCase()
         .replace(/(^|\s)\S/g, (letter) => letter.toUpperCase());
       const rating = parseFloat(val.rooms[0]?.reviews[0]?.average_rating);
@@ -191,9 +209,9 @@ function TenantDashboard() {
         uuid={val.uuid}
         property={val.property}
         picture={val.picture_properties[0]?.picture}
-        regency={regency}
+        province={province}
         country={val.property_location?.country}
-        price={Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR" }).format(val.rooms[0]?.lowest_price)}
+        price={formatRupiah(val.rooms[0]?.lowest_price)}
         rating={averageRating}
       />
     })
@@ -263,13 +281,17 @@ function TenantDashboard() {
           {/* MY PROPERTY */}
           <Box>
             <Text fontSize={{ base: "20", sm: "28" }} fontWeight={"semibold"} mb={{ base: "6", sm: "10" }} textAlign={{ base: "center", sm: "left" }}>Your Property Listings</Text>
-            {propertyListing.length === 0 ? (
-              <Text>No property listings yet</Text>
-            ) : (
-              <Slider {...settingsMyProperty} prevArrow={<FaChevronLeft color="#E2E8F0" />} nextArrow={<FaChevronRight color="#E2E8F0" />}>
-                {printMyProperty()}
-              </Slider>
-            )}
+            {
+              loading ? (
+                <Text textAlign="center"><Spinner color='red.500' /></Text>
+              ) : propertyListing.length === 0 ? (
+                <Text>No property listings yet</Text>
+              ) : (
+                <Slider {...settingsMyProperty} prevArrow={<FaChevronLeft color="#E2E8F0" />} nextArrow={<FaChevronRight color="#E2E8F0" />}>
+                  {printMyProperty()}
+                </Slider>
+              )
+            }
           </Box>
         </Box>
         <br />
@@ -277,21 +299,26 @@ function TenantDashboard() {
           borderColor={{ base: "white", sm: "gray.300" }}
         >
           <Text fontSize={{ base: "20", sm: "28" }} fontWeight={"semibold"} mb={{ base: "6", sm: "10" }} textAlign={{ base: "center", sm: "left" }}>See Availability by Calendar Date</Text>
-          <Fullcalendar
-            className="my-calendar"
-            plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-            initialView={"dayGridMonth"}
-            headerToolbar={{
-              start: "today prev,next",
-              center: "title",
-              end: "dayGridMonth,timeGridWeek,timeGridDay",
-            }}
-            height={"90vh"}
-            events=
-            {roomEvents}
-            dayMaxEvents={2} // max number of events displayed per day
-            dateClick={dateClick}
-          />
+          {
+            loadingOrder || loadingMaintenance ? (
+              <Text textAlign="center"><Spinner color='red.500' /></Text>
+            ) : (
+              <Fullcalendar
+                className="my-calendar"
+                plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+                initialView={"dayGridMonth"}
+                headerToolbar={{
+                  start: "today prev,next",
+                  center: "title",
+                  end: "dayGridMonth,timeGridWeek,timeGridDay",
+                }}
+                height={"90vh"}
+                events=
+                {roomEvents}
+                dayMaxEvents={2} // max number of events displayed per day
+                dateClick={dateClick}
+              />
+            )}
           <Modal isOpen={modalIsOpen} onClose={() => setModalIsOpen(false)} scrollBehavior={"inside"}>
             <ModalOverlay />
             <ModalContent>
@@ -305,55 +332,59 @@ function TenantDashboard() {
               </ModalHeader>
               <ModalBody>
                 <OrderedList p="4" m="auto">
-                  {availableRooms.length === 0 ? (
-                    <Text>There are currently no available property & rooms</Text>
-                  ) : (
-                      printAvailableRooms().map((val, idx) => {
-                        return (
-                          <Card mb="2" borderColor={"gray.300"} borderWidth={"1px"} boxShadow={"none"}>
-                            <CardHeader>
-                              <Heading size="md">{val.property}</Heading>
-                            </CardHeader>
-                            <CardBody>
-                              <Stack divider={<StackDivider />} spacing="4">
-                                <Box>
-                                  <Heading size="xs" textTransform="uppercase">
-                                    Room Name
-                                  </Heading>
-                                  <Text pt="2" fontSize="sm">
-                                    {val.name}
-                                  </Text>
-                                </Box>
-                                <Box>
-                                  <Heading size="xs" textTransform="uppercase">
-                                    Price
-                                  </Heading>
-                                  <Text pt="2" fontSize="sm">
-                                    {val.price}
-                                  </Text>
-                                </Box>
-                                <Box>
-                                  <Heading size="xs" textTransform="uppercase">
-                                    Capacity
-                                  </Heading>
-                                  <Text pt="2" fontSize="sm">
-                                    {val.capacity} adults
-                                  </Text>
-                                </Box>
-                                <Box>
-                                  <Heading size="xs" textTransform="uppercase">
-                                    Description
-                                  </Heading>
-                                  <Text pt="2" fontSize="sm">
-                                    {val.description}
-                                  </Text>
-                                </Box>
-                              </Stack>
-                            </CardBody>
-                          </Card>
-                        );
-                      })
-                  )}
+                  {
+                    loading2 ? (
+                      <Text textAlign="center"><Spinner color='red.500' /></Text>
+                    ) :
+                      availableRooms.length === 0 ? (
+                        <Text>There are currently no available property & rooms</Text>
+                      ) : (
+                        printAvailableRooms().map((val, idx) => {
+                          return (
+                            <Card mb="2" borderColor={"gray.300"} borderWidth={"1px"} boxShadow={"none"}>
+                              <CardHeader>
+                                <Heading size="md">{val.property}</Heading>
+                              </CardHeader>
+                              <CardBody>
+                                <Stack divider={<StackDivider />} spacing="4">
+                                  <Box>
+                                    <Heading size="xs" textTransform="uppercase">
+                                      Room Name
+                                    </Heading>
+                                    <Text pt="2" fontSize="sm">
+                                      {val.name}
+                                    </Text>
+                                  </Box>
+                                  <Box>
+                                    <Heading size="xs" textTransform="uppercase">
+                                      Price
+                                    </Heading>
+                                    <Text pt="2" fontSize="sm">
+                                      {val.price}
+                                    </Text>
+                                  </Box>
+                                  <Box>
+                                    <Heading size="xs" textTransform="uppercase">
+                                      Capacity
+                                    </Heading>
+                                    <Text pt="2" fontSize="sm">
+                                      {val.capacity} adults
+                                    </Text>
+                                  </Box>
+                                  <Box>
+                                    <Heading size="xs" textTransform="uppercase">
+                                      Description
+                                    </Heading>
+                                    <Text pt="2" fontSize="sm">
+                                      {val.description}
+                                    </Text>
+                                  </Box>
+                                </Stack>
+                              </CardBody>
+                            </Card>
+                          );
+                        })
+                      )}
                 </OrderedList>
               </ModalBody>
               <ModalFooter>

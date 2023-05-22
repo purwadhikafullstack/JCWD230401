@@ -48,6 +48,7 @@ module.exports = {
         attributes: ["startDate", "endDate"],
         where: {
           isDeleted: 0,
+          isActive: 1
         },
         include: [
           {

@@ -9,15 +9,22 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      provinceName: {
+      name: {
         type: Sequelize.STRING
       },
+      alt_name: {
+        type: Sequelize.STRING
+      },
+      latitude: {
+        type: Sequelize.DOUBLE
+      },
+      longitude: {
+        type: Sequelize.DOUBLE
+      },
       createdAt: {
-        allowNull: false,
         type: Sequelize.DATE
       },
       updatedAt: {
-        allowNull: false,
         type: Sequelize.DATE
       }
     });

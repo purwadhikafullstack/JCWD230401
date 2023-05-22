@@ -35,6 +35,7 @@ function AddRoom(props) {
     const [fileRoom, setFileRoom] = useState(null);
     const [allPropertyByUserId, setAllPropertyByUserId] = useState([]);
     const [property, setProperty] = useState(null);
+    const [loading, setLoading] = useState(false);
 
     const checkFileSize = (files) => {
         const maxSize = 2 * 1024 * 1024;
@@ -85,8 +86,14 @@ function AddRoom(props) {
 
     const getPropertyNameAndId = async () => {
         try {
+            let token = localStorage.getItem("tempatku_login");
             let get = await axios.get(
-                `${process.env.REACT_APP_API_BASE_URL}/room/getpropertynameandid`
+                `${process.env.REACT_APP_API_BASE_URL}/room/getpropertynameandid`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
             );
             setAllPropertyByUserId(get.data);
         } catch (error) {
@@ -108,6 +115,7 @@ function AddRoom(props) {
 
     const btnAddRoom = async () => {
         try {
+            setLoading(true);
             let token = localStorage.getItem("tempatku_login");
             let formData = new FormData();
             formData.append(
@@ -117,7 +125,7 @@ function AddRoom(props) {
                     name: roomName,
                     description: description,
                     capacity: roomCapacity,
-                    // facilities: JANGAN LUPA TAMBAHIN,
+                    // facilities: improvement kalo waktu cukup,
                     price: roomPrice,
                 })
             );
@@ -139,19 +147,27 @@ function AddRoom(props) {
                     },
                 }
             );
-            // console.log(add);
+
             if (add.data.success) {
-                setProperty(null);
-                setRoomName("");
-                setFileRoom(null);
-                setDescription("");
-                setDescriptionLength(0);
-                setRoomCapacity("");
-                setRoomPrice("");
-                alert("Room Added");
+                toast({
+                    title: "Added new room.",
+                    description: "Created room successfully.",
+                    status: "success",
+                    duration: 3500,
+                    isClosable: true,
+                });
             }
         } catch (error) {
             console.log(error);
+        } finally {
+            setProperty(null);
+            setRoomName("");
+            setFileRoom(null);
+            setDescription("");
+            setDescriptionLength(0);
+            setRoomCapacity("");
+            setRoomPrice("");
+            setLoading(false);
         }
     };
 
@@ -441,96 +457,6 @@ function AddRoom(props) {
                         </Box>
                     </Box>
                 </Box>
-                {/* Facilities */}
-                {/* <Box textAlign="left" fontSize={"3xl"} fontWeight="bold">
-                    <h2>Room Facilities</h2>
-                </Box>
-                <Box as={Flex} my="10">
-                    <Flex flex={1} fontWeight="medium" alignItems={"center"}>
-                        Choose Facilities That Fit Your Room
-                    </Flex>
-                    <Box flex={3} display="flex" flexDir={"column"}>
-                        <Box
-                            display={"flex"}
-                            flexDir={"row"}
-                            w={"100%"}
-                            justifyContent={"space-evenly"}
-                        >
-                            <Box mx="4" display={"flex"}>
-                                <CheckboxGroup colorScheme="red">
-                                    <Stack
-                                        spacing={[1, 5]}
-                                        direction={["row", "column"]}
-                                    >
-                                        <Checkbox>
-                                            <Text>Wifi</Text>
-                                        </Checkbox>
-                                        <Checkbox>
-                                            <Text>TV</Text>
-                                        </Checkbox>
-                                        <Checkbox>
-                                            <Text>Air Conditioning</Text>
-                                        </Checkbox>
-                                    </Stack>
-                                </CheckboxGroup>
-                            </Box>
-                            <Box mx="4" display={"flex"}>
-                                <CheckboxGroup colorScheme="red">
-                                    <Stack
-                                        spacing={[1, 5]}
-                                        direction={["row", "column"]}
-                                    >
-                                        <Checkbox>
-                                            <Text>Free Parking</Text>
-                                        </Checkbox>
-                                        <Checkbox>
-                                            <Text>Dedicated Workspace</Text>
-                                        </Checkbox>
-                                        <Checkbox>
-                                            <Text>Breakfast</Text>
-                                        </Checkbox>
-                                    </Stack>
-                                </CheckboxGroup>
-                            </Box>
-                            <Box mx="4" display={"flex"}>
-                                <CheckboxGroup colorScheme="red">
-                                    <Stack
-                                        spacing={[1, 5]}
-                                        direction={["row", "column"]}
-                                    >
-                                        <Checkbox>
-                                            <Text>Hot Tub</Text>
-                                        </Checkbox>
-                                        <Checkbox>
-                                            <Text>Washer</Text>
-                                        </Checkbox>
-                                        <Checkbox>
-                                            <Text>Kitchen</Text>
-                                        </Checkbox>
-                                    </Stack>
-                                </CheckboxGroup>
-                            </Box>
-                            <Box mx="4" display={"flex"}>
-                                <CheckboxGroup colorScheme="red">
-                                    <Stack
-                                        spacing={[1, 5]}
-                                        direction={["row", "column"]}
-                                    >
-                                        <Checkbox>
-                                            <Text>City View</Text>
-                                        </Checkbox>
-                                        <Checkbox>
-                                            <Text>Refrigerator</Text>
-                                        </Checkbox>
-                                        <Checkbox>
-                                            <Text>Pool</Text>
-                                        </Checkbox>
-                                    </Stack>
-                                </CheckboxGroup>
-                            </Box>
-                        </Box>
-                    </Box>
-                </Box> */}
                 {/* Price */}
                 <Box textAlign="left" fontSize={"3xl"} fontWeight="bold">
                     <h2>Room Price</h2>
@@ -576,6 +502,7 @@ function AddRoom(props) {
                         rounded={"3xl"}
                         bgColor="#D3212D"
                         onClick={btnAddRoom}
+                        isLoading={loading}
                     >
                         <Text color={"white"}>Save</Text>
                     </Button>

@@ -14,12 +14,6 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.STRING
       },
-      startDate: {
-        type: Sequelize.STRING
-      },
-      endDate: {
-        type: Sequelize.STRING
-      },
       discount: {
         type: Sequelize.INTEGER
       },
@@ -33,16 +27,20 @@ module.exports = {
         allowNull: false,
         type: Sequelize.INTEGER
       },
+      expiredAt: {
+        type: Sequelize.DATE
+      },
       userId: {
         allowNull: false,
         type: Sequelize.INTEGER
       },
+      invoice_number: {
+        type: Sequelize.INTEGER
+      },
       createdAt: {
-        allowNull: false,
         type: Sequelize.DATE
       },
       updatedAt: {
-        allowNull: false,
         type: Sequelize.DATE
       }
     });

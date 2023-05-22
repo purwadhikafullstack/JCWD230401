@@ -9,9 +9,6 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      province_id: {
-        type: Sequelize.INTEGER
-      },
       name: {
         type: Sequelize.STRING
       },
@@ -24,12 +21,14 @@ module.exports = {
       longitude: {
         type: Sequelize.DOUBLE
       },
-      createdAt: {
+      province_Id: {
         allowNull: false,
+        type: Sequelize.INTEGER
+      },
+      createdAt: {
         type: Sequelize.DATE
       },
       updatedAt: {
-        allowNull: false,
         type: Sequelize.DATE
       }
     });

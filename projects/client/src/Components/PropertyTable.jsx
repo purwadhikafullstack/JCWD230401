@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
     Table,
     Thead,
@@ -28,9 +28,11 @@ function PropertyTable(props) {
     function BtnDeleteProperty() {
         const { isOpen, onOpen, onClose } = useDisclosure();
         const cancelRef = React.useRef();
+        const [loading, setLoading] = useState(false);
 
         const deleteProperty = async () => {
             try {
+                setLoading(true);
                 let token = localStorage.getItem("tempatku_login");
                 let del = await axios.patch(
                     `${process.env.REACT_APP_API_BASE_URL}/property/deleteproperty/${props.uuid}`,
@@ -45,6 +47,8 @@ function PropertyTable(props) {
                 props.getAllPropertyList();
             } catch (error) {
                 console.log(error);
+            } finally {
+                setLoading(false);
             }
         };
 
@@ -80,6 +84,7 @@ function PropertyTable(props) {
                                     colorScheme="red"
                                     onClick={deleteProperty}
                                     ml={3}
+                                    isLoading={loading}
                                 >
                                     Delete
                                 </Button>

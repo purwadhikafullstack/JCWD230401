@@ -15,12 +15,14 @@ module.exports = {
       isDeleted: {
         type: Sequelize.BOOLEAN
       },
-      createdAt: {
+      roomId: {
         allowNull: false,
+        type: Sequelize.INTEGER
+      },
+      createdAt: {
         type: Sequelize.DATE
       },
       updatedAt: {
-        allowNull: false,
         type: Sequelize.DATE
       }
     });
