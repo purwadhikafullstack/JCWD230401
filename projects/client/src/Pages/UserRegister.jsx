@@ -143,7 +143,7 @@ export default function UserRegister() {
                     <Heading fontSize={"3xl"} fontWeight="semibold"
                         my="8"
                     >Register to tempatku</Heading>
-                    <Stack spacing={6}>
+                    <Stack spacing={8}>
                         <HStack>
                             <Box>
                                 {/* NAME */}

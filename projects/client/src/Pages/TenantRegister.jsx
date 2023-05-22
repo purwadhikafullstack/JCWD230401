@@ -176,7 +176,7 @@ export default function TenantRegister() {
                     <Heading fontSize={"3xl"} fontWeight="semibold"
                         my="8"
                     >Register as a Tenant</Heading>
-                    <Stack spacing={6}>
+                    <Stack spacing={8}>
                         <HStack>
                             <Box>
                                 {/* NAME */}
