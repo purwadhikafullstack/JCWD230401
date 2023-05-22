@@ -61,8 +61,14 @@ function SalesReport(props) {
 
     const getProperty = async () => {
         try {
+            let token = localStorage.getItem("tempatku_login");
             let get = await axios.get(
-                `${process.env.REACT_APP_API_BASE_URL}/room/property-name-and-id`
+                `${process.env.REACT_APP_API_BASE_URL}/room/property-name-and-id`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
             );
             setAllProperty(get.data);
         } catch (error) {
@@ -104,9 +110,9 @@ function SalesReport(props) {
         }
     };
 
-    console.log("transactionDataChart", transactionDataChart);
-    console.log("propertyDataChart", propertyDataChart);
-    console.log("userDataChart", userDataChart);
+    // console.log("transactionDataChart", transactionDataChart);
+    // console.log("propertyDataChart", propertyDataChart);
+    // console.log("userDataChart", userDataChart);
 
     const getUsers = async () => {
         try {
