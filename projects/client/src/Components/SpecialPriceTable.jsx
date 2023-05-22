@@ -40,7 +40,7 @@ function SpecialPriceTable(props) {
             try {
                 let token = localStorage.getItem("tempatku_login");
                 let del = await axios.patch(
-                    `${process.env.REACT_APP_API_BASE_URL}/special/deletespecialprice`,
+                    `${process.env.REACT_APP_API_BASE_URL}/special/delete`,
                     { uuid: props.uuidSpecial },
                     {
                         headers: {
@@ -133,7 +133,7 @@ function SpecialPriceTable(props) {
     const editIsActiveSpecial = async () => {
         let token = localStorage.getItem("tempatku_login");
         let update = await axios.patch(
-            `${process.env.REACT_APP_API_BASE_URL}/special/editactive/${props.uuidSpecial}`,
+            `${process.env.REACT_APP_API_BASE_URL}/special/active/${props.uuidSpecial}`,
             {},
             {
                 headers: { Authorization: `Bearer ${token}` },

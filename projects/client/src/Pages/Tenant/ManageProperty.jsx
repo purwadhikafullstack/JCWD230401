@@ -60,7 +60,7 @@ function ManageProperty(props) {
         try {
             let token = localStorage.getItem("tempatku_login");
             let get = await axios.get(
-                `${process.env.REACT_APP_API_BASE_URL}/property/getpropertydata/${params.uuid}`,
+                `${process.env.REACT_APP_API_BASE_URL}/property/data/${params.uuid}`,
                 {
                     headers: {
                         Authorization: `Bearer ${token}`,
@@ -89,7 +89,7 @@ function ManageProperty(props) {
             formData.append("images", imageFile);
 
             let edit = await axios.patch(
-                `${process.env.REACT_APP_API_BASE_URL}/property/updateimageproperty?id=${id}&propertyId=${propertyData.id}`,
+                `${process.env.REACT_APP_API_BASE_URL}/property/update-image?id=${id}&propertyId=${propertyData.id}`,
                 formData,
                 {
                     headers: {
@@ -118,7 +118,7 @@ function ManageProperty(props) {
             setLoading(true);
             let token = localStorage.getItem("tempatku_login");
             let del = await axios.patch(
-                `${process.env.REACT_APP_API_BASE_URL}/property/deleteimageproperty?id=${id}`,
+                `${process.env.REACT_APP_API_BASE_URL}/property/delete-image?id=${id}`,
                 {
                     headers: {
                         Authorization: `Bearer ${token}`,
@@ -230,7 +230,7 @@ function ManageProperty(props) {
     const getProvince = async () => {
         try {
             let get = await axios.get(
-                `${process.env.REACT_APP_API_BASE_URL}/property/getprovince`
+                `${process.env.REACT_APP_API_BASE_URL}/property/provinces`
             );
             console.log("get allprovince", get.data);
             setAllProvince(get.data);
@@ -249,7 +249,7 @@ function ManageProperty(props) {
     const getRegencyById = async () => {
         try {
             let get = await axios.post(
-                `${process.env.REACT_APP_API_BASE_URL}/property/getregencybyid`,
+                `${process.env.REACT_APP_API_BASE_URL}/property/regencies`,
                 {
                     province_id: province.value,
                 }
@@ -267,7 +267,7 @@ function ManageProperty(props) {
             let token = localStorage.getItem("tempatku_login");
 
             let edit = await axios.patch(
-                `${process.env.REACT_APP_API_BASE_URL}/property/editproperty/${params.uuid}`,
+                `${process.env.REACT_APP_API_BASE_URL}/property/edit/${params.uuid}`,
                 {
                     category: category,
                     property: property,

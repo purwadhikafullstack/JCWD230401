@@ -107,7 +107,7 @@ function RoomConditionList(props) {
         try {
             let token = localStorage.getItem("tempatku_login");
             let get = await axios.get(
-                `${process.env.REACT_APP_API_BASE_URL}/special/getspecialpricebyroomuuid/${params1.uuid}?page=${pageSpecialPrice}&size=${sizeSpecialPrice}&sortby=${sortbySpecialPrice}&order=${orderSpecialPrice}`,
+                `${process.env.REACT_APP_API_BASE_URL}/special/room/${params1.uuid}?page=${pageSpecialPrice}&size=${sizeSpecialPrice}&sortby=${sortbySpecialPrice}&order=${orderSpecialPrice}`,
                 {
                     headers: {
                         Authorization: `Bearer ${token}`,
@@ -128,7 +128,7 @@ function RoomConditionList(props) {
         try {
             let token = localStorage.getItem("tempatku_login");
             let get = await axios.get(
-                `${process.env.REACT_APP_API_BASE_URL}/maintenance/getmaintenancebyroomuuid/${params1.uuid}?page=${pageMaintenance}&size=${sizeMaintenance}&sortby=${sortbyMaintenance}&order${orderMaintenance}`,
+                `${process.env.REACT_APP_API_BASE_URL}/maintenance/room/${params1.uuid}?page=${pageMaintenance}&size=${sizeMaintenance}&sortby=${sortbyMaintenance}&order${orderMaintenance}`,
                 {
                     headers: {
                         Authorization: `Bearer ${token}`,
@@ -235,7 +235,7 @@ function RoomConditionList(props) {
                 setLoading(true);
                 let token = localStorage.getItem("tempatku_login");
                 let add = await axios.post(
-                    `${process.env.REACT_APP_API_BASE_URL}/special/addspecialprice`,
+                    `${process.env.REACT_APP_API_BASE_URL}/special/create`,
                     {
                         specialStartDate: specialStartDate,
                         specialEndDate: specialEndDate,
@@ -382,7 +382,7 @@ function RoomConditionList(props) {
                 setLoading(true);
                 let token = localStorage.getItem("tempatku_login");
                 let add = await axios.post(
-                    `${process.env.REACT_APP_API_BASE_URL}/maintenance/addmaintenance`,
+                    `${process.env.REACT_APP_API_BASE_URL}/maintenance/create`,
                     {
                         maintenanceStartDate: maintenanceStartDate,
                         maintenanceEndDate: maintenanceEndDate,

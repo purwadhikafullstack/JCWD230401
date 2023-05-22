@@ -54,7 +54,7 @@ function ManageRoom() {
         try {
             let token = localStorage.getItem("tempatku_login");
             let get = await axios.get(
-                `${process.env.REACT_APP_API_BASE_URL}/room/getroomdata/${params.uuid}`,
+                `${process.env.REACT_APP_API_BASE_URL}/room/data/${params.uuid}`,
                 {
                     headers: {
                         Authorization: `Bearer ${token}`,
@@ -82,7 +82,7 @@ function ManageRoom() {
             formData.append("images", imageFile);
 
             let edit = await axios.patch(
-                `${process.env.REACT_APP_API_BASE_URL}/room/updateimageroom?id=${id}&roomId=${roomData.id}`,
+                `${process.env.REACT_APP_API_BASE_URL}/room/update-image?id=${id}&roomId=${roomData.id}`,
                 formData,
                 {
                     headers: {
@@ -111,7 +111,7 @@ function ManageRoom() {
             setLoading(true);
             let token = localStorage.getItem("tempatku_login");
             let del = await axios.patch(
-                `${process.env.REACT_APP_API_BASE_URL}/room/deleteimageroom?id=${id}`,
+                `${process.env.REACT_APP_API_BASE_URL}/room/delete-image?id=${id}`,
                 {
                     headers: {
                         Authorization: `Bearer ${token}`,
@@ -222,7 +222,7 @@ function ManageRoom() {
             let token = localStorage.getItem("tempatku_login");
 
             let edit = await axios.patch(
-                `${process.env.REACT_APP_API_BASE_URL}/room/editroom/${params.uuid}`,
+                `${process.env.REACT_APP_API_BASE_URL}/room/edit/${params.uuid}`,
                 {
                     name: roomName,
                     description: description,

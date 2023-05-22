@@ -10,29 +10,25 @@ route.get("/filter", propertyController.filterProperty);
 route.get("/getroomavailable", propertyController.getRoomAvailable);
 route.get("/getpropertydetail", propertyController.getPropertyDetail);
 route.get("/getpictureproperty", propertyController.getPicturePropertyDetail);
-route.get("/getallpropertytenant", propertyController.getAllPropertyTenant);
-route.get("/getprovince", propertyController.getProvince);
-route.post("/getregencybyid", propertyController.getRegencyByProvinceId);
+route.get("/alltenants", propertyController.getAllPropertyTenant);
+route.get("/provinces", propertyController.getProvince);
+route.post("/regencies", propertyController.getRegencyByProvinceId);
 route.post(
-    "/addproperty",
+    "/create",
     readToken,
     uploader2mb("/ImgProperty", "PTY").array("images", 5),
     propertyController.addProperty
 );
-route.get("/getpropertydata/:uuid", propertyController.getPropertyData);
-route.patch("/editproperty/:uuid", propertyController.editProperty);
-route.patch(
-    "/deleteproperty/:uuid",
-    readToken,
-    propertyController.deleteProperty
-);
+route.get("/data/:uuid", propertyController.getPropertyData);
+route.patch("/edit/:uuid", propertyController.editProperty);
+route.patch("/delete/:uuid", readToken, propertyController.deleteProperty);
 route.get("/list", readToken, propertyController.listProperty);
 route.patch(
-    "/updateimageproperty",
+    "/update-image",
     uploader2mb("/ImgProperty", "PTY").array("images", 1),
     propertyController.updateImageProperty
 );
-route.patch("/deleteimageproperty", propertyController.deletePropertyPicture);
+route.patch("/delete-image", propertyController.deletePropertyPicture);
 route.get("/available", propertyController.getAvailableProperty);
 
 module.exports = route;

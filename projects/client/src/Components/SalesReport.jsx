@@ -62,7 +62,7 @@ function SalesReport(props) {
     const getProperty = async () => {
         try {
             let get = await axios.get(
-                `${process.env.REACT_APP_API_BASE_URL}/room/getpropertynameandid`
+                `${process.env.REACT_APP_API_BASE_URL}/room/property-name-and-id`
             );
             setAllProperty(get.data);
         } catch (error) {
@@ -83,7 +83,7 @@ function SalesReport(props) {
     const getTransactionChart = async () => {
         try {
             let get = await axios.get(
-                `${process.env.REACT_APP_API_BASE_URL}/report/transactionchart?start=${startDateTransaction}&end=${endDateTransaction}`
+                `${process.env.REACT_APP_API_BASE_URL}/report/transaction-chart?start=${startDateTransaction}&end=${endDateTransaction}`
             );
             setTransactionDataChart(get.data.data);
             console.log("getinfooo", get.data.data);
@@ -95,7 +95,7 @@ function SalesReport(props) {
     const getPropertyChart = async () => {
         try {
             let get = await axios.get(
-                `${process.env.REACT_APP_API_BASE_URL}/report/propertychart/${property.value}?start=${startDateProperty}&end=${endDateProperty}`
+                `${process.env.REACT_APP_API_BASE_URL}/report/property-chart/${property.value}?start=${startDateProperty}&end=${endDateProperty}`
             );
             setPropertyDataChart(get.data.data);
             console.log("GET PROPERTYCHART:", get.data.data);
@@ -123,7 +123,7 @@ function SalesReport(props) {
     const getUserChart = async () => {
         try {
             let get = await axios.get(
-                `${process.env.REACT_APP_API_BASE_URL}/report/userchart?start=${startDateUsers}&end=${endDateUsers}`
+                `${process.env.REACT_APP_API_BASE_URL}/report/user-chart?start=${startDateUsers}&end=${endDateUsers}`
             );
             setUserDataChart(get.data.data);
             console.log("GET USER CHART", get);
