@@ -32,6 +32,8 @@ function ManageProperty(props) {
     const inputFile4 = useRef(null);
     const inputFile5 = useRef(null);
 
+    const [loading, setLoading] = useState(false);
+
     const [propertyData, setPropertyData] = useState(null);
     const [category, setCategory] = useState("");
     const [property, setProperty] = useState("");
@@ -80,6 +82,7 @@ function ManageProperty(props) {
 
     const uploadImageProperty = async (imageFile, id, propertyId) => {
         try {
+            setLoading(true);
             let token = localStorage.getItem("tempatku_login");
             let formData = new FormData();
 
@@ -105,11 +108,14 @@ function ManageProperty(props) {
             }
         } catch (error) {
             console.log(error);
+        } finally {
+            setLoading(false);
         }
     };
 
     const deleteImageProperty = async (id) => {
         try {
+            setLoading(true);
             let token = localStorage.getItem("tempatku_login");
             let del = await axios.patch(
                 `${process.env.REACT_APP_API_BASE_URL}/property/deleteimageproperty?id=${id}`,
@@ -131,6 +137,8 @@ function ManageProperty(props) {
             }
         } catch (error) {
             console.log(error);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -221,7 +229,9 @@ function ManageProperty(props) {
 
     const getProvince = async () => {
         try {
-            let get = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/property/getprovince`);
+            let get = await axios.get(
+                `${process.env.REACT_APP_API_BASE_URL}/property/getprovince`
+            );
             console.log("get allprovince", get.data);
             setAllProvince(get.data);
         } catch (error) {
@@ -238,9 +248,12 @@ function ManageProperty(props) {
 
     const getRegencyById = async () => {
         try {
-            let get = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/property/getregencybyid`, {
-                province_id: province.value,
-            });
+            let get = await axios.post(
+                `${process.env.REACT_APP_API_BASE_URL}/property/getregencybyid`,
+                {
+                    province_id: province.value,
+                }
+            );
             setAllRegency(get.data);
         } catch (error) {
             console.log(error);
@@ -249,6 +262,8 @@ function ManageProperty(props) {
 
     const btnEditProperty = async () => {
         try {
+            setLoading(true);
+
             let token = localStorage.getItem("tempatku_login");
 
             let edit = await axios.patch(
@@ -281,6 +296,8 @@ function ManageProperty(props) {
             }
         } catch (error) {
             console.log(error);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -314,11 +331,11 @@ function ManageProperty(props) {
         }
     }, [allRegency, propertyData]);
 
-    console.log("filePropertyEdit1:", filePropertyEdit1);
-    console.log("filePropertyEdit2:", filePropertyEdit2);
-    console.log("filePropertyEdit3:", filePropertyEdit3);
-    console.log("filePropertyEdit4:", filePropertyEdit4);
-    console.log("filePropertyEdit5:", filePropertyEdit5);
+    // console.log("filePropertyEdit1:", filePropertyEdit1);
+    // console.log("filePropertyEdit2:", filePropertyEdit2);
+    // console.log("filePropertyEdit3:", filePropertyEdit3);
+    // console.log("filePropertyEdit4:", filePropertyEdit4);
+    // console.log("filePropertyEdit5:", filePropertyEdit5);
 
     // ACTIVE BUTTON
     const handleButtonClick = (value) => {
@@ -563,6 +580,7 @@ function ManageProperty(props) {
                                                             onClick={() => {
                                                                 inputFile1.current.click();
                                                             }}
+                                                            isLoading={loading}
                                                         >
                                                             <Image
                                                                 src={
@@ -631,6 +649,7 @@ function ManageProperty(props) {
                                                                         .id
                                                                 );
                                                             }}
+                                                            isLoading={loading}
                                                         >
                                                             <Text
                                                                 fontSize={"xl"}
@@ -664,6 +683,7 @@ function ManageProperty(props) {
                                                     onClick={() => {
                                                         inputFile1.current.click();
                                                     }}
+                                                    isLoading={loading}
                                                 >
                                                     <SlPicture
                                                         fontSize={"35px"}
@@ -700,6 +720,7 @@ function ManageProperty(props) {
                                                             onClick={() => {
                                                                 inputFile2.current.click();
                                                             }}
+                                                            isLoading={loading}
                                                         >
                                                             <Image
                                                                 src={
@@ -745,6 +766,9 @@ function ManageProperty(props) {
                                                                         filePropertyEdit2.id
                                                                     );
                                                                 }}
+                                                                isLoading={
+                                                                    loading
+                                                                }
                                                             />
                                                         </Box>
                                                         <Button
@@ -768,6 +792,7 @@ function ManageProperty(props) {
                                                                         .id
                                                                 );
                                                             }}
+                                                            isLoading={loading}
                                                         >
                                                             <Text
                                                                 fontSize={"xl"}
@@ -801,6 +826,7 @@ function ManageProperty(props) {
                                                     onClick={() => {
                                                         inputFile2.current.click();
                                                     }}
+                                                    isLoading={loading}
                                                 >
                                                     <SlPicture
                                                         fontSize={"35px"}
@@ -819,6 +845,7 @@ function ManageProperty(props) {
                                                                 filePropertyEdit2.id
                                                             );
                                                         }}
+                                                        isLoading={loading}
                                                     />
                                                     <Text
                                                         textAlign={"center"}
@@ -836,6 +863,7 @@ function ManageProperty(props) {
                                                             onClick={() => {
                                                                 inputFile3.current.click();
                                                             }}
+                                                            isLoading={loading}
                                                         >
                                                             <Image
                                                                 src={
@@ -881,6 +909,9 @@ function ManageProperty(props) {
                                                                         filePropertyEdit3.id
                                                                     );
                                                                 }}
+                                                                isLoading={
+                                                                    loading
+                                                                }
                                                             />
                                                         </Box>
                                                         <Button
@@ -904,6 +935,7 @@ function ManageProperty(props) {
                                                                         .id
                                                                 );
                                                             }}
+                                                            isLoading={loading}
                                                         >
                                                             <Text
                                                                 fontSize={"xl"}
@@ -937,6 +969,7 @@ function ManageProperty(props) {
                                                     onClick={() => {
                                                         inputFile3.current.click();
                                                     }}
+                                                    isLoading={loading}
                                                 >
                                                     <SlPicture
                                                         fontSize={"35px"}
@@ -955,6 +988,7 @@ function ManageProperty(props) {
                                                                 filePropertyEdit3.id
                                                             );
                                                         }}
+                                                        isLoading={loading}
                                                     />
                                                     <Text
                                                         textAlign={"center"}
@@ -972,6 +1006,7 @@ function ManageProperty(props) {
                                                             onClick={() => {
                                                                 inputFile4.current.click();
                                                             }}
+                                                            isLoading={loading}
                                                         >
                                                             <Image
                                                                 src={
@@ -1017,6 +1052,9 @@ function ManageProperty(props) {
                                                                         filePropertyEdit4.id
                                                                     );
                                                                 }}
+                                                                isLoading={
+                                                                    loading
+                                                                }
                                                             />
                                                         </Box>
                                                         <Button
@@ -1040,6 +1078,7 @@ function ManageProperty(props) {
                                                                         .id
                                                                 );
                                                             }}
+                                                            isLoading={loading}
                                                         >
                                                             <Text
                                                                 fontSize={"xl"}
@@ -1073,6 +1112,7 @@ function ManageProperty(props) {
                                                     onClick={() => {
                                                         inputFile4.current.click();
                                                     }}
+                                                    isLoading={loading}
                                                 >
                                                     <SlPicture
                                                         fontSize={"35px"}
@@ -1091,6 +1131,7 @@ function ManageProperty(props) {
                                                                 filePropertyEdit4.id
                                                             );
                                                         }}
+                                                        isLoading={loading}
                                                     />
                                                     <Text
                                                         textAlign={"center"}
@@ -1108,6 +1149,7 @@ function ManageProperty(props) {
                                                             onClick={() => {
                                                                 inputFile5.current.click();
                                                             }}
+                                                            isLoading={loading}
                                                         >
                                                             <Image
                                                                 src={
@@ -1153,6 +1195,9 @@ function ManageProperty(props) {
                                                                         filePropertyEdit5.id
                                                                     );
                                                                 }}
+                                                                isLoading={
+                                                                    loading
+                                                                }
                                                             />
                                                         </Box>
                                                         <Button
@@ -1176,6 +1221,7 @@ function ManageProperty(props) {
                                                                         .id
                                                                 );
                                                             }}
+                                                            isLoading={loading}
                                                         >
                                                             <Text
                                                                 fontSize={"xl"}
@@ -1209,6 +1255,7 @@ function ManageProperty(props) {
                                                     onClick={() => {
                                                         inputFile5.current.click();
                                                     }}
+                                                    isLoading={loading}
                                                 >
                                                     <SlPicture
                                                         fontSize={"35px"}
@@ -1397,32 +1444,13 @@ function ManageProperty(props) {
                 >
                     <Button
                         type="button"
-                        w={"300px"}
-                        mr={"4"}
-                        rounded={"3xl"}
-                        // onClick={() => {
-                        // setCategory("");
-                        // setProperty("");
-                        // setFileProperty(null);
-                        // setDescription("");
-                        // setDescriptionLength(0);
-                        // setAddress("");
-                        // setRegency("");
-                        // setProvince("");
-                        // setZipcode("");
-                        // setCountry("");
-                        // }}
-                    >
-                        <Text>Reset</Text>
-                    </Button>
-                    <Button
-                        type="button"
                         _hover=""
                         w={"300px"}
                         ml={"4"}
                         rounded={"3xl"}
                         bgColor="#D3212D"
                         onClick={btnEditProperty}
+                        isLoading={loading}
                     >
                         <Text color={"white"}>Save</Text>
                     </Button>

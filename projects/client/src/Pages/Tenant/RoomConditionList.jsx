@@ -193,6 +193,7 @@ function RoomConditionList(props) {
         const [specialEndDate, setSpecialEndDate] = useState(null);
         const [price, setPrice] = useState("");
         const [percentage, setPercentage] = useState("");
+        const [loading, setLoading] = useState(false);
 
         const handlePriceChange = (event) => {
             const inputPrice = event.target.value;
@@ -231,6 +232,7 @@ function RoomConditionList(props) {
 
         const handleSubmitSpecialPrice = async () => {
             try {
+                setLoading(true);
                 let token = localStorage.getItem("tempatku_login");
                 let add = await axios.post(
                     `${process.env.REACT_APP_API_BASE_URL}/special/addspecialprice`,
@@ -271,6 +273,7 @@ function RoomConditionList(props) {
                 setPercentage("");
                 setSpecialStartDate(null);
                 setSpecialEndDate(null);
+                setLoading(false);
             }
         };
         return (
@@ -340,6 +343,7 @@ function RoomConditionList(props) {
                                 textColor={"white"}
                                 mr={"4"}
                                 _hover=""
+                                isLoading={loading}
                             >
                                 Save
                             </Button>
@@ -358,6 +362,7 @@ function RoomConditionList(props) {
         const [maintenanceStartDate, setMaintenanceStartDate] = useState(null);
         const [maintenanceEndDate, setMaintenanceEndDate] = useState(null);
         const [remarks, setRemarks] = useState("");
+        const [loading, setLoading] = useState(false);
 
         const handleRemarksChange = (event) => {
             const inputRemarks = event.target.value;
@@ -374,6 +379,7 @@ function RoomConditionList(props) {
 
         const handleSubmitMaintenance = async () => {
             try {
+                setLoading(true);
                 let token = localStorage.getItem("tempatku_login");
                 let add = await axios.post(
                     `${process.env.REACT_APP_API_BASE_URL}/maintenance/addmaintenance`,
@@ -413,6 +419,7 @@ function RoomConditionList(props) {
                 setMaintenanceStartDate(null);
                 setMaintenanceEndDate(null);
                 setRemarks("");
+                setLoading(false);
             }
         };
         return (
@@ -471,6 +478,7 @@ function RoomConditionList(props) {
                                 onClick={handleSubmitMaintenance}
                                 textColor={"white"}
                                 mr={"4"}
+                                isLoading={loading}
                             >
                                 Save
                             </Button>

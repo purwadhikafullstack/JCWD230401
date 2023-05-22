@@ -3,6 +3,7 @@ const { propertyController } = require("../controllers");
 const { readToken } = require("../helper/jwt");
 const { checkUser } = require("../helper/validator");
 const uploader = require("../helper/uploader");
+const uploader2mb = require("../helper/uploader2");
 
 route.get("/", propertyController.getAllProperty);
 route.get("/filter", propertyController.filterProperty);
@@ -15,7 +16,7 @@ route.post("/getregencybyid", propertyController.getRegencyByProvinceId);
 route.post(
     "/addproperty",
     readToken,
-    uploader("/ImgProperty", "PTY").array("images", 5),
+    uploader2mb("/ImgProperty", "PTY").array("images", 5),
     propertyController.addProperty
 );
 route.get("/getpropertydata/:uuid", propertyController.getPropertyData);
@@ -28,7 +29,7 @@ route.patch(
 route.get("/list", readToken, propertyController.listProperty);
 route.patch(
     "/updateimageproperty",
-    uploader("/ImgProperty", "PTY").array("images", 1),
+    uploader2mb("/ImgProperty", "PTY").array("images", 1),
     propertyController.updateImageProperty
 );
 route.patch("/deleteimageproperty", propertyController.deletePropertyPicture);

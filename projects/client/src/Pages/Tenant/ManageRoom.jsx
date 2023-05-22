@@ -28,6 +28,8 @@ function ManageRoom() {
 
     const toast = useToast();
 
+    const [loading, setLoading] = useState(false);
+
     const inputFile1 = useRef(null);
     const inputFile2 = useRef(null);
     const inputFile3 = useRef(null);
@@ -73,6 +75,7 @@ function ManageRoom() {
 
     const uploadImageRoom = async (imageFile, id, roomId) => {
         try {
+            setLoading(true);
             let token = localStorage.getItem("tempatku_login");
             let formData = new FormData();
 
@@ -98,11 +101,14 @@ function ManageRoom() {
             }
         } catch (error) {
             console.log(error);
+        } finally {
+            setLoading(false);
         }
     };
 
     const deleteImageRoom = async (id) => {
         try {
+            setLoading(true);
             let token = localStorage.getItem("tempatku_login");
             let del = await axios.patch(
                 `${process.env.REACT_APP_API_BASE_URL}/room/deleteimageroom?id=${id}`,
@@ -124,6 +130,8 @@ function ManageRoom() {
             }
         } catch (error) {
             console.log(error);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -209,6 +217,8 @@ function ManageRoom() {
 
     const btnEditRoom = async () => {
         try {
+            setLoading(true);
+
             let token = localStorage.getItem("tempatku_login");
 
             let edit = await axios.patch(
@@ -236,6 +246,8 @@ function ManageRoom() {
             }
         } catch (error) {
             console.log(error);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -243,9 +255,9 @@ function ManageRoom() {
         getRoomData();
     }, []);
 
-    console.log("roomData:", roomData);
-    console.log("property:", property);
-    console.log("Roomname:", roomName);
+    // console.log("roomData:", roomData);
+    // console.log("property:", property);
+    // console.log("Roomname:", roomName);
 
     return (
         <Container
@@ -342,6 +354,7 @@ function ManageRoom() {
                                                             onClick={() => {
                                                                 inputFile1.current.click();
                                                             }}
+                                                            isLoading={loading}
                                                         >
                                                             <Image
                                                                 src={
@@ -387,6 +400,9 @@ function ManageRoom() {
                                                                         fileRoomEdit1.id
                                                                     );
                                                                 }}
+                                                                isLoading={
+                                                                    loading
+                                                                }
                                                             />
                                                         </Box>
                                                         <Button
@@ -410,6 +426,7 @@ function ManageRoom() {
                                                                         .id
                                                                 );
                                                             }}
+                                                            isLoading={loading}
                                                         >
                                                             <Text
                                                                 fontSize={"xl"}
@@ -443,6 +460,7 @@ function ManageRoom() {
                                                     onClick={() => {
                                                         inputFile1.current.click();
                                                     }}
+                                                    isLoading={loading}
                                                 >
                                                     <SlPicture
                                                         fontSize={"35px"}
@@ -461,6 +479,7 @@ function ManageRoom() {
                                                                 fileRoomEdit1.id
                                                             );
                                                         }}
+                                                        isLoading={loading}
                                                     />
                                                     <Text
                                                         textAlign={"center"}
@@ -479,6 +498,7 @@ function ManageRoom() {
                                                             onClick={() => {
                                                                 inputFile2.current.click();
                                                             }}
+                                                            isLoading={loading}
                                                         >
                                                             <Image
                                                                 src={
@@ -524,6 +544,9 @@ function ManageRoom() {
                                                                         fileRoomEdit2.id
                                                                     );
                                                                 }}
+                                                                isLoading={
+                                                                    loading
+                                                                }
                                                             />
                                                         </Box>
                                                         <Button
@@ -547,6 +570,7 @@ function ManageRoom() {
                                                                         .id
                                                                 );
                                                             }}
+                                                            isLoading={loading}
                                                         >
                                                             <Text
                                                                 fontSize={"xl"}
@@ -580,6 +604,7 @@ function ManageRoom() {
                                                     onClick={() => {
                                                         inputFile2.current.click();
                                                     }}
+                                                    isLoading={loading}
                                                 >
                                                     <SlPicture
                                                         fontSize={"35px"}
@@ -598,6 +623,7 @@ function ManageRoom() {
                                                                 fileRoomEdit2.id
                                                             );
                                                         }}
+                                                        isLoading={loading}
                                                     />
                                                     <Text
                                                         textAlign={"center"}
@@ -615,6 +641,7 @@ function ManageRoom() {
                                                             onClick={() => {
                                                                 inputFile3.current.click();
                                                             }}
+                                                            isLoading={loading}
                                                         >
                                                             <Image
                                                                 src={
@@ -660,6 +687,9 @@ function ManageRoom() {
                                                                         fileRoomEdit3.id
                                                                     );
                                                                 }}
+                                                                isLoading={
+                                                                    loading
+                                                                }
                                                             />
                                                         </Box>
                                                         <Button
@@ -683,6 +713,7 @@ function ManageRoom() {
                                                                         .id
                                                                 );
                                                             }}
+                                                            isLoading={loading}
                                                         >
                                                             <Text
                                                                 fontSize={"xl"}
@@ -716,6 +747,7 @@ function ManageRoom() {
                                                     onClick={() => {
                                                         inputFile3.current.click();
                                                     }}
+                                                    isLoading={loading}
                                                 >
                                                     <SlPicture
                                                         fontSize={"35px"}
@@ -734,6 +766,7 @@ function ManageRoom() {
                                                                 fileRoomEdit3.id
                                                             );
                                                         }}
+                                                        isLoading={loading}
                                                     />
                                                     <Text
                                                         textAlign={"center"}
@@ -751,6 +784,7 @@ function ManageRoom() {
                                                             onClick={() => {
                                                                 inputFile4.current.click();
                                                             }}
+                                                            isLoading={loading}
                                                         >
                                                             <Image
                                                                 src={
@@ -796,6 +830,9 @@ function ManageRoom() {
                                                                         fileRoomEdit4.id
                                                                     );
                                                                 }}
+                                                                isLoading={
+                                                                    loading
+                                                                }
                                                             />
                                                         </Box>
                                                         <Button
@@ -819,6 +856,7 @@ function ManageRoom() {
                                                                         .id
                                                                 );
                                                             }}
+                                                            isLoading={loading}
                                                         >
                                                             <Text
                                                                 fontSize={"xl"}
@@ -852,6 +890,7 @@ function ManageRoom() {
                                                     onClick={() => {
                                                         inputFile4.current.click();
                                                     }}
+                                                    isLoading={loading}
                                                 >
                                                     <SlPicture
                                                         fontSize={"35px"}
@@ -870,6 +909,7 @@ function ManageRoom() {
                                                                 fileRoomEdit4.id
                                                             );
                                                         }}
+                                                        isLoading={loading}
                                                     />
                                                     <Text
                                                         textAlign={"center"}
@@ -887,6 +927,7 @@ function ManageRoom() {
                                                             onClick={() => {
                                                                 inputFile5.current.click();
                                                             }}
+                                                            isLoading={loading}
                                                         >
                                                             <Image
                                                                 src={
@@ -932,6 +973,9 @@ function ManageRoom() {
                                                                         fileRoomEdit5.id
                                                                     );
                                                                 }}
+                                                                isLoading={
+                                                                    loading
+                                                                }
                                                             />
                                                         </Box>
                                                         <Button
@@ -955,6 +999,7 @@ function ManageRoom() {
                                                                         .id
                                                                 );
                                                             }}
+                                                            isLoading={loading}
                                                         >
                                                             <Text
                                                                 fontSize={"xl"}
@@ -988,6 +1033,7 @@ function ManageRoom() {
                                                     onClick={() => {
                                                         inputFile5.current.click();
                                                     }}
+                                                    isLoading={loading}
                                                 >
                                                     <SlPicture
                                                         fontSize={"35px"}
@@ -1006,6 +1052,7 @@ function ManageRoom() {
                                                                 fileRoomEdit5.id
                                                             );
                                                         }}
+                                                        isLoading={loading}
                                                     />
                                                     <Text
                                                         textAlign={"center"}
@@ -1081,96 +1128,6 @@ function ManageRoom() {
                         </Box>
                     </Box>
                 </Box>
-                {/* Facilities */}
-                {/* <Box textAlign="left" fontSize={"3xl"} fontWeight="bold">
-                    <h2>Room Facilities</h2>
-                </Box>
-                <Box as={Flex} my="10">
-                    <Flex flex={1} fontWeight="medium" alignItems={"center"}>
-                        Choose Facilities That Fit Your Room
-                    </Flex>
-                    <Box flex={3} display="flex" flexDir={"column"}>
-                        <Box
-                            display={"flex"}
-                            flexDir={"row"}
-                            w={"100%"}
-                            justifyContent={"space-evenly"}
-                        >
-                            <Box mx="4" display={"flex"}>
-                                <CheckboxGroup colorScheme="red">
-                                    <Stack
-                                        spacing={[1, 5]}
-                                        direction={["row", "column"]}
-                                    >
-                                        <Checkbox>
-                                            <Text>Wifi</Text>
-                                        </Checkbox>
-                                        <Checkbox>
-                                            <Text>TV</Text>
-                                        </Checkbox>
-                                        <Checkbox>
-                                            <Text>Air Conditioning</Text>
-                                        </Checkbox>
-                                    </Stack>
-                                </CheckboxGroup>
-                            </Box>
-                            <Box mx="4" display={"flex"}>
-                                <CheckboxGroup colorScheme="red">
-                                    <Stack
-                                        spacing={[1, 5]}
-                                        direction={["row", "column"]}
-                                    >
-                                        <Checkbox>
-                                            <Text>Free Parking</Text>
-                                        </Checkbox>
-                                        <Checkbox>
-                                            <Text>Dedicated Workspace</Text>
-                                        </Checkbox>
-                                        <Checkbox>
-                                            <Text>Breakfast</Text>
-                                        </Checkbox>
-                                    </Stack>
-                                </CheckboxGroup>
-                            </Box>
-                            <Box mx="4" display={"flex"}>
-                                <CheckboxGroup colorScheme="red">
-                                    <Stack
-                                        spacing={[1, 5]}
-                                        direction={["row", "column"]}
-                                    >
-                                        <Checkbox>
-                                            <Text>Hot Tub</Text>
-                                        </Checkbox>
-                                        <Checkbox>
-                                            <Text>Washer</Text>
-                                        </Checkbox>
-                                        <Checkbox>
-                                            <Text>Kitchen</Text>
-                                        </Checkbox>
-                                    </Stack>
-                                </CheckboxGroup>
-                            </Box>
-                            <Box mx="4" display={"flex"}>
-                                <CheckboxGroup colorScheme="red">
-                                    <Stack
-                                        spacing={[1, 5]}
-                                        direction={["row", "column"]}
-                                    >
-                                        <Checkbox>
-                                            <Text>City View</Text>
-                                        </Checkbox>
-                                        <Checkbox>
-                                            <Text>Refrigerator</Text>
-                                        </Checkbox>
-                                        <Checkbox>
-                                            <Text>Pool</Text>
-                                        </Checkbox>
-                                    </Stack>
-                                </CheckboxGroup>
-                            </Box>
-                        </Box>
-                    </Box>
-                </Box> */}
                 {/* Price */}
                 <Box textAlign="left" fontSize={"3xl"} fontWeight="bold">
                     <h2>Edit Room Price</h2>
@@ -1205,9 +1162,6 @@ function ManageRoom() {
                     w={"full"}
                     py={"2"}
                 >
-                    <Button type="button" w={"300px"} mr={"4"} rounded={"3xl"}>
-                        <Text>Reset</Text>
-                    </Button>
                     <Button
                         type="button"
                         _hover=""
