@@ -294,261 +294,266 @@ export default function EditProfile(props) {
             alert(error.message)
         } finally {
             setLoading3(false);
+            setLoadingPage(false);
         }
     };
 
-    return (
-        <>
-            <Flex
-                minH={"100vh"}
-                align={"center"}
-                justify={"center"}
-                bg={"white"}
-            >
-                <Stack
-                    bg="white"
-                    spacing={6}
-                    w={"full"}
-                    maxW={"md"}
-                    rounded={"xl"}
-                    borderWidth={"1px"}
-                    borderColor={{ base: "white", sm: "gray.300" }}
-                    p={6}
-                    my={12}>
-                    <Heading lineHeight={1.1} fontSize={{ base: "2xl", sm: "3xl" }} align="center" mb="4">
-                        Profile Page
-                    </Heading>
-                    <FormControl id="userName">
-                        <Stack
-                            direction={["column"]}
-                            spacing={6}
-                        >
-                            <Center>
-                                {
-                                    props.isLoading ? (
-                                        <Text textAlign="center"><Spinner color='red.500' /></Text>
-                                    ) : (
-                                        <Avatar size="xl"
-                                            src={currentProfileImage == null ? "https://ionicframework.com/docs/img/demos/avatar.svg" : currentProfileImage && currentProfileImage.includes("http") ? currentProfileImage : `${process.env.REACT_APP_API_IMG_URL}${currentProfileImage}` ? `${process.env.REACT_APP_API_IMG_URL}${currentProfileImage}` : "https://ionicframework.com/docs/img/demos/avatar.svg"}
-                                        >
-                                            {!isVerified && role == "User" ?
-                                                <AvatarBadge
-                                                    as={IconButton}
-                                                    size="sm"
-                                                    rounded="full"
-                                                    bottom="-1px"
-                                                    right="-3px"
-                                                    colorScheme="red"
-                                                    icon={<BsShieldExclamation />}
-                                                /> :
-                                                isVerified && role == "User" ?
+    if (loadingPage) {
+        return <Loading />
+    } else {
+        return (
+            <>
+                <Flex
+                    minH={"100vh"}
+                    align={"center"}
+                    justify={"center"}
+                    bg={"white"}
+                >
+                    <Stack
+                        bg="white"
+                        spacing={6}
+                        w={"full"}
+                        maxW={"md"}
+                        rounded={"xl"}
+                        borderWidth={"1px"}
+                        borderColor={{ base: "white", sm: "gray.300" }}
+                        p={6}
+                        my={12}>
+                        <Heading lineHeight={1.1} fontSize={{ base: "2xl", sm: "3xl" }} align="center" mb="4">
+                            Profile Page
+                        </Heading>
+                        <FormControl id="userName">
+                            <Stack
+                                direction={["column"]}
+                                spacing={6}
+                            >
+                                <Center>
+                                    {
+                                        props.isLoading ? (
+                                            <Text textAlign="center"><Spinner color='red.500' /></Text>
+                                        ) : (
+                                            <Avatar size="xl"
+                                                src={currentProfileImage == null ? "https://ionicframework.com/docs/img/demos/avatar.svg" : currentProfileImage && currentProfileImage.includes("http") ? currentProfileImage : `${process.env.REACT_APP_API_IMG_URL}${currentProfileImage}` ? `${process.env.REACT_APP_API_IMG_URL}${currentProfileImage}` : "https://ionicframework.com/docs/img/demos/avatar.svg"}
+                                            >
+                                                {!isVerified && role == "User" ?
                                                     <AvatarBadge
                                                         as={IconButton}
                                                         size="sm"
                                                         rounded="full"
                                                         bottom="-1px"
                                                         right="-3px"
-                                                        colorScheme="green"
-                                                        icon={<BsShieldCheck />}
+                                                        colorScheme="red"
+                                                        icon={<BsShieldExclamation />}
                                                     /> :
-                                                    <AvatarBadge display={{ base: "none" }} />
-                                            }
-                                        </Avatar>
+                                                    isVerified && role == "User" ?
+                                                        <AvatarBadge
+                                                            as={IconButton}
+                                                            size="sm"
+                                                            rounded="full"
+                                                            bottom="-1px"
+                                                            right="-3px"
+                                                            colorScheme="green"
+                                                            icon={<BsShieldCheck />}
+                                                        /> :
+                                                        <AvatarBadge display={{ base: "none" }} />
+                                                }
+                                            </Avatar>
 
-                                    )}
-                            </Center>
-                            <Box w="full">
-                                <Center w="full"
-                                >
-                                    {/* PROFILE PICTURE */}
-                                    <Button w="full" onClick={() =>
-                                        inputFile.current.click()}>Change Profile Photo
-                                        <Input
-                                            my="4"
-                                            ml="6"
-                                            type="file"
-                                            id="file"
-                                            ref={inputFile}
-                                            style={{ display: "none" }}
-                                            onChange={onChangeFile}
-                                            accept="image/*"
-                                            variant="unstyled"
-                                        ></Input>
-                                    </Button>
+                                        )}
                                 </Center>
-                                <Text fontSize="xs" pt="1">Image size: max. 1 MB</Text>
-                                <Text fontSize="xs">Image format: .jpg, .jpeg, .png, .gif</Text>
-                                {!isVerified && role == "User" ?
-                                    <div>
-                                        <Box py="2">
-                                            <Divider />
-                                        </Box>
-                                        <Box pb="2">
-                                            <Text fontSize="xs">Your account has not been verified yet. Click the button to verify and enjoy tempatku has to offer.</Text>
-                                        </Box>
-                                        <Box>
-                                            <Button
-                                                onClick={onBtnSendVerifyEmail}
-                                                isLoading={loading}
-                                                colorScheme="green"
-                                            >Verify Account</Button>
-                                        </Box>
-                                        <Box py="2">
-                                            <Divider />
-                                        </Box>
-                                    </div>
-                                    :
-                                    isVerified && role == "User" ?
+                                <Box w="full">
+                                    <Center w="full"
+                                    >
+                                        {/* PROFILE PICTURE */}
+                                        <Button w="full" onClick={() =>
+                                            inputFile.current.click()}>Change Profile Photo
+                                            <Input
+                                                my="4"
+                                                ml="6"
+                                                type="file"
+                                                id="file"
+                                                ref={inputFile}
+                                                style={{ display: "none" }}
+                                                onChange={onChangeFile}
+                                                accept="image/*"
+                                                variant="unstyled"
+                                            ></Input>
+                                        </Button>
+                                    </Center>
+                                    <Text fontSize="xs" pt="1">Image size: max. 1 MB</Text>
+                                    <Text fontSize="xs">Image format: .jpg, .jpeg, .png, .gif</Text>
+                                    {!isVerified && role == "User" ?
                                         <div>
                                             <Box py="2">
                                                 <Divider />
                                             </Box>
-                                            <Text fontSize="xs">Your account is verified.</Text>
+                                            <Box pb="2">
+                                                <Text fontSize="xs">Your account has not been verified yet. Click the button to verify and enjoy tempatku has to offer.</Text>
+                                            </Box>
+                                            <Box>
+                                                <Button
+                                                    onClick={onBtnSendVerifyEmail}
+                                                    isLoading={loading}
+                                                    colorScheme="green"
+                                                >Verify Account</Button>
+                                            </Box>
                                             <Box py="2">
                                                 <Divider />
                                             </Box>
                                         </div>
                                         :
-                                        <Text fontSize="xs"></Text>
-                                }
-                            </Box>
-                        </Stack>
-                        {/* Modal Open */}
-                        <Modal
-                            isOpen={modalProfileImage.isOpen}
-                            onClose={modalProfileImage.onClose}
-                        >
-                            <ModalOverlay />
-                            <ModalContent>
-                                <ModalHeader>Change Profile Photo</ModalHeader>
-                                <ModalCloseButton />
-                                <ModalBody textAlign="center">
-                                    <Avatar objectFit="cover" size="2xl" src={profileImage ? URL.createObjectURL(profileImage) : ""}></Avatar>
-                                </ModalBody>
-                                <ModalFooter>
-                                    <Button colorScheme="red" mr={3} onClick={() => {
-                                        modalProfileImage.onClose();
-                                        setProfileImage(null);
-                                    }} variant="solid">
-                                        Cancel
-                                    </Button>
-                                    <Button
-                                        onClick={onBtnEditProfileImage}
-                                        isLoading={loading2}
-                                        colorScheme="green"
-                                        variant="outline"
-                                    >Save</Button>
-                                </ModalFooter>
-                            </ModalContent>
-                        </Modal>
-                    </FormControl>
-                    <FormControl id="Name" isInvalid={formik.errors.name}>
-                        <FormLabel>Name</FormLabel>
-                        <Input
-                            placeholder={currentName}
-                            _placeholder={{ color: "black" }}
-                            type="text"
-                            onChange={handleForm}
-                            name="name"
-                        />
-                        <FormErrorMessage fontSize="xs" style={{ position: "absolute", top: "100%", marginTop: "0.30rem" }}>{formik.errors.name}</FormErrorMessage>
-                    </FormControl>
-                    {/* EMAIL */}
-                    <FormControl id="email" isInvalid={formik.errors.email}>
-                        <FormLabel>Email address</FormLabel>
-                        <Input
-                            placeholder={currentEmail}
-                            _placeholder={{ color: "black" }}
-                            type="email"
-                            onChange={handleForm}
-                            name="email"
-                        />
-                        <FormErrorMessage fontSize="xs" style={{ position: "absolute", top: "100%", marginTop: "0.30rem" }}>{formik.errors.email}</FormErrorMessage>
-                    </FormControl>
-                    {/* GENDER */}
-                    <FormControl id="gender" isInvalid={formik.errors.gender}>
-                        <FormLabel>Gender</FormLabel>
-                        <Box justifyContent="space-between">
-                            <RadioGroup
-                                value={formik.values.gender}
-                                onChange={handleGenderChange}
-                                name="gender"
+                                        isVerified && role == "User" ?
+                                            <div>
+                                                <Box py="2">
+                                                    <Divider />
+                                                </Box>
+                                                <Text fontSize="xs">Your account is verified.</Text>
+                                                <Box py="2">
+                                                    <Divider />
+                                                </Box>
+                                            </div>
+                                            :
+                                            <Text fontSize="xs"></Text>
+                                    }
+                                </Box>
+                            </Stack>
+                            {/* Modal Open */}
+                            <Modal
+                                isOpen={modalProfileImage.isOpen}
+                                onClose={modalProfileImage.onClose}
                             >
-                                <Radio value="Male" mr={2}>
-                                    Male
-                                </Radio>
-                                <Radio value="Female">Female</Radio>
-                            </RadioGroup>
-                        </Box>
-                        <FormErrorMessage fontSize="xs" style={{ position: "absolute", top: "100%", marginTop: "0.30rem" }}>{formik.errors.gender}</FormErrorMessage>
-                    </FormControl>
-                    {/* BIRTH */}
-                    <FormControl id="birth" isInvalid={formik.errors.birth}>
-                        <FormLabel>Birthdate</FormLabel>
-                        <Input
-                            placeholder={currentBirth}
-                            _placeholder={{ color: "gray.800" }}
-                            type="date"
-                            value={formik.values.birth}
-                            onChange={handleBirthChange}
-                            name="birth"
-                        />
-                        <FormErrorMessage fontSize="xs" style={{ position: "absolute", top: "100%", marginTop: "0.30rem" }}>{formik.errors.birth}</FormErrorMessage>
-                    </FormControl>
-                    {
-                        // Tenant
-                        role == "Tenant" ? (
-                            <Stack spacing={3} direction={["column"]} pt="4">
-                                <Button
-                                    bg={"#D3212D"}
-                                    color={"white"}
-                                    _hover={{
-                                        bg: "#D3212D",
-                                    }}
-                                    type="button"
-                                    w="full"
-                                    onClick={onBtnEditProfile}
-                                    isLoading={loading1}
+                                <ModalOverlay />
+                                <ModalContent>
+                                    <ModalHeader>Change Profile Photo</ModalHeader>
+                                    <ModalCloseButton />
+                                    <ModalBody textAlign="center">
+                                        <Avatar objectFit="cover" size="2xl" src={profileImage ? URL.createObjectURL(profileImage) : ""}></Avatar>
+                                    </ModalBody>
+                                    <ModalFooter>
+                                        <Button colorScheme="red" mr={3} onClick={() => {
+                                            modalProfileImage.onClose();
+                                            setProfileImage(null);
+                                        }} variant="solid">
+                                            Cancel
+                                        </Button>
+                                        <Button
+                                            onClick={onBtnEditProfileImage}
+                                            isLoading={loading2}
+                                            colorScheme="green"
+                                            variant="outline"
+                                        >Save</Button>
+                                    </ModalFooter>
+                                </ModalContent>
+                            </Modal>
+                        </FormControl>
+                        <FormControl id="Name" isInvalid={formik.errors.name}>
+                            <FormLabel>Name</FormLabel>
+                            <Input
+                                placeholder={currentName}
+                                _placeholder={{ color: "black" }}
+                                type="text"
+                                onChange={handleForm}
+                                name="name"
+                            />
+                            <FormErrorMessage fontSize="xs" style={{ position: "absolute", top: "100%", marginTop: "0.30rem" }}>{formik.errors.name}</FormErrorMessage>
+                        </FormControl>
+                        {/* EMAIL */}
+                        <FormControl id="email" isInvalid={formik.errors.email}>
+                            <FormLabel>Email address</FormLabel>
+                            <Input
+                                placeholder={currentEmail}
+                                _placeholder={{ color: "black" }}
+                                type="email"
+                                onChange={handleForm}
+                                name="email"
+                            />
+                            <FormErrorMessage fontSize="xs" style={{ position: "absolute", top: "100%", marginTop: "0.30rem" }}>{formik.errors.email}</FormErrorMessage>
+                        </FormControl>
+                        {/* GENDER */}
+                        <FormControl id="gender" isInvalid={formik.errors.gender}>
+                            <FormLabel>Gender</FormLabel>
+                            <Box justifyContent="space-between">
+                                <RadioGroup
+                                    value={formik.values.gender}
+                                    onChange={handleGenderChange}
+                                    name="gender"
                                 >
-                                    Save
-                                </Button>
-                                {/* SHOW KTP CARD PHOTO */}
-                                <Button
-                                    variant={"outline"}
-                                    color={"#D3212D"}
-                                    _hover={{
-                                        bg: "gray.200",
-                                    }}
-                                    type="button"
-                                    w="full"
-                                    borderColor="#D3212D"
-                                    onClick={onBtnShowKTP}
-                                    isLoading={loading3}
-                                >
-                                    Show KTP Photo
-                                </Button>
-                            </Stack>
-                        ) : (
-                            // User
-                            <Stack spacing={3} direction={["column"]} pt="4">
-                                <Button
-                                    bg={"#D3212D"}
-                                    color={"white"}
-                                    _hover={{
-                                        bg: "#D3212D",
-                                    }}
-                                    type="button"
-                                    w="full"
-                                    onClick={onBtnEditProfile}
-                                    isLoading={loading1}
-                                >
-                                    Save
-                                </Button>
-                            </Stack>
-                        )
-                    }
-                </Stack>
-            </Flex>
-        </>
-    );
+                                    <Radio value="Male" mr={2}>
+                                        Male
+                                    </Radio>
+                                    <Radio value="Female">Female</Radio>
+                                </RadioGroup>
+                            </Box>
+                            <FormErrorMessage fontSize="xs" style={{ position: "absolute", top: "100%", marginTop: "0.30rem" }}>{formik.errors.gender}</FormErrorMessage>
+                        </FormControl>
+                        {/* BIRTH */}
+                        <FormControl id="birth" isInvalid={formik.errors.birth}>
+                            <FormLabel>Birthdate</FormLabel>
+                            <Input
+                                placeholder={currentBirth}
+                                _placeholder={{ color: "gray.800" }}
+                                type="date"
+                                value={formik.values.birth}
+                                onChange={handleBirthChange}
+                                name="birth"
+                            />
+                            <FormErrorMessage fontSize="xs" style={{ position: "absolute", top: "100%", marginTop: "0.30rem" }}>{formik.errors.birth}</FormErrorMessage>
+                        </FormControl>
+                        {
+                            // Tenant
+                            role == "Tenant" ? (
+                                <Stack spacing={3} direction={["column"]} pt="4">
+                                    <Button
+                                        bg={"#D3212D"}
+                                        color={"white"}
+                                        _hover={{
+                                            bg: "#D3212D",
+                                        }}
+                                        type="button"
+                                        w="full"
+                                        onClick={onBtnEditProfile}
+                                        isLoading={loading1}
+                                    >
+                                        Save
+                                    </Button>
+                                    {/* SHOW KTP CARD PHOTO */}
+                                    <Button
+                                        variant={"outline"}
+                                        color={"#D3212D"}
+                                        _hover={{
+                                            bg: "gray.200",
+                                        }}
+                                        type="button"
+                                        w="full"
+                                        borderColor="#D3212D"
+                                        onClick={onBtnShowKTP}
+                                        isLoading={loading3}
+                                    >
+                                        Show KTP Photo
+                                    </Button>
+                                </Stack>
+                            ) : (
+                                // User
+                                <Stack spacing={3} direction={["column"]} pt="4">
+                                    <Button
+                                        bg={"#D3212D"}
+                                        color={"white"}
+                                        _hover={{
+                                            bg: "#D3212D",
+                                        }}
+                                        type="button"
+                                        w="full"
+                                        onClick={onBtnEditProfile}
+                                        isLoading={loading1}
+                                    >
+                                        Save
+                                    </Button>
+                                </Stack>
+                            )
+                        }
+                    </Stack>
+                </Flex>
+            </>
+        );
+    }
 }

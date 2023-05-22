@@ -14,9 +14,12 @@ import "slick-carousel/slick/slick-theme.css";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import CalendarPropertyCard from "../../Components/CalendarPropertyCard";
 import { formatRupiah } from "../../helper";
+import Loading from "../../Components/Loading";
 
 
 function TenantDashboard() {
+  const [loadingPage, setLoadingPage] = useState(true);
+
   const name = useSelector((state) => state.authReducer.name);
   const [roomOrders, setRoomOrders] = useState([]);
   const [roomMaintenances, setRoomMaintenances] = useState([]);
@@ -262,154 +265,158 @@ function TenantDashboard() {
     ],
   };
 
-  return (
-    <Flex
-      minH={"100vh"}
-      px={2}
-    >
-      <Box>
-        <Sidebar />
-      </Box>
-      <Box w="50vw" flex="5" px={{ base: "4", sm: "10" }} bg={"white"} >
-        <br />
-        <Heading mb={{ base: "8", sm: "10" }} textAlign={{ base: "center", sm: "left" }} >
-          Welcome, {name} 👋
-        </Heading>
-        <Box p={{ base: "2", sm: "10" }} bg={"white"} rounded={"xl"} borderWidth={"1px"}
-          borderColor={{ base: "white", sm: "gray.300" }}
-        >
-          {/* MY PROPERTY */}
-          <Box>
-            <Text fontSize={{ base: "20", sm: "28" }} fontWeight={"semibold"} mb={{ base: "6", sm: "10" }} textAlign={{ base: "center", sm: "left" }}>Your Property Listings</Text>
-            {
-              loading ? (
-                <Text textAlign="center"><Spinner color='red.500' /></Text>
-              ) : propertyListing.length === 0 ? (
-                <Text>No property listings yet</Text>
-              ) : (
-                <Slider {...settingsMyProperty} prevArrow={<FaChevronLeft color="#E2E8F0" />} nextArrow={<FaChevronRight color="#E2E8F0" />}>
-                  {printMyProperty()}
-                </Slider>
-              )
-            }
+  if (loadingPage) {
+    return <Loading />
+  } else {
+    return (
+      <Flex
+        minH={"100vh"}
+        px={2}
+      >
+        <Box>
+          <Sidebar />
+        </Box>
+        <Box w="50vw" flex="5" px={{ base: "4", sm: "10" }} bg={"white"} >
+          <br />
+          <Heading mb={{ base: "8", sm: "10" }} textAlign={{ base: "center", sm: "left" }} >
+            Welcome, {name} 👋
+          </Heading>
+          <Box p={{ base: "2", sm: "10" }} bg={"white"} rounded={"xl"} borderWidth={"1px"}
+            borderColor={{ base: "white", sm: "gray.300" }}
+          >
+            {/* MY PROPERTY */}
+            <Box>
+              <Text fontSize={{ base: "20", sm: "28" }} fontWeight={"semibold"} mb={{ base: "6", sm: "10" }} textAlign={{ base: "center", sm: "left" }}>Your Property Listings</Text>
+              {
+                loading ? (
+                  <Text textAlign="center"><Spinner color='red.500' /></Text>
+                ) : propertyListing.length === 0 ? (
+                  <Text>No property listings yet</Text>
+                ) : (
+                  <Slider {...settingsMyProperty} prevArrow={<FaChevronLeft color="#E2E8F0" />} nextArrow={<FaChevronRight color="#E2E8F0" />}>
+                    {printMyProperty()}
+                  </Slider>
+                )
+              }
+            </Box>
           </Box>
-        </Box>
-        <br />
-        <Box p={{ base: "2", sm: "10" }} bg={"white"} rounded={"xl"} borderWidth={"1px"}
-          borderColor={{ base: "white", sm: "gray.300" }}
-        >
-          <Text fontSize={{ base: "20", sm: "28" }} fontWeight={"semibold"} mb={{ base: "6", sm: "10" }} textAlign={{ base: "center", sm: "left" }}>See Availability by Calendar Date</Text>
-          {
-            loadingOrder || loadingMaintenance ? (
-              <Text textAlign="center"><Spinner color='red.500' /></Text>
-            ) : (
-              <Fullcalendar
-                className="my-calendar"
-                plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-                initialView={"dayGridMonth"}
-                headerToolbar={{
-                  start: "today prev,next",
-                  center: "title",
-                  end: "dayGridMonth,timeGridWeek,timeGridDay",
-                }}
-                height={"90vh"}
-                events=
-                {roomEvents}
-                dayMaxEvents={2} // max number of events displayed per day
-                dateClick={dateClick}
-              />
-            )}
-          <Modal isOpen={modalIsOpen} onClose={() => setModalIsOpen(false)} scrollBehavior={"inside"}>
-            <ModalOverlay />
-            <ModalContent>
-              <ModalHeader fontWeight={"semibold"}>
-                <Text fontSize={"xl"} px="4" pt="4">
-                  Available Properties & Rooms
-                </Text>
-                <Text fontSize={"xl"} px="4">
-                  {formatSelectedDate} :
-                </Text>
-              </ModalHeader>
-              <ModalBody>
-                <OrderedList p="4" m="auto">
-                  {
-                    loading2 ? (
-                      <Text textAlign="center"><Spinner color='red.500' /></Text>
-                    ) :
-                      availableRooms.length === 0 ? (
-                        <Text>There are currently no available property & rooms</Text>
-                      ) : (
-                        printAvailableRooms().map((val, idx) => {
-                          return (
-                            <Card mb="2" borderColor={"gray.300"} borderWidth={"1px"} boxShadow={"none"}>
-                              <CardHeader>
-                                <Heading size="md">{val.property}</Heading>
-                              </CardHeader>
-                              <CardBody>
-                                <Stack divider={<StackDivider />} spacing="4">
-                                  <Box>
-                                    <Heading size="xs" textTransform="uppercase">
-                                      Room Name
-                                    </Heading>
-                                    <Text pt="2" fontSize="sm">
-                                      {val.name}
-                                    </Text>
-                                  </Box>
-                                  <Box>
-                                    <Heading size="xs" textTransform="uppercase">
-                                      Price
-                                    </Heading>
-                                    <Text pt="2" fontSize="sm">
-                                      {val.price}
-                                    </Text>
-                                  </Box>
-                                  <Box>
-                                    <Heading size="xs" textTransform="uppercase">
-                                      Capacity
-                                    </Heading>
-                                    <Text pt="2" fontSize="sm">
-                                      {val.capacity} adults
-                                    </Text>
-                                  </Box>
-                                  <Box>
-                                    <Heading size="xs" textTransform="uppercase">
-                                      Description
-                                    </Heading>
-                                    <Text pt="2" fontSize="sm">
-                                      {val.description}
-                                    </Text>
-                                  </Box>
-                                </Stack>
-                              </CardBody>
-                            </Card>
-                          );
-                        })
-                      )}
-                </OrderedList>
-              </ModalBody>
-              <ModalFooter>
-                <Button color="white" bg="#D3212D"
-                  _hover={{
-                    bg: "#D3212D",
+          <br />
+          <Box p={{ base: "2", sm: "10" }} bg={"white"} rounded={"xl"} borderWidth={"1px"}
+            borderColor={{ base: "white", sm: "gray.300" }}
+          >
+            <Text fontSize={{ base: "20", sm: "28" }} fontWeight={"semibold"} mb={{ base: "6", sm: "10" }} textAlign={{ base: "center", sm: "left" }}>See Availability by Calendar Date</Text>
+            {
+              loadingOrder || loadingMaintenance ? (
+                <Text textAlign="center"><Spinner color='red.500' /></Text>
+              ) : (
+                <Fullcalendar
+                  className="my-calendar"
+                  plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+                  initialView={"dayGridMonth"}
+                  headerToolbar={{
+                    start: "today prev,next",
+                    center: "title",
+                    end: "dayGridMonth,timeGridWeek,timeGridDay",
                   }}
-                  onClick={() => {
-                    setModalIsOpen(false);
-                  }} variant="solid"
-                  _active={{
-                    bg: "#D3212D",
-                    transform: "scale(0.98)",
-                  }}
-                >
-                  Close
-                </Button>
-              </ModalFooter>
-            </ModalContent>
-          </Modal>
+                  height={"90vh"}
+                  events=
+                  {roomEvents}
+                  dayMaxEvents={2} // max number of events displayed per day
+                  dateClick={dateClick}
+                />
+              )}
+            <Modal isOpen={modalIsOpen} onClose={() => setModalIsOpen(false)} scrollBehavior={"inside"}>
+              <ModalOverlay />
+              <ModalContent>
+                <ModalHeader fontWeight={"semibold"}>
+                  <Text fontSize={"xl"} px="4" pt="4">
+                    Available Properties & Rooms
+                  </Text>
+                  <Text fontSize={"xl"} px="4">
+                    {formatSelectedDate} :
+                  </Text>
+                </ModalHeader>
+                <ModalBody>
+                  <OrderedList p="4" m="auto">
+                    {
+                      loading2 ? (
+                        <Text textAlign="center"><Spinner color='red.500' /></Text>
+                      ) :
+                        availableRooms.length === 0 ? (
+                          <Text>There are currently no available property & rooms</Text>
+                        ) : (
+                          printAvailableRooms().map((val, idx) => {
+                            return (
+                              <Card mb="2" borderColor={"gray.300"} borderWidth={"1px"} boxShadow={"none"}>
+                                <CardHeader>
+                                  <Heading size="md">{val.property}</Heading>
+                                </CardHeader>
+                                <CardBody>
+                                  <Stack divider={<StackDivider />} spacing="4">
+                                    <Box>
+                                      <Heading size="xs" textTransform="uppercase">
+                                        Room Name
+                                      </Heading>
+                                      <Text pt="2" fontSize="sm">
+                                        {val.name}
+                                      </Text>
+                                    </Box>
+                                    <Box>
+                                      <Heading size="xs" textTransform="uppercase">
+                                        Price
+                                      </Heading>
+                                      <Text pt="2" fontSize="sm">
+                                        {val.price}
+                                      </Text>
+                                    </Box>
+                                    <Box>
+                                      <Heading size="xs" textTransform="uppercase">
+                                        Capacity
+                                      </Heading>
+                                      <Text pt="2" fontSize="sm">
+                                        {val.capacity} adults
+                                      </Text>
+                                    </Box>
+                                    <Box>
+                                      <Heading size="xs" textTransform="uppercase">
+                                        Description
+                                      </Heading>
+                                      <Text pt="2" fontSize="sm">
+                                        {val.description}
+                                      </Text>
+                                    </Box>
+                                  </Stack>
+                                </CardBody>
+                              </Card>
+                            );
+                          })
+                        )}
+                  </OrderedList>
+                </ModalBody>
+                <ModalFooter>
+                  <Button color="white" bg="#D3212D"
+                    _hover={{
+                      bg: "#D3212D",
+                    }}
+                    onClick={() => {
+                      setModalIsOpen(false);
+                    }} variant="solid"
+                    _active={{
+                      bg: "#D3212D",
+                      transform: "scale(0.98)",
+                    }}
+                  >
+                    Close
+                  </Button>
+                </ModalFooter>
+              </ModalContent>
+            </Modal>
+          </Box>
+          <br />
         </Box>
-        <br />
-      </Box>
-    </Flex>
-  );
+      </Flex>
+    );
+  }
 }
 
 export default TenantDashboard;
