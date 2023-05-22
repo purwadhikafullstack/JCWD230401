@@ -26,6 +26,7 @@ import "slick-carousel/slick/slick-theme.css";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { useDispatch } from "react-redux";
 import { loginActionGoogle } from "../../reducers/auth";
+import { formatRupiah } from "../../helper";
 
 
 export default function LandingNew() {
@@ -44,6 +45,7 @@ export default function LandingNew() {
     const [showLocation, setShowLocation] = useState([]);
     const [recommendProperty, setRecommendProperty] = useState([]);
     const dispatch = useDispatch();
+
 
 
 
@@ -149,7 +151,7 @@ export default function LandingNew() {
                 rating={parseFloat(val.average_rating).toFixed(2)}
                 province={province}
                 country={val.room.property.property_location.country}
-                price={Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR" }).format(val.room?.lowest_price)}
+                price={formatRupiah(val.room?.lowest_price)}
             />
         })
     };
@@ -231,13 +233,13 @@ export default function LandingNew() {
     const numberOfProperties = recommendProperty.length;
     let slidesToShowValue = 4;
     if (numberOfProperties === 1) {
-      slidesToShowValue = 1;
+        slidesToShowValue = 1;
     } else if (numberOfProperties === 2) {
-      slidesToShowValue = 2;
+        slidesToShowValue = 2;
     } else if (numberOfProperties === 3) {
         slidesToShowValue = 3;
     };
-        
+
     const settingsRecommendation = {
         infinite: true,
         slidesToShow: slidesToShowValue,

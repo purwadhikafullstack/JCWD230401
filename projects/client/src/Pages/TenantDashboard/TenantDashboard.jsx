@@ -13,6 +13,8 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import CalendarPropertyCard from "../../Components/CalendarPropertyCard";
+import { formatRupiah } from "../../helper";
+
 
 function TenantDashboard() {
   const name = useSelector((state) => state.authReducer.name);
@@ -138,7 +140,7 @@ function TenantDashboard() {
         property: val.property.property,
         name: val.room_category.name,
         description: val.description,
-        price: Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR" }).format(val.price),
+        price: formatRupiah(val.price),
         capacity: val.capacity,
       };
     });
@@ -193,7 +195,7 @@ function TenantDashboard() {
         picture={val.picture_properties[0]?.picture}
         regency={regency}
         country={val.property_location?.country}
-        price={Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR" }).format(val.rooms[0]?.lowest_price)}
+        price={formatRupiah(val.rooms[0]?.lowest_price)}
         rating={averageRating}
       />
     })
