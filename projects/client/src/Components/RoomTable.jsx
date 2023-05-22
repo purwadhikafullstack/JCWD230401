@@ -36,7 +36,7 @@ function RoomTable(props) {
                 setLoading(true);
                 let token = localStorage.getItem("tempatku_login");
                 let del = await axios.patch(
-                    `${process.env.REACT_APP_API_BASE_URL}/room/deleteroom/${props.uuid}`,
+                    `${process.env.REACT_APP_API_BASE_URL}/room/delete/${props.uuid}`,
                     {},
                     {
                         headers: {
