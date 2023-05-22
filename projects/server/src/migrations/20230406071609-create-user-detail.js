@@ -10,6 +10,7 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       uuid: {
+        primaryKey: true,
         type: Sequelize.STRING
       },
       name: {
@@ -25,17 +26,19 @@ module.exports = {
         type: Sequelize.STRING
       },
       image_ktp: {
-        type: Sequelize.STRING
+        type: Sequelize.BLOB
       },
       userId: {
+        allowNull: false,
+        type: Sequelize.INTEGER
+      },
+      account_number: {
         type: Sequelize.INTEGER
       },
       createdAt: {
-        allowNull: false,
         type: Sequelize.DATE
       },
       updatedAt: {
-        allowNull: false,
         type: Sequelize.DATE
       }
     });

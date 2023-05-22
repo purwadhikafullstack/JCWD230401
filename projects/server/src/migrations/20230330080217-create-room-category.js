@@ -9,21 +9,20 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      uuid: {
-        type: Sequelize.STRING
-      },
       name: {
         type: Sequelize.STRING
       },
       isDeleted: {
-        type: Sequelize.TINYINT
+        type: Sequelize.BOOLEAN
+      },
+      user_id: {
+        allowNull: false,
+        type: Sequelize.INTEGER
       },
       createdAt: {
-        allowNull: false,
         type: Sequelize.DATE
       },
       updatedAt: {
-        allowNull: false,
         type: Sequelize.DATE
       }
     });
