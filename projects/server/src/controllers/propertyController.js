@@ -329,7 +329,6 @@ module.exports = {
     },
     getRegencyByProvinceId: async (req, res, next) => {
         try {
-            console.log("province_id", req.body.province_id);
             let get = await model.regency.findAll({
                 where: {
                     province_id: req.body.province_id,
@@ -418,7 +417,7 @@ module.exports = {
             });
         } catch (error) {
             await ormTransaction.rollback();
-            console.log(error);
+            console.log("Error Add Property:", error);
             next(error);
         }
     },
@@ -504,9 +503,11 @@ module.exports = {
     editProperty: async (req, res, next) => {
         const ormTransaction = await model.sequelize.transaction();
         try {
+
             let getPropertyByUuid = await model.property.findAll({
                 where: {
                     uuid: req.params.uuid,
+
                 },
                 include: [
                     { model: model.property_location, attributes: ["id"] },

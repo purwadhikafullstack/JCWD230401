@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
     Table,
     Thead,
@@ -29,9 +29,11 @@ function RoomTable(props) {
     function BtnDelete() {
         const { isOpen, onOpen, onClose } = useDisclosure();
         const cancelRef = React.useRef();
+        const [loading, setLoading] = useState(false);
 
         const deleteRoom = async () => {
             try {
+                setLoading(true);
                 let token = localStorage.getItem("tempatku_login");
                 let del = await axios.patch(
                     `${process.env.REACT_APP_API_BASE_URL}/room/deleteroom/${props.uuid}`,
@@ -46,6 +48,8 @@ function RoomTable(props) {
                 props.getAllRoomList();
             } catch (error) {
                 console.log(error);
+            } finally {
+                setLoading(false);
             }
         };
 
@@ -79,6 +83,7 @@ function RoomTable(props) {
                                     colorScheme="red"
                                     onClick={deleteRoom}
                                     ml={3}
+                                    isLoading={loading}
                                 >
                                     Delete
                                 </Button>

@@ -1,11 +1,12 @@
-const multer = require('multer');
-const fs = require('fs');
+const multer = require("multer");
+const fs = require("fs");
 
-const uploader2 = (directory, filePreFix) => { // directory = alamat, prefix itu kode khusus untuk menggambarkan itu gambar apa
+const uploader2 = (directory, filePreFix) => {
+    // directory = alamat, prefix itu kode khusus untuk menggambarkan itu gambar apa
     // Define default directory storage
-    let defaultDir = './src/public';
+    let defaultDir = "./src/public";
 
-    // Multer Configuration 
+    // Multer Configuration
     // 1. config storage location
     const storage = multer.diskStorage({
         destination: (req, file, cb) => {
@@ -14,39 +15,49 @@ const uploader2 = (directory, filePreFix) => { // directory = alamat, prefix itu
                 console.log(`Directory ${storeDir} exist ✅`);
                 cb(null, storeDir);
             } else {
-                fs.mkdir(storeDir, { recursive: true }, (error) => { // recursive karena mkdir tdk bisa buat sub folder
+                fs.mkdir(storeDir, { recursive: true }, (error) => {
+                    // recursive karena mkdir tdk bisa buat sub folder
                     if (error) {
                         console.log("error create directory : ", error);
                     }
-                    cb(error, storeDir)
-
-                })
+                    cb(error, storeDir);
+                });
             }
         },
         filename: (req, file, cb) => {
             console.log("cek original name", file.originalname);
-            let ext = file.originalname.split('.')[file.originalname.split('.').length - 1];
+            console.log("cek file  :", file);
+            let ext =
+                file.originalname.split(".")[
+                    file.originalname.split(".").length - 1
+                ];
             console.log("check extension", ext);
 
-            let newName = filePreFix + Date.now() + '.' + ext;
+            let newName = filePreFix + Date.now() + "." + ext;
             console.log("New Name : ", newName);
             cb(null, newName);
-        }
+        },
     });
 
-    // 2. Config file filter 
-    const fileFilter = (req,file,cb) => {
+    // 2. Config file filter
+    const fileFilter = (req, file, cb) => {
         const extFilter = /\.(jpg|jpeg|png|webp|avif)/;
         let checkExt = file.originalname.toLowerCase().match(extFilter);
-        if(checkExt){
+        if (checkExt) {
             cb(null, true);
-        }else{
-            cb(new Error("Your file extension denied"), false);
+        } else {
+            cb(null, false);
+            return cb(new Error("Your file extension is denied"));
         }
     };
 
-    // 3. Return multer
-    return multer({storage, fileFilter})
-}
+    // 3. set file size limit
+    const limits = {
+        fileSize: 1024 * 1024 * 2, // 2MB
+    };
+
+    // 4. Return multer
+    return multer({ storage, fileFilter, limits });
+};
 
 module.exports = uploader2;
