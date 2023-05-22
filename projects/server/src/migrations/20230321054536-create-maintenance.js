@@ -26,16 +26,17 @@ module.exports = {
       isActive: {
         type: Sequelize.BOOLEAN
       },
+      isDeleted: {
+        type: Sequelize.BOOLEAN
+      },
       roomId: {
         allowNull: false,
         type: Sequelize.INTEGER
       },
       createdAt: {
-        allowNull: false,
         type: Sequelize.DATE
       },
       updatedAt: {
-        allowNull: false,
         type: Sequelize.DATE
       }
     });

@@ -25,7 +25,6 @@ module.exports = {
       },
       categoryId: {
         allowNull: false,
-
         type: Sequelize.INTEGER
       },
       picture_propertyId: {
@@ -35,15 +34,12 @@ module.exports = {
       },
       userId: {
         allowNull: false,
-
         type: Sequelize.INTEGER
       },
       createdAt: {
-        allowNull: false,
         type: Sequelize.DATE
       },
       updatedAt: {
-        allowNull: false,
         type: Sequelize.DATE
       }
     });

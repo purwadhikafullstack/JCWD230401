@@ -16,24 +16,8 @@ module.exports = {
       next(error);
     }
   },
-
-  //2. PROPERTY CATEGORIES
-  propertyCategory: async (req, res, next) => {
-    try {
-      let get = await model.category.findAll({
-        where: {
-          isDeleted: 0,
-        },
-        group: ["category"],
-      });
-      res.status(200).send(get);
-    } catch (error) {
-      console.log(error);
-      next(error);
-    }
-  },
   
-  //3. PROPERTY RECOMMENDATIONS
+  //2. PROPERTY RECOMMENDATIONS
   propertyRecommendation: async (req, res, next) => {
     try {
       // get top rating roomId minimum average rating is 4.00
