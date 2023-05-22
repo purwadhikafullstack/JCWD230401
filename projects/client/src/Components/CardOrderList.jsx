@@ -46,7 +46,9 @@ export default function CardOrderList(props) {
 
     function ModalReview() {
         const { isOpen, onOpen, onClose } = useDisclosure()
+        const [loadingButton, setLoadingButton] = useState(false)
         const btnReview = async () => {
+            setLoadingButton(true)
             let review = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/review/`, {
                 rating: props.rating,
                 review: props.review,
@@ -57,6 +59,7 @@ export default function CardOrderList(props) {
                     Authorization: `Bearer ${token}`,
                 },
             });
+            setLoadingButton(false)
             onClose();
             props.getOrderList()
             // TOAST
@@ -80,7 +83,7 @@ export default function CardOrderList(props) {
                         <ModalBody>
                             <VStack>
                                 <Textarea
-                                    placeholder='Here is a sample placeholder'
+                                    placeholder='Write a review'
                                     size='md'
                                     resize='none'
                                     onChange={(e) => props.setReview(e.target.value)}
@@ -89,6 +92,7 @@ export default function CardOrderList(props) {
                                     <Flex alignItems={'center'}>
                                         <Box >
                                             <Button colorScheme={'red'} variant='outline'
+                                                isLoading={loadingButton}
                                                 onClick={btnReview}>
                                                 Send
                                             </Button>

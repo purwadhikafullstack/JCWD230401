@@ -104,8 +104,8 @@ export default function RoomCard(props) {
                             <Image
                                 src={!props.picture?.length ? noimage : `${process.env.REACT_APP_API_IMG_URL}${props?.picture[0].picture}`}
                                 alt="Your Image"
-                                w="100%"
-                                h="100%"
+                                w="full"
+                                h='full'
                                 objectFit="cover"
                                 borderRadius="12px"
                             />
@@ -199,7 +199,7 @@ export default function RoomCard(props) {
                                         (
                                             //if User isVerified true
                                             <>
-                                                <Link to={`/payment/${props.uuid}`} state={{ inputCheckIn: props.inputCheckIn, inputCheckOut: props.inputCheckOut }}>
+                                                <Link to={`/payment/${props.uuid}`} state={{ inputCheckIn: props.inputCheckIn, inputCheckOut: props.inputCheckOut, priceRoom: props.price }}>
                                                     <Button
                                                         loadingText="Submitting"
                                                         bg={'#D3212D'}

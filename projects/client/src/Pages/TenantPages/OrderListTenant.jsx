@@ -42,8 +42,11 @@ import OrderListCardTenant from "../../Components/TenantComponents/OrderListCard
 import { FaFilter } from "react-icons/fa";
 import Pagination from "../../Components/Pagination";
 import AlertDialogTenant from "../../Components/AlertDialogTenant";
+import Loading from "../../Components/Loading";
 
 export default function OrderListTenant() {
+    const [loadingPage, setLoadingPage] = useState(true)
+    const [loadingButton, setLoadingButton] = useState(false)
     // TOKEN
     let token = localStorage.getItem("tempatku_login");
 
@@ -114,6 +117,7 @@ export default function OrderListTenant() {
 
     const [dataSummary, setDataSummary] = useState([]);
     const getSummary = async () => {
+        setLoadingButton(true)
         let get = await axios.get(
             `${process.env.REACT_APP_API_BASE_URL}/order/getsummary?page=${pageSummary}&size=${sizeSummary}&sortby=${sortBySummary}&order=${orderSummary}`,
             {
@@ -124,6 +128,8 @@ export default function OrderListTenant() {
         );
         setDataSummary(get.data.rows);
         setTotalDataSummary(get.data.count);
+        setLoadingPage(false)
+        setLoadingButton(false)
         console.log("SUMMARY count", get.data.count);
     };
     console.log("SUMMARY", dataSummary);
@@ -168,192 +174,167 @@ export default function OrderListTenant() {
     useEffect(() => {
         getSummary();
     }, [pageSummary, sizeSummary, sortBySummary, orderSummary]);
-    return (
-        // <Flex>
-        //     {/* SIDEBAR */}
-        //     <Box>
-        //         <Sidebar />
-        //     </Box>
 
-        //     {/* CONTENT */}
-        //     <Box mx='10' border='1px solid black' minHeight={'100vh'} w='full'>
-        //         <Text>Order List</Text>
-        //         <Box border='1px solid red' shadow={'xl'} rounded={'xl'} p='3' m='5'>
-        //             <Text>Actions Needed</Text>
-        //             <Flex flexDir={'column'} w='full' alignItems={'center'}>
-        //                 <Flex justifyContent={'space-evenly'} gap='2'>
-        //                     <CardOrderListTenant />
-        //                     <CardOrderListTenant />
-        //                     <CardOrderListTenant />
-        //                     <CardOrderListTenant />
-        //                     <CardOrderListTenant />
-        //                 </Flex>
-        //                 <Box>
-        //                     Pagination
-        //                 </Box>
-        //             </Flex>
-        //         </Box>
-        //     </Box>
-
-        // </Flex>
-
-        <>
-            <Flex
-                minH={"100vh"}
-                // align={'center'}
-                // justify={'center'}
-                // p={12}
-            >
-                {/* Left Content */}
-                <Box>
-                    <Sidebar />
-                </Box>
-                {/* Right Content */}
-                <Box w="full" flex="5" px={{ base: "1", sm: "4" }} mt="5">
-                    <Heading
-                        lineHeight={1.1}
-                        mb="5"
-                        fontSize={{ base: "2xl", md: "3xl" }}
-                        textAlign={{ base: "center", sm: "start" }}
-                    >
-                        Order List
-                    </Heading>
-                    {/* Actions Needed */}
-                    <Box w="full">
-                        <Stack
-                            spacing={4}
-                            w={"full"}
-                            maxW={"1000px"}
-                            rounded={"xl"}
-                            boxShadow={"lg"}
-                            border="1px"
-                            borderColor="gray.300"
-                            p={6}
-                            my={2}
-                        >
-                            <Heading
-                                lineHeight={1.1}
-                                fontSize={{ base: "2xl", md: "3xl" }}
-                            >
-                                Action(s) Needed
-                            </Heading>
-                            <Flex align={"center"} overflowX={"auto"}>
-                                {/* Client Order List Card */}
-                                {actionsNeeded.length ? (
-                                    printCardOrderList()
-                                ) : (
-                                    <Text>Takdee Orderann cekguu</Text>
-                                )}
-                            </Flex>
-                            <Flex justify={"center"}>
-                                {totalData === 0 ? null : (
-                                    <Pagination
-                                        size={size}
-                                        totalData={totalData}
-                                        paginate={paginate}
-                                    />
-                                )}
-                            </Flex>
-                        </Stack>
-                    </Box>
-                    {/* Summary */}
+    if (loadingPage) {
+        return <Loading />
+    } else {
+        return (
+            <>
+                <Flex
+                    minH={"100vh"}
+                >
+                    {/* Left Content */}
                     <Box>
-                        <Stack
-                            spacing={4}
-                            w={"full"}
-                            maxW={"1000px"}
-                            rounded={"xl"}
-                            boxShadow={"lg"}
-                            border="1px"
-                            borderColor="gray.300"
-                            p={6}
-                            my={2}
+                        <Sidebar />
+                    </Box>
+                    {/* Right Content */}
+                    <Box w="full" flex="5" px={{ base: "1", sm: "4" }} mt="5">
+                        <Heading
+                            lineHeight={1.1}
+                            mb="5"
+                            fontSize={{ base: "2xl", md: "3xl" }}
+                            textAlign={{ base: "center", sm: "start" }}
                         >
+                            Order List
+                        </Heading>
+                        {/* Actions Needed */}
+                        <Box w="full">
                             <Stack
-                                align={"center"}
-                                justify={"space-between"}
-                                direction={"row"}
+                                spacing={4}
+                                w={"full"}
+                                maxW={"90vw"}
+                                rounded={"xl"}
+                                boxShadow={"lg"}
+                                border="1px"
+                                borderColor="gray.300"
+                                p={6}
+                                my={2}
                             >
                                 <Heading
                                     lineHeight={1.1}
                                     fontSize={{ base: "2xl", md: "3xl" }}
                                 >
-                                    Summary
+                                    Action(s) Needed
                                 </Heading>
-                                <Menu closeOnSelect={false}>
-                                    <MenuButton
-                                        as={Button}
-                                        bg={"#D3212D"}
-                                        color={"white"}
-                                        _hover={{
-                                            bg: "#D3212D",
-                                        }}
-                                        leftIcon={<FaFilter />}
-                                    >
-                                        Filter
-                                    </MenuButton>
-                                    <MenuList minWidth="240px">
-                                        <MenuOptionGroup
-                                            defaultValue="desc"
-                                            title="Order"
-                                            type="radio"
-                                        >
-                                            <MenuItemOption
-                                                value="desc"
-                                                onClick={() => {
-                                                    setSortBySummary("id");
-                                                    setOrderSummary("DESC");
-                                                }}
-                                            >
-                                                Newest
-                                            </MenuItemOption>
-                                            <MenuItemOption
-                                                value="asc"
-                                                onClick={() => {
-                                                    setSortBySummary("id");
-                                                    setOrderSummary("ASC");
-                                                }}
-                                            >
-                                                Oldest
-                                            </MenuItemOption>
-                                        </MenuOptionGroup>
-                                    </MenuList>
-                                </Menu>
+                                <Flex align={"center"} overflowX={"auto"}>
+                                    {/* Client Order List Card */}
+                                    {actionsNeeded.length ? (
+                                        printCardOrderList()
+                                    ) : (
+                                        <Text>Takdee Orderann cekguu</Text>
+                                    )}
+                                </Flex>
+                                <Flex justify={"center"}>
+                                    {totalData === 0 ? null : (
+                                        <Pagination
+                                            size={size}
+                                            totalData={totalData}
+                                            paginate={paginate}
+                                        />
+                                    )}
+                                </Flex>
                             </Stack>
-                            <TableContainer
-                                overflowX={"auto"}
-                                overflowY={"auto"}
+                        </Box>
+                        {/* Summary */}
+                        <Box>
+                            <Stack
+                                spacing={4}
+                                w={"full"}
+                                maxW={"90vw"}
+                                rounded={"xl"}
+                                boxShadow={"lg"}
+                                border="1px"
+                                borderColor="gray.300"
+                                p={6}
+                                my={2}
                             >
-                                <Table variant="striped">
-                                    <Thead>
-                                        <Tr>
-                                            <Th>Invoice Number</Th>
-                                            <Th>User</Th>
-                                            <Th>Property</Th>
-                                            <Th>Room</Th>
-                                            <Th>Start Date</Th>
-                                            <Th>Night(s)</Th>
-                                            <Th>Price</Th>
-                                            <Th>Status</Th>
-                                            <Th>Edit</Th>
-                                        </Tr>
-                                    </Thead>
-                                    <Tbody>{printTableSummary()}</Tbody>
-                                </Table>
-                            </TableContainer>
-                            <Flex justify={"center"}>
-                                {totalDataSummary === 0 ? null : (
-                                    <Pagination
-                                        size={sizeSummary}
-                                        totalData={totalDataSummary}
-                                        paginate={paginateSummary}
-                                    />
-                                )}
-                            </Flex>
-                        </Stack>
+                                <Stack
+                                    align={"center"}
+                                    justify={"space-between"}
+                                    direction={"row"}
+                                >
+                                    <Heading
+                                        lineHeight={1.1}
+                                        fontSize={{ base: "2xl", md: "3xl" }}
+                                    >
+                                        Summary
+                                    </Heading>
+                                    <Menu closeOnSelect={false}>
+                                        <MenuButton
+                                            as={Button}
+                                            bg={"#D3212D"}
+                                            color={"white"}
+                                            _hover={{
+                                                bg: "#D3212D",
+                                            }}
+                                            leftIcon={<FaFilter />}
+                                            isLoading={loadingButton}
+                                        >
+                                            Filter
+                                        </MenuButton>
+                                        <MenuList minWidth="240px">
+                                            <MenuOptionGroup
+                                                defaultValue="desc"
+                                                title="Order"
+                                                type="radio"
+                                            >
+                                                <MenuItemOption
+                                                    value="desc"
+                                                    onClick={() => {
+                                                        setSortBySummary("id");
+                                                        setOrderSummary("DESC");
+                                                    }}
+                                                >
+                                                    Newest
+                                                </MenuItemOption>
+                                                <MenuItemOption
+                                                    value="asc"
+                                                    onClick={() => {
+                                                        setSortBySummary("id");
+                                                        setOrderSummary("ASC");
+                                                    }}
+                                                >
+                                                    Oldest
+                                                </MenuItemOption>
+                                            </MenuOptionGroup>
+                                        </MenuList>
+                                    </Menu>
+                                </Stack>
+                                <TableContainer
+                                    overflowX={"auto"}
+                                    overflowY={"auto"}
+                                >
+                                    <Table variant="striped">
+                                        <Thead>
+                                            <Tr>
+                                                <Th>Invoice Number</Th>
+                                                <Th>User</Th>
+                                                <Th>Property</Th>
+                                                <Th>Room</Th>
+                                                <Th>Start Date</Th>
+                                                <Th>Night(s)</Th>
+                                                <Th>Price</Th>
+                                                <Th>Status</Th>
+                                                <Th>Edit</Th>
+                                            </Tr>
+                                        </Thead>
+                                        <Tbody>{printTableSummary()}</Tbody>
+                                    </Table>
+                                </TableContainer>
+                                <Flex justify={"center"}>
+                                    {totalDataSummary === 0 ? null : (
+                                        <Pagination
+                                            size={sizeSummary}
+                                            totalData={totalDataSummary}
+                                            paginate={paginateSummary}
+                                        />
+                                    )}
+                                </Flex>
+                            </Stack>
+                        </Box>
                     </Box>
-                </Box>
-            </Flex>
-        </>
-    );
+                </Flex>
+            </>
+        );
+    }
 }

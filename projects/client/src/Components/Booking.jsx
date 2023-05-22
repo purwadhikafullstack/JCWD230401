@@ -22,9 +22,11 @@ import {
     ModalBody,
     ModalCloseButton,
     useDisclosure,
+    VStack
 } from '@chakra-ui/react';
 import { BsStarFill } from "react-icons/bs";
 import { useNavigate } from 'react-router-dom';
+import { API_URL } from '../helper';
 import axios from 'axios';
 import { useSelector } from "react-redux";
 import DatePicker from 'react-datepicker';
@@ -44,14 +46,13 @@ export default function Booking(props) {
         <>
             <Box
                 rounded={'lg'}
-                boxShadow={'lg'}
                 p={8}
-                w='450px'
+                w={{ sm: '150px', md: '450px' }}
                 border='1px'
-                borderColor={'gray.200'}
+                borderColor={'gray.300'}
             >
                 <Stack spacing={4}>
-                    <HStack justifyContent={'space-between'} w='50%'>
+                    <Box display={{ base: 'flex', md: 'flex' }} flexDirection={{ base: 'column', md: 'row' }} justifyContent={'space-between'} >
                         <Box >
                             <FormControl id="checkin">
                                 <FormLabel>Check in</FormLabel>
@@ -72,7 +73,7 @@ export default function Booking(props) {
                                 </Box>
                             </FormControl>
                         </Box>
-                        <Box>
+                        <Box pt={{ base: '4', md: '0' }}>
                             <FormControl id="checkout">
                                 <FormLabel>Check out</FormLabel>
                                 <Box border="1px"
@@ -90,11 +91,8 @@ export default function Booking(props) {
                                 </Box>
                             </FormControl>
                         </Box>
-                    </HStack>
-                    <FormControl id="guests">
-                        <FormLabel>Guests</FormLabel>
-                        <Input type="number" placeholder='number of guests' />
-                    </FormControl>
+                    </Box>
+                    <Button colorScheme={'red'} isLoading={props.loadingButton}>Choose Date</Button>
                     <Stack pt={2}>
                         <Text align={'center'}>
                             You won't be charged yet

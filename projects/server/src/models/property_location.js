@@ -20,7 +20,7 @@ module.exports = (sequelize, DataTypes) => {
             provinceId: DataTypes.INTEGER,
             propertyId: DataTypes.INTEGER,
             regency_id: DataTypes.INTEGER,
-            gmaps: DataTypes.STRING,
+            gmaps: DataTypes.TEXT('long'),
         },
         {
             sequelize,

@@ -18,7 +18,119 @@ export default function BookingDetails(props) {
     };
 
     return (
-        <Box as={Container} maxW='container.xl' p={4}>
+        // <Box as={Container} maxW='container.xl' p={4}>
+        //     {/* <Grid
+        //         templateColumns={{
+        //             base: 'repeat(1, 1fr)',
+        //             sm: 'repeat(1, 1fr)',
+        //             md: 'repeat(1, 1fr)',
+        //         }}
+        //         gap={4}>
+        //         <GridItem colSpan={1}>
+        //             <VStack spacing="20px" m="auto">
+        //                 <Text fontSize="2xl" fontWeight="700">
+        //                     Booking Confirmed
+        //                 </Text>
+        //             </VStack>
+        //         </GridItem>
+        //     </Grid>
+        //     <Divider mt={12} mb={{ base: 0, md: 6 }} /> */}
+        //     <Grid
+        //         templateColumns={{
+        //             base: 'repeat(1, 1fr)',
+        //             sm: 'repeat(1, 1fr)',
+        //             md: 'repeat(1, 1fr)',
+        //         }}
+        //         gap={4}>
+        //         <GridItem colSpan={1}>
+        //             <VStack alignItems={{ lg: "flex-start" }} m="auto">
+        //                 <Text fontSize="xl" fontWeight="700">
+        //                     Booking Details
+        //                 </Text>
+        //                 <Text>
+        //                     Details: {props.roomName}
+        //                 </Text>
+        //             </VStack>
+        //         </GridItem>
+        //     </Grid>
+        //     <Divider mt={6} mb={6} />
+        //     <Grid
+        //         templateColumns={{
+        //             base: 'repeat(1, 1fr)',
+        //             sm: 'repeat(2, 1fr)',
+        //             md: 'repeat(5, 1fr)',
+        //         }}
+        //         gap={{ base: '8', sm: '4', md: '4' }}>
+        //         <Feature
+        //             heading={'Invoice number:'}
+        //             text={props.invoiceNumber}
+        //         />
+        //         <Feature
+        //             heading={'Check-in:'}
+        //             text={props.startDate}
+        //         />
+        //         <Feature
+        //             heading={'Check-out:'}
+        //             text={props.endDate}
+        //         />
+        //         <Feature
+        //             heading={'Total:'}
+        //             text={formatRupiah(props.total)}
+        //         />
+        //         <Feature
+        //             heading={'Status:'}
+        //             text={props.status}
+        //         />
+        //     </Grid>
+        //     <Divider mt={6} mb={6} />
+        //     <Grid
+        //         templateColumns={{
+        //             base: 'repeat(1, 1fr)',
+        //             sm: 'repeat(1, 1fr)',
+        //             md: 'repeat(1, 1fr)',
+        //         }}
+        //         gap={4}>
+        //         <GridItem colSpan={1}>
+        //             <VStack alignItems={{ lg: "flex-start" }} m="auto">
+        //                 <Text fontSize="xl" fontWeight="700">
+        //                     Other Details
+        //                 </Text>
+        //             </VStack>
+        //         </GridItem>
+        //     </Grid>
+        //     <Divider mt={6} mb={6} />
+        //     <Grid
+        //         templateColumns={{
+        //             base: 'repeat(1, 1fr)',
+        //             sm: 'repeat(2, 1fr)',
+        //             md: 'repeat(5, 1fr)',
+        //         }}
+        //         gap={{ base: '8', sm: '4', md: '4' }}>
+        //         <Feature
+        //             heading={'Guest:'}
+        //             text={props.customer}
+        //         />
+        //         <Feature
+        //             heading={'Property:'}
+        //             text={props.propertyName}
+        //         />
+        //         <Feature
+        //             heading={'Address:'}
+        //             text={props.propertyAddress}
+        //         />
+        //         <Feature
+        //             heading={'Regency:'}
+        //             text={props.propertyRegency}
+        //         />
+        //         <Feature
+        //             heading={'Country:'}
+        //             text={props.propertyCountry}
+        //         />
+        //     </Grid>
+        //     <Divider mt={6} mb={6} />
+        // </Box>
+
+        <Box as={Container} maxW='container.xl' p={{ base: '0', md: '4' }} mt={{ base: '16', md: '20', lg: '0' }}>
             {/* <Grid
                 templateColumns={{
                     base: 'repeat(1, 1fr)',
@@ -35,6 +147,7 @@ export default function BookingDetails(props) {
                 </GridItem>
             </Grid>
             <Divider mt={12} mb={{ base: 0, md: 6 }} /> */}
+            {/* <Box borderTop={'1px'} borderColor={{base:'white', lg:'gray.300'}}  mt={6} mb={6}></Box> */}
             <Grid
                 templateColumns={{
                     base: 'repeat(1, 1fr)',
@@ -44,7 +157,7 @@ export default function BookingDetails(props) {
                 gap={4}>
                 <GridItem colSpan={1}>
                     <VStack alignItems={{ lg: "flex-start" }} m="auto">
-                        <Text fontSize="xl" fontWeight="700">
+                        <Text fontSize="xl" fontWeight="700" color="#D3212D" pb={{ base: '10', lg: '2' }}>
                             Booking Details
                         </Text>
                         <Text>
@@ -53,7 +166,7 @@ export default function BookingDetails(props) {
                     </VStack>
                 </GridItem>
             </Grid>
-            <Divider mt={6} mb={6} />
+            <Box borderTop={'1px'} borderColor={{ base: 'white', lg: 'gray.300' }} mt={6} mb={6}></Box>
             <Grid
                 templateColumns={{
                     base: 'repeat(1, 1fr)',
@@ -82,7 +195,7 @@ export default function BookingDetails(props) {
                     text={props.status}
                 />
             </Grid>
-            <Divider mt={6} mb={6} />
+            <Box borderTop={'1px'} borderColor={{ base: 'white', lg: 'gray.300' }} mt={6} mb={6}></Box>
             <Grid
                 templateColumns={{
                     base: 'repeat(1, 1fr)',
@@ -92,13 +205,13 @@ export default function BookingDetails(props) {
                 gap={4}>
                 <GridItem colSpan={1}>
                     <VStack alignItems={{ lg: "flex-start" }} m="auto">
-                        <Text fontSize="xl" fontWeight="700">
+                        <Text fontSize="xl" fontWeight="700" color="#D3212D">
                             Other Details
                         </Text>
                     </VStack>
                 </GridItem>
             </Grid>
-            <Divider mt={6} mb={6} />
+            <Box borderTop={'1px'} borderColor={{ base: 'white', lg: 'gray.300' }} mt={6} mb={6}></Box>
             <Grid
                 templateColumns={{
                     base: 'repeat(1, 1fr)',
@@ -127,7 +240,7 @@ export default function BookingDetails(props) {
                     text={props.propertyCountry}
                 />
             </Grid>
-            <Divider mt={6} mb={6} />
+            <Box borderTop={'1px'} borderColor={{ base: 'white', lg: 'gray.300' }} mt={6} mb={6}></Box>
         </Box>
     );
 }

@@ -183,10 +183,10 @@ export default function Navbar() {
                           imageProfile == null
                             ? "https://ionicframework.com/docs/img/demos/avatar.svg"
                             : imageProfile && imageProfile.includes("http")
-                            ? imageProfile
-                            : `${process.env.REACT_APP_API_IMG_URL}${imageProfile}`
-                            ? `${process.env.REACT_APP_API_IMG_URL}${imageProfile}`
-                            : "https://ionicframework.com/docs/img/demos/avatar.svg"
+                              ? imageProfile
+                              : `${process.env.REACT_APP_API_IMG_URL}${imageProfile}`
+                                ? `${process.env.REACT_APP_API_IMG_URL}${imageProfile}`
+                                : "https://ionicframework.com/docs/img/demos/avatar.svg"
                         }
                       />
                       :
@@ -198,10 +198,10 @@ export default function Navbar() {
                             imageProfile == null
                               ? "https://ionicframework.com/docs/img/demos/avatar.svg"
                               : imageProfile && imageProfile.includes("http")
-                              ? imageProfile
-                              : `${process.env.REACT_APP_API_IMG_URL}${imageProfile}`
-                              ? `${process.env.REACT_APP_API_IMG_URL}${imageProfile}`
-                              : "https://ionicframework.com/docs/img/demos/avatar.svg"
+                                ? imageProfile
+                                : `${process.env.REACT_APP_API_IMG_URL}${imageProfile}`
+                                  ? `${process.env.REACT_APP_API_IMG_URL}${imageProfile}`
+                                  : "https://ionicframework.com/docs/img/demos/avatar.svg"
                           }
                         />
                         :
@@ -217,7 +217,7 @@ export default function Navbar() {
                     <MenuList zIndex={9999}>
                       <MenuItem onClick={() => navigate("/")}>Home</MenuItem>
                       <MenuItem onClick={() => navigate("/profile/edit")}>Profile</MenuItem>
-                      <MenuItem>Bookings</MenuItem>
+                      <MenuItem onClick={() => navigate("/order/list")}>Bookings</MenuItem>
 
                       {password === "NULL" ? (
                         <div>

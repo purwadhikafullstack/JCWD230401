@@ -27,8 +27,11 @@ import { FiUpload } from "react-icons/fi";
 import { MdContentCopy } from "react-icons/md";
 import BookingDetails from "../Components/BookingDetails";
 import { formatRupiah } from "../helper";
+import noimage from "../assets/noimage.png"
+import Loading from "../Components/Loading";
 
 export default function PaymentDetail() {
+    const [loadingPage, setLoadingPage] = useState(true)
     const params = useParams();
     let token = localStorage.getItem("tempatku_login");
     const [isLoadingButton, setIsLoadingButton] = useState(false);
@@ -85,6 +88,7 @@ export default function PaymentDetail() {
             getOther.data[0].property.property_location.regency.name
         );
         setPropertyCountry(getOther.data[0].property.property_location.country);
+        setLoadingPage(false);
     };
 
     // CANCEL BUTTON
@@ -468,282 +472,194 @@ export default function PaymentDetail() {
     useEffect(() => {
         getTransactionTimeAndBank();
     }, []);
-    // const []
-    return (
-        <Box
-            // minH={'100vh'}
-            // align={'center'}
-            // justify={'center'}
-            // bg={useColorModeValue('gray.50', 'gray.800')}
-            // p={5}
 
-            minH={"100vh"}
-            align={"center"}
-            justify={"center"}
-            display={{ base: "block", lg: "flex" }} //responsive
-            bg={useColorModeValue("gray.50", "gray.800")}
-            p={{ lg: "12" }}
-            pt={"12"}
-            style={{ justifyContent: "center", alignItems: "center" }}
-        >
+    if (loadingPage) {
+        return <Loading />
+    } else {
+        return (
             <Box
-                w="full"
-                display="flex"
-                flexDirection={["column", "column", "column", "row"]}
+                minH={'100vh'}
+                align={'center'}
+                justify={'center'}
+                display={{ base: 'block', lg: 'flex' }} //responsive
+                bg={'white'}
+                p={{ base: '0', lg: '12' }}
+                pt={'12'}
+                style={{ justifyContent: 'center', alignItems: 'center' }}
             >
-                <Box order={[2, 2, 2, 1]} w="full" m="auto">
-                    <BookingDetails
-                        invoiceNumber={invoiceNumber}
-                        startDate={startDate}
-                        endDate={endDate}
-                        total={days * price}
-                        status={transactionStatus}
-                        customer={customer}
-                        propertyName={propertyName}
-                        propertyAddress={propertyAddress}
-                        propertyRegency={propertyRegency}
-                        propertyCountry={propertyCountry}
-                        roomName={roomName}
-                    />
-                </Box>
-                <Box order={[1, 1, 1, 2]} m="auto" mb="0">
-                    <Box
-                        maxW={"400px"}
-                        w={"full"}
-                        bg={useColorModeValue("white", "gray.800")}
-                        boxShadow={"lg"}
-                        rounded={"md"}
-                        overflow={"hidden"}
-                    >
-                        <MemoCountDown />
+
+                <Box w='full' display='flex' flexDirection={['column', 'column', 'column', 'row']}>
+                    <Box order={[2, 2, 2, 1]} w='full' m='auto'>
+                        <BookingDetails invoiceNumber={invoiceNumber} startDate={startDate} endDate={endDate} total={days * price} status={transactionStatus} customer={customer} propertyName={propertyName} propertyAddress={propertyAddress} propertyRegency={propertyRegency} propertyCountry={propertyCountry} roomName={roomName} />
+                    </Box>
+                    <Box order={[1, 1, 1, 2]} m='auto' mb='0'>
                         <Box
-                            bg={useColorModeValue("gray.50", "gray.900")}
-                            px={6}
-                            py={6}
+                            maxW={'400px'}
+                            w={'full'}
+                            bg={'white'}
+                            rounded={{ base: 'none', md: 'xl' }}
+                            borderWidth={'1px'}
+                            borderColor={{ base: 'white', sm: 'gray.300' }}
+                            overflow={'hidden'}
                         >
-                            <List spacing={3}>
-                                <ListItem>
-                                    <Text textAlign="center" fontSize="sm">
-                                        Account Name
-                                    </Text>
-                                    <Text
-                                        textAlign="center"
-                                        fontWeight={"600"}
-                                        fontSize="md"
-                                    >
-                                        {bank?.name}
-                                    </Text>
-                                </ListItem>
-                                <Box
-                                    borderTop={"2px"}
-                                    borderColor={"gray.300"}
-                                ></Box>
-                                <ListItem>
-                                    {/* BUAT USECLIPBOARD UNTUK TOMBOL COPY */}
-                                    <Flex
-                                        alignItems="center"
-                                        justify={"center"}
-                                    >
-                                        <Box></Box>
-                                        <Box>
+                            <MemoCountDown />
+                            <Box borderTop={'1px'} borderColor={{ base: 'white', md: 'gray.300' }}></Box>
+                            <Box bg={'white'} px={6} py={6}>
+                                <List spacing={{ base: '3', md: '6' }}>
+                                    <ListItem>
+                                        <Text textAlign="center" fontSize="sm">
+                                            Account Name
+                                        </Text>
+                                        <Text textAlign="center" fontWeight={'600'} fontSize="md" pt='2'>
+                                            {bank?.name}
+                                        </Text>
+                                    </ListItem>
+                                    <Box borderTop={'1px'} borderColor={{ base: 'white', md: 'gray.300' }}></Box>
+                                    <ListItem>
+                                        {/* BUAT USECLIPBOARD UNTUK TOMBOL COPY */}
+                                        <Flex alignItems="center" justify={'center'}>
                                             <Box>
-                                                <Text
-                                                    textAlign="center"
-                                                    fontSize="sm"
-                                                >
-                                                    Account Number
-                                                </Text>
                                             </Box>
                                             <Box>
-                                                <Text
-                                                    textAlign="center"
-                                                    fontWeight={"600"}
-                                                    fontSize="md"
-                                                >
-                                                    <ListIcon
-                                                        as={MdContentCopy}
-                                                        color="green.400"
-                                                        fontSize={"2xl"}
-                                                    />
-                                                    {bank?.account_number}
-                                                </Text>
+                                                <Box>
+                                                    <Text textAlign="center" fontSize="sm">
+                                                        Account Number
+                                                    </Text>
+                                                </Box>
+                                                <Box pt='2'>
+                                                    <Text textAlign="center" fontWeight={'600'} fontSize="md">
+                                                        <ListIcon as={MdContentCopy} color="#D3212D" fontSize={'2xl'} />
+                                                        {bank?.account_number}
+                                                    </Text>
+                                                </Box>
                                             </Box>
-                                        </Box>
-                                    </Flex>
-                                </ListItem>
-                                <Box
-                                    borderTop={"2px"}
-                                    borderColor={"gray.300"}
-                                ></Box>
-                                <ListItem>
-                                    <Flex
-                                        alignItems="center"
-                                        justify={"center"}
-                                    >
-                                        <Box></Box>
-                                        <Box>
+                                        </Flex>
+                                    </ListItem>
+                                    <Box borderTop={'1px'} borderColor={{ base: 'white', md: 'gray.300' }}></Box>
+                                    <ListItem>
+                                        <Flex alignItems="center" justify={'center'}>
                                             <Box>
-                                                <Text
-                                                    textAlign="center"
-                                                    fontSize="sm"
-                                                >
-                                                    Payment Nominal
-                                                </Text>
                                             </Box>
                                             <Box>
-                                                <Text
-                                                    textAlign="center"
-                                                    fontWeight={"600"}
-                                                    fontSize="md"
-                                                >
-                                                    <ListIcon
-                                                        as={MdContentCopy}
-                                                        color="green.400"
-                                                        fontSize={"2xl"}
-                                                    />
-                                                    {formatRupiah(days * price)}
-                                                </Text>
+                                                <Box>
+                                                    <Text textAlign="center" fontSize="sm">
+                                                        Payment Nominal
+                                                    </Text>
+                                                </Box>
+                                                <Box pt='2'>
+                                                    <Text textAlign="center" fontWeight={'600'} fontSize="md">
+                                                        <ListIcon as={MdContentCopy} color="#D3212D" fontSize={'2xl'} />
+                                                        {formatRupiah(days * price)}
+                                                    </Text>
+                                                </Box>
                                             </Box>
-                                        </Box>
-                                    </Flex>
-                                </ListItem>
-                            </List>
+                                        </Flex>
+                                    </ListItem>
+                                </List>
 
-                            <Button
-                                mt={10}
-                                w={"full"}
-                                bg={"green.400"}
-                                color={"white"}
-                                // rounded={'xl'}
-                                isDisabled={
-                                    transactionStatus ===
-                                        "Waiting for payment" ||
-                                    transactionStatus === "Reject"
-                                        ? false
-                                        : true
-                                }
-                                _hover={{
-                                    bg: "green.500",
-                                }}
-                                _focus={{
-                                    bg: "green.500",
-                                }}
-                                leftIcon={
-                                    <Icon as={FiUpload} fontSize={"xl"} />
-                                }
-                                onClick={() =>
-                                    inputImagePayment.current.click()
-                                }
-                                isLoading={isLoadingButton}
-                            >
-                                <Input
-                                    type={"file"}
-                                    display="none"
-                                    id="file"
-                                    ref={inputImagePayment}
-                                    onChange={onChangeImagePayment}
-                                />
-                                {transactionStatus !== "Waiting for payment" ||
-                                fileImagePayment
-                                    ? "Image Uploaded"
-                                    : "Upload Payment Receipt"}
-                            </Button>
-
-                            <Link to="/order/list">
+                                {/* BUAT KONDISI KALO EXPIRED UDAH LEWAT BUTTON NYA ILANG */}
                                 <Button
-                                    mt={2}
-                                    w={"full"}
-                                    bg={"blue.400"}
-                                    color={"white"}
+                                    mt={10}
+                                    w={'full'}
+                                    borderColor="#D3212D"
+                                    color={'#D3212D'}
+                                    variant={'outline'}
                                     // rounded={'xl'}
+                                    isDisabled={transactionStatus === 'Waiting for payment' || transactionStatus === 'Reject' ? false : true}
                                     _hover={{
-                                        bg: "blue.500",
+                                        bg: 'gray.200',
                                     }}
                                     _focus={{
-                                        bg: "blue.500",
+                                        bg: 'gray.200',
                                     }}
-                                    leftIcon={
-                                        <Icon
-                                            as={AiOutlineEye}
-                                            fontSize={"xl"}
-                                        />
-                                    }
+                                    leftIcon={<Icon as={FiUpload} fontSize={'xl'} />}
+                                    onClick={() => inputImagePayment.current.click()}
                                     isLoading={isLoadingButton}
                                 >
-                                    See your order list
+                                    <Input type={'file'} display='none' id='file' ref={inputImagePayment}
+                                        onChange={onChangeImagePayment} />
+                                    {transactionStatus !== 'Waiting for payment' || fileImagePayment ? 'Image Uploaded' : 'Upload Payment Receipt'}
                                 </Button>
-                            </Link>
-                            {/* CANCEL ORDER BUTTON SEMENTARA */}
-                            <Button
-                                onClick={onOpen}
-                                isDisabled={
-                                    transactionStatus !==
-                                        "Waiting for payment" ||
-                                    fileImagePayment
-                                        ? true
-                                        : false
-                                }
-                                mt={2}
-                                w={"full"}
-                                bg={"red.400"}
-                                color={"white"}
-                                _hover={{
-                                    bg: "blue.500",
-                                }}
-                                _focus={{
-                                    bg: "blue.500",
-                                }}
-                                isLoading={isLoadingButton}
-                            >
-                                Cancel Order
-                            </Button>
 
-                            <AlertDialog
-                                isOpen={isOpen}
-                                leastDestructiveRef={cancelRef}
-                                onClose={onClose}
-                            >
-                                <AlertDialogOverlay>
-                                    <AlertDialogContent>
-                                        <AlertDialogHeader
-                                            fontSize="lg"
-                                            fontWeight="bold"
-                                        >
-                                            Cancel Order
-                                        </AlertDialogHeader>
+                                <Link to='/order/list'>
+                                    <Button
+                                        mt={2}
+                                        w={'full'}
+                                        bg={'white'}
+                                        borderColor="red.500"
+                                        color={'red.500'}
+                                        variant={'outline'}
+                                        // rounded={'xl'}
+                                        _hover={{
+                                            bg: 'gray.200',
+                                        }}
+                                        _focus={{
+                                            bg: 'gray.200',
+                                        }}
+                                        leftIcon={<Icon as={AiOutlineEye} fontSize={'xl'} />}
+                                        isLoading={isLoadingButton}
+                                    >
+                                        See your order list
+                                    </Button>
+                                </Link>
+                                {/* CANCEL ORDER BUTTON SEMENTARA */}
+                                <Button
+                                    onClick={onOpen}
+                                    isDisabled={transactionStatus !== 'Waiting for payment' || fileImagePayment ? true : false}
+                                    mt={2}
+                                    w={'full'}
+                                    bg={'red.400'}
+                                    color={'white'}
+                                    _hover={{
+                                        bg: 'red.500',
+                                    }}
+                                    _focus={{
+                                        bg: 'red.500',
+                                    }}
+                                    isLoading={isLoadingButton}
+                                >
+                                    Cancel Order
+                                </Button>
 
-                                        <AlertDialogBody>
-                                            Are you sure? You can't undo this
-                                            action afterwards.
-                                        </AlertDialogBody>
+                                <AlertDialog
+                                    isOpen={isOpen}
+                                    leastDestructiveRef={cancelRef}
+                                    onClose={onClose}
+                                >
+                                    <AlertDialogOverlay>
+                                        <AlertDialogContent>
+                                            <AlertDialogHeader fontSize='lg' fontWeight='bold'>
+                                                Cancel Order
+                                            </AlertDialogHeader>
 
-                                        <AlertDialogFooter>
-                                            <Button
-                                                ref={cancelRef}
-                                                onClick={onClose}
-                                            >
-                                                Cancel
-                                            </Button>
-                                            <Button
-                                                colorScheme="red"
-                                                ml={3}
-                                                onClick={() => {
-                                                    cancelOrReject();
-                                                    // setCompletedCountdown(true)
-                                                    getTransactionTimeAndBank();
-                                                    onClose();
-                                                }}
-                                            >
-                                                Save
-                                            </Button>
-                                        </AlertDialogFooter>
-                                    </AlertDialogContent>
-                                </AlertDialogOverlay>
-                            </AlertDialog>
+                                            <AlertDialogBody>
+                                                Are you sure? You can't undo this action afterwards.
+                                            </AlertDialogBody>
+
+                                            <AlertDialogFooter>
+                                                <Button ref={cancelRef} onClick={onClose}>
+                                                    Cancel
+                                                </Button>
+                                                <Button colorScheme='red' ml={3}
+                                                    onClick={() => {
+                                                        cancelOrReject();
+                                                        // setCompletedCountdown(true)
+                                                        getTransactionTimeAndBank();
+                                                        onClose();
+                                                    }}
+                                                >
+                                                    Save
+                                                </Button>
+                                            </AlertDialogFooter>
+                                        </AlertDialogContent>
+                                    </AlertDialogOverlay>
+                                </AlertDialog>
+                            </Box>
                         </Box>
                     </Box>
                 </Box>
-            </Box>
-        </Box>
-    );
+
+            </Box >
+        );
+    }
 }

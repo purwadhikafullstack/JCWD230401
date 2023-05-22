@@ -10,14 +10,17 @@ import {
     useDisclosure
 } from '@chakra-ui/react'
 import axios from 'axios'
+import { useState } from 'react'
 
 export default function AlertDialogTenant(props) {
+    const [loadingButton, setLoadingButton] = useState(false)
     let token = localStorage.getItem("tempatku_login");
 
     const { isOpen, onOpen, onClose } = useDisclosure()
     const cancelRef = React.useRef()
 
     const updateTransactionStatus = async () => {
+        setLoadingButton(true)
         let update = await axios.patch(`${process.env.REACT_APP_API_BASE_URL}/transaction/updatetransactionstatus`, {
             transaction_statusId: 5, // 5 = cancel
             uuid: props.uuidTransaction
@@ -27,6 +30,7 @@ export default function AlertDialogTenant(props) {
             },
         })
         props.getSummary()
+        setLoadingButton(false)
     }
 
     const handleCancel = () => {
@@ -40,6 +44,7 @@ export default function AlertDialogTenant(props) {
         <>
             <Button colorScheme='red' variant={'outline'} onClick={onOpen}
                 isDisabled={props.status === 'Waiting for payment' || props.status === 'Reject' ? false : true}
+                isLoading={loadingButton}
             >
                 Cancel Order
             </Button>
@@ -63,7 +68,8 @@ export default function AlertDialogTenant(props) {
                             <Button ref={cancelRef} onClick={onClose}>
                                 Cancel
                             </Button>
-                            <Button colorScheme='red' onClick={handleCancel} ml={3}>
+                            <Button colorScheme='red' onClick={handleCancel} ml={3}
+                                isLoading={loadingButton}>
                                 Save
                             </Button>
                         </AlertDialogFooter>
