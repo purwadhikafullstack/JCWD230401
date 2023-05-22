@@ -14,7 +14,7 @@ import {
   MenuList,
   MenuItem,
   MenuDivider,
-  useDisclosure,
+  useDisclosure, Spinner,
   Stack, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, InputGroup, Input, InputRightElement
 } from "@chakra-ui/react";
 import { HamburgerIcon, CloseIcon, AddIcon } from "@chakra-ui/icons";
@@ -29,7 +29,7 @@ import Logo from "../assets/logotempatku.png";
 import { Route, Routes, useLocation } from "react-router-dom";
 
 
-export default function Navbar() {
+export default function Navbar(props) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [scrollBehavior, setScrollBehavior] = React.useState("outside");
   const navigate = useNavigate();
@@ -41,7 +41,6 @@ export default function Navbar() {
   const [modalIsOpen, setModalIsOpen] = React.useState(false);
   const initialRef = React.useRef(null);
   const finalRef = React.useRef(null);
-
 
   // Login Page Modal
   const onOpenModal = () => {
@@ -215,21 +214,8 @@ export default function Navbar() {
                   {
                     // User
                     role == "User" ?
-                      <Avatar
-                        size={"sm"}
-                        src={
-                          imageProfile == null
-                            ? "https://ionicframework.com/docs/img/demos/avatar.svg"
-                            : imageProfile && imageProfile.includes("http")
-                              ? imageProfile
-                              : `${process.env.REACT_APP_API_IMG_URL}${imageProfile}`
-                                ? `${process.env.REACT_APP_API_IMG_URL}${imageProfile}`
-                                : "https://ionicframework.com/docs/img/demos/avatar.svg"
-                        }
-                      />
-                      :
-                      // Tenant
-                      role == "Tenant" ?
+
+                      props.isLoading ? (<Spinner color='red.500' />) : (
                         <Avatar
                           size={"sm"}
                           src={
@@ -242,11 +228,31 @@ export default function Navbar() {
                                   : "https://ionicframework.com/docs/img/demos/avatar.svg"
                           }
                         />
-                        :
+                      )
+                      :
+                      // Tenant
+                      role == "Tenant" ? props.isLoading ? (<Spinner color='red.500' />) : (
                         <Avatar
                           size={"sm"}
-                          src={"https://ionicframework.com/docs/img/demos/avatar.svg"}
+                          src={
+                            imageProfile == null
+                              ? "https://ionicframework.com/docs/img/demos/avatar.svg"
+                              : imageProfile && imageProfile.includes("http")
+                                ? imageProfile
+                                : `${process.env.REACT_APP_API_IMG_URL}${imageProfile}`
+                                  ? `${process.env.REACT_APP_API_IMG_URL}${imageProfile}`
+                                  : "https://ionicframework.com/docs/img/demos/avatar.svg"
+                          }
                         />
+                      )
+                        :
+                        props.isLoading ? (<Spinner color='red.500' />) :
+                          (
+                            <Avatar
+                              size={"sm"}
+                              src={"https://ionicframework.com/docs/img/demos/avatar.svg"}
+                            />
+                          )
                   }
                 </MenuButton>
                 {

@@ -7,7 +7,7 @@ import {
     Heading,
     Input,
     Stack,
-    Avatar,
+    Avatar, Spinner,
     useToast, AvatarBadge, IconButton, Link, Divider,
     Center, Radio, RadioGroup, Box, useDisclosure, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, Text, FormErrorMessage
 } from "@chakra-ui/react";
@@ -319,32 +319,38 @@ export default function EditProfile(props) {
                             spacing={6}
                         >
                             <Center>
-                                <Avatar size="xl"
-                                    src={currentProfileImage == null ? "https://ionicframework.com/docs/img/demos/avatar.svg" : currentProfileImage && currentProfileImage.includes("http") ? currentProfileImage : `${process.env.REACT_APP_API_IMG_URL}${currentProfileImage}` ? `${process.env.REACT_APP_API_IMG_URL}${currentProfileImage}` : "https://ionicframework.com/docs/img/demos/avatar.svg"}
-                                >
-                                    {!isVerified && role == "User" ?
-                                        <AvatarBadge
-                                            as={IconButton}
-                                            size="sm"
-                                            rounded="full"
-                                            bottom="-1px"
-                                            right="-3px"
-                                            colorScheme="red"
-                                            icon={<BsShieldExclamation />}
-                                        /> :
-                                        isVerified && role == "User" ?
-                                            <AvatarBadge
-                                                as={IconButton}
-                                                size="sm"
-                                                rounded="full"
-                                                bottom="-1px"
-                                                right="-3px"
-                                                colorScheme="green"
-                                                icon={<BsShieldCheck />}
-                                            /> :
-                                            <AvatarBadge display={{ base: "none" }} />
-                                    }
-                                </Avatar>
+                                {
+                                    props.isLoading ? (
+                                        <Text textAlign="center"><Spinner color='red.500' /></Text>
+                                    ) : (
+                                        <Avatar size="xl"
+                                            src={currentProfileImage == null ? "https://ionicframework.com/docs/img/demos/avatar.svg" : currentProfileImage && currentProfileImage.includes("http") ? currentProfileImage : `${process.env.REACT_APP_API_IMG_URL}${currentProfileImage}` ? `${process.env.REACT_APP_API_IMG_URL}${currentProfileImage}` : "https://ionicframework.com/docs/img/demos/avatar.svg"}
+                                        >
+                                            {!isVerified && role == "User" ?
+                                                <AvatarBadge
+                                                    as={IconButton}
+                                                    size="sm"
+                                                    rounded="full"
+                                                    bottom="-1px"
+                                                    right="-3px"
+                                                    colorScheme="red"
+                                                    icon={<BsShieldExclamation />}
+                                                /> :
+                                                isVerified && role == "User" ?
+                                                    <AvatarBadge
+                                                        as={IconButton}
+                                                        size="sm"
+                                                        rounded="full"
+                                                        bottom="-1px"
+                                                        right="-3px"
+                                                        colorScheme="green"
+                                                        icon={<BsShieldCheck />}
+                                                    /> :
+                                                    <AvatarBadge display={{ base: "none" }} />
+                                            }
+                                        </Avatar>
+
+                                    )}
                             </Center>
                             <Box w="full">
                                 <Center w="full"

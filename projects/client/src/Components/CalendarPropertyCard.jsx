@@ -52,7 +52,7 @@ export default function CalendarPropertyCard(props) {
                             {props.property}
                         </Text>
                         <Text fontWeight={"normal"} fontSize={{base:"sm", lg:"xs"}} color="gray.500">
-                            {props.regency}, {props.country}
+                            {props.province}, {props.country}
                         </Text>
                         <Flex justifyContent={"space-between"}>
                             <Text fontWeight={600} fontSize={{base:"sm", lg:"xs"}} textAlign={"left"} display="flex">
