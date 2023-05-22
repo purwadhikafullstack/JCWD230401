@@ -39,6 +39,8 @@ export default function Navbar() {
   const password = useSelector((state) => state.authReducer.password);
   const { pathname } = useLocation();
   const [modalIsOpen, setModalIsOpen] = React.useState(false);
+  const initialRef = React.useRef(null);
+  const finalRef = React.useRef(null);
 
 
   // Login Page Modal
@@ -80,6 +82,12 @@ export default function Navbar() {
       console.log("ini error dari onBtnGoogleLogout : ", error);
     }
   };
+
+  React.useEffect(() => {
+    if (isOpen && initialRef.current) {
+      initialRef.current.focus(); // focus input inside modal
+    }
+  }, [isOpen]);
 
   return (
     <>
@@ -252,13 +260,18 @@ export default function Navbar() {
                       :
                       <MenuList zIndex={9999}>
                         <MenuItem onClick={onOpen} maxH={"100vh"}>Login
-                          <Modal onClose={onClose} isOpen={isOpen} scrollBehavior={scrollBehavior} >
+                          <Modal onClose={onClose} isOpen={isOpen} scrollBehavior={scrollBehavior} trapFocus={true}>
                             <ModalOverlay />
                             <ModalContent>
                               <ModalCloseButton onClose={onCloseModal} />
                               <ModalBody>
                                 {/* login modal */}
-                                <Login onOpenModal={onOpenModal} onCloseModal={onCloseModal} />
+                                <Login 
+                                onOpenModal={onOpenModal} 
+                                onCloseModal={onCloseModal}
+                                initialRef={initialRef}
+                                finalRef={finalRef}
+                                 />
                               </ModalBody>
                             </ModalContent>
                           </Modal>

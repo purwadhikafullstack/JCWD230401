@@ -1,4 +1,5 @@
 const sequelize = require("sequelize");
+const { join } = require("path");
 const model = require("../models");
 const { v4: uuidv4 } = require("uuid");
 const bcrypt = require("bcrypt");
@@ -71,11 +72,11 @@ module.exports = {
             hbs({
               viewEngine: {
                 extname: ".html", // html extension
-                layoutsDir: "./src/helper", // location of handlebars templates
+                layoutsDir: join(__dirname,"../helper"), // location of handlebars templates
                 defaultLayout: "register-verification-email", // name of main template
-                partialsDir: "./src/helper", // location of your subtemplates
+                partialsDir: join(__dirname,"../helper"), // location of your subtemplates
               },
-              viewPath: "./src/helper",
+              viewPath: join(__dirname,"../helper"),
               extName: ".html",
             })
           );
@@ -87,7 +88,7 @@ module.exports = {
             template: "register-verification-email",
             context: {
               name: req.body.name,
-              link: `http://localhost:3000/account/verification/${token}`,
+              link: `${process.env.FE_URL}/account/verification/${token}`,
               otp: otp,
             },
           });
@@ -376,11 +377,11 @@ module.exports = {
           hbs({
             viewEngine: {
               extname: ".html", // html extension
-              layoutsDir: "./src/helper", // location of handlebars templates
+              layoutsDir: join(__dirname,"../helper"), // location of handlebars templates
               defaultLayout: "reset-password-email", // name of main template
-              partialsDir: "./src/helper", // location of your subtemplates
+              partialsDir: join(__dirname,"../helper"), // location of your subtemplates
             },
-            viewPath: "./src/helper",
+            viewPath: join(__dirname,"../helper"),
             extName: ".html",
           })
         );
@@ -392,7 +393,7 @@ module.exports = {
           template: "reset-password-email",
           context: {
             name: name,
-            link: `http://localhost:3000/password/reset/${token}`,
+            link: `${process.env.FE_URL}/password/reset/${token}`,
             otp: otp,
           },
         });
@@ -662,11 +663,11 @@ module.exports = {
             hbs({
               viewEngine: {
                 extname: ".html", // html extension
-                layoutsDir: "./src/helper", // location of handlebars templates
+                layoutsDir: join(__dirname,"../helper"), // location of handlebars templates
                 defaultLayout: "account-verification-email", // name of main template
-                partialsDir: "./src/helper", // location of your subtemplates
+                partialsDir: join(__dirname,"../helper"), // location of your subtemplates
               },
-              viewPath: "./src/helper",
+              viewPath: join(__dirname,"../helper"),
               extName: ".html",
             })
           );
@@ -678,7 +679,7 @@ module.exports = {
             template: "account-verification-email",
             context: {
               name: name,
-              link: `http://localhost:3000/account/verification/${token}`,
+              link: `${process.env.FE_URL}/account/verification/${token}`,
               otp: otp,
             },
           });

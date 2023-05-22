@@ -228,9 +228,19 @@ export default function LandingNew() {
     };
 
     //react-slick slider property recommendation
+    const numberOfProperties = recommendProperty.length;
+    let slidesToShowValue = 4;
+    if (numberOfProperties === 1) {
+      slidesToShowValue = 1;
+    } else if (numberOfProperties === 2) {
+      slidesToShowValue = 2;
+    } else if (numberOfProperties === 3) {
+        slidesToShowValue = 3;
+    };
+        
     const settingsRecommendation = {
         infinite: true,
-        slidesToShow: 4,
+        slidesToShow: slidesToShowValue,
         slidesToScroll: 1,
         initialSlide: 0,
         responsive: [
