@@ -470,7 +470,7 @@ module.exports = {
             const special_prices = await con.query(query, {
                 type: sequelize.QueryTypes.SELECT,
             });
-            console.log("sssss", get[0]);
+            console.log("sssss", get);
 
             if (special_prices.length) {
                 let newRoomPrice = get[0].dataValues.rooms.map((val, idx) => {
@@ -495,6 +495,27 @@ module.exports = {
                 );
                 res.status(200).send(get[0]);
             }
+        } catch (error) {
+            console.log(error);
+            next(error);
+        }
+    },
+    getSpecialPrice: async (req, res, next) => {
+        try {
+            let get = await model.special_price.findAll({
+                include: [
+                    {
+                        model: model.room,
+                        attributes: ['id', 'uuid', 'price'],
+                        where: {
+                            uuid: req.params.uuid,
+                            isActive: 1
+                        }
+                    }
+                ]
+            });
+            console.log("ini isi get :", get)
+            res.status(200).send(get);
         } catch (error) {
             console.log(error);
             next(error);
@@ -739,7 +760,7 @@ module.exports = {
         let limit = parseInt(parseInt(req.query.size) || 3);
         let offset = parseInt(
             ((parseInt(req.query.page) || 1) - 1) *
-                (parseInt(req.query.size) || 3)
+            (parseInt(req.query.size) || 3)
         );
 
         // Available Property

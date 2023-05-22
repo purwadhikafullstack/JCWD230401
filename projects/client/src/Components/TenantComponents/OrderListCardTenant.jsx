@@ -28,13 +28,16 @@ import {
 import React from "react";
 import { capitalizeFirstWord, formatRupiah } from "../../helper";
 import axios from "axios";
+import { useState } from "react";
 
 export default function OrderListCardTenant(props) {
+    const [loadingButton, setLoadingButton] = useState(false)
     let token = localStorage.getItem("tempatku_login");
     const diff = new Date(props.endDate) - new Date(props.startDate);
     const days = diff / 86400000;
 
     const updateTransactionStatus = async () => {
+        setLoadingButton(true)
         let update = await axios.patch(
             `${process.env.REACT_APP_API_BASE_URL}/transaction/confirmtransaction`,
             {
@@ -49,9 +52,11 @@ export default function OrderListCardTenant(props) {
         );
         props.getActionsNeeded();
         props.getSummary();
+        setLoadingButton(false)
     };
 
     const rejectTransaction = async () => {
+        setLoadingButton(true)
         let update = await axios.patch(
             `${process.env.REACT_APP_API_BASE_URL}/transaction/rejecttransaction`,
             {
@@ -65,6 +70,8 @@ export default function OrderListCardTenant(props) {
         );
         props.getActionsNeeded();
         props.getSummary();
+        setLoadingButton(false)
+
     };
 
     // ALERT DIALOG BUTTON CONFIRM
@@ -91,6 +98,7 @@ export default function OrderListCardTenant(props) {
                     _focus={{
                         bg: "#D3212D",
                     }}
+                    isLoading={loadingButton}
                 >
                     Confirm Order
                 </Button>
@@ -119,6 +127,8 @@ export default function OrderListCardTenant(props) {
                                     colorScheme="red"
                                     onClick={handleConfirm}
                                     ml={3}
+                                    isLoading={loadingButton}
+
                                 >
                                     Confirm
                                 </Button>
@@ -149,6 +159,7 @@ export default function OrderListCardTenant(props) {
                         bg: "gray.200",
                     }}
                     variant="outline"
+                    isLoading={loadingButton}
                 >
                     Check Details
                 </Button>
@@ -178,6 +189,7 @@ export default function OrderListCardTenant(props) {
                             <Button
                                 variant="solid"
                                 colorScheme="red"
+                                isLoading={loadingButton}
                                 onClick={handleReject}
                             >
                                 Reject Payment
@@ -210,7 +222,7 @@ export default function OrderListCardTenant(props) {
                     <Avatar
                         size={"lg"}
                         src={
-                            "https://images.unsplash.com/photo-1520810627419-35e362c5dc07?ixlib=rb-1.2.1&q=80&fm=jpg&crop=faces&fit=crop&h=200&w=200&ixid=eyJhcHBfaWQiOjE3Nzg0fQ"
+                            props.userPicture == null ? "https://ionicframework.com/docs/img/demos/avatar.svg" : props.userPicture && props.userPicture.includes('http') ? props.userPicture : `${process.env.REACT_APP_API_IMG_URL}${props.userPicture}` ? `${process.env.REACT_APP_API_IMG_URL}${props.userPicture}` : "https://ionicframework.com/docs/img/demos/avatar.svg"
                         }
                         alt={"Avatar Alt"}
                         mb={0}

@@ -1,5 +1,5 @@
 const { join } = require("path");
-require('dotenv').config({path:join(__dirname,'../.env')});
+require('dotenv').config({ path: join(__dirname, '../.env') });
 const express = require("express");
 const cors = require("cors");
 const bearerToken = require("express-bearer-token");
@@ -18,13 +18,13 @@ app.use(cookieParser())
 
 // required middlewares google auth
 app.use(
-  cookieSession({
-    name: process.env.SESSION_NAME,
-    keys: [process.env.SESSION_KEYS],
-    maxAge: 24 * 60 * 60 * 1000,
-    sameSite: "None",
-    secure: true,
-  })
+    cookieSession({
+        name: process.env.SESSION_NAME,
+        keys: [process.env.SESSION_KEYS],
+        maxAge: 24 * 60 * 60 * 1000,
+        sameSite: "None",
+        secure: true,
+    })
 );
 app.use(passport.initialize());
 app.use(passport.session());
@@ -88,11 +88,6 @@ app.use((req, res, next) => {
 });
 
 // reminderCheckInUser()
-
-const value = 25000;
-const displayedValue = (value / 1000).toFixed(0); // '500'
-console.log("displayedValue", displayedValue); // Output: 500
-
 
 
 // error

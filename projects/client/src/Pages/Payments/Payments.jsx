@@ -35,8 +35,11 @@ import {
 import { useSelector } from "react-redux";
 import { Rating } from "@smastrom/react-rating";
 import "@smastrom/react-rating/style.css";
+import noimage from "../../assets/noimage.png"
+import Loading from "../../Components/Loading"
 
 export default function Payments() {
+    const [loadingPage, setLoadingPage] = useState(true)
     const location = useLocation();
     const params = useParams();
     const navigate = useNavigate();
@@ -54,6 +57,7 @@ export default function Payments() {
     const days = diff / 86400000;
 
     const [details, setDetails] = useState([]);
+    const [image, setImage] = useState('');
     const getDetails = async () => {
         let get = await axios.get(
             `${process.env.REACT_APP_API_BASE_URL}/room/roompayment?uuid=${params.uuid}`,
@@ -64,6 +68,7 @@ export default function Payments() {
             }
         );
         setDetails(get.data[0]);
+        setImage(get.data[0].picture_rooms[0].picture)
         console.log("payments get rooms detail transaction", get);
     };
     console.log("details", details);
@@ -73,7 +78,7 @@ export default function Payments() {
         if (!selectedPayment || checkIn == "" || checkOut == "") {
             alert("Choose payment and date first!");
         } else {
-            setLoadingConfirm(true);
+            setLoadingPage(true);
             let addTransaction = await axios.post(
                 `${process.env.REACT_APP_API_BASE_URL}/transaction/`,
                 {
@@ -89,10 +94,8 @@ export default function Payments() {
                     },
                 }
             );
-            setLoadingConfirm(false);
+            setLoadingPage(false);
             navigate(`/payment/detail/${addTransaction.data.data1.uuid}`);
-
-            console.log("add transactionnnn", addTransaction);
         }
     };
     let now = new Date();
@@ -111,6 +114,7 @@ export default function Payments() {
         );
         console.log("average", get);
         setAverage(get.data.avg_rating);
+        setLoadingPage(false)
     };
     function RatingProperty(average) {
         return <Rating style={{ maxWidth: 100 }} value={average} readOnly />;
@@ -120,18 +124,14 @@ export default function Payments() {
         getDetails();
         getAverage();
     }, []);
-    return (
-        <Box mt="3" px="3">
-            {loadingConfirm ? (
-                <Flex justifyContent={"center"} alignItems="center">
-                    <Spinner color="red" />
-                </Flex>
-            ) : (
+
+    if (loadingPage) {
+        return <Loading />
+    } else {
+        return (
+            <Box mt="3" px="3">
                 <Box>
                     <Flex justifyContent={"center"} mb="5">
-                        {/* <Text fontSize={'2xl'} fontWeight='bold'>
-                    Secure Payment
-                </Text> */}
                         <Text fontSize={"2xl"} fontWeight="bold">
                             Booking Details
                         </Text>
@@ -346,7 +346,7 @@ export default function Payments() {
                                     {/* BOX 1 */}
                                     <Box flex="1">
                                         <Image
-                                            src="https://images.unsplash.com/photo-1589834390005-5d4fb9bf3d32?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80"
+                                            src={image ? `${process.env.REACT_APP_API_IMG_URL}${image}` : noimage}
                                             w="full"
                                             h="120px"
                                             objectFit={"cover"}
@@ -379,10 +379,10 @@ export default function Payments() {
                                                 ?.property_location?.regency
                                                 ?.name
                                                 ? capitalizeFirstWord(
-                                                      details?.property
-                                                          ?.property_location
-                                                          ?.regency?.name
-                                                  )
+                                                    details?.property
+                                                        ?.property_location
+                                                        ?.regency?.name
+                                                )
                                                 : ""}
                                             , <br />{" "}
                                             {
@@ -455,8 +455,7 @@ export default function Payments() {
                         </Box>
                     </Flex>
                 </Box>
-            )}
-            {/* TITLE */}
-        </Box>
-    );
+            </Box>
+        );
+    }
 }

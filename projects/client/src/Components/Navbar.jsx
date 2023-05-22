@@ -214,7 +214,6 @@ export default function Navbar(props) {
                   {
                     // User
                     role == "User" ?
-
                       props.isLoading ? (<Spinner color='red.500' />) : (
                         <Avatar
                           size={"sm"}

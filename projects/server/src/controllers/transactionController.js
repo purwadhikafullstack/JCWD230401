@@ -145,7 +145,7 @@ module.exports = {
 
 
             // NODE-SCHEDULE
-            const task = schedule.scheduleJob(twoHoursLater, async function () { // nnti twoHoursLater di ubah ke variable paling atas kalo udah selesai testing
+            const task = schedule.scheduleJob(twoHoursLater, async function () {
                 let get = await model.transaction.findAll({
                     attributes: ['transaction_statusId'],
                     where: { id: transaksi.dataValues.id }
