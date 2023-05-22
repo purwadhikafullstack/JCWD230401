@@ -17,10 +17,8 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 import { BsShieldExclamation, BsShieldCheck } from "react-icons/bs";
 import { decodeToken } from "react-jwt";
-import Loading from "../Components/Loading";
 
 export default function EditProfile(props) {
-    const [loadingPage, setLoadingPage] = useState(true);
     const currentName = useSelector((state) => state.authReducer.name);
     const currentEmail = useSelector((state) => state.authReducer.email);
     const currentGender = useSelector((state) => state.authReducer.gender);
@@ -294,13 +292,10 @@ export default function EditProfile(props) {
             alert(error.message)
         } finally {
             setLoading3(false);
-            setLoadingPage(false);
         }
     };
 
-    if (loadingPage) {
-        return <Loading />
-    } else {
+
         return (
             <>
                 <Flex
@@ -555,5 +550,4 @@ export default function EditProfile(props) {
                 </Flex>
             </>
         );
-    }
 }
