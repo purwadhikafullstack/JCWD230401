@@ -255,7 +255,7 @@ export default function Navbar() {
                     <MenuList zIndex={9999}>
                       <MenuItem onClick={() => navigate("/")}>Home</MenuItem>
                       <MenuItem onClick={() => navigate("/profile/edit")}>Profile</MenuItem>
-                      <MenuItem>Bookings</MenuItem>
+                      <MenuItem onClick={() => navigate("/order/list")}>Bookings</MenuItem>
 
                       {password === "NULL" ? (
                         <div>
@@ -280,9 +280,9 @@ export default function Navbar() {
                         <MenuItem onClick={() => navigate("/dashboard")}>Dashboard</MenuItem>
                         <MenuItem onClick={() => navigate("/profile/edit")}>Profile</MenuItem>
                         <MenuItem onClick={() => navigate("/password/change")}>Change Password</MenuItem>
-                        <MenuItem>Manage Property / Rooms</MenuItem>
-                        <MenuItem>Transaction</MenuItem>
-                        <MenuItem>Report</MenuItem>
+                        <MenuItem onClick={() => navigate("/properties")}>Manage Property / Rooms</MenuItem>
+                        <MenuItem onClick={() => navigate("/tenantorderlist")}>Transaction</MenuItem>
+                        <MenuItem onClick={() => navigate("/statistics")}>Statistics</MenuItem>
                         <MenuItem
                           onClick={onBtnLogout}
                         >Logout</MenuItem>
