@@ -349,8 +349,8 @@ function ManageProperty(props) {
             flexDir="column"
         >
             <Box
-                border={"none"}
-                shadow={"2xl"}
+                border={"1px"}
+                borderColor={"gray.300"}
                 rounded={"3xl"}
                 px={"8"}
                 mb={"10"}

@@ -108,7 +108,6 @@ function SalesReport(props) {
         }
     };
 
-
     const getUsers = async () => {
         try {
             let get = await axios.get(
@@ -155,15 +154,19 @@ function SalesReport(props) {
         getUserChart();
     }, []);
 
-    const shadowBox = { borderRadius: "10px", boxShadow: "1px 1px 5px gray" };
-
     return (
         <>
             <Flex minH={"93vh"}>
                 <Box>
                     <Sidebar />
                 </Box>
-                <Box w="full" flex="5" px={{ base: "1", sm: "4" }} mt="5">
+                <Box
+                    w="full"
+                    flex="5"
+                    px={{ base: "1", sm: "4" }}
+                    mt="5"
+                    pb={"6"}
+                >
                     <Heading
                         lineHeight={1.1}
                         fontSize={{ base: "2xl", md: "3xl" }}
@@ -186,7 +189,8 @@ function SalesReport(props) {
                         >
                             {/* Transaction */}
                             <Card
-                                style={shadowBox}
+                                borderColor={"gray.300"}
+                                borderWidth={"1px"}
                                 borderRadius="2xl"
                                 maxH={{ md: "5xl" }}
                                 maxW={{ md: "5xl" }}
@@ -372,8 +376,9 @@ function SalesReport(props) {
                                 maxW={{ base: "unset", md: "5xl" }}
                             >
                                 <Card
-                                    style={shadowBox}
                                     borderRadius="2xl"
+                                    borderColor={"gray.300"}
+                                    borderWidth={"1px"}
                                     maxH={{ md: "4xl" }}
                                 >
                                     <CardBody>
@@ -545,17 +550,6 @@ function SalesReport(props) {
                                         </Box>
 
                                         <Box
-                                            fontSize={{
-                                                base: "3xl",
-                                                md: "5xl",
-                                                lg: "5xl",
-                                            }}
-                                            fontWeight="bold"
-                                            letterSpacing="tighter"
-                                        >
-                                            {users}
-                                        </Box>
-                                        <Box
                                             mt={{ base: "2", md: "2", lg: "2" }}
                                             borderRadius="2xl"
                                         >
@@ -581,8 +575,9 @@ function SalesReport(props) {
                                 maxW={{ base: "unset", md: "5xl" }}
                             >
                                 <Card
-                                    style={shadowBox}
                                     borderRadius="2xl"
+                                    borderColor={"gray.300"}
+                                    borderWidth={"1px"}
                                     maxH={{ md: "4xl" }}
                                 >
                                     <CardBody>
@@ -726,17 +721,6 @@ function SalesReport(props) {
                                             </Flex>
                                         </Box>
 
-                                        <Box
-                                            fontSize={{
-                                                base: "3xl",
-                                                md: "5xl",
-                                                lg: "5xl",
-                                            }}
-                                            fontWeight="bold"
-                                            letterSpacing="tighter"
-                                        >
-                                            {users}
-                                        </Box>
                                         <Box
                                             mt={{ base: "2", md: "2", lg: "2" }}
                                             borderRadius="2xl"
