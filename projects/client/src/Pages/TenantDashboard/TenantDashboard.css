@@ -20,6 +20,11 @@ background-color: white;
   color:white;
 }
 
+.fc-event-title-container.final {
+  background-color: rgb(250, 162, 162);
+  /* border: 1px solid #f04651; */
+}
+
 .fc-event-title {
   background-color: rgb(250, 162, 162);
 }

@@ -162,6 +162,10 @@ export default function TenantRegister() {
         formik.setFieldValue(event.target.name, event.target.files[0]);
     };
 
+    React.useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
+
 
     return (
         <Stack minH={{ lg: "100vh" }}

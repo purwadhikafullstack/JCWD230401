@@ -130,6 +130,10 @@ export default function UserRegister() {
         window.open(`${process.env.REACT_APP_API_BASE_URL}/auth/google`, "_self", "toolbar=no, scrollbars=yes, resizable=no, width=1000, height=auto")
     };
 
+    React.useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
+
     return (
         <Stack minH={{ lg: "100vh" }}
             direction={{ base: "column", md: "column", lg: "row" }}

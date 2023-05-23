@@ -16,7 +16,6 @@ module.exports = (sequelize, DataTypes) => {
             picture: DataTypes.STRING,
             isDeleted: DataTypes.BOOLEAN,
             propertyId: DataTypes.INTEGER,
-            category_picture_propertyId: DataTypes.INTEGER,
         },
         {
             sequelize,
