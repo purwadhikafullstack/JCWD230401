@@ -42,7 +42,6 @@ function RoomList(props) {
     const [order, setOrder] = React.useState(defaultOrder);
     const [filter, setFilter] = React.useState(defaultFilter);
 
-    console.log("dataAllRoom:", dataAllRoom);
 
     const printRoomData = () => {
         const actualRowNumber = page * size;
@@ -75,8 +74,6 @@ function RoomList(props) {
             );
             setDataAllRoom(get.data.data);
             setTotalData(get.data.datanum);
-            console.log("get room list", get.data.data);
-            console.log("get room list only", get);
         } catch (error) {
             console.log(error);
         }
@@ -95,7 +92,6 @@ function RoomList(props) {
         getAllRoomList();
     }, []);
 
-    console.log("dataAllRoom", dataAllRoom);
 
     return (
         <>

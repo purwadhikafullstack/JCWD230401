@@ -164,7 +164,6 @@ module.exports = {
                     uuid: req.params.uuid,
                 },
             });
-            console.log("get.dataValues[0].isActive", get.dataValues.isActive);
             if (get.dataValues.isActive === true) {
                 await model.maintenance.update(
                     {
@@ -188,7 +187,6 @@ module.exports = {
                     }
                 );
             }
-            console.log("get", get);
             res.status(200).send({
                 success: true,
             });

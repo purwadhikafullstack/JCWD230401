@@ -303,7 +303,6 @@ module.exports = {
                     },
                 ],
             });
-            console.log("get all properties:", get);
             return res.status(200).send({
                 success: true,
                 data: get,
@@ -417,7 +416,7 @@ module.exports = {
             });
         } catch (error) {
             await ormTransaction.rollback();
-            console.log("Error Add Property:", error);
+            console.log(error);
             next(error);
         }
     },
@@ -597,7 +596,6 @@ module.exports = {
                         id: req.query.id,
                     },
                 });
-                console.log("ini req.files:", req.files);
                 let update = await model.picture_property.update(
                     {
                         picture: `/ImgProperty/${req.files[0].filename}`,
@@ -688,7 +686,6 @@ module.exports = {
                 ],
                 order: [[sortby, order]],
             });
-            console.log("get list:", get);
             return res.status(200).send({
                 data: get.rows,
                 totalPages: Math.ceil(get.count / size),

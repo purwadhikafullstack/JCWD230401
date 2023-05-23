@@ -48,7 +48,6 @@ function ManageRoom(props) {
                     },
                 }
             );
-            console.log("get", get);
             setRoomData(get.data.data[0]);
             setFileRoomEdit1(get.data.data[0].picture_rooms[0]);
             setFileRoomEdit2(get.data.data[0].picture_rooms[1]);
@@ -248,12 +247,6 @@ function ManageRoom(props) {
     useEffect(() => {
         getRoomData();
     }, []);
-
-    console.log("Room Data:", roomData);
-    console.log("Description:", description);
-    console.log("Room capacity:", roomCapacity);
-    console.log("Room Name:", roomName);
-    console.log("Room Name:");
 
     return (
         <Container

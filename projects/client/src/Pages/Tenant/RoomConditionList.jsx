@@ -114,17 +114,13 @@ function RoomConditionList(props) {
                     },
                 }
             );
-            console.log(" getSpecialPriceData get.data.data:", get.data.data);
             setDataSpecialPrice(get.data.data);
             setTotalDataSpecialPrice(get.data.datanum);
             setRoomName(get.data.data[0].room.room_category.name);
-            console.log("get special price list only:", get.data);
-            console.log("get special price data:", get);
         } catch (error) {
             console.log(error);
         }
     };
-    console.log("roomName", roomName);
 
     const getMaintenanceData = async () => {
         try {
@@ -140,8 +136,6 @@ function RoomConditionList(props) {
 
             setDataMaintenance(get.data.data);
             setTotalDataMaintenance(get.data.datanum);
-            console.log("get maintenance list only:", get.data);
-            console.log("get maintenance data:", get);
         } catch (error) {
             console.log(error);
         }
@@ -209,7 +203,6 @@ function RoomConditionList(props) {
                     },
                 }
             );
-            console.log("get");
             setNormalPrice(get.data.data.price)
             setRoomId(get.data.data.id)
         };
@@ -222,8 +215,6 @@ function RoomConditionList(props) {
                 const calculatedPercentage =
                 (Number(inputPrice) * 100) / normalPrice;
                 setPercentage(calculatedPercentage.toFixed(2));
-                console.log("calculate", calculatedPercentage);
-                console.log(typeof normalPrice);
             } else {
                 setPercentage("");
             }
@@ -401,7 +392,6 @@ function RoomConditionList(props) {
                     },
                 }
             );
-            console.log("get");
             setRoomId(get.data.data.id)
         };
 
@@ -467,7 +457,7 @@ function RoomConditionList(props) {
         useEffect(() => {
             getRoomId();
         }, [isOpen]);
-        console.log("roomId maintenance",roomId);
+
         return (
             <>
                 <Button onClick={onOpen} bgColor="green.400" _hover={""}>
@@ -541,10 +531,6 @@ function RoomConditionList(props) {
         getSpecialPriceData();
         getMaintenanceData();
     }, [pageSpecialPrice, pageMaintenance]);
-
-    console.log("DataSpecialPrice:", dataSpecialPrice);
-    // console.log("DataMaintenance:", dataMaintenance);
-    // console.log("pageSpecialPrice:", pageSpecialPrice);
 
     return (
         <>

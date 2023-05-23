@@ -144,7 +144,6 @@ module.exports = {
     },
     deleteSpecialPrice: async (req, res, next) => {
         try {
-            console.log("req.body", req.body);
             let get = await model.special_price.findAll({
                 where: {
                     uuid: req.body.uuid,
@@ -177,9 +176,7 @@ module.exports = {
                     uuid: req.params.uuid,
                 },
             });
-            // console.log(
-            //     "get.dataValues[0].isActive", get.dataValues.isActive
-            // );
+
             if (get.dataValues.isActive === true) {
                 await model.special_price.update(
                     {
@@ -203,7 +200,6 @@ module.exports = {
                     }
                 );
             }
-            // console.log("get", get);
             res.status(200).send({
                 success: true,
                 data: get,

@@ -92,7 +92,6 @@ function SalesReport(props) {
                 `${process.env.REACT_APP_API_BASE_URL}/report/transaction-chart?start=${startDateTransaction}&end=${endDateTransaction}`
             );
             setTransactionDataChart(get.data.data);
-            console.log("getinfooo", get.data.data);
         } catch (error) {
             console.log(error);
         }
@@ -104,22 +103,17 @@ function SalesReport(props) {
                 `${process.env.REACT_APP_API_BASE_URL}/report/property-chart/${property.value}?start=${startDateProperty}&end=${endDateProperty}`
             );
             setPropertyDataChart(get.data.data);
-            console.log("GET PROPERTYCHART:", get.data.data);
         } catch (error) {
             console.log(error);
         }
     };
 
-    // console.log("transactionDataChart", transactionDataChart);
-    // console.log("propertyDataChart", propertyDataChart);
-    // console.log("userDataChart", userDataChart);
 
     const getUsers = async () => {
         try {
             let get = await axios.get(
                 `${process.env.REACT_APP_API_BASE_URL}/report/users?start=${startDateUsers}&end=${endDateUsers}`
             );
-            console.log("GET USERS TOTAL", get);
             setUsers();
         } catch (error) {
             console.log(error);
@@ -132,7 +126,6 @@ function SalesReport(props) {
                 `${process.env.REACT_APP_API_BASE_URL}/report/user-chart?start=${startDateUsers}&end=${endDateUsers}`
             );
             setUserDataChart(get.data.data);
-            console.log("GET USER CHART", get);
         } catch (error) {
             console.log(error);
         }
@@ -163,8 +156,6 @@ function SalesReport(props) {
     }, []);
 
     const shadowBox = { borderRadius: "10px", boxShadow: "1px 1px 5px gray" };
-
-    console.log("property:", property);
 
     return (
         <>

@@ -75,7 +75,6 @@ function ManageProperty(props) {
                     },
                 }
             );
-            console.log("get", get);
             setPropertyData(get.data.data[0]);
             setFilePropertyEdit1(get.data.data[0].picture_properties[0]);
             setFilePropertyEdit2(get.data.data[0].picture_properties[1]);
@@ -239,7 +238,6 @@ function ManageProperty(props) {
             let get = await axios.get(
                 `${process.env.REACT_APP_API_BASE_URL}/property/provinces`
             );
-            console.log("get allprovince", get.data);
             setAllProvince(get.data);
         } catch (error) {
             console.log(error);
@@ -319,7 +317,6 @@ function ManageProperty(props) {
             let data = allProvince.filter(
                 (val) => val.value === propertyData.property_location.provinceId
             );
-            console.log("INI DATAAAA PROVINCE DI USEEFFECT TOT", data);
             setProvince(data[0]);
         }
     }, [allProvince, propertyData]);
@@ -333,17 +330,9 @@ function ManageProperty(props) {
             let data = allRegency.filter(
                 (val) => val.value === propertyData.property_location.regencyId
             );
-            console.log("INI DATAAAA REGENCY DI USEEFFECT TOT", data);
             setRegency(data[0]);
         }
     }, [allRegency, propertyData]);
-
-    // console.log("filePropertyEdit1:", filePropertyEdit1);
-    // console.log("filePropertyEdit2:", filePropertyEdit2);
-    // console.log("filePropertyEdit3:", filePropertyEdit3);
-    // console.log("filePropertyEdit4:", filePropertyEdit4);
-    // console.log("filePropertyEdit5:", filePropertyEdit5);
-    console.log("propertyData", propertyData);
 
     // ACTIVE BUTTON
     const handleButtonClick = (value) => {

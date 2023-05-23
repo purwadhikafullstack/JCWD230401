@@ -171,7 +171,6 @@ function AddProperty(props) {
                         gmaps: mapsUrl,
                     })
                 );
-                console.log("formData", formData);
 
                 if (fileProperty != null) {
                     let temp = [...fileProperty];
@@ -231,14 +230,6 @@ function AddProperty(props) {
             getRegencyById();
         }
     }, [province]);
-
-    console.log("allProvince", allProvince);
-    console.log("allRegency", allRegency);
-    console.log("regencies", regencies);
-    console.log("Province:", province);
-    console.log("Regency:", regency);
-    console.log("description", description);
-    console.log("fileProperty", fileProperty);
 
     return (
         <Container

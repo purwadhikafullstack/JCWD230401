@@ -65,8 +65,6 @@ module.exports = {
                 order: [["createdAt", "ASC"]],
             });
 
-            console.log("chart", chart);
-
             for (let i = 0; i < chart.length; i++) {
                 dateArr.push(
                     new Date(chart[i].createdAt).toLocaleDateString(
@@ -136,7 +134,6 @@ module.exports = {
                 group: ["createdAt"],
                 order: [["createdAt", "ASC"]],
             });
-            console.log("chart:", chart);
 
             for (let i = 0; i < chart.length; i++) {
                 dateArr.push(
@@ -221,7 +218,6 @@ module.exports = {
                 month: "2-digit",
                 day: "numeric",
             };
-            console.log(chart);
 
             for (let i = 0; i < chart.length; i++) {
                 dateArr.push(
