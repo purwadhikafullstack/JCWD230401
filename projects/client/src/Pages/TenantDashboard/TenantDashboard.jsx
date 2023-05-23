@@ -292,7 +292,7 @@ function TenantDashboard() {
                 loading ? (
                   <Text textAlign="center"><Spinner color='red.500' /></Text>
                 ) : propertyListing.length === 0 ? (
-                  <Text>No property listings yet</Text>
+                  <Text  textAlign={{ base: "center", sm: "left" }}>No property listings yet</Text>
                 ) : (
                   <Slider {...settingsMyProperty} prevArrow={<FaChevronLeft color="#E2E8F0" />} nextArrow={<FaChevronRight color="#E2E8F0" />}>
                     {printMyProperty()}
@@ -303,7 +303,7 @@ function TenantDashboard() {
           </Box>
           <br />
           <Box p={{ base: "2", sm: "10" }} bg={"white"} rounded={"xl"} borderWidth={"1px"}
-            borderColor={{ base: "white", sm: "gray.300" }}
+            borderColor={{ base: "white", sm: "gray.300" }} 
           >
             <Text fontSize={{ base: "20", sm: "28" }} fontWeight={"semibold"} mb={{ base: "6", sm: "10" }} textAlign={{ base: "center", sm: "left" }}>See Availability by Calendar Date</Text>
             {
@@ -311,7 +311,7 @@ function TenantDashboard() {
                 <Text textAlign="center"><Spinner color='red.500' /></Text>
               ) : (
                 <Fullcalendar
-                  className="my-calendar"
+                  className="my-calendar-dashboard"
                   plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
                   initialView={"dayGridMonth"}
                   headerToolbar={{
