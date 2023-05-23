@@ -13,9 +13,11 @@ import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { useFormik } from "formik";
 import * as yup from "yup";
+import Loading from "../Components/Loading";
 
 
 export default function Verification() {
+  const [loadingPage, setLoadingPage] = useState(true);
   const params = useParams(); //to get token from email link for auth
   const navigate = useNavigate();
   const [loading1, setLoading1] = React.useState(false);
@@ -135,81 +137,91 @@ export default function Verification() {
     formik.setFieldValue(event.target.name, event.target.value);
   };
 
-  return (
-    <Flex
-      minH={{ base: "50vh", sm: "100vh" }}
-      align={{ base: "none", sm: "center" }}
-      justify={"center"}
-      bg={"white"}>
-      <Stack
-        spacing={6}
-        w={"full"}
-        maxW={"sm"}
-        bg={"white"}
-        rounded={"xl"}
-        borderWidth={"1px"}
-        borderColor={{ base: "white", sm: "gray.300" }}
-        p={6}
-        my={10}>
-        <Heading lineHeight={1.1} fontSize={{ base: "2xl", md: "3xl" }}>
-          Verify your Account
-        </Heading>
-        <Text
-          fontSize={{ base: "sm", sm: "md" }}
-        >
-          We have sent code to your email
-        </Text>
+  React.useEffect(() => {
+    setTimeout(() => {
+      setLoadingPage(false);
+    }, 1700);
+  }, []);
 
-        <FormControl>
-          <Center>
-            <HStack>
-              <FormControl isInvalid={formik.errors.verificationCode}>
-                <FormLabel>Input your OTP code here :</FormLabel>
-                <Input type="text"
-                  onChange={handleForm}
-                  name="verificationCode"
-                />
-                <FormErrorMessage fontSize="xs" style={{ position: "absolute", top: "100%", marginTop: "0.30rem" }}>{formik.errors.verificationCode}</FormErrorMessage>
-              </FormControl>
-            </HStack>
-          </Center>
-          <Center
-            fontSize={{ base: "xs", sm: "sm" }}
-            fontWeight="thin"
-            mt={6}
+  if (loadingPage) {
+    return <Loading />
+  } else {
+    return (
+      <Flex
+        minH={{ base: "50vh", sm: "100vh" }}
+        align={{ base: "none", sm: "center" }}
+        justify={"center"}
+        bg={"white"}>
+        <Stack
+          spacing={6}
+          w={"full"}
+          maxW={"sm"}
+          bg={"white"}
+          rounded={"xl"}
+          borderWidth={"1px"}
+          borderColor={{ base: "white", sm: "gray.300" }}
+          p={6}
+          my={10}>
+          <Heading lineHeight={1.1} fontSize={{ base: "2xl", md: "3xl" }}>
+            Verify your Account
+          </Heading>
+          <Text
+            fontSize={{ base: "sm", sm: "md" }}
           >
-            the code is valid for 24 hours
-          </Center>
-        </FormControl>
-        <Stack spacing={2}>
-          <Button
-            bg={"#D3212D"}
-            color={"white"}
-            _hover={{
-              bg: "#D3212D",
-            }}
-            type="button"
-            onClick={onBtnVerify}
-            isLoading={loading1}
-          >
-            Verify
-          </Button>
-          <Button
-            bg={"none"}
-            color={"#D3212D"}
-            variant="outline"
-            _hover={{
-              color: "#D3212D",
-            }}
-            borderColor={"#D3212D"}
-            onClick={onBtnSendVerifyEmail}
-            type="button"
-            isLoading={loading2}
-          >
-            Resend OTP
-          </Button>
+            We have sent code to your email
+          </Text>
+
+          <FormControl>
+            <Center>
+              <HStack>
+                <FormControl isInvalid={formik.errors.verificationCode}>
+                  <FormLabel>Input your OTP code here :</FormLabel>
+                  <Input type="text"
+                    onChange={handleForm}
+                    name="verificationCode"
+                  />
+                  <FormErrorMessage fontSize="xs" style={{ position: "absolute", top: "100%", marginTop: "0.30rem" }}>{formik.errors.verificationCode}</FormErrorMessage>
+                </FormControl>
+              </HStack>
+            </Center>
+            <Center
+              fontSize={{ base: "xs", sm: "sm" }}
+              fontWeight="thin"
+              mt={6}
+            >
+              the code is valid for 24 hours
+            </Center>
+          </FormControl>
+          <Stack spacing={2}>
+            <Button
+              bg={"#D3212D"}
+              color={"white"}
+              _hover={{
+                bg: "#D3212D",
+              }}
+              type="button"
+              onClick={onBtnVerify}
+              isLoading={loading1}
+            >
+              Verify
+            </Button>
+            <Button
+              bg={"none"}
+              color={"#D3212D"}
+              variant="outline"
+              _hover={{
+                color: "#D3212D",
+              }}
+              borderColor={"#D3212D"}
+              onClick={onBtnSendVerifyEmail}
+              type="button"
+              isLoading={loading2}
+            >
+              Resend OTP
+            </Button>
+          </Stack>
         </Stack>
-      </Stack>
-    </Flex>
-  );
+      </Flex>
+    );
+  }
 }

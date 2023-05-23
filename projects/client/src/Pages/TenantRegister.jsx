@@ -18,9 +18,11 @@ import { FiUpload } from "react-icons/fi";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import tenantRegisterBanner from "../assets/tenant-register-banner.jpg";
+import Loading from "../Components/Loading";
 
 
 export default function TenantRegister() {
+    const [loadingPage, setLoadingPage] = useState(true);
     const [showPassword, setShowPassword] = useState(false);
     const [showPasswordConfirmation, setShowPasswordConfirmation] = useState(false);
     const navigate = useNavigate();
@@ -166,207 +168,216 @@ export default function TenantRegister() {
         window.scrollTo(0, 0);
     }, []);
 
+    React.useEffect(() => {
+        setTimeout(() => {
+            setLoadingPage(false);
+        }, 1700);
+    }, []);
 
-    return (
-        <Stack minH={{ lg: "100vh" }}
-            direction={{ base: "column", md: "column", lg: "row" }}
-        >
-            <Flex
-                p={{ base: "8", sm: "0" }}
-                flex={1}
-                align={"center"} justify={"center"}
+    if (loadingPage) {
+        return <Loading />
+    } else {
+        return (
+            <Stack minH={{ lg: "100vh" }}
+                direction={{ base: "column", md: "column", lg: "row" }}
             >
-                <Stack spacing={0} w={"full"} maxW={{ base: "sm" }}>
-                    <Heading fontSize={"3xl"} fontWeight="semibold"
-                        my="8"
-                    >Register as a Tenant</Heading>
-                    <Stack spacing={8}>
-                        <HStack>
-                            <Box>
-                                {/* NAME */}
-                                <FormControl isInvalid={formik.errors.name}>
-                                    <FormLabel>Name</FormLabel>
-                                    <Input type="text"
-                                        onChange={handleForm}
-                                        name="name"
-                                    />
-                                    <FormErrorMessage fontSize="xs" style={{ position: "absolute", top: "100%", marginTop: "0.30rem" }}>{formik.errors.name}</FormErrorMessage>
-                                </FormControl>
-                            </Box>
-                            <Box>
-                                {/* PHONE */}
-                                <FormControl isInvalid={formik.errors.phone}>
-                                    <FormLabel>Phone number</FormLabel>
-                                    <Input type="text"
-                                        onChange={handleForm}
-                                        name="phone"
-                                    />
-                                    <FormErrorMessage fontSize="xs" style={{ position: "absolute", top: "100%", marginTop: "0.30rem" }}>{formik.errors.phone}</FormErrorMessage>
-                                </FormControl>
-                            </Box>
-                        </HStack>
-                        {/* EMAIL */}
-                        <FormControl isInvalid={formik.errors.email}>
-                            <FormLabel>Email address</FormLabel>
-                            <Input type="email"
-                                onChange={handleForm}
-                                name="email"
-                            />
-                            <FormErrorMessage fontSize="xs" style={{ position: "absolute", top: "100%", marginTop: "0.30rem" }}>{formik.errors.email}</FormErrorMessage>
-                        </FormControl>
-                        {/* PASSWORD */}
-                        <FormControl isInvalid={formik.errors.password}>
-                            <FormLabel>Password</FormLabel>
-                            <InputGroup>
-                                {/* Input Password */}
-                                <Input
-                                    type={showPassword ? "text" : "password"}
+                <Flex
+                    p={{ base: "8", sm: "0" }}
+                    flex={1}
+                    align={"center"} justify={"center"}
+                >
+                    <Stack spacing={0} w={"full"} maxW={{ base: "sm" }}>
+                        <Heading fontSize={"3xl"} fontWeight="semibold"
+                            my="8"
+                        >Register as a Tenant</Heading>
+                        <Stack spacing={8}>
+                            <HStack>
+                                <Box>
+                                    {/* NAME */}
+                                    <FormControl isInvalid={formik.errors.name}>
+                                        <FormLabel>Name</FormLabel>
+                                        <Input type="text"
+                                            onChange={handleForm}
+                                            name="name"
+                                        />
+                                        <FormErrorMessage fontSize="xs" style={{ position: "absolute", top: "100%", marginTop: "0.30rem" }}>{formik.errors.name}</FormErrorMessage>
+                                    </FormControl>
+                                </Box>
+                                <Box>
+                                    {/* PHONE */}
+                                    <FormControl isInvalid={formik.errors.phone}>
+                                        <FormLabel>Phone number</FormLabel>
+                                        <Input type="text"
+                                            onChange={handleForm}
+                                            name="phone"
+                                        />
+                                        <FormErrorMessage fontSize="xs" style={{ position: "absolute", top: "100%", marginTop: "0.30rem" }}>{formik.errors.phone}</FormErrorMessage>
+                                    </FormControl>
+                                </Box>
+                            </HStack>
+                            {/* EMAIL */}
+                            <FormControl isInvalid={formik.errors.email}>
+                                <FormLabel>Email address</FormLabel>
+                                <Input type="email"
                                     onChange={handleForm}
-                                    name="password"
+                                    name="email"
                                 />
-                                <InputRightElement h={"full"}>
-                                    <Button
-                                        variant={"ghost"}
-                                        _hover={"none"}
-                                        _active={"none"}
-                                        onClick={() =>
-                                            setShowPassword(
-                                                (showPassword) => !showPassword
-                                            )
-                                        }
-                                    >
-                                        {showPassword ? (
-                                            <ViewIcon />
-                                        ) : (
-                                            <ViewOffIcon />
-                                        )}
-                                    </Button>
-                                </InputRightElement>
-                            </InputGroup>
-                            <FormErrorMessage fontSize="xs" style={{ position: "absolute", top: "100%", marginTop: "0.30rem" }}>{formik.errors.password}</FormErrorMessage>
-                        </FormControl>
-                        <FormControl isInvalid={formik.errors.passwordConfirmation}>
-                            <FormLabel>Confirmation Password</FormLabel>
-                            <InputGroup>
-                                <Input
-                                    type={showPasswordConfirmation ? "text" : "password"}
-                                    onChange={handleForm}
-                                    name="passwordConfirmation"
-                                />
-                                <InputRightElement h={"full"}>
-                                    <Button
-                                        variant={"ghost"}
-                                        _hover={"none"}
-                                        _active={"none"}
-                                        onClick={() =>
-                                            setShowPasswordConfirmation(
-                                                (showPasswordConfirmation) =>
-                                                    !showPasswordConfirmation
-                                            )
-                                        }
-                                    >
-                                        {showPasswordConfirmation ? (
-                                            <ViewIcon />
-                                        ) : (
-                                            <ViewOffIcon />
-                                        )}
-                                    </Button>
-                                </InputRightElement>
-                            </InputGroup>
-                            <FormErrorMessage fontSize="xs" style={{ position: "absolute", top: "100%", marginTop: "0.30rem" }}>{formik.errors.passwordConfirmation}</FormErrorMessage>
-                        </FormControl>
-                        {/* UPLOAD ID CARD */}
-                        <FormControl isInvalid={formik.errors.fileImage}>
-                            <FormLabel>Upload a photo of your KTP
-                                <Text fontSize="xs">( Image size: max. 1 MB , Image format: .jpg, .jpeg, .png )</Text>
-                            </FormLabel>
-                            <Image
-                                boxSize="200px"
-                                objectFit="cover"
-                                src={formik.values.fileImage
-                                    ? URL.createObjectURL(
-                                        formik.values.fileImage
-                                    )
-                                    : image}
-                                w="full"
-                                borderRadius="8px 8px 0 0"
-                                border="1px solid #CBD5E0"
-                            />
-                            <Button fontFamily={"heading"} bg={"gray.200"} color={"gray.800"} w="full"
-                                leftIcon={<Icon as={FiUpload} ml={{ base: "4", sm: "8" }} fontSize={"2xl"} />}
-                                variant={"link"}
-                                onClick={() =>
-                                    inputFile.current.click()
-                                }
-                                borderRadius="0 0 8px 8px"
-                            >
-                                {/* Upload your id card */}
-                                <Input
-                                    my="4"
-                                    ml={{ base: "3", sm: "6" }}
-                                    type="file"
-                                    id="file"
-                                    ref={inputFile}
-                                    onChange={onChangeFile}
-                                    accept="image/*"
-                                    variant="unstyled"
-                                    name="fileImage"
-                                    p="1"
-                                ></Input>
-                            </Button>
-                            <FormErrorMessage fontSize="xs" style={{ position: "absolute", top: "100%", marginTop: "0.30rem" }}>{formik.errors.fileImage}</FormErrorMessage>
-                        </FormControl>
-                    </Stack>
-                    <Stack
-                        pt="10"
-                    >
-                        <Button bg={"#D3212D"} color={"white"} variant={"solid"}
-                            _hover={{
-                                bg: "#D3212D",
-                            }}
-                            onClick={onBtnRegister}
-                            isLoading={loading}
-                        >
-                            Register
-                        </Button>
-                        {/* Login */}
-                    </Stack>
-                    <Stack
-                        pb="6"
-                        px="10"
-                    >
-                        <Card variant="none" borderColor="#d0d7de" mt="2">
-                            <CardBody>
-                                <Center>
-                                    <HStack fontSize="sm"
-                                    >
-                                        <Text>Have an account?</Text>
-                                        <Text onClick={() => {
-                                            navigate("/");
-                                        }} color="#0969da"
-                                            cursor={"pointer"}
+                                <FormErrorMessage fontSize="xs" style={{ position: "absolute", top: "100%", marginTop: "0.30rem" }}>{formik.errors.email}</FormErrorMessage>
+                            </FormControl>
+                            {/* PASSWORD */}
+                            <FormControl isInvalid={formik.errors.password}>
+                                <FormLabel>Password</FormLabel>
+                                <InputGroup>
+                                    {/* Input Password */}
+                                    <Input
+                                        type={showPassword ? "text" : "password"}
+                                        onChange={handleForm}
+                                        name="password"
+                                    />
+                                    <InputRightElement h={"full"}>
+                                        <Button
+                                            variant={"ghost"}
+                                            _hover={"none"}
+                                            _active={"none"}
+                                            onClick={() =>
+                                                setShowPassword(
+                                                    (showPassword) => !showPassword
+                                                )
+                                            }
                                         >
-                                            Login.
-                                        </Text>
-                                    </HStack>
-                                </Center>
-                            </CardBody>
-                        </Card>
+                                            {showPassword ? (
+                                                <ViewIcon />
+                                            ) : (
+                                                <ViewOffIcon />
+                                            )}
+                                        </Button>
+                                    </InputRightElement>
+                                </InputGroup>
+                                <FormErrorMessage fontSize="xs" style={{ position: "absolute", top: "100%", marginTop: "0.30rem" }}>{formik.errors.password}</FormErrorMessage>
+                            </FormControl>
+                            <FormControl isInvalid={formik.errors.passwordConfirmation}>
+                                <FormLabel>Confirmation Password</FormLabel>
+                                <InputGroup>
+                                    <Input
+                                        type={showPasswordConfirmation ? "text" : "password"}
+                                        onChange={handleForm}
+                                        name="passwordConfirmation"
+                                    />
+                                    <InputRightElement h={"full"}>
+                                        <Button
+                                            variant={"ghost"}
+                                            _hover={"none"}
+                                            _active={"none"}
+                                            onClick={() =>
+                                                setShowPasswordConfirmation(
+                                                    (showPasswordConfirmation) =>
+                                                        !showPasswordConfirmation
+                                                )
+                                            }
+                                        >
+                                            {showPasswordConfirmation ? (
+                                                <ViewIcon />
+                                            ) : (
+                                                <ViewOffIcon />
+                                            )}
+                                        </Button>
+                                    </InputRightElement>
+                                </InputGroup>
+                                <FormErrorMessage fontSize="xs" style={{ position: "absolute", top: "100%", marginTop: "0.30rem" }}>{formik.errors.passwordConfirmation}</FormErrorMessage>
+                            </FormControl>
+                            {/* UPLOAD ID CARD */}
+                            <FormControl isInvalid={formik.errors.fileImage}>
+                                <FormLabel>Upload a photo of your KTP
+                                    <Text fontSize="xs">( Image size: max. 1 MB , Image format: .jpg, .jpeg, .png )</Text>
+                                </FormLabel>
+                                <Image
+                                    boxSize="200px"
+                                    objectFit="cover"
+                                    src={formik.values.fileImage
+                                        ? URL.createObjectURL(
+                                            formik.values.fileImage
+                                        )
+                                        : image}
+                                    w="full"
+                                    borderRadius="8px 8px 0 0"
+                                    border="1px solid #CBD5E0"
+                                />
+                                <Button fontFamily={"heading"} bg={"gray.200"} color={"gray.800"} w="full"
+                                    leftIcon={<Icon as={FiUpload} ml={{ base: "4", sm: "8" }} fontSize={"2xl"} />}
+                                    variant={"link"}
+                                    onClick={() =>
+                                        inputFile.current.click()
+                                    }
+                                    borderRadius="0 0 8px 8px"
+                                >
+                                    {/* Upload your id card */}
+                                    <Input
+                                        my="4"
+                                        ml={{ base: "3", sm: "6" }}
+                                        type="file"
+                                        id="file"
+                                        ref={inputFile}
+                                        onChange={onChangeFile}
+                                        accept="image/*"
+                                        variant="unstyled"
+                                        name="fileImage"
+                                        p="1"
+                                    ></Input>
+                                </Button>
+                                <FormErrorMessage fontSize="xs" style={{ position: "absolute", top: "100%", marginTop: "0.30rem" }}>{formik.errors.fileImage}</FormErrorMessage>
+                            </FormControl>
+                        </Stack>
+                        <Stack
+                            pt="10"
+                        >
+                            <Button bg={"#D3212D"} color={"white"} variant={"solid"}
+                                _hover={{
+                                    bg: "#D3212D",
+                                }}
+                                onClick={onBtnRegister}
+                                isLoading={loading}
+                            >
+                                Register
+                            </Button>
+                            {/* Login */}
+                        </Stack>
+                        <Stack
+                            pb="6"
+                            px="10"
+                        >
+                            <Card variant="none" borderColor="#d0d7de" mt="2">
+                                <CardBody>
+                                    <Center>
+                                        <HStack fontSize="sm"
+                                        >
+                                            <Text>Have an account?</Text>
+                                            <Text onClick={() => {
+                                                navigate("/");
+                                            }} color="#0969da"
+                                                cursor={"pointer"}
+                                            >
+                                                Login.
+                                            </Text>
+                                        </HStack>
+                                    </Center>
+                                </CardBody>
+                            </Card>
+                        </Stack>
                     </Stack>
-                </Stack>
-            </Flex>
-            <Flex
-                flex={1}
-                display={{ base: "flex", sm: "flex" }}
-            >
-                <Image
-                    alt={"User Register Page Image"}
-                    objectFit={"cover"}
-                    src={tenantRegisterBanner}
-                    h={{ base: "30vh", sm: "50vh", lg: "full" }}
-                    w="full"
-                />
-            </Flex>
-        </Stack>
-    );
+                </Flex>
+                <Flex
+                    flex={1}
+                    display={{ base: "flex", sm: "flex" }}
+                >
+                    <Image
+                        alt={"User Register Page Image"}
+                        objectFit={"cover"}
+                        src={tenantRegisterBanner}
+                        h={{ base: "30vh", sm: "50vh", lg: "full" }}
+                        w="full"
+                    />
+                </Flex>
+            </Stack>
+        );
+    }
 }
