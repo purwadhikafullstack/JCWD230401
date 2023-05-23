@@ -12,7 +12,7 @@ import {
     ModalCloseButton,
     useDisclosure,
     Textarea,
-    VStack
+    VStack,
 
 } from "@chakra-ui/react"
 import { AiOutlineRight } from "react-icons/ai"
@@ -62,12 +62,9 @@ export default function CardOrderList(props) {
             setLoadingButton(false)
             onClose();
             props.getOrderList()
-            // TOAST
         }
         return (
             <>
-                {/* - jika props.review.length === true berdasarkan id transaksi, isDisable jadikan true
-                tapi kalau props.review.length === false, isDisable jadikan false */}
                 <Button
                     onClick={onOpen}
                     isDisabled={props.isReview ? true : false}

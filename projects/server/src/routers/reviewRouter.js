@@ -3,7 +3,7 @@ const { reviewController } = require('../controllers');
 const { readToken } = require('../helper/jwt');
 const { checkUser } = require('../helper/validator');
 
-route.get('/getaverageandreviewproperty', reviewController.getAverageAndReviewProperty)
+route.get('/getaverageandreviewproperty', reviewController.getAverageAndReviewProperty) // gak kepake
 route.post('/', readToken, reviewController.addReview)
 route.get('/', reviewController.getAllReview)
 route.get('/average', reviewController.getAverage)
