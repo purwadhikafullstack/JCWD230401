@@ -142,7 +142,7 @@ export default function ChangePassword() {
                 justify={"center"}
                 bg={"white"}>
                 <Stack
-                    spacing={6}
+                    spacing={8}
                     w={"full"}
                     maxW={"md"}
                     bg={"white"}
