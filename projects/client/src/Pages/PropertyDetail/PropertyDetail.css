@@ -1,0 +1,254 @@
+/* ----------product-details page------------- */
+.product-details {
+    padding: 0 12%;
+}
+
+.product-title {
+    margin-top: 50px;
+}
+
+.product-title h1 {
+    font-weight: 600;
+    font-size: 30px;
+}
+
+.product-title .row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    margin: 10px 0;
+}
+
+.product-title span {
+    margin: 0 20px;
+}
+
+.gallery {
+    display: grid;
+    grid-gap: 10px;
+    grid-template-areas: 'first first . .''first first . .';
+    margin: 20px 0;
+}
+
+.gallery div img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    border-radius: 10px;
+}
+
+.gallery-img-1 {
+    grid-area: first;
+}
+
+.small-details h2 {
+    font-weight: 500;
+}
+
+.small-details h4 {
+    text-align: right;
+    font-size: 22px;
+}
+
+.line {
+    border: 0;
+    height: 1px;
+    background: #ccc;
+    width: 100%;
+    max-width: 800px;
+    margin: 20px 0 50px;
+}
+
+.guest-field {
+    flex: 1;
+}
+
+.details-list {
+    list-style: none;
+    margin: 50px 0;
+}
+
+.details-list li {
+    margin-left: 50px;
+    font-size: 20px;
+    font-weight: 500;
+    margin-bottom: 20px;
+    color: #555;
+    position: relative;
+}
+
+.details-list li span {
+    display: block;
+    font-weight: 400;
+    font-size: 16px;
+}
+
+.details-list li i {
+    position: absolute;
+    top: 5px;
+    left: -40px;
+}
+
+.product-desc {
+    max-width: 700px;
+    margin-bottom: 50px;
+}
+
+.map {
+    margin: 50px 0;
+}
+
+.map iframe {
+    width: 100%;
+    margin-bottom: 30px;
+}
+
+.map h3 {
+    font-size: 26px;
+    font-weight: 500;
+    margin-bottom: 30px;
+}
+
+.map b {
+    display: block;
+    margin-bottom: 16px;
+}
+
+.tenant {
+    display: flex;
+    align-items: center;
+}
+
+.tenant img {
+    width: 80px;
+    border-radius: 50%;
+    margin-right: 30px;
+}
+
+.tenant h2 {
+    margin-bottom: 10px;
+    font-weight: 500;
+}
+
+.tenant .row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    margin: 10px 0;
+}
+
+.contact-tenant {
+    display: inline-block;
+    margin-top: 20px;
+    text-decoration: none;
+    color: #555;
+    padding: 15px 50px;
+    border: 1px solid #D3212D;
+    border-radius: 8px;
+}
+
+/* CALENDAR */
+
+.fc-button-group {
+    font-size: 0.5rem;
+}
+
+.fc .fc-button-primary {
+    font-size: 0.8rem;
+    color: black;
+    background-color: white;
+}
+
+.fc-h-event {
+    background-color: rgba(0, 0, 0, 0);
+    border: 1px solid rgba(0, 0, 0, 0);
+}
+
+.fc-event-title-container {
+    background-color: rgba(0, 0, 0, 0);
+    color: black;
+}
+
+.fc-event-title {
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.fc .fc-view-harness {
+    font-size: 0.9rem;
+}
+
+.fc .fc-toolbar-title {
+    font-size: 1.2rem;
+}
+
+.edit-event-highlight {
+    background-color: #D3212D;
+    height: 50px;
+    border-radius: 50px;
+    font-size: 16px;
+    text-align: center;
+    justify-content: center;
+}
+
+.edit-event-highlight .fc-event-title {
+    margin-top: 2px;
+    color: white;
+    width: 100%;
+}
+
+/* -----media query for product details page---------- */
+@media only screen and (max-width: 700px) {
+    .product-details {
+        margin-bottom: 50px;
+    }
+
+    .row p {
+        margin-top: 10px;
+    }
+
+    .gallery {
+        grid-template-areas: 'first first''. .''. .';
+    }
+
+    .small-details h2 {
+        font-size: 20px;
+        margin-top: 24px;
+    }
+
+    .small-details h4 {
+        text-align: left;
+        margin: 10px 0;
+        font-size: 18px;
+    }
+
+    .check-form {
+        padding: 10px 30px;
+    }
+
+    .check-form div {
+        padding: 20px 0;
+        width: 100%;
+    }
+
+    .check-form input {
+        border-bottom: 1px solid #ccc;
+        width: 100%;
+        padding-bottom: 5px;
+    }
+
+    .check-form button {
+        font-size: 14px;
+        margin-top: 10px;
+        margin-bottom: 15px;
+        border-radius: 4px;
+    }
+
+    .tenant {
+        display: block;
+        line-height: 28px;
+    }
+
+    .contact-tenant {
+        margin: 40px 0;
+    }
+}
