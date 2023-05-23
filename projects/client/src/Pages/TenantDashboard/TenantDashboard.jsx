@@ -19,7 +19,6 @@ import Loading from "../../Components/Loading";
 
 function TenantDashboard() {
   const [loadingPage, setLoadingPage] = useState(true);
-
   const name = useSelector((state) => state.authReducer.name);
   const [roomOrders, setRoomOrders] = useState([]);
   const [roomMaintenances, setRoomMaintenances] = useState([]);
@@ -227,11 +226,13 @@ function TenantDashboard() {
 
   //react-slick slider property listing
   const numberOfProperties = propertyListing.length;
-  let slidesToShowValue = 3;
+  let slidesToShowValue = 4;
   if (numberOfProperties === 1) {
     slidesToShowValue = 1;
   } else if (numberOfProperties === 2) {
     slidesToShowValue = 2;
+  } else if (numberOfProperties === 3) {
+    slidesToShowValue = 3;
   };
   const settingsMyProperty = {
     infinite: true,
@@ -239,6 +240,14 @@ function TenantDashboard() {
     slidesToScroll: 1,
     initialSlide: 0,
     responsive: [
+      {
+        breakpoint: 1440,
+        settings: {
+          slidesToShow: 3,
+          slidesToScroll: 1,
+          infinite: true,
+        },
+      },
       {
         breakpoint: 1024,
         settings: {
@@ -292,7 +301,7 @@ function TenantDashboard() {
                 loading ? (
                   <Text textAlign="center"><Spinner color='red.500' /></Text>
                 ) : propertyListing.length === 0 ? (
-                  <Text  textAlign={{ base: "center", sm: "left" }}>No property listings yet</Text>
+                  <Text textAlign={{ base: "center", sm: "left" }}>No property listings yet</Text>
                 ) : (
                   <Slider {...settingsMyProperty} prevArrow={<FaChevronLeft color="#E2E8F0" />} nextArrow={<FaChevronRight color="#E2E8F0" />}>
                     {printMyProperty()}
@@ -303,7 +312,7 @@ function TenantDashboard() {
           </Box>
           <br />
           <Box p={{ base: "2", sm: "10" }} bg={"white"} rounded={"xl"} borderWidth={"1px"}
-            borderColor={{ base: "white", sm: "gray.300" }} 
+            borderColor={{ base: "white", sm: "gray.300" }}
           >
             <Text fontSize={{ base: "20", sm: "28" }} fontWeight={"semibold"} mb={{ base: "6", sm: "10" }} textAlign={{ base: "center", sm: "left" }}>See Availability by Calendar Date</Text>
             {

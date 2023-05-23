@@ -61,15 +61,15 @@ export default function CalendarPropertyCard(props) {
                                     / night
                                 </Text>
                             </Text>
-                        </Flex>
                             <Flex alignItems={"center"} justifyContent="flex-start">
                                 <Box>
-                                    <StarIcon color={"yellow.500"} fontSize={{ base: "lg", lg: "sm" }} mb="1" />
+                                    <StarIcon color={"yellow.500"} fontSize={{ base: "md", lg: "sm" }} mb="1" />
                                 </Box>
-                                <Text fontWeight={600} fontSize={{ base: "lg", lg: "sm" }} textAlign="right" ml="1">
+                                <Text fontWeight={600} fontSize={{ base: "md", md: "sm", lg: "sm" }} textAlign="right" ml="1">
                                     {props.rating}
                                 </Text>
                             </Flex>
+                        </Flex>
                     </Box>
                 </Box>
             </Link>
