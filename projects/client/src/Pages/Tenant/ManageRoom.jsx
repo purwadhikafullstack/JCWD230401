@@ -13,17 +13,12 @@ import {
     FormLabel,
     Image,
     useToast,
-    Checkbox,
-    CheckboxGroup,
-    useCheckbox,
-    useCheckboxGroup,
-    Stack,
 } from "@chakra-ui/react";
 import { HiTrash } from "react-icons/hi2";
 import { SlPicture } from "react-icons/sl";
 import { useParams } from "react-router-dom";
 
-function ManageRoom() {
+function ManageRoom(props) {
     const params = useParams();
 
     const toast = useToast();
@@ -35,14 +30,6 @@ function ManageRoom() {
     const inputFile3 = useRef(null);
     const inputFile4 = useRef(null);
     const inputFile5 = useRef(null);
-
-    const [roomData, setRoomData] = useState(null);
-    const [roomName, setRoomName] = useState("");
-    const [description, setDescription] = useState("");
-    const [descriptionLength, setDescriptionLength] = useState(0);
-    const [roomCapacity, setRoomCapacity] = useState("");
-    const [roomPrice, setRoomPrice] = useState("");
-    const [property, setProperty] = useState(null);
 
     const [fileRoomEdit1, setFileRoomEdit1] = useState(null);
     const [fileRoomEdit2, setFileRoomEdit2] = useState(null);
@@ -72,6 +59,13 @@ function ManageRoom() {
             console.log(error);
         }
     };
+
+    const [roomData, setRoomData] = useState(null);
+    const [roomName, setRoomName] = useState(roomData?.room_category?.name);
+    const [description, setDescription] = useState(roomData?.description);
+    const [descriptionLength, setDescriptionLength] = useState(0);
+    const [roomCapacity, setRoomCapacity] = useState(roomData?.capacity);
+    const [roomPrice, setRoomPrice] = useState(roomData?.price);
 
     const uploadImageRoom = async (imageFile, id, roomId) => {
         try {
@@ -255,9 +249,11 @@ function ManageRoom() {
         getRoomData();
     }, []);
 
-    // console.log("roomData:", roomData);
-    // console.log("property:", property);
-    // console.log("Roomname:", roomName);
+    console.log("Room Data:", roomData);
+    console.log("Description:", description);
+    console.log("Room capacity:", roomCapacity);
+    console.log("Room Name:", roomName);
+    console.log("Room Name:");
 
     return (
         <Container

@@ -114,6 +114,7 @@ function RoomConditionList(props) {
                     },
                 }
             );
+            console.log(" getSpecialPriceData get.data.data:", get.data.data);
             setDataSpecialPrice(get.data.data);
             setTotalDataSpecialPrice(get.data.datanum);
             setRoomName(get.data.data[0].room.room_category.name);
@@ -123,6 +124,7 @@ function RoomConditionList(props) {
             console.log(error);
         }
     };
+    console.log("roomName", roomName);
 
     const getMaintenanceData = async () => {
         try {
@@ -191,9 +193,26 @@ function RoomConditionList(props) {
         const { isOpen, onOpen, onClose } = useDisclosure();
         const [specialStartDate, setSpecialStartDate] = useState(null);
         const [specialEndDate, setSpecialEndDate] = useState(null);
+        const [normalPrice, setNormalPrice] = useState("")
+        const [roomId, setRoomId] = useState("")
         const [price, setPrice] = useState("");
         const [percentage, setPercentage] = useState("");
         const [loading, setLoading] = useState(false);
+
+        const getRoomPrice = async () => {
+            let token = localStorage.getItem("tempatku_login");
+            let get = await axios.get(
+                `${process.env.REACT_APP_API_BASE_URL}/special/data/${params1.uuid}`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
+            console.log("get");
+            setNormalPrice(get.data.data.price)
+            setRoomId(get.data.data.id)
+        };
 
         const handlePriceChange = (event) => {
             const inputPrice = event.target.value;
@@ -201,8 +220,10 @@ function RoomConditionList(props) {
 
             if (inputPrice !== "") {
                 const calculatedPercentage =
-                    (Number(inputPrice) * 100) / dataSpecialPrice[0].room.price;
+                (Number(inputPrice) * 100) / normalPrice;
                 setPercentage(calculatedPercentage.toFixed(2));
+                console.log("calculate", calculatedPercentage);
+                console.log(typeof normalPrice);
             } else {
                 setPercentage("");
             }
@@ -214,7 +235,7 @@ function RoomConditionList(props) {
 
             if (inputPercentage !== "") {
                 const calculatedPrice =
-                    (Number(inputPercentage) * dataSpecialPrice[0].room.price) /
+                    (Number(inputPercentage) * normalPrice) /
                     100;
                 setPrice(calculatedPrice.toFixed(2));
             } else {
@@ -240,7 +261,7 @@ function RoomConditionList(props) {
                         specialStartDate: specialStartDate,
                         specialEndDate: specialEndDate,
                         price: price,
-                        roomId: dataSpecialPrice[0].roomId,
+                        roomId: roomId,
                     },
                     {
                         headers: {
@@ -276,6 +297,10 @@ function RoomConditionList(props) {
                 setLoading(false);
             }
         };
+
+        useEffect(() => {
+            getRoomPrice();
+        }, [isOpen]);
         return (
             <>
                 <Button onClick={onOpen} bgColor="green.400" _hover={""}>
@@ -364,6 +389,22 @@ function RoomConditionList(props) {
         const [remarks, setRemarks] = useState("");
         const [loading, setLoading] = useState(false);
 
+        const [roomId, setRoomId] = useState("")
+
+        const getRoomId = async () => {
+            let token = localStorage.getItem("tempatku_login");
+            let get = await axios.get(
+                `${process.env.REACT_APP_API_BASE_URL}/maintenance/data/${params1.uuid}`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
+            console.log("get");
+            setRoomId(get.data.data.id)
+        };
+
         const handleRemarksChange = (event) => {
             const inputRemarks = event.target.value;
             setRemarks(inputRemarks);
@@ -387,7 +428,7 @@ function RoomConditionList(props) {
                         maintenanceStartDate: maintenanceStartDate,
                         maintenanceEndDate: maintenanceEndDate,
                         remarks: remarks,
-                        roomId: dataMaintenance[0].roomId,
+                        roomId: roomId,
                     },
                     {
                         headers: {
@@ -422,6 +463,11 @@ function RoomConditionList(props) {
                 setLoading(false);
             }
         };
+
+        useEffect(() => {
+            getRoomId();
+        }, [isOpen]);
+        console.log("roomId maintenance",roomId);
         return (
             <>
                 <Button onClick={onOpen} bgColor="green.400" _hover={""}>
@@ -496,7 +542,7 @@ function RoomConditionList(props) {
         getMaintenanceData();
     }, [pageSpecialPrice, pageMaintenance]);
 
-    // console.log("DataSpecialPrice:", dataSpecialPrice);
+    console.log("DataSpecialPrice:", dataSpecialPrice);
     // console.log("DataMaintenance:", dataMaintenance);
     // console.log("pageSpecialPrice:", pageSpecialPrice);
 

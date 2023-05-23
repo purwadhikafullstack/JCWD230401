@@ -109,7 +109,7 @@ module.exports = {
 
             let chart = await model.order.findAll({
                 attributes: [
-                    [sequelize.fn("sum", sequelize.col("price")), "price"],
+                    [sequelize.fn("sum", sequelize.col("order.price")), "price"],
                     "createdAt",
                 ],
                 where: {

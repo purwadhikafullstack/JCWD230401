@@ -20,6 +20,7 @@ import {
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import Pagination from "../../Components/Pagination";
 import Sidebar from "../../Components/Sidebar";
+import { formatRupiah } from "../../helper/index";
 
 function RoomList(props) {
     const location = useLocation();
@@ -53,7 +54,7 @@ function RoomList(props) {
                     idx={rowNumber}
                     name={val.room_category.name}
                     capacity={val.capacity}
-                    price={val.price}
+                    price={formatRupiah(val.price)}
                     uuid={val.uuid}
                     getAllRoomList={getAllRoomList}
                 />
@@ -93,6 +94,8 @@ function RoomList(props) {
     useEffect(() => {
         getAllRoomList();
     }, []);
+
+    console.log("dataAllRoom", dataAllRoom);
 
     return (
         <>

@@ -4,6 +4,23 @@ const { v4: uuidv4 } = require("uuid");
 const fs = require("fs");
 
 module.exports = {
+    getRoomData: async (req, res, next) => {
+        try {
+            let get = await model.room.findOne({
+                where: {
+                    uuid: req.params.uuid,
+                },
+                attributes: ["price", "id"],
+            });
+            res.status(200).send({
+                success: true,
+                data: get,
+            });
+        } catch (error) {
+            console.log(error);
+            next(error);
+        }
+    },
     createSpecialPrice: async (req, res, next) => {
         const ormTransaction = await model.sequelize.transaction();
         try {
@@ -86,6 +103,7 @@ module.exports = {
             let count = await model.special_price.findAll({
                 where: {
                     roomId: getRoomId.id,
+                    isDeleted: 0,
                 },
             });
 
@@ -96,7 +114,7 @@ module.exports = {
                     {
                         model: model.room,
                         where: {
-                            isDeleted: false,
+                            isDeleted: 0,
                         },
                         include: [
                             {
@@ -107,6 +125,7 @@ module.exports = {
                 ],
                 where: {
                     roomId: getRoomId.id,
+                    isDeleted: 0,
                 },
                 order: [[sortby, order]],
             });
@@ -115,6 +134,8 @@ module.exports = {
                 data: get.rows,
                 totalPages: Math.ceil(get.count / size),
                 datanum: count.length,
+                // success: true,
+                // data: getRoomId,
             });
         } catch (error) {
             console.log(error);

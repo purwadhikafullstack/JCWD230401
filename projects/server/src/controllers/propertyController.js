@@ -506,15 +506,15 @@ module.exports = {
                 include: [
                     {
                         model: model.room,
-                        attributes: ['id', 'uuid', 'price'],
+                        attributes: ["id", "uuid", "price"],
                         where: {
                             uuid: req.params.uuid,
-                            isActive: 1
-                        }
-                    }
-                ]
+                            isActive: 1,
+                        },
+                    },
+                ],
             });
-            console.log("ini isi get :", get)
+            console.log("ini isi get :", get);
             res.status(200).send(get);
         } catch (error) {
             console.log(error);
@@ -524,11 +524,9 @@ module.exports = {
     editProperty: async (req, res, next) => {
         const ormTransaction = await model.sequelize.transaction();
         try {
-
             let getPropertyByUuid = await model.property.findAll({
                 where: {
                     uuid: req.params.uuid,
-
                 },
                 include: [
                     { model: model.property_location, attributes: ["id"] },
@@ -567,7 +565,7 @@ module.exports = {
                     zip: req.body.zipcode,
                     country: req.body.country,
                     regencyId: req.body.regencyId,
-                    provinceId: req.body.provinceId,
+                    provinceId: parseInt(req.body.provinceId),
                     gmaps: req.body.gmaps,
                 },
                 {
@@ -760,7 +758,7 @@ module.exports = {
         let limit = parseInt(parseInt(req.query.size) || 3);
         let offset = parseInt(
             ((parseInt(req.query.page) || 1) - 1) *
-            (parseInt(req.query.size) || 3)
+                (parseInt(req.query.size) || 3)
         );
 
         // Available Property

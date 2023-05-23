@@ -16,7 +16,7 @@ route.post(
     uploader2mb("/ImgRoom", "ROM").array("images", 5),
     roomController.addRoom
 );
-route.patch("/edit/:uuid", roomController.editRoom);
+route.patch("/edit/:uuid", readToken, roomController.editRoom);
 route.get("/data/:uuid", roomController.getRoomData);
 route.patch(
     "/update-image",

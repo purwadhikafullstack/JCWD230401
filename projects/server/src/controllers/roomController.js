@@ -265,6 +265,9 @@ module.exports = {
             let get = await model.room.findAndCountAll({
                 offset: parseInt(page * size),
                 limit: parseInt(size),
+                where: {
+                    isDeleted: 0,
+                },
                 include: [
                     {
                         model: model.room_category,
@@ -278,8 +281,6 @@ module.exports = {
                     },
                 ],
             });
-
-            console.log("get list:", get);
             return res.status(200).send({
                 data: get.rows,
                 totalPages: Math.ceil(get.count / size),
