@@ -243,7 +243,7 @@ function TenantDashboard() {
       {
         breakpoint: 1440,
         settings: {
-          slidesToShow: 3,
+          slidesToShow: slidesToShowValue <= 3 ? slidesToShowValue : 3,
           slidesToScroll: 1,
           infinite: true,
         },
@@ -251,7 +251,7 @@ function TenantDashboard() {
       {
         breakpoint: 1024,
         settings: {
-          slidesToShow: 2,
+          slidesToShow: slidesToShowValue <= 2 ? slidesToShowValue : 2,
           slidesToScroll: 1,
           infinite: true,
         },
@@ -259,7 +259,7 @@ function TenantDashboard() {
       {
         breakpoint: 600,
         settings: {
-          slidesToShow: 1,
+          slidesToShow: slidesToShowValue <= 1 ? slidesToShowValue : 1,
           slidesToScroll: 1,
           infinite: true,
         },
@@ -267,7 +267,7 @@ function TenantDashboard() {
       {
         breakpoint: 480,
         settings: {
-          slidesToShow: 1,
+          slidesToShow: slidesToShowValue <= 1 ? slidesToShowValue : 1,
           slidesToScroll: 1,
           infinite: true,
         },
@@ -286,17 +286,17 @@ function TenantDashboard() {
         <Box>
           <Sidebar />
         </Box>
-        <Box w="50vw" flex="5" px={{ base: "4", sm: "10" }} bg={"white"} >
+        <Box w={"50vw"} flex="5" px={{ base: "4", sm: "10" }} bg={"white"} >
           <br />
           <Heading mb={{ base: "8", sm: "10" }} textAlign={{ base: "center", sm: "left" }} >
             Welcome, {name} 👋
           </Heading>
+          <Text fontSize={{ base: "20", sm: "28" }} fontWeight={"semibold"} my={{ base: "6", sm: "10" }} textAlign={{ base: "center", sm: "left" }}>Your Property Listings</Text>
           <Box p={{ base: "2", sm: "10" }} bg={"white"} rounded={"xl"} borderWidth={"1px"}
-            borderColor={{ base: "white", sm: "gray.300" }}
+            borderColor={{ base: "white", sm: "gray.300" }} pb={{ base: "20" }}
           >
             {/* MY PROPERTY */}
             <Box>
-              <Text fontSize={{ base: "20", sm: "28" }} fontWeight={"semibold"} mb={{ base: "6", sm: "10" }} textAlign={{ base: "center", sm: "left" }}>Your Property Listings</Text>
               {
                 loading ? (
                   <Text textAlign="center"><Spinner color='red.500' /></Text>
@@ -311,30 +311,33 @@ function TenantDashboard() {
             </Box>
           </Box>
           <br />
+          <Text fontSize={{ base: "20", sm: "28" }} fontWeight={"semibold"} my={{ base: "6", sm: "10" }} textAlign={{ base: "center", sm: "left" }}>See Availability by Calendar Date</Text>
           <Box p={{ base: "2", sm: "10" }} bg={"white"} rounded={"xl"} borderWidth={"1px"}
             borderColor={{ base: "white", sm: "gray.300" }}
+            overflowX={"auto"}
           >
-            <Text fontSize={{ base: "20", sm: "28" }} fontWeight={"semibold"} mb={{ base: "6", sm: "10" }} textAlign={{ base: "center", sm: "left" }}>See Availability by Calendar Date</Text>
-            {
-              loadingOrder || loadingMaintenance ? (
-                <Text textAlign="center"><Spinner color='red.500' /></Text>
-              ) : (
-                <Fullcalendar
-                  className="my-calendar-dashboard"
-                  plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-                  initialView={"dayGridMonth"}
-                  headerToolbar={{
-                    start: "today prev,next",
-                    center: "title",
-                    end: "dayGridMonth,timeGridWeek,timeGridDay",
-                  }}
-                  height={"90vh"}
-                  events=
-                  {roomEvents}
-                  dayMaxEvents={2} // max number of events displayed per day
-                  dateClick={dateClick}
-                />
-              )}
+            <Box  w={{ base: "200vw", sm: "150vw", lg:"full" }} pr={{base:"0", sm:"10", lg:"0"}}>
+              {
+                loadingOrder || loadingMaintenance ? (
+                  <Text textAlign="center"><Spinner color='red.500' /></Text>
+                ) : (
+                  <Fullcalendar
+                    className="my-calendar-dashboard"
+                    plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+                    initialView={"dayGridMonth"}
+                    headerToolbar={{
+                      start: "today prev,next",
+                      center: "title",
+                      end: "dayGridMonth,timeGridWeek,timeGridDay",
+                    }}
+                    height={"90vh"}
+                    events=
+                    {roomEvents}
+                    dayMaxEvents={2} // max number of events displayed per day
+                    dateClick={dateClick}
+                  />
+                )}
+            </Box>
             <Modal isOpen={modalIsOpen} onClose={() => setModalIsOpen(false)} scrollBehavior={"inside"}>
               <ModalOverlay />
               <ModalContent>

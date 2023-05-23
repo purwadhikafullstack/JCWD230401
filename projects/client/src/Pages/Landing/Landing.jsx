@@ -1,5 +1,5 @@
 import {
-    Flex, Text, Box, Heading, Stack, Button, VStack, useBreakpointValue,
+    Flex, Text, Box, Heading, Stack, Button, VStack,
     Image, Input,
     List, ListItem, Spinner
 } from "@chakra-ui/react";
@@ -259,7 +259,7 @@ export default function LandingNew() {
             {
                 breakpoint: 1440, 
                 settings: {
-                    slidesToShow: 4,
+                    slidesToShow: slidesToShowValue <= 4 ? slidesToShowValue : 4,
                     slidesToScroll: 1,
                     infinite: true,
                 },
@@ -267,7 +267,7 @@ export default function LandingNew() {
             {
                 breakpoint: 1024,
                 settings: {
-                    slidesToShow: 2,
+                    slidesToShow: slidesToShowValue <= 2 ? slidesToShowValue : 2,
                     slidesToScroll: 1,
                     infinite: true,
                 },
@@ -275,7 +275,7 @@ export default function LandingNew() {
             {
                 breakpoint: 600,
                 settings: {
-                    slidesToShow: 1,
+                    slidesToShow: slidesToShowValue <= 1 ? slidesToShowValue : 1,
                     slidesToScroll: 1,
                     infinite: true,
                 },
@@ -283,7 +283,7 @@ export default function LandingNew() {
             {
                 breakpoint: 480,
                 settings: {
-                    slidesToShow: 1,
+                    slidesToShow: slidesToShowValue <= 1 ? slidesToShowValue : 1,
                     slidesToScroll: 1,
                     infinite: true,
                 },
