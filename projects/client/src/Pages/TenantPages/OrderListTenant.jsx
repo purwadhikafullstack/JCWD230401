@@ -64,7 +64,7 @@ export default function OrderListTenant() {
     const [actionsNeeded, setActionsNeeded] = useState([]); // all response
     const getActionsNeeded = async () => {
         let get = await axios.get(
-            `${process.env.REACT_APP_API_BASE_URL}/order/getactionsneeded?page=${page}&size=${size}&sortby=${sortBy}&order=${order}`,
+            `${process.env.REACT_APP_API_BASE_URL}/order/actions-needed?page=${page}&size=${size}&sortby=${sortBy}&order=${order}`,
             {
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -119,7 +119,7 @@ export default function OrderListTenant() {
     const getSummary = async () => {
         setLoadingButton(true)
         let get = await axios.get(
-            `${process.env.REACT_APP_API_BASE_URL}/order/getsummary?page=${pageSummary}&size=${sizeSummary}&sortby=${sortBySummary}&order=${orderSummary}`,
+            `${process.env.REACT_APP_API_BASE_URL}/order/summary?page=${pageSummary}&size=${sizeSummary}&sortby=${sortBySummary}&order=${orderSummary}`,
             {
                 headers: {
                     Authorization: `Bearer ${token}`,
