@@ -8,6 +8,7 @@ const hbs = require("nodemailer-express-handlebars");
 const nodemailer = require("nodemailer");
 const handlebars = require("handlebars")
 const puppeteer = require("puppeteer")
+const { join } = require("path");
 
 
 module.exports = {
@@ -98,6 +99,8 @@ module.exports = {
                 ]
             })
 
+            console.log("getTenant", getTenant.dataValues.user.user_detail);
+
 
             let data = {
                 customerName: get.dataValues.user.user_detail.name,
@@ -107,7 +110,7 @@ module.exports = {
                 checkIn: req.body.start,
                 totalDays: countDays(req.body.start, req.body.end),
                 tenantName: getTenant.dataValues.user.user_detail.name,
-                tenantNorek: getTenant.dataValues.user.user_detail.account_number,
+                tenantNorek: getTenant.dataValues.user.user_detail.dataValues.account_number,
                 totalPrice: countDays(req.body.start, req.body.end) * get.dataValues.orders[0].price,
             }
 
@@ -125,11 +128,11 @@ module.exports = {
                 hbs({
                     viewEngine: {
                         extname: ".html", // html extension
-                        layoutsDir: "./src/helper", // location of handlebars templates
+                        layoutsDir: join(__dirname, "../helper"), // location of handlebars templates
                         defaultLayout: "payment-guidelines", // name of main template
-                        partialsDir: "./src/helper", // location of your subtemplates aka. header, footer etc
+                        partialsDir: join(__dirname, "../helper"), // location of your subtemplates aka. header, footer etc
                     },
-                    viewPath: "./src/helper",
+                    viewPath: join(__dirname, "../helper"),
                     extName: ".html",
                 })
             );
@@ -164,11 +167,11 @@ module.exports = {
                         hbs({
                             viewEngine: {
                                 extname: ".html", // html extension
-                                layoutsDir: "./src/helper", // location of handlebars templates
+                                layoutsDir: join(__dirname, "../helper"), // location of handlebars templates
                                 defaultLayout: "cancel-payment", // name of main template
-                                partialsDir: "./src/helper", // location of your subtemplates aka. header, footer etc
+                                partialsDir: join(__dirname, "../helper"), // location of your subtemplates aka. header, footer etc
                             },
-                            viewPath: "./src/helper",
+                            viewPath: join(__dirname, "../helper"),
                             extName: ".html",
                         })
                     );
@@ -340,11 +343,11 @@ module.exports = {
                 hbs({
                     viewEngine: {
                         extname: ".html", // html extension
-                        layoutsDir: "./src/helper", // location of handlebars templates
+                        layoutsDir: join(__dirname, "../helper"), // location of handlebars templates
                         defaultLayout: "cancel-payment", // name of main template
-                        partialsDir: "./src/helper", // location of your subtemplates aka. header, footer etc
+                        partialsDir: join(__dirname, "../helper"), // location of your subtemplates aka. header, footer etc
                     },
-                    viewPath: "./src/helper",
+                    viewPath: join(__dirname, "../helper"),
                     extName: ".html",
                 })
             );
@@ -420,11 +423,11 @@ module.exports = {
                 hbs({
                     viewEngine: {
                         extname: ".html", // html extension
-                        layoutsDir: "./src/helper", // location of handlebars templates
+                        layoutsDir: join(__dirname, "../helper"), // location of handlebars templates
                         defaultLayout: "reject-payment", // name of main template
-                        partialsDir: "./src/helper", // location of your subtemplates aka. header, footer etc
+                        partialsDir: join(__dirname, "../helper"), // location of your subtemplates aka. header, footer etc
                     },
-                    viewPath: "./src/helper",
+                    viewPath: join(__dirname, "../helper"),
                     extName: ".html",
                 })
             );
@@ -458,11 +461,11 @@ module.exports = {
                         hbs({
                             viewEngine: {
                                 extname: ".html", // html extension
-                                layoutsDir: "./src/helper", // location of handlebars templates
+                                layoutsDir: join(__dirname, "../helper"), // location of handlebars templates
                                 defaultLayout: "cancel-payment", // name of main template
-                                partialsDir: "./src/helper", // location of your subtemplates aka. header, footer etc
+                                partialsDir: join(__dirname, "../helper"), // location of your subtemplates aka. header, footer etc
                             },
-                            viewPath: "./src/helper",
+                            viewPath: join(__dirname, "../helper"),
                             extName: ".html",
                         })
                     );
@@ -560,7 +563,7 @@ module.exports = {
 
             // CREATE PDF
             const templateHtmlToPdf = fs.readFileSync(
-                path.join(process.cwd(), "src/helper/invoice.html"),
+                path.join(__dirname, "../helper/invoice.html"),
                 "utf8"
             );
             const template = handlebars.compile(templateHtmlToPdf);
@@ -606,11 +609,11 @@ module.exports = {
                 hbs({
                     viewEngine: {
                         extname: ".html", // html extension
-                        layoutsDir: "./src/helper", // location of handlebars templates
+                        layoutsDir: join(__dirname, "../helper"), // location of handlebars templates
                         defaultLayout: "email-voucer", // name of main template
-                        partialsDir: "./src/helper", // location of your subtemplates aka. header, footer etc
+                        partialsDir: join(__dirname, "../helper"), // location of your subtemplates aka. header, footer etc
                     },
-                    viewPath: "./src/helper",
+                    viewPath: join(__dirname, "../helper"),
                     extName: ".html",
                 })
             );

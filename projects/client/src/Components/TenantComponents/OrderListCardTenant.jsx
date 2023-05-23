@@ -39,7 +39,7 @@ export default function OrderListCardTenant(props) {
     const updateTransactionStatus = async () => {
         setLoadingButton(true)
         let update = await axios.patch(
-            `${process.env.REACT_APP_API_BASE_URL}/transaction/confirmtransaction`,
+            `${process.env.REACT_APP_API_BASE_URL}/transaction/confirm`,
             {
                 transaction_statusId: 3,
                 uuid: props.uuidTransaction,
@@ -58,7 +58,7 @@ export default function OrderListCardTenant(props) {
     const rejectTransaction = async () => {
         setLoadingButton(true)
         let update = await axios.patch(
-            `${process.env.REACT_APP_API_BASE_URL}/transaction/rejecttransaction`,
+            `${process.env.REACT_APP_API_BASE_URL}/transaction/reject`,
             {
                 uuid: props.uuidTransaction,
             },

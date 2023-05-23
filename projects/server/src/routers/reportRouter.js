@@ -5,8 +5,8 @@ const route = require("express").Router();
 route.get("/income", reportController.getIncomeToday);
 route.get("/users", reportController.getUserPerDay);
 
-route.get("/transactionchart", reportController.transactionChart);
-route.get("/propertychart/:idProperty", reportController.propertyChart);
-route.get("/userchart", reportController.userChart);
+route.get("/transaction-chart", reportController.transactionChart);
+route.get("/property-chart/:idProperty", reportController.propertyChart);
+route.get("/user-chart", reportController.userChart);
 
 module.exports = route;

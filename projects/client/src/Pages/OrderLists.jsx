@@ -52,7 +52,7 @@ export default function OrderLists() {
     const getOrderList = async () => {
         setLoadingButton(true)
         let get = await axios.get(
-            `${process.env.REACT_APP_API_BASE_URL}/order/getallorder?page=${page}&size=${size}&status=${transactionStatusId}&invoice=${invoice}&sortby=${sortBy}&order=${order}&start=${start}&end=${end}`,
+            `${process.env.REACT_APP_API_BASE_URL}/order?page=${page}&size=${size}&status=${transactionStatusId}&invoice=${invoice}&sortby=${sortBy}&order=${order}&start=${start}&end=${end}`,
             {
                 headers: {
                     Authorization: `Bearer ${token}`,

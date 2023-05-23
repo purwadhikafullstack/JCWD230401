@@ -88,7 +88,7 @@ function AddRoom(props) {
         try {
             let token = localStorage.getItem("tempatku_login");
             let get = await axios.get(
-                `${process.env.REACT_APP_API_BASE_URL}/room/getpropertynameandid`,
+                `${process.env.REACT_APP_API_BASE_URL}/room/property-name-and-id`,
                 {
                     headers: {
                         Authorization: `Bearer ${token}`,
@@ -139,7 +139,7 @@ function AddRoom(props) {
 
             console.log("FormData:", formData);
             let add = await axios.post(
-                `${process.env.REACT_APP_API_BASE_URL}/room/addroom`,
+                `${process.env.REACT_APP_API_BASE_URL}/room/create`,
                 formData,
                 {
                     headers: {

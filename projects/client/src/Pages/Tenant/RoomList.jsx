@@ -65,7 +65,7 @@ function RoomList(props) {
         try {
             let token = localStorage.getItem("tempatku_login");
             let get = await axios.get(
-                `${process.env.REACT_APP_API_BASE_URL}/room/getlistroom?page=${page}&size=${size}&sortby=${name}&order=${order}&name=${filter}&uuid=${param.uuid}`,
+                `${process.env.REACT_APP_API_BASE_URL}/room/list?page=${page}&size=${size}&sortby=${name}&order=${order}&name=${filter}&uuid=${param.uuid}`,
                 {
                     headers: {
                         Authorization: `Bearer ${token}`,
