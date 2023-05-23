@@ -2,15 +2,14 @@ const maintenanceController = require("../controllers/maintenanceController");
 const { readToken } = require("../helper/jwt");
 const route = require("express").Router();
 
-route.post("/addmaintenance", maintenanceController.createMaintenance);
+route.post("/create", maintenanceController.createMaintenance);
 
-route.get(
-    "/getmaintenancebyroomuuid/:uuid",
-    maintenanceController.listMaintenance
-);
+route.get("/room/:uuid", maintenanceController.listMaintenance);
 
-route.patch("/deletemaintenance", maintenanceController.deleteMaintenance);
+route.get("/data/:uuid", maintenanceController.getRoomData);
 
-route.patch("/editactive/:uuid", maintenanceController.editIsActiveMaintenance)
+route.patch("/delete", maintenanceController.deleteMaintenance);
+
+route.patch("/active/:uuid", maintenanceController.editIsActiveMaintenance);
 
 module.exports = route;

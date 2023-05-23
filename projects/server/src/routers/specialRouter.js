@@ -3,15 +3,17 @@ const { readToken } = require("../helper/jwt");
 const route = require("express").Router();
 
 
-route.post("/addspecialprice", specialController.createSpecialPrice)
+route.post("/create", specialController.createSpecialPrice)
 
 route.get(
-    "/getspecialpricebyroomuuid/:uuid",
+    "/room/:uuid",
     specialController.listSpecialPrice
 );
 
-route.patch("/deletespecialprice", specialController.deleteSpecialPrice);
+route.get("/data/:uuid", specialController.getRoomData)
 
-route.patch("/editactive/:uuid", specialController.editIsActiveSpecial)
+route.patch("/delete", specialController.deleteSpecialPrice);
+
+route.patch("/active/:uuid", specialController.editIsActiveSpecial)
 
 module.exports = route;

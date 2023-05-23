@@ -21,6 +21,7 @@ import {
     useDisclosure,
     Box,
     Flex,
+    useToast,
 } from "@chakra-ui/react";
 import axios from "axios";
 import { Link } from "react-router-dom";
@@ -31,12 +32,14 @@ function RoomTable(props) {
         const cancelRef = React.useRef();
         const [loading, setLoading] = useState(false);
 
+        const toast = useToast();
+
         const deleteRoom = async () => {
             try {
                 setLoading(true);
                 let token = localStorage.getItem("tempatku_login");
                 let del = await axios.patch(
-                    `${process.env.REACT_APP_API_BASE_URL}/room/deleteroom/${props.uuid}`,
+                    `${process.env.REACT_APP_API_BASE_URL}/room/delete/${props.uuid}`,
                     {},
                     {
                         headers: {
@@ -45,6 +48,12 @@ function RoomTable(props) {
                     }
                 );
                 onClose();
+                toast({
+                    title: "Room Deleted !",
+                    status: "success",
+                    duration: 3500,
+                    isClosable: true,
+                });
                 props.getAllRoomList();
             } catch (error) {
                 console.log(error);

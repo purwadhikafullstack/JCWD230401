@@ -90,7 +90,7 @@ function AddProperty(props) {
     const getProvince = async () => {
         try {
             let get = await axios.get(
-                `${process.env.REACT_APP_API_BASE_URL}/property/getprovince`
+                `${process.env.REACT_APP_API_BASE_URL}/property/provinces`
             );
             setAllProvince(get.data);
         } catch (error) {
@@ -112,7 +112,7 @@ function AddProperty(props) {
     const getRegencyById = async () => {
         try {
             let get = await axios.post(
-                `${process.env.REACT_APP_API_BASE_URL}/property/getregencybyid`,
+                `${process.env.REACT_APP_API_BASE_URL}/property/regencies`,
                 {
                     province_id: province.value,
                 }
@@ -171,7 +171,6 @@ function AddProperty(props) {
                         gmaps: mapsUrl,
                     })
                 );
-                console.log("formData", formData);
 
                 if (fileProperty != null) {
                     let temp = [...fileProperty];
@@ -181,7 +180,7 @@ function AddProperty(props) {
                 }
 
                 let add = await axios.post(
-                    `${process.env.REACT_APP_API_BASE_URL}/property/addproperty`,
+                    `${process.env.REACT_APP_API_BASE_URL}/property/create`,
                     formData,
                     {
                         headers: {
@@ -232,14 +231,6 @@ function AddProperty(props) {
         }
     }, [province]);
 
-    console.log("allProvince", allProvince);
-    console.log("allRegency", allRegency);
-    console.log("regencies", regencies);
-    console.log("Province:", province);
-    console.log("Regency:", regency);
-    console.log("description", description);
-    console.log("fileProperty", fileProperty);
-
     return (
         <Container
             my={"4"}
@@ -250,8 +241,8 @@ function AddProperty(props) {
             flexDir="column"
         >
             <Box
-                border={"none"}
-                shadow={"2xl"}
+                border={"1px"}
+                borderColor={"gray.300"}
                 rounded={"3xl"}
                 px={"8"}
                 mb={"10"}

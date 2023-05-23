@@ -61,8 +61,14 @@ function SalesReport(props) {
 
     const getProperty = async () => {
         try {
+            let token = localStorage.getItem("tempatku_login");
             let get = await axios.get(
-                `${process.env.REACT_APP_API_BASE_URL}/room/getpropertynameandid`
+                `${process.env.REACT_APP_API_BASE_URL}/room/property-name-and-id`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
             );
             setAllProperty(get.data);
         } catch (error) {
@@ -83,10 +89,9 @@ function SalesReport(props) {
     const getTransactionChart = async () => {
         try {
             let get = await axios.get(
-                `${process.env.REACT_APP_API_BASE_URL}/report/transactionchart?start=${startDateTransaction}&end=${endDateTransaction}`
+                `${process.env.REACT_APP_API_BASE_URL}/report/transaction-chart?start=${startDateTransaction}&end=${endDateTransaction}`
             );
             setTransactionDataChart(get.data.data);
-            console.log("getinfooo", get.data.data);
         } catch (error) {
             console.log(error);
         }
@@ -95,25 +100,19 @@ function SalesReport(props) {
     const getPropertyChart = async () => {
         try {
             let get = await axios.get(
-                `${process.env.REACT_APP_API_BASE_URL}/report/propertychart/${property.value}?start=${startDateProperty}&end=${endDateProperty}`
+                `${process.env.REACT_APP_API_BASE_URL}/report/property-chart/${property.value}?start=${startDateProperty}&end=${endDateProperty}`
             );
             setPropertyDataChart(get.data.data);
-            console.log("GET PROPERTYCHART:", get.data.data);
         } catch (error) {
             console.log(error);
         }
     };
-
-    console.log("transactionDataChart", transactionDataChart);
-    console.log("propertyDataChart", propertyDataChart);
-    console.log("userDataChart", userDataChart);
 
     const getUsers = async () => {
         try {
             let get = await axios.get(
                 `${process.env.REACT_APP_API_BASE_URL}/report/users?start=${startDateUsers}&end=${endDateUsers}`
             );
-            console.log("GET USERS TOTAL", get);
             setUsers();
         } catch (error) {
             console.log(error);
@@ -123,10 +122,9 @@ function SalesReport(props) {
     const getUserChart = async () => {
         try {
             let get = await axios.get(
-                `${process.env.REACT_APP_API_BASE_URL}/report/userchart?start=${startDateUsers}&end=${endDateUsers}`
+                `${process.env.REACT_APP_API_BASE_URL}/report/user-chart?start=${startDateUsers}&end=${endDateUsers}`
             );
             setUserDataChart(get.data.data);
-            console.log("GET USER CHART", get);
         } catch (error) {
             console.log(error);
         }
@@ -156,17 +154,19 @@ function SalesReport(props) {
         getUserChart();
     }, []);
 
-    const shadowBox = { borderRadius: "10px", boxShadow: "1px 1px 5px gray" };
-
-    console.log("property:", property);
-
     return (
         <>
             <Flex minH={"93vh"}>
                 <Box>
                     <Sidebar />
                 </Box>
-                <Box w="full" flex="5" px={{ base: "1", sm: "4" }} mt="5">
+                <Box
+                    w="full"
+                    flex="5"
+                    px={{ base: "1", sm: "4" }}
+                    mt="5"
+                    pb={"6"}
+                >
                     <Heading
                         lineHeight={1.1}
                         fontSize={{ base: "2xl", md: "3xl" }}
@@ -189,7 +189,8 @@ function SalesReport(props) {
                         >
                             {/* Transaction */}
                             <Card
-                                style={shadowBox}
+                                borderColor={"gray.300"}
+                                borderWidth={"1px"}
                                 borderRadius="2xl"
                                 maxH={{ md: "5xl" }}
                                 maxW={{ md: "5xl" }}
@@ -375,8 +376,9 @@ function SalesReport(props) {
                                 maxW={{ base: "unset", md: "5xl" }}
                             >
                                 <Card
-                                    style={shadowBox}
                                     borderRadius="2xl"
+                                    borderColor={"gray.300"}
+                                    borderWidth={"1px"}
                                     maxH={{ md: "4xl" }}
                                 >
                                     <CardBody>
@@ -548,17 +550,6 @@ function SalesReport(props) {
                                         </Box>
 
                                         <Box
-                                            fontSize={{
-                                                base: "3xl",
-                                                md: "5xl",
-                                                lg: "5xl",
-                                            }}
-                                            fontWeight="bold"
-                                            letterSpacing="tighter"
-                                        >
-                                            {users}
-                                        </Box>
-                                        <Box
                                             mt={{ base: "2", md: "2", lg: "2" }}
                                             borderRadius="2xl"
                                         >
@@ -584,8 +575,9 @@ function SalesReport(props) {
                                 maxW={{ base: "unset", md: "5xl" }}
                             >
                                 <Card
-                                    style={shadowBox}
                                     borderRadius="2xl"
+                                    borderColor={"gray.300"}
+                                    borderWidth={"1px"}
                                     maxH={{ md: "4xl" }}
                                 >
                                     <CardBody>
@@ -729,17 +721,6 @@ function SalesReport(props) {
                                             </Flex>
                                         </Box>
 
-                                        <Box
-                                            fontSize={{
-                                                base: "3xl",
-                                                md: "5xl",
-                                                lg: "5xl",
-                                            }}
-                                            fontWeight="bold"
-                                            letterSpacing="tighter"
-                                        >
-                                            {users}
-                                        </Box>
                                         <Box
                                             mt={{ base: "2", md: "2", lg: "2" }}
                                             borderRadius="2xl"

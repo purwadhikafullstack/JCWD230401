@@ -10,7 +10,6 @@ module.exports = {
                     isDeleted: false,
                 },
             });
-            console.log("get all categories:", get);
             return res.status(200).send({
                 success: true,
                 data: get,
@@ -26,7 +25,6 @@ module.exports = {
                 uuid: uuidv4(),
                 category: req.body.category,
             });
-            console.log("add category", add);
             return res.status(200).send({
                 success: true,
                 message: "Added new category",
@@ -65,8 +63,6 @@ module.exports = {
                 where: { uuid: req.params.uuid },
                 attributes: ["picture"],
             });
-            console.log("req.body.data", req.body.data);
-            console.log("req.files", req.files);
             let { category } = JSON.parse(req.body.data);
             if (req.files.length === 0) {
                 let edit = await model.category.update(
@@ -79,7 +75,6 @@ module.exports = {
                         },
                     }
                 );
-                console.log("Data edit:", edit);
                 res.status(200).send({
                     success: true,
                     message: "Category edited",

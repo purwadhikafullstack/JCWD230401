@@ -13,17 +13,12 @@ import {
     FormLabel,
     Image,
     useToast,
-    Checkbox,
-    CheckboxGroup,
-    useCheckbox,
-    useCheckboxGroup,
-    Stack,
 } from "@chakra-ui/react";
 import { HiTrash } from "react-icons/hi2";
 import { SlPicture } from "react-icons/sl";
 import { useParams } from "react-router-dom";
 
-function ManageRoom() {
+function ManageRoom(props) {
     const params = useParams();
 
     const toast = useToast();
@@ -36,14 +31,6 @@ function ManageRoom() {
     const inputFile4 = useRef(null);
     const inputFile5 = useRef(null);
 
-    const [roomData, setRoomData] = useState(null);
-    const [roomName, setRoomName] = useState("");
-    const [description, setDescription] = useState("");
-    const [descriptionLength, setDescriptionLength] = useState(0);
-    const [roomCapacity, setRoomCapacity] = useState("");
-    const [roomPrice, setRoomPrice] = useState("");
-    const [property, setProperty] = useState(null);
-
     const [fileRoomEdit1, setFileRoomEdit1] = useState(null);
     const [fileRoomEdit2, setFileRoomEdit2] = useState(null);
     const [fileRoomEdit3, setFileRoomEdit3] = useState(null);
@@ -54,14 +41,13 @@ function ManageRoom() {
         try {
             let token = localStorage.getItem("tempatku_login");
             let get = await axios.get(
-                `${process.env.REACT_APP_API_BASE_URL}/room/getroomdata/${params.uuid}`,
+                `${process.env.REACT_APP_API_BASE_URL}/room/data/${params.uuid}`,
                 {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
                 }
             );
-            console.log("get", get);
             setRoomData(get.data.data[0]);
             setFileRoomEdit1(get.data.data[0].picture_rooms[0]);
             setFileRoomEdit2(get.data.data[0].picture_rooms[1]);
@@ -73,6 +59,13 @@ function ManageRoom() {
         }
     };
 
+    const [roomData, setRoomData] = useState(null);
+    const [roomName, setRoomName] = useState(roomData?.room_category?.name);
+    const [description, setDescription] = useState(roomData?.description);
+    const [descriptionLength, setDescriptionLength] = useState(0);
+    const [roomCapacity, setRoomCapacity] = useState(roomData?.capacity);
+    const [roomPrice, setRoomPrice] = useState(roomData?.price);
+
     const uploadImageRoom = async (imageFile, id, roomId) => {
         try {
             setLoading(true);
@@ -82,7 +75,7 @@ function ManageRoom() {
             formData.append("images", imageFile);
 
             let edit = await axios.patch(
-                `${process.env.REACT_APP_API_BASE_URL}/room/updateimageroom?id=${id}&roomId=${roomData.id}`,
+                `${process.env.REACT_APP_API_BASE_URL}/room/update-image?id=${id}&roomId=${roomData.id}`,
                 formData,
                 {
                     headers: {
@@ -111,7 +104,7 @@ function ManageRoom() {
             setLoading(true);
             let token = localStorage.getItem("tempatku_login");
             let del = await axios.patch(
-                `${process.env.REACT_APP_API_BASE_URL}/room/deleteimageroom?id=${id}`,
+                `${process.env.REACT_APP_API_BASE_URL}/room/delete-image?id=${id}`,
                 {
                     headers: {
                         Authorization: `Bearer ${token}`,
@@ -222,7 +215,7 @@ function ManageRoom() {
             let token = localStorage.getItem("tempatku_login");
 
             let edit = await axios.patch(
-                `${process.env.REACT_APP_API_BASE_URL}/room/editroom/${params.uuid}`,
+                `${process.env.REACT_APP_API_BASE_URL}/room/edit/${params.uuid}`,
                 {
                     name: roomName,
                     description: description,
@@ -255,10 +248,6 @@ function ManageRoom() {
         getRoomData();
     }, []);
 
-    // console.log("roomData:", roomData);
-    // console.log("property:", property);
-    // console.log("Roomname:", roomName);
-
     return (
         <Container
             my={"4"}
@@ -269,8 +258,8 @@ function ManageRoom() {
             flexDir="column"
         >
             <Box
-                border={"none"}
-                shadow={"2xl"}
+                border={"1px"}
+                borderColor={"gray.300"}
                 rounded={"3xl"}
                 px={"8"}
                 mb={"10"}

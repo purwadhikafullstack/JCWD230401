@@ -34,7 +34,7 @@ function MaintenanceTable(props) {
             try {
                 let token = localStorage.getItem("tempatku_login");
                 let del = await axios.patch(
-                    `${process.env.REACT_APP_API_BASE_URL}/maintenance/deletemaintenance`,
+                    `${process.env.REACT_APP_API_BASE_URL}/maintenance/delete`,
                     { uuid: props.uuidMaintenance },
                     {
                         headers: {
@@ -111,7 +111,7 @@ function MaintenanceTable(props) {
     const editIsActiveMaintenance = async () => {
         let token = localStorage.getItem("tempatku_login");
         let edit = await axios.patch(
-            `${process.env.REACT_APP_API_BASE_URL}/maintenance/editactive/${props.uuidMaintenance}`,
+            `${process.env.REACT_APP_API_BASE_URL}/maintenance/active/${props.uuidMaintenance}`,
             {},
             {
                 headers: { Authorization: `Bearer ${token}` },

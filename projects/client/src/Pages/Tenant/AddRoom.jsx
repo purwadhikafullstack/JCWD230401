@@ -48,13 +48,11 @@ function AddRoom(props) {
         });
         return overSize;
     };
-    console.log("fileRoom", fileRoom);
     const onChangeFile = (event) => {
         const files = [...event.target.files];
         const overSize = checkFileSize(files);
         const fileAmount = files.length;
-        console.log("files:", files);
-        console.log("event.target.files:", event.target.files);
+
         if (overSize) {
             toast({
                 title: "Error occured",
@@ -88,7 +86,7 @@ function AddRoom(props) {
         try {
             let token = localStorage.getItem("tempatku_login");
             let get = await axios.get(
-                `${process.env.REACT_APP_API_BASE_URL}/room/getpropertynameandid`,
+                `${process.env.REACT_APP_API_BASE_URL}/room/property-name-and-id`,
                 {
                     headers: {
                         Authorization: `Bearer ${token}`,
@@ -101,7 +99,6 @@ function AddRoom(props) {
         }
     };
 
-    console.log("INI GET ID & NAME PROPERTY:", allPropertyByUserId);
 
     const propertyOptions = allPropertyByUserId.map((val, idx) => {
         return { value: val.value, label: val.label };
@@ -134,12 +131,10 @@ function AddRoom(props) {
                 temp.forEach((val, idx) => {
                     formData.append("images", temp[idx]);
                 });
-                console.log("temp:", temp);
             }
 
-            console.log("FormData:", formData);
             let add = await axios.post(
-                `${process.env.REACT_APP_API_BASE_URL}/room/addroom`,
+                `${process.env.REACT_APP_API_BASE_URL}/room/create`,
                 formData,
                 {
                     headers: {
@@ -175,9 +170,6 @@ function AddRoom(props) {
         getPropertyNameAndId();
     }, []);
 
-    console.log("property:", property);
-    console.log("Roomname:", roomName);
-
     return (
         <Container
             my={"4"}
@@ -188,8 +180,8 @@ function AddRoom(props) {
             flexDir="column"
         >
             <Box
-                border={"none"}
-                shadow={"2xl"}
+                border={"1px"}
+                borderColor={"gray.300"}
                 rounded={"3xl"}
                 px={"8"}
                 mb={"10"}

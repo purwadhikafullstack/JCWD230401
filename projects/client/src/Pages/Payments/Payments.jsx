@@ -60,7 +60,7 @@ export default function Payments() {
     const [image, setImage] = useState('');
     const getDetails = async () => {
         let get = await axios.get(
-            `${process.env.REACT_APP_API_BASE_URL}/room/roompayment?uuid=${params.uuid}`,
+            `${process.env.REACT_APP_API_BASE_URL}/room/payment?uuid=${params.uuid}`,
             {
                 headers: {
                     Authorization: `Bearer ${token}`,
