@@ -15,8 +15,10 @@ import TransactionChart from "./TransactionChart";
 import PropertyChart from "./PropertyChart";
 import UserChart from "./UserChart";
 import Sidebar from "./Sidebar";
+import Loading from "./Loading";
 
 function SalesReport(props) {
+    const [loadingPage, setLoadingPage] = useState(true);
     const today = new Date()
         .toLocaleString("sv", { timeZone: "Asia/Jakarta" })
         .split(" ")[0];
@@ -154,232 +156,56 @@ function SalesReport(props) {
         getUserChart();
     }, []);
 
-    return (
-        <>
-            <Flex minH={"93vh"}>
-                <Box>
-                    <Sidebar />
-                </Box>
-                <Box
-                    w="full"
-                    flex="5"
-                    px={{ base: "1", sm: "4" }}
-                    mt="5"
-                    pb={"6"}
-                >
-                    <Heading
-                        lineHeight={1.1}
-                        fontSize={{ base: "2xl", md: "3xl" }}
-                        textAlign={{ base: "center", sm: "start" }}
-                    >
-                        Statistics
-                    </Heading>
-                    <Box
-                        display={"flex"}
-                        flexDir={{ base: "column", md: "row", lg: "row" }}
-                        mt="5"
-                    >
-                        {/* Box 1 */}
-                        <Box
-                            flex={"3"}
-                            display={{ base: "block", md: "flex", lg: "flex" }}
-                            flexDir="column"
-                            justifyContent="center"
-                            w={{ base: "100%", md: "xl" }}
-                        >
-                            {/* Transaction */}
-                            <Card
-                                borderColor={"gray.300"}
-                                borderWidth={"1px"}
-                                borderRadius="2xl"
-                                maxH={{ md: "5xl" }}
-                                maxW={{ md: "5xl" }}
-                                minH={{ md: "807px" }}
-                            >
-                                <CardBody>
-                                    <Box
-                                        display={{
-                                            base: "block",
-                                            md: "flex",
-                                            lg: "flex",
-                                        }}
-                                        justifyContent={{
-                                            base: "flex-start",
-                                            md: "space-between",
-                                            lg: "space-between",
-                                        }}
-                                        alignItems={{
-                                            base: "flex-start",
-                                            md: "center",
-                                            lg: "center",
-                                        }}
-                                        flexDir={{
-                                            base: "column",
-                                            md: "row",
-                                            lg: "row",
-                                        }}
-                                        py={{ base: "1", md: "1", lg: "1" }}
-                                    >
-                                        <Text
-                                            color="#D3212D"
-                                            fontSize={{
-                                                base: "3xl",
-                                                md: "4xl",
-                                                lg: "4xl",
-                                            }}
-                                            fontWeight="extrabold"
-                                            w={{
-                                                base: "100%",
-                                                md: "xl",
-                                                lg: "xl",
-                                            }}
-                                            opacity="inherit"
-                                        >
-                                            Total Revenue
-                                        </Text>
-                                    </Box>
-                                    <Flex flexDir={"column"}>
-                                        <Flex>
-                                            <Text
-                                                fontSize={"12px"}
-                                                letterSpacing={"tighter"}
-                                            >
-                                                *Choose a date / date range
-                                            </Text>
-                                        </Flex>
-                                        <Flex
-                                            ml={{
-                                                base: "0",
-                                                md: "0",
-                                                lg: "0",
-                                            }}
-                                            my={{
-                                                base: "0",
-                                                md: "4",
-                                                lg: "4",
-                                            }}
-                                        >
-                                            <Box display="flex" my="auto">
-                                                <Input
-                                                    type="date"
-                                                    mr={{
-                                                        base: "4px",
-                                                        md: "3",
-                                                    }}
-                                                    mb={{ base: "0", md: "0" }}
-                                                    width={{
-                                                        base: "100%",
-                                                        md: "auto",
-                                                    }}
-                                                    maxW={{
-                                                        base: "155px",
-                                                        md: "unset",
-                                                    }}
-                                                    onChange={(e) =>
-                                                        setStartDateTransaction(
-                                                            e.target.value
-                                                        )
-                                                    }
-                                                    defaultValue={weekAgo}
-                                                    focusBorderColor="#D3212D"
-                                                    borderColor="#D3212D"
-                                                    borderWidth="2px"
-                                                    _placeholder={{
-                                                        color: "#D3212D",
-                                                    }}
-                                                    letterSpacing={"tighter"}
-                                                    fontWeight={"semibold"}
-                                                    _hover={""}
-                                                />
-                                                <Input
-                                                    type="date"
-                                                    ml={{
-                                                        base: "4px",
-                                                        md: "3",
-                                                    }}
-                                                    width={{
-                                                        base: "100%",
-                                                        md: "auto",
-                                                    }}
-                                                    maxW={{
-                                                        base: "155px",
-                                                        md: "unset",
-                                                    }}
-                                                    onChange={(e) =>
-                                                        setEndDateTransaction(
-                                                            e.target.value
-                                                        )
-                                                    }
-                                                    defaultValue={today}
-                                                    focusBorderColor="#D3212D"
-                                                    borderColor="#D3212D"
-                                                    borderWidth="2px"
-                                                    _placeholder={{
-                                                        color: "#D3212D",
-                                                    }}
-                                                    letterSpacing={"tighter"}
-                                                    fontWeight={"semibold"}
-                                                    _hover={""}
-                                                />
-                                            </Box>
-                                        </Flex>
-                                    </Flex>
+    useEffect(() => {
+        setTimeout(() => {
+            setLoadingPage(false);
+        }, 1700);
+    }, []);
 
-                                    <Box
-                                        fontSize={{
-                                            base: "3xl",
-                                            md: "6xl",
-                                            lg: "6xl",
-                                        }}
-                                        fontWeight="bold"
-                                        letterSpacing="tighter"
-                                    >
-                                        {totalincome}
-                                    </Box>
-                                    <Box
-                                        mt={{ base: "8", md: "4", lg: "4" }}
-                                        borderRadius="2xl"
-                                    >
-                                        <TransactionChart
-                                            transactiondatachart={
-                                                transactionDataChart
-                                            }
-                                            maxH="2xl"
-                                        />
-                                    </Box>
-                                </CardBody>
-                            </Card>
-                        </Box>
-                        {/* Box 2 */}
-                        <Box
-                            flex={"1"}
-                            display="flex"
-                            flexDir={"column"}
-                            justifyContent={{
-                                base: "flex-start",
-                                md: "space-between",
-                                lg: "space-between",
-                            }}
-                            ml={{ base: "0", md: "0" }}
-                            minW={{ base: "100%", md: "xl" }}
+    if (loadingPage) {
+        return <Loading />
+    } else {
+        return (
+            <>
+                <Flex minH={"93vh"}>
+                    <Box>
+                        <Sidebar />
+                    </Box>
+                    <Box
+                        w="full"
+                        flex="5"
+                        px={{ base: "1", sm: "4" }}
+                        mt="5"
+                        pb={"6"}
+                    >
+                        <Heading
+                            lineHeight={1.1}
+                            fontSize={{ base: "2xl", md: "3xl" }}
+                            textAlign={{ base: "center", sm: "start" }}
                         >
-                            {/* Property */}
+                            Statistics
+                        </Heading>
+                        <Box
+                            display={"flex"}
+                            flexDir={{ base: "column", md: "row", lg: "row" }}
+                            mt="5"
+                        >
+                            {/* Box 1 */}
                             <Box
-                                display={{
-                                    base: "block",
-                                    md: "flex",
-                                    lg: "flex",
-                                }}
+                                flex={"3"}
+                                display={{ base: "block", md: "flex", lg: "flex" }}
                                 flexDir="column"
                                 justifyContent="center"
-                                w={{ base: "100%", md: "md", lg: "md" }}
-                                maxW={{ base: "unset", md: "5xl" }}
+                                w={{ base: "100%", md: "xl" }}
                             >
+                                {/* Transaction */}
                                 <Card
-                                    borderRadius="2xl"
                                     borderColor={"gray.300"}
                                     borderWidth={"1px"}
-                                    maxH={{ md: "4xl" }}
+                                    borderRadius="2xl"
+                                    maxH={{ md: "5xl" }}
+                                    maxW={{ md: "5xl" }}
+                                    minH={{ md: "807px" }}
                                 >
                                     <CardBody>
                                         <Box
@@ -403,341 +229,527 @@ function SalesReport(props) {
                                                 md: "row",
                                                 lg: "row",
                                             }}
+                                            py={{ base: "1", md: "1", lg: "1" }}
                                         >
-                                            <Flex flexDir={"column"}>
-                                                <Text
-                                                    color="#D3212D"
-                                                    fontSize={{
-                                                        base: "3xl",
-                                                        md: "4xl",
-                                                        lg: "4xl",
-                                                    }}
-                                                    fontWeight="extrabold"
-                                                >
-                                                    Property
-                                                </Text>
-                                                <Flex>
-                                                    <Text
-                                                        fontSize={"12px"}
-                                                        letterSpacing={
-                                                            "tighter"
-                                                        }
-                                                    >
-                                                        *Choose a property
-                                                    </Text>
-                                                </Flex>
-                                                <Box>
-                                                    <FormControl>
-                                                        <Select
-                                                            useBasicStyles
-                                                            name="property"
-                                                            options={
-                                                                propertyOptions
-                                                            }
-                                                            placeholder="Select property"
-                                                            closeMenuOnSelect={
-                                                                true
-                                                            }
-                                                            {...selectProperty}
-                                                        />
-                                                    </FormControl>
-                                                </Box>
-                                                <Flex>
-                                                    <Text
-                                                        fontSize={"12px"}
-                                                        letterSpacing={
-                                                            "tighter"
-                                                        }
-                                                    >
-                                                        *Choose a date / date
-                                                        range
-                                                    </Text>
-                                                </Flex>
-                                                <Flex
-                                                    ml={{
-                                                        base: "0",
-                                                        md: "auto",
-                                                        lg: "auto",
-                                                    }}
-                                                >
-                                                    <Box
-                                                        display="flex"
-                                                        my="auto"
-                                                    >
-                                                        <Input
-                                                            type="date"
-                                                            mr={{
-                                                                base: "4px",
-                                                                md: "3",
-                                                            }}
-                                                            mb={{
-                                                                base: "0",
-                                                                md: "0",
-                                                                lg: "0",
-                                                            }}
-                                                            width={{
-                                                                base: "100%",
-                                                                md: "auto",
-                                                            }}
-                                                            maxW={{
-                                                                base: "150px",
-                                                                md: "155px",
-                                                                lg: "155px",
-                                                            }}
-                                                            onChange={(e) =>
-                                                                setStartDateProperty(
-                                                                    e.target
-                                                                        .value
-                                                                )
-                                                            }
-                                                            defaultValue={
-                                                                weekAgo
-                                                            }
-                                                            focusBorderColor="#D3212D"
-                                                            borderColor="#D3212D"
-                                                            borderWidth="2px"
-                                                            _placeholder={{
-                                                                color: "#D3212D",
-                                                            }}
-                                                            letterSpacing={
-                                                                "tighter"
-                                                            }
-                                                            fontWeight={
-                                                                "semibold"
-                                                            }
-                                                            _hover={""}
-                                                        />
-                                                        <Input
-                                                            type="date"
-                                                            ml={{
-                                                                base: "4px",
-                                                                md: "2",
-                                                                lg: "2",
-                                                            }}
-                                                            width={{
-                                                                base: "100%",
-                                                                md: "auto",
-                                                            }}
-                                                            maxW={{
-                                                                base: "150px",
-                                                                md: "155px",
-                                                                lg: "155px",
-                                                            }}
-                                                            onChange={(e) =>
-                                                                setEndDateProperty(
-                                                                    e.target
-                                                                        .value
-                                                                )
-                                                            }
-                                                            defaultValue={today}
-                                                            focusBorderColor="#D3212D"
-                                                            borderColor="#D3212D"
-                                                            borderWidth="2px"
-                                                            _placeholder={{
-                                                                color: "#D3212D",
-                                                            }}
-                                                            letterSpacing={
-                                                                "tighter"
-                                                            }
-                                                            fontWeight={
-                                                                "semibold"
-                                                            }
-                                                            _hover={""}
-                                                        />
-                                                    </Box>
-                                                </Flex>
-                                            </Flex>
+                                            <Text
+                                                color="#D3212D"
+                                                fontSize={{
+                                                    base: "3xl",
+                                                    md: "4xl",
+                                                    lg: "4xl",
+                                                }}
+                                                fontWeight="extrabold"
+                                                w={{
+                                                    base: "100%",
+                                                    md: "xl",
+                                                    lg: "xl",
+                                                }}
+                                                opacity="inherit"
+                                            >
+                                                Total Revenue
+                                            </Text>
                                         </Box>
+                                        <Flex flexDir={"column"}>
+                                            <Flex>
+                                                <Text
+                                                    fontSize={"12px"}
+                                                    letterSpacing={"tighter"}
+                                                >
+                                                    *Choose a date / date range
+                                                </Text>
+                                            </Flex>
+                                            <Flex
+                                                ml={{
+                                                    base: "0",
+                                                    md: "0",
+                                                    lg: "0",
+                                                }}
+                                                my={{
+                                                    base: "0",
+                                                    md: "4",
+                                                    lg: "4",
+                                                }}
+                                            >
+                                                <Box display="flex" my="auto">
+                                                    <Input
+                                                        type="date"
+                                                        mr={{
+                                                            base: "4px",
+                                                            md: "3",
+                                                        }}
+                                                        mb={{ base: "0", md: "0" }}
+                                                        width={{
+                                                            base: "100%",
+                                                            md: "auto",
+                                                        }}
+                                                        maxW={{
+                                                            base: "155px",
+                                                            md: "unset",
+                                                        }}
+                                                        onChange={(e) =>
+                                                            setStartDateTransaction(
+                                                                e.target.value
+                                                            )
+                                                        }
+                                                        defaultValue={weekAgo}
+                                                        focusBorderColor="#D3212D"
+                                                        borderColor="#D3212D"
+                                                        borderWidth="2px"
+                                                        _placeholder={{
+                                                            color: "#D3212D",
+                                                        }}
+                                                        letterSpacing={"tighter"}
+                                                        fontWeight={"semibold"}
+                                                        _hover={""}
+                                                    />
+                                                    <Input
+                                                        type="date"
+                                                        ml={{
+                                                            base: "4px",
+                                                            md: "3",
+                                                        }}
+                                                        width={{
+                                                            base: "100%",
+                                                            md: "auto",
+                                                        }}
+                                                        maxW={{
+                                                            base: "155px",
+                                                            md: "unset",
+                                                        }}
+                                                        onChange={(e) =>
+                                                            setEndDateTransaction(
+                                                                e.target.value
+                                                            )
+                                                        }
+                                                        defaultValue={today}
+                                                        focusBorderColor="#D3212D"
+                                                        borderColor="#D3212D"
+                                                        borderWidth="2px"
+                                                        _placeholder={{
+                                                            color: "#D3212D",
+                                                        }}
+                                                        letterSpacing={"tighter"}
+                                                        fontWeight={"semibold"}
+                                                        _hover={""}
+                                                    />
+                                                </Box>
+                                            </Flex>
+                                        </Flex>
 
                                         <Box
-                                            mt={{ base: "2", md: "2", lg: "2" }}
+                                            fontSize={{
+                                                base: "3xl",
+                                                md: "6xl",
+                                                lg: "6xl",
+                                            }}
+                                            fontWeight="bold"
+                                            letterSpacing="tighter"
+                                        >
+                                            {totalincome}
+                                        </Box>
+                                        <Box
+                                            mt={{ base: "8", md: "4", lg: "4" }}
                                             borderRadius="2xl"
                                         >
-                                            <PropertyChart
-                                                propertydatachart={
-                                                    propertyDataChart
+                                            <TransactionChart
+                                                transactiondatachart={
+                                                    transactionDataChart
                                                 }
+                                                maxH="2xl"
                                             />
                                         </Box>
                                     </CardBody>
                                 </Card>
                             </Box>
-                            {/* Users */}
+                            {/* Box 2 */}
                             <Box
-                                display={{
-                                    base: "block",
-                                    md: "flex",
-                                    lg: "flex",
+                                flex={"1"}
+                                display="flex"
+                                flexDir={"column"}
+                                justifyContent={{
+                                    base: "flex-start",
+                                    md: "space-between",
+                                    lg: "space-between",
                                 }}
-                                flexDir="column"
-                                justifyContent="center"
-                                w={{ base: "100%", md: "md", lg: "md" }}
-                                maxW={{ base: "unset", md: "5xl" }}
+                                ml={{ base: "0", md: "0" }}
+                                minW={{ base: "100%", md: "xl" }}
                             >
-                                <Card
-                                    borderRadius="2xl"
-                                    borderColor={"gray.300"}
-                                    borderWidth={"1px"}
-                                    maxH={{ md: "4xl" }}
+                                {/* Property */}
+                                <Box
+                                    display={{
+                                        base: "block",
+                                        md: "flex",
+                                        lg: "flex",
+                                    }}
+                                    flexDir="column"
+                                    justifyContent="center"
+                                    w={{ base: "100%", md: "md", lg: "md" }}
+                                    maxW={{ base: "unset", md: "5xl" }}
                                 >
-                                    <CardBody>
-                                        <Box
-                                            display={{
-                                                base: "block",
-                                                md: "flex",
-                                                lg: "flex",
-                                            }}
-                                            justifyContent={{
-                                                base: "flex-start",
-                                                md: "space-between",
-                                                lg: "space-between",
-                                            }}
-                                            alignItems={{
-                                                base: "flex-start",
-                                                md: "center",
-                                                lg: "center",
-                                            }}
-                                            flexDir={{
-                                                base: "column",
-                                                md: "row",
-                                                lg: "row",
-                                            }}
-                                        >
-                                            <Flex flexDir={"column"}>
-                                                <Text
-                                                    color="#D3212D"
-                                                    fontSize={{
-                                                        base: "3xl",
-                                                        md: "4xl",
-                                                        lg: "4xl",
-                                                    }}
-                                                    fontWeight="extrabold"
-                                                >
-                                                    Users
-                                                </Text>
-                                                <Flex>
+                                    <Card
+                                        borderRadius="2xl"
+                                        borderColor={"gray.300"}
+                                        borderWidth={"1px"}
+                                        maxH={{ md: "4xl" }}
+                                    >
+                                        <CardBody>
+                                            <Box
+                                                display={{
+                                                    base: "block",
+                                                    md: "flex",
+                                                    lg: "flex",
+                                                }}
+                                                justifyContent={{
+                                                    base: "flex-start",
+                                                    md: "space-between",
+                                                    lg: "space-between",
+                                                }}
+                                                alignItems={{
+                                                    base: "flex-start",
+                                                    md: "center",
+                                                    lg: "center",
+                                                }}
+                                                flexDir={{
+                                                    base: "column",
+                                                    md: "row",
+                                                    lg: "row",
+                                                }}
+                                            >
+                                                <Flex flexDir={"column"}>
                                                     <Text
-                                                        fontSize={"12px"}
-                                                        letterSpacing={
-                                                            "tighter"
-                                                        }
+                                                        color="#D3212D"
+                                                        fontSize={{
+                                                            base: "3xl",
+                                                            md: "4xl",
+                                                            lg: "4xl",
+                                                        }}
+                                                        fontWeight="extrabold"
                                                     >
-                                                        *Choose a date / date
-                                                        range
+                                                        Property
                                                     </Text>
-                                                </Flex>
-                                                <Flex
-                                                    ml={{
-                                                        base: "0",
-                                                        md: "auto",
-                                                        lg: "auto",
-                                                    }}
-                                                >
-                                                    <Box
-                                                        display="flex"
-                                                        my="auto"
-                                                    >
-                                                        <Input
-                                                            type="date"
-                                                            mr={{
-                                                                base: "4px",
-                                                                md: "3",
-                                                            }}
-                                                            mb={{
-                                                                base: "0",
-                                                                md: "0",
-                                                            }}
-                                                            width={{
-                                                                base: "100%",
-                                                                md: "auto",
-                                                            }}
-                                                            maxW={{
-                                                                base: "150px",
-                                                                md: "155px",
-                                                                lg: "155px",
-                                                            }}
-                                                            onChange={(e) =>
-                                                                setStartDateUsers(
-                                                                    e.target
-                                                                        .value
-                                                                )
-                                                            }
-                                                            defaultValue={
-                                                                weekAgo
-                                                            }
-                                                            focusBorderColor="#D3212D"
-                                                            borderColor="#D3212D"
-                                                            borderWidth="2px"
-                                                            _placeholder={{
-                                                                color: "#D3212D",
-                                                            }}
+                                                    <Flex>
+                                                        <Text
+                                                            fontSize={"12px"}
                                                             letterSpacing={
                                                                 "tighter"
                                                             }
-                                                            fontWeight={
-                                                                "semibold"
-                                                            }
-                                                            _hover={""}
-                                                        />
-                                                        <Input
-                                                            type="date"
-                                                            ml={{
-                                                                base: "4px",
-                                                                md: "2",
-                                                                lg: "2",
-                                                            }}
-                                                            width={{
-                                                                base: "100%",
-                                                                md: "auto",
-                                                            }}
-                                                            maxW={{
-                                                                base: "150px",
-                                                                md: "155px",
-                                                                lg: "155px",
-                                                            }}
-                                                            onChange={(e) =>
-                                                                setEndDateUsers(
-                                                                    e.target
-                                                                        .value
-                                                                )
-                                                            }
-                                                            defaultValue={today}
-                                                            focusBorderColor="#D3212D"
-                                                            borderColor="#D3212D"
-                                                            borderWidth="2px"
-                                                            _placeholder={{
-                                                                color: "#D3212D",
-                                                            }}
-                                                            letterSpacing={
-                                                                "tighter"
-                                                            }
-                                                            fontWeight={
-                                                                "semibold"
-                                                            }
-                                                            _hover={""}
-                                                        />
+                                                        >
+                                                            *Choose a property
+                                                        </Text>
+                                                    </Flex>
+                                                    <Box>
+                                                        <FormControl>
+                                                            <Select
+                                                                useBasicStyles
+                                                                name="property"
+                                                                options={
+                                                                    propertyOptions
+                                                                }
+                                                                placeholder="Select property"
+                                                                closeMenuOnSelect={
+                                                                    true
+                                                                }
+                                                                {...selectProperty}
+                                                            />
+                                                        </FormControl>
                                                     </Box>
+                                                    <Flex>
+                                                        <Text
+                                                            fontSize={"12px"}
+                                                            letterSpacing={
+                                                                "tighter"
+                                                            }
+                                                        >
+                                                            *Choose a date / date
+                                                            range
+                                                        </Text>
+                                                    </Flex>
+                                                    <Flex
+                                                        ml={{
+                                                            base: "0",
+                                                            md: "auto",
+                                                            lg: "auto",
+                                                        }}
+                                                    >
+                                                        <Box
+                                                            display="flex"
+                                                            my="auto"
+                                                        >
+                                                            <Input
+                                                                type="date"
+                                                                mr={{
+                                                                    base: "4px",
+                                                                    md: "3",
+                                                                }}
+                                                                mb={{
+                                                                    base: "0",
+                                                                    md: "0",
+                                                                    lg: "0",
+                                                                }}
+                                                                width={{
+                                                                    base: "100%",
+                                                                    md: "auto",
+                                                                }}
+                                                                maxW={{
+                                                                    base: "150px",
+                                                                    md: "155px",
+                                                                    lg: "155px",
+                                                                }}
+                                                                onChange={(e) =>
+                                                                    setStartDateProperty(
+                                                                        e.target
+                                                                            .value
+                                                                    )
+                                                                }
+                                                                defaultValue={
+                                                                    weekAgo
+                                                                }
+                                                                focusBorderColor="#D3212D"
+                                                                borderColor="#D3212D"
+                                                                borderWidth="2px"
+                                                                _placeholder={{
+                                                                    color: "#D3212D",
+                                                                }}
+                                                                letterSpacing={
+                                                                    "tighter"
+                                                                }
+                                                                fontWeight={
+                                                                    "semibold"
+                                                                }
+                                                                _hover={""}
+                                                            />
+                                                            <Input
+                                                                type="date"
+                                                                ml={{
+                                                                    base: "4px",
+                                                                    md: "2",
+                                                                    lg: "2",
+                                                                }}
+                                                                width={{
+                                                                    base: "100%",
+                                                                    md: "auto",
+                                                                }}
+                                                                maxW={{
+                                                                    base: "150px",
+                                                                    md: "155px",
+                                                                    lg: "155px",
+                                                                }}
+                                                                onChange={(e) =>
+                                                                    setEndDateProperty(
+                                                                        e.target
+                                                                            .value
+                                                                    )
+                                                                }
+                                                                defaultValue={today}
+                                                                focusBorderColor="#D3212D"
+                                                                borderColor="#D3212D"
+                                                                borderWidth="2px"
+                                                                _placeholder={{
+                                                                    color: "#D3212D",
+                                                                }}
+                                                                letterSpacing={
+                                                                    "tighter"
+                                                                }
+                                                                fontWeight={
+                                                                    "semibold"
+                                                                }
+                                                                _hover={""}
+                                                            />
+                                                        </Box>
+                                                    </Flex>
                                                 </Flex>
-                                            </Flex>
-                                        </Box>
+                                            </Box>
 
-                                        <Box
-                                            mt={{ base: "2", md: "2", lg: "2" }}
-                                            borderRadius="2xl"
-                                        >
-                                            <UserChart
-                                                userdatachart={userDataChart}
-                                            />
-                                        </Box>
-                                    </CardBody>
-                                </Card>
+                                            <Box
+                                                mt={{ base: "2", md: "2", lg: "2" }}
+                                                borderRadius="2xl"
+                                            >
+                                                <PropertyChart
+                                                    propertydatachart={
+                                                        propertyDataChart
+                                                    }
+                                                />
+                                            </Box>
+                                        </CardBody>
+                                    </Card>
+                                </Box>
+                                {/* Users */}
+                                <Box
+                                    display={{
+                                        base: "block",
+                                        md: "flex",
+                                        lg: "flex",
+                                    }}
+                                    flexDir="column"
+                                    justifyContent="center"
+                                    w={{ base: "100%", md: "md", lg: "md" }}
+                                    maxW={{ base: "unset", md: "5xl" }}
+                                >
+                                    <Card
+                                        borderRadius="2xl"
+                                        borderColor={"gray.300"}
+                                        borderWidth={"1px"}
+                                        maxH={{ md: "4xl" }}
+                                    >
+                                        <CardBody>
+                                            <Box
+                                                display={{
+                                                    base: "block",
+                                                    md: "flex",
+                                                    lg: "flex",
+                                                }}
+                                                justifyContent={{
+                                                    base: "flex-start",
+                                                    md: "space-between",
+                                                    lg: "space-between",
+                                                }}
+                                                alignItems={{
+                                                    base: "flex-start",
+                                                    md: "center",
+                                                    lg: "center",
+                                                }}
+                                                flexDir={{
+                                                    base: "column",
+                                                    md: "row",
+                                                    lg: "row",
+                                                }}
+                                            >
+                                                <Flex flexDir={"column"}>
+                                                    <Text
+                                                        color="#D3212D"
+                                                        fontSize={{
+                                                            base: "3xl",
+                                                            md: "4xl",
+                                                            lg: "4xl",
+                                                        }}
+                                                        fontWeight="extrabold"
+                                                    >
+                                                        Users
+                                                    </Text>
+                                                    <Flex>
+                                                        <Text
+                                                            fontSize={"12px"}
+                                                            letterSpacing={
+                                                                "tighter"
+                                                            }
+                                                        >
+                                                            *Choose a date / date
+                                                            range
+                                                        </Text>
+                                                    </Flex>
+                                                    <Flex
+                                                        ml={{
+                                                            base: "0",
+                                                            md: "auto",
+                                                            lg: "auto",
+                                                        }}
+                                                    >
+                                                        <Box
+                                                            display="flex"
+                                                            my="auto"
+                                                        >
+                                                            <Input
+                                                                type="date"
+                                                                mr={{
+                                                                    base: "4px",
+                                                                    md: "3",
+                                                                }}
+                                                                mb={{
+                                                                    base: "0",
+                                                                    md: "0",
+                                                                }}
+                                                                width={{
+                                                                    base: "100%",
+                                                                    md: "auto",
+                                                                }}
+                                                                maxW={{
+                                                                    base: "150px",
+                                                                    md: "155px",
+                                                                    lg: "155px",
+                                                                }}
+                                                                onChange={(e) =>
+                                                                    setStartDateUsers(
+                                                                        e.target
+                                                                            .value
+                                                                    )
+                                                                }
+                                                                defaultValue={
+                                                                    weekAgo
+                                                                }
+                                                                focusBorderColor="#D3212D"
+                                                                borderColor="#D3212D"
+                                                                borderWidth="2px"
+                                                                _placeholder={{
+                                                                    color: "#D3212D",
+                                                                }}
+                                                                letterSpacing={
+                                                                    "tighter"
+                                                                }
+                                                                fontWeight={
+                                                                    "semibold"
+                                                                }
+                                                                _hover={""}
+                                                            />
+                                                            <Input
+                                                                type="date"
+                                                                ml={{
+                                                                    base: "4px",
+                                                                    md: "2",
+                                                                    lg: "2",
+                                                                }}
+                                                                width={{
+                                                                    base: "100%",
+                                                                    md: "auto",
+                                                                }}
+                                                                maxW={{
+                                                                    base: "150px",
+                                                                    md: "155px",
+                                                                    lg: "155px",
+                                                                }}
+                                                                onChange={(e) =>
+                                                                    setEndDateUsers(
+                                                                        e.target
+                                                                            .value
+                                                                    )
+                                                                }
+                                                                defaultValue={today}
+                                                                focusBorderColor="#D3212D"
+                                                                borderColor="#D3212D"
+                                                                borderWidth="2px"
+                                                                _placeholder={{
+                                                                    color: "#D3212D",
+                                                                }}
+                                                                letterSpacing={
+                                                                    "tighter"
+                                                                }
+                                                                fontWeight={
+                                                                    "semibold"
+                                                                }
+                                                                _hover={""}
+                                                            />
+                                                        </Box>
+                                                    </Flex>
+                                                </Flex>
+                                            </Box>
+
+                                            <Box
+                                                mt={{ base: "2", md: "2", lg: "2" }}
+                                                borderRadius="2xl"
+                                            >
+                                                <UserChart
+                                                    userdatachart={userDataChart}
+                                                />
+                                            </Box>
+                                        </CardBody>
+                                    </Card>
+                                </Box>
                             </Box>
                         </Box>
                     </Box>
-                </Box>
-            </Flex>
-        </>
-    );
+                </Flex>
+            </>
+        );
+    }
 }
 
 export default SalesReport;
