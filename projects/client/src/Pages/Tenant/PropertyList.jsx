@@ -71,8 +71,6 @@ function PropertyList(props) {
             );
             setDataAllProperty(get.data.data);
             setTotalData(get.data.datanum);
-            console.log("get property list", get.data.data);
-            console.log("get property list only", get);
         } catch (error) {
             console.log(error);
         }

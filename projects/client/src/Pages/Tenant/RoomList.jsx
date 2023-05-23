@@ -20,6 +20,7 @@ import {
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import Pagination from "../../Components/Pagination";
 import Sidebar from "../../Components/Sidebar";
+import { formatRupiah } from "../../helper/index";
 
 function RoomList(props) {
     const location = useLocation();
@@ -41,7 +42,6 @@ function RoomList(props) {
     const [order, setOrder] = React.useState(defaultOrder);
     const [filter, setFilter] = React.useState(defaultFilter);
 
-    console.log("dataAllRoom:", dataAllRoom);
 
     const printRoomData = () => {
         const actualRowNumber = page * size;
@@ -53,7 +53,7 @@ function RoomList(props) {
                     idx={rowNumber}
                     name={val.room_category.name}
                     capacity={val.capacity}
-                    price={val.price}
+                    price={formatRupiah(val.price)}
                     uuid={val.uuid}
                     getAllRoomList={getAllRoomList}
                 />
@@ -74,8 +74,6 @@ function RoomList(props) {
             );
             setDataAllRoom(get.data.data);
             setTotalData(get.data.datanum);
-            console.log("get room list", get.data.data);
-            console.log("get room list only", get);
         } catch (error) {
             console.log(error);
         }
@@ -93,6 +91,7 @@ function RoomList(props) {
     useEffect(() => {
         getAllRoomList();
     }, []);
+
 
     return (
         <>

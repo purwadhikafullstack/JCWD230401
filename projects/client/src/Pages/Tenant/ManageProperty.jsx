@@ -36,15 +36,23 @@ function ManageProperty(props) {
 
     const [propertyData, setPropertyData] = useState(null);
     const [category, setCategory] = useState("");
-    const [property, setProperty] = useState("");
-    const [description, setDescription] = useState("");
+    const [property, setProperty] = useState(propertyData?.property);
+    const [description, setDescription] = useState(propertyData?.description);
     const [descriptionLength, setDescriptionLength] = useState(0);
-    const [address, setAddress] = useState("");
-    const [regency, setRegency] = useState(null);
+    const [address, setAddress] = useState(
+        propertyData?.property_location?.address
+    );
     const [province, setProvince] = useState(null);
-    const [zipcode, setZipcode] = useState("");
-    const [country, setCountry] = useState("");
-    const [mapsUrl, setMapsUrl] = useState("");
+    const [regency, setRegency] = useState(null);
+    const [zipcode, setZipcode] = useState(
+        propertyData?.property_location?.zip
+    );
+    const [country, setCountry] = useState(
+        propertyData?.property_location?.country
+    );
+    const [mapsUrl, setMapsUrl] = useState(
+        propertyData?.property_location.gmaps
+    );
 
     const [allRegency, setAllRegency] = useState([]);
     const [activeButton, setActiveButton] = useState(null);
@@ -67,7 +75,6 @@ function ManageProperty(props) {
                     },
                 }
             );
-            console.log("get", get);
             setPropertyData(get.data.data[0]);
             setFilePropertyEdit1(get.data.data[0].picture_properties[0]);
             setFilePropertyEdit2(get.data.data[0].picture_properties[1]);
@@ -78,7 +85,6 @@ function ManageProperty(props) {
             console.log(error);
         }
     };
-    console.log("propertyData", propertyData);
 
     const uploadImageProperty = async (imageFile, id, propertyId) => {
         try {
@@ -232,7 +238,6 @@ function ManageProperty(props) {
             let get = await axios.get(
                 `${process.env.REACT_APP_API_BASE_URL}/property/provinces`
             );
-            console.log("get allprovince", get.data);
             setAllProvince(get.data);
         } catch (error) {
             console.log(error);
@@ -312,7 +317,6 @@ function ManageProperty(props) {
             let data = allProvince.filter(
                 (val) => val.value === propertyData.property_location.provinceId
             );
-            console.log("INI DATAAAA PROVINCE DI USEEFFECT TOT", data);
             setProvince(data[0]);
         }
     }, [allProvince, propertyData]);
@@ -326,16 +330,9 @@ function ManageProperty(props) {
             let data = allRegency.filter(
                 (val) => val.value === propertyData.property_location.regencyId
             );
-            console.log("INI DATAAAA REGENCY DI USEEFFECT TOT", data);
             setRegency(data[0]);
         }
     }, [allRegency, propertyData]);
-
-    // console.log("filePropertyEdit1:", filePropertyEdit1);
-    // console.log("filePropertyEdit2:", filePropertyEdit2);
-    // console.log("filePropertyEdit3:", filePropertyEdit3);
-    // console.log("filePropertyEdit4:", filePropertyEdit4);
-    // console.log("filePropertyEdit5:", filePropertyEdit5);
 
     // ACTIVE BUTTON
     const handleButtonClick = (value) => {
@@ -501,7 +498,7 @@ function ManageProperty(props) {
                                         type="text"
                                         justifyItems={"self-end"}
                                         h={"40px"}
-                                        value={
+                                        defaultValue={
                                             !category
                                                 ? propertyData?.category
                                                       ?.category
@@ -1382,7 +1379,7 @@ function ManageProperty(props) {
                                             placeholder="Select regency"
                                             closeMenuOnSelect={true}
                                             {...selectRegency}
-                                            defaultValue={regency?.label}
+                                            defaultInputValue={regency?.label}
                                         />
                                     </FormControl>
                                 </Box>

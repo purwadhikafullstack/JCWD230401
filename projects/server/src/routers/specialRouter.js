@@ -10,6 +10,8 @@ route.get(
     specialController.listSpecialPrice
 );
 
+route.get("/data/:uuid", specialController.getRoomData)
+
 route.patch("/delete", specialController.deleteSpecialPrice);
 
 route.patch("/active/:uuid", specialController.editIsActiveSpecial)

@@ -21,6 +21,7 @@ import {
     useDisclosure,
     Box,
     Flex,
+    useToast,
 } from "@chakra-ui/react";
 import axios from "axios";
 import { Link } from "react-router-dom";
@@ -30,6 +31,8 @@ function RoomTable(props) {
         const { isOpen, onOpen, onClose } = useDisclosure();
         const cancelRef = React.useRef();
         const [loading, setLoading] = useState(false);
+
+        const toast = useToast();
 
         const deleteRoom = async () => {
             try {
@@ -45,6 +48,12 @@ function RoomTable(props) {
                     }
                 );
                 onClose();
+                toast({
+                    title: "Room Deleted !",
+                    status: "success",
+                    duration: 3500,
+                    isClosable: true,
+                });
                 props.getAllRoomList();
             } catch (error) {
                 console.log(error);
