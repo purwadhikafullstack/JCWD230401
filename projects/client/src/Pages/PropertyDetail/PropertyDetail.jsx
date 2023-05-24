@@ -41,6 +41,7 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import Loading from "../../Components/Loading";
+import moment from "moment";
 
 
 
@@ -70,12 +71,13 @@ export default function PropertyDetail() {
     const today = new Date().toISOString().split("T")[0];
     const tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate() + 1);
+
     const nextDay = tomorrow.toISOString().split("T")[0];
     const [inputCheckIn, setInputCheckIn] = useState(
-        location.state.inputCheckIn || today
+        moment(location.state.inputCheckIn).format().split('T')[0] || today
     );
     const [inputCheckOut, setInputCheckOut] = useState(
-        location.state.inputCheckOut || nextDay
+        moment(location.state.inputCheckOut).format().split('T')[0] || nextDay
     );
     const getPropertyDetail = async () => {
         let get = await axios.get(
