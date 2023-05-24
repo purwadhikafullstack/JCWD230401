@@ -163,7 +163,7 @@ function SalesReport(props) {
     }, []);
 
     if (loadingPage) {
-        return <Loading />
+        return <Loading />;
     } else {
         return (
             <>
@@ -187,16 +187,25 @@ function SalesReport(props) {
                         </Heading>
                         <Box
                             display={"flex"}
-                            flexDir={{ base: "column", md: "row", lg: "row" }}
+                            flexDir={{
+                                base: "column",
+                                md: "column",
+                                lg: "row",
+                            }}
                             mt="5"
                         >
                             {/* Box 1 */}
                             <Box
                                 flex={"3"}
-                                display={{ base: "block", md: "flex", lg: "flex" }}
+                                display={{
+                                    base: "block",
+                                    md: "flex",
+                                    lg: "flex",
+                                }}
                                 flexDir="column"
                                 justifyContent="center"
-                                w={{ base: "100%", md: "xl" }}
+                                w={{ base: "100%", md: "100%" }}
+                                mb={{ base: "8", md: "8" }}
                             >
                                 {/* Transaction */}
                                 <Card
@@ -205,7 +214,11 @@ function SalesReport(props) {
                                     borderRadius="2xl"
                                     maxH={{ md: "5xl" }}
                                     maxW={{ md: "5xl" }}
-                                    minH={{ md: "807px" }}
+                                    minH={{
+                                        base: "100%",
+                                        md: "100%",
+                                        lg: "807px",
+                                    }}
                                 >
                                     <CardBody>
                                         <Box
@@ -277,7 +290,10 @@ function SalesReport(props) {
                                                             base: "4px",
                                                             md: "3",
                                                         }}
-                                                        mb={{ base: "0", md: "0" }}
+                                                        mb={{
+                                                            base: "0",
+                                                            md: "0",
+                                                        }}
                                                         width={{
                                                             base: "100%",
                                                             md: "auto",
@@ -298,7 +314,9 @@ function SalesReport(props) {
                                                         _placeholder={{
                                                             color: "#D3212D",
                                                         }}
-                                                        letterSpacing={"tighter"}
+                                                        letterSpacing={
+                                                            "tighter"
+                                                        }
                                                         fontWeight={"semibold"}
                                                         _hover={""}
                                                     />
@@ -328,7 +346,9 @@ function SalesReport(props) {
                                                         _placeholder={{
                                                             color: "#D3212D",
                                                         }}
-                                                        letterSpacing={"tighter"}
+                                                        letterSpacing={
+                                                            "tighter"
+                                                        }
                                                         fontWeight={"semibold"}
                                                         _hover={""}
                                                     />
@@ -383,8 +403,9 @@ function SalesReport(props) {
                                     }}
                                     flexDir="column"
                                     justifyContent="center"
-                                    w={{ base: "100%", md: "md", lg: "md" }}
+                                    w={{ base: "100%", lg: "md" }}
                                     maxW={{ base: "unset", md: "5xl" }}
+                                    mb={{ base: "8", md: "8" }}
                                 >
                                     <Card
                                         borderRadius="2xl"
@@ -460,8 +481,8 @@ function SalesReport(props) {
                                                                 "tighter"
                                                             }
                                                         >
-                                                            *Choose a date / date
-                                                            range
+                                                            *Choose a date /
+                                                            date range
                                                         </Text>
                                                     </Flex>
                                                     <Flex
@@ -540,7 +561,9 @@ function SalesReport(props) {
                                                                             .value
                                                                     )
                                                                 }
-                                                                defaultValue={today}
+                                                                defaultValue={
+                                                                    today
+                                                                }
                                                                 focusBorderColor="#D3212D"
                                                                 borderColor="#D3212D"
                                                                 borderWidth="2px"
@@ -561,7 +584,11 @@ function SalesReport(props) {
                                             </Box>
 
                                             <Box
-                                                mt={{ base: "2", md: "2", lg: "2" }}
+                                                mt={{
+                                                    base: "2",
+                                                    md: "2",
+                                                    lg: "2",
+                                                }}
                                                 borderRadius="2xl"
                                             >
                                                 <PropertyChart
@@ -582,7 +609,7 @@ function SalesReport(props) {
                                     }}
                                     flexDir="column"
                                     justifyContent="center"
-                                    w={{ base: "100%", md: "md", lg: "md" }}
+                                    w={{ base: "100%", lg: "md" }}
                                     maxW={{ base: "unset", md: "5xl" }}
                                 >
                                     <Card
@@ -633,8 +660,8 @@ function SalesReport(props) {
                                                                 "tighter"
                                                             }
                                                         >
-                                                            *Choose a date / date
-                                                            range
+                                                            *Choose a date /
+                                                            date range
                                                         </Text>
                                                     </Flex>
                                                     <Flex
@@ -712,7 +739,9 @@ function SalesReport(props) {
                                                                             .value
                                                                     )
                                                                 }
-                                                                defaultValue={today}
+                                                                defaultValue={
+                                                                    today
+                                                                }
                                                                 focusBorderColor="#D3212D"
                                                                 borderColor="#D3212D"
                                                                 borderWidth="2px"
@@ -733,11 +762,17 @@ function SalesReport(props) {
                                             </Box>
 
                                             <Box
-                                                mt={{ base: "2", md: "2", lg: "2" }}
+                                                mt={{
+                                                    base: "2",
+                                                    md: "2",
+                                                    lg: "2",
+                                                }}
                                                 borderRadius="2xl"
                                             >
                                                 <UserChart
-                                                    userdatachart={userDataChart}
+                                                    userdatachart={
+                                                        userDataChart
+                                                    }
                                                 />
                                             </Box>
                                         </CardBody>

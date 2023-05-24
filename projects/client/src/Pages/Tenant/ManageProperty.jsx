@@ -165,7 +165,6 @@ function ManageProperty(props) {
             uploadImageProperty(event.target.files[0], id);
         }
     };
-
     const onChangeFile2 = (event, id) => {
         const maxSize = 2 * 1024 * 1024;
         if (event.target.files[0].size > maxSize) {
@@ -324,13 +323,15 @@ function ManageProperty(props) {
     }, [allProvince, propertyData]);
 
     useEffect(() => {
-        getRegencyById();
+        if (province) {
+            getRegencyById();
+        }
     }, [province]);
 
     useEffect(() => {
         if (allRegency.length && propertyData) {
             let data = allRegency.filter(
-                (val) => val.value === propertyData.property_location.regencyId
+                (val) => val.value === propertyData.property_location.regency_id
             );
             setRegency(data[0]);
         }
@@ -368,7 +369,7 @@ function ManageProperty(props) {
                 >
                     <Box
                         textAlign="left"
-                        fontSize={"5xl"}
+                        fontSize={{ base: "2xl", md: "5xl", lg: "5xl" }}
                         fontWeight="bold"
                         mt="10"
                     >
@@ -377,1042 +378,1184 @@ function ManageProperty(props) {
                     <Box mt={"10"}>
                         <Box
                             textAlign="left"
-                            fontSize={"3xl"}
+                            fontSize={{ base: "xl", md: "3xl", lg: "3xl" }}
                             fontWeight="bold"
                         >
                             <h2>Basic Information</h2>
                         </Box>
-                        {/* CHOOSE/EDIT CATEGORY */}
-                        <Box as={Flex} my="10">
-                            <Flex
-                                flex={1}
-                                fontWeight="medium"
-                                alignItems={"center"}
-                            >
-                                <Text>Edit Category</Text>
-                            </Flex>
-                            <Box flex={3} display="flex" flexDir={"column"}>
-                                <Box display={"flex"} flexDir={"row"}>
-                                    <Button
-                                        type="button"
-                                        justifyContent={"center"}
-                                        display={"flex"}
-                                        flexDir="column"
-                                        size="md"
-                                        w={"120px"}
-                                        h={"120px"}
-                                        textAlign="center"
-                                        mx={"4"}
-                                        variant={
-                                            activeButton === "Hotel"
-                                                ? "outline"
-                                                : "solid"
-                                        }
-                                        borderColor={
-                                            activeButton === "Hotel"
-                                                ? "red.500"
-                                                : "gray.200"
-                                        }
-                                        borderWidth={
-                                            activeButton === "Hotel"
-                                                ? "2px"
-                                                : "1px"
-                                        }
-                                        value={"Hotel"}
-                                        onClick={() => {
-                                            handleButtonClick("Hotel");
-                                            setCategory("Hotel");
-                                        }}
-                                    >
-                                        <Text textAlign={"center"}>
+                        <Box fontSize={{ base: "xs", md: "lg" }}>
+                            {/* CHOOSE/EDIT CATEGORY */}
+                            <Box as={Flex} my="10">
+                                <Flex
+                                    flex={1}
+                                    fontWeight="medium"
+                                    alignItems={"center"}
+                                >
+                                    <Text>Edit Category</Text>
+                                </Flex>
+                                <Box flex={3} display="flex" flexDir={"column"}>
+                                    <Box display={"flex"} flexDir={"row"}>
+                                        <Button
+                                            type="button"
+                                            justifyContent={"center"}
+                                            display={"flex"}
+                                            flexDir="column"
+                                            size="md"
+                                            w={{ base: "50px", md: "120px" }}
+                                            h={{ base: "50px", md: "120px" }}
+                                            textAlign="center"
+                                            ml={"4"}
+                                            variant={
+                                                activeButton === "Hotel"
+                                                    ? "outline"
+                                                    : "solid"
+                                            }
+                                            borderColor={
+                                                activeButton === "Hotel"
+                                                    ? "red.500"
+                                                    : "gray.200"
+                                            }
+                                            borderWidth={
+                                                activeButton === "Hotel"
+                                                    ? "2px"
+                                                    : "1px"
+                                            }
+                                            value={"Hotel"}
+                                            onClick={() => {
+                                                handleButtonClick("Hotel");
+                                                setCategory("Hotel");
+                                            }}
+                                        >
                                             <BiHotel
                                                 fontSize={"45px"}
                                                 color="#D3212D"
                                             />
-                                            Hotel
-                                        </Text>
-                                    </Button>
-                                    <Button
-                                        type="button"
-                                        justifyContent={"center"}
-                                        display={"flex"}
-                                        flexDir="column"
-                                        size="md"
-                                        w={"120px"}
-                                        h={"120px"}
-                                        textAlign="center"
-                                        mx={"4"}
-                                        variant={
-                                            activeButton === "Villa"
-                                                ? "outline"
-                                                : "solid"
-                                        }
-                                        borderColor={
-                                            activeButton === "Villa"
-                                                ? "red.500"
-                                                : "gray.200"
-                                        }
-                                        borderWidth={
-                                            activeButton === "Villa"
-                                                ? "2px"
-                                                : "1px"
-                                        }
-                                        value={"Villa"}
-                                        onClick={() => {
-                                            handleButtonClick("Villa");
-                                            setCategory("Villa");
-                                        }}
-                                    >
-                                        <BiHomeAlt
-                                            fontSize={"45px"}
-                                            color="#D3212D"
-                                        />
-                                        <Text textAlign={"center"}>Villa</Text>
-                                    </Button>
-                                    <Button
-                                        type="button"
-                                        justifyContent={"center"}
-                                        display={"flex"}
-                                        flexDir="column"
-                                        size="md"
-                                        w={"120px"}
-                                        h={"120px"}
-                                        textAlign="center"
-                                        mx={"4"}
-                                        variant={
-                                            activeButton === "Apartment"
-                                                ? "outline"
-                                                : "solid"
-                                        }
-                                        borderColor={
-                                            activeButton === "Apartment"
-                                                ? "red.500"
-                                                : "gray.200"
-                                        }
-                                        borderWidth={
-                                            activeButton === "Apartment"
-                                                ? "2px"
-                                                : "1px"
-                                        }
-                                        value={"Apartment"}
-                                        onClick={() => {
-                                            handleButtonClick("Apartment");
-                                            setCategory("Apartment");
-                                        }}
-                                    >
-                                        <MdApartment
-                                            fontSize={"45px"}
-                                            color="#D3212D"
-                                        />
-                                        <Text textAlign={"center"}>
-                                            Apartment
-                                        </Text>
-                                    </Button>
-                                </Box>
-                                <Box mx="4" my="2">
-                                    <Text mb="2" fontWeight={"medium"}>
-                                        Or you can add your own category
-                                    </Text>
-                                    <InputGroup display={"flex"} size={"md"}>
-                                        <Input
-                                            placeholder="Your category"
-                                            type="text"
-                                            justifyItems={"self-end"}
-                                            h={"40px"}
-                                            defaultValue={
-                                                !category
-                                                    ? propertyData?.category
-                                                          ?.category
-                                                    : category
-                                            }
-                                            onChange={(e) => {
-                                                setCategory(e.target.value);
-                                            }}
-                                        />
-                                    </InputGroup>
-                                </Box>
-                            </Box>
-                        </Box>
-                        {/* CREATE/EDIT PROPERTY NAME */}
-                        <Box as={Flex} my={"10"}>
-                            <Flex
-                                flex={1}
-                                fontWeight={"medium"}
-                                alignItems={"center"}
-                            >
-                                <Text>Edit Name</Text>
-                            </Flex>
-                            <Box flex={3}>
-                                <Box mx="4" my="2">
-                                    <InputGroup display={"flex"} size={"md"}>
-                                        <Input
-                                            placeholder="Enter the name of your listing"
-                                            type="text"
-                                            justifyItems={"self-end"}
-                                            h={"40px"}
-                                            // value={property}
-                                            defaultValue={
-                                                propertyData?.property
-                                            }
-                                            onChange={(e) =>
-                                                setProperty(e.target.value)
-                                            }
-                                        />
-                                    </InputGroup>
-                                </Box>
-                            </Box>
-                        </Box>
-                        {/* UPLOAD/EDIT PHOTO/S */}
-                        <Box as={Flex} my={"10"}>
-                            <Flex
-                                flex={1}
-                                fontWeight={"medium"}
-                                alignItems={"center"}
-                            >
-                                <Text>Edit Pictures</Text>
-                            </Flex>
-                            <Box flex={3}>
-                                <Box
-                                    display={"flex"}
-                                    flexDir={"column"}
-                                    placeItems={"center"}
-                                >
-                                    <Box
-                                        border={"2px"}
-                                        borderStyle={"dashed"}
-                                        borderColor={"gray.200"}
-                                        borderRadius={"lg"}
-                                        mx="4"
-                                        my="2"
-                                        minW={"871px"}
-                                    >
-                                        <Box as={Flex}>
-                                            <Box
-                                                display={"flex"}
-                                                w={"full"}
-                                                justifyContent={"space-between"}
+                                            <Text
+                                                textAlign={"center"}
+                                                fontSize={{
+                                                    base: "3xs",
+                                                    md: "unset",
+                                                }}
                                             >
-                                                {/* Button Image 1 */}
-                                                {filePropertyEdit1 ? (
-                                                    <>
-                                                        <Flex
-                                                            flexDir={"column"}
-                                                        >
-                                                            <Box
-                                                                onClick={() => {
-                                                                    inputFile1.current.click();
-                                                                }}
-                                                                isLoading={
-                                                                    loading
+                                                Hotel
+                                            </Text>
+                                        </Button>
+                                        <Button
+                                            type="button"
+                                            justifyContent={"center"}
+                                            display={"flex"}
+                                            flexDir="column"
+                                            size="md"
+                                            w={{ base: "50px", md: "120px" }}
+                                            h={{ base: "50px", md: "120px" }}
+                                            textAlign="center"
+                                            ml={"4"}
+                                            variant={
+                                                activeButton === "Villa"
+                                                    ? "outline"
+                                                    : "solid"
+                                            }
+                                            borderColor={
+                                                activeButton === "Villa"
+                                                    ? "red.500"
+                                                    : "gray.200"
+                                            }
+                                            borderWidth={
+                                                activeButton === "Villa"
+                                                    ? "2px"
+                                                    : "1px"
+                                            }
+                                            value={"Villa"}
+                                            onClick={() => {
+                                                handleButtonClick("Villa");
+                                                setCategory("Villa");
+                                            }}
+                                        >
+                                            <BiHomeAlt
+                                                fontSize={"45px"}
+                                                color="#D3212D"
+                                            />
+                                            <Text
+                                                textAlign={"center"}
+                                                fontSize={{
+                                                    base: "3xs",
+                                                    md: "unset",
+                                                }}
+                                            >
+                                                Villa
+                                            </Text>
+                                        </Button>
+                                        <Button
+                                            type="button"
+                                            justifyContent={"center"}
+                                            display={"flex"}
+                                            flexDir="column"
+                                            size="md"
+                                            w={{ base: "50px", md: "120px" }}
+                                            h={{ base: "50px", md: "120px" }}
+                                            textAlign="center"
+                                            ml={"4"}
+                                            variant={
+                                                activeButton === "Apartment"
+                                                    ? "outline"
+                                                    : "solid"
+                                            }
+                                            borderColor={
+                                                activeButton === "Apartment"
+                                                    ? "red.500"
+                                                    : "gray.200"
+                                            }
+                                            borderWidth={
+                                                activeButton === "Apartment"
+                                                    ? "2px"
+                                                    : "1px"
+                                            }
+                                            value={"Apartment"}
+                                            onClick={() => {
+                                                handleButtonClick("Apartment");
+                                                setCategory("Apartment");
+                                            }}
+                                        >
+                                            <MdApartment
+                                                fontSize={"45px"}
+                                                color="#D3212D"
+                                            />
+                                            <Text
+                                                textAlign={"center"}
+                                                fontSize={{
+                                                    base: "3xs",
+                                                    md: "unset",
+                                                }}
+                                            >
+                                                Apartment
+                                            </Text>
+                                        </Button>
+                                    </Box>
+                                    <Box mx="4" my="2">
+                                        <Text
+                                            mb="2"
+                                            fontWeight={"medium"}
+                                            fontSize={{
+                                                base: "3xs",
+                                                md: "unset",
+                                            }}
+                                        >
+                                            Or you can add your own category
+                                        </Text>
+                                        <InputGroup
+                                            display={"flex"}
+                                            size={"md"}
+                                        >
+                                            <Input
+                                                placeholder="Your category"
+                                                type="text"
+                                                justifyItems={"self-end"}
+                                                h={"40px"}
+                                                defaultValue={
+                                                    !category
+                                                        ? propertyData?.category
+                                                              ?.category
+                                                        : category
+                                                }
+                                                onChange={(e) => {
+                                                    setCategory(e.target.value);
+                                                }}
+                                            />
+                                        </InputGroup>
+                                    </Box>
+                                </Box>
+                            </Box>
+                            {/* CREATE/EDIT PROPERTY NAME */}
+                            <Box as={Flex} my={"10"}>
+                                <Flex
+                                    flex={1}
+                                    fontWeight={"medium"}
+                                    alignItems={"center"}
+                                >
+                                    <Text>Edit Name</Text>
+                                </Flex>
+                                <Box flex={3}>
+                                    <Box mx="4" my="2">
+                                        <InputGroup
+                                            display={"flex"}
+                                            size={"md"}
+                                        >
+                                            <Input
+                                                placeholder="Enter the name of your listing"
+                                                type="text"
+                                                justifyItems={"self-end"}
+                                                h={"40px"}
+                                                // value={property}
+                                                defaultValue={
+                                                    propertyData?.property
+                                                }
+                                                onChange={(e) =>
+                                                    setProperty(e.target.value)
+                                                }
+                                            />
+                                        </InputGroup>
+                                    </Box>
+                                </Box>
+                            </Box>
+                            {/* UPLOAD/EDIT PHOTO/S */}
+                            <Box as={Flex} my={"10"}>
+                                <Flex
+                                    flex={1}
+                                    fontWeight={"medium"}
+                                    alignItems={"center"}
+                                >
+                                    <Text>Edit Pictures</Text>
+                                </Flex>
+                                <Box flex={3}>
+                                    <Box
+                                        display={"flex"}
+                                        flexDir={"column"}
+                                        placeItems={"center"}
+                                    >
+                                        <Box
+                                            border={"2px"}
+                                            borderStyle={"dashed"}
+                                            borderColor={"gray.200"}
+                                            borderRadius={"lg"}
+                                            mx="4"
+                                            my="2"
+                                            minW={{
+                                                base: "187px",
+                                                md: "509px",
+                                                lg: "871px",
+                                            }}
+                                        >
+                                            <Box as={Flex}>
+                                                <Box
+                                                    display={"flex"}
+                                                    w={"full"}
+                                                    flexDir={{
+                                                        base: "column",
+                                                        md: "column",
+                                                        lg: "row",
+                                                    }}
+                                                    justifyContent={
+                                                        "space-between"
+                                                    }
+                                                >
+                                                    {/* Button Image 1 */}
+                                                    {filePropertyEdit1 ? (
+                                                        <>
+                                                            <Flex
+                                                                flexDir={
+                                                                    "column"
                                                                 }
                                                             >
-                                                                <Image
-                                                                    src={
-                                                                        typeof filePropertyEdit1.name ==
-                                                                        "string"
-                                                                            ? URL.createObjectURL(
-                                                                                  filePropertyEdit1
-                                                                              )
-                                                                            : `${process.env.REACT_APP_API_IMG_URL}${filePropertyEdit1.picture}`
-                                                                    }
-                                                                    w={"100px"}
-                                                                    h={"100px"}
-                                                                    my={"4"}
-                                                                    mx={"4"}
-                                                                    style={{
-                                                                        maxWidth:
-                                                                            "100px",
-                                                                        maxHeight:
-                                                                            "100px",
-                                                                        aspectRatio:
-                                                                            "1/1",
-                                                                        objectFit:
-                                                                            "cover",
-                                                                        borderRadius:
-                                                                            "6px",
-                                                                        boxShadow:
-                                                                            "2px 2px 5px gray",
+                                                                <Box
+                                                                    onClick={() => {
+                                                                        inputFile1.current.click();
                                                                     }}
-                                                                />
-                                                                <input
-                                                                    type="file"
-                                                                    id="file"
-                                                                    ref={
-                                                                        inputFile1
+                                                                    isLoading={
+                                                                        loading
                                                                     }
-                                                                    style={{
-                                                                        display:
-                                                                            "none",
-                                                                    }}
-                                                                    onChange={(
-                                                                        event
-                                                                    ) => {
-                                                                        onChangeFile1(
-                                                                            event,
-                                                                            filePropertyEdit1.id
+                                                                    align="center"
+                                                                >
+                                                                    <Image
+                                                                        src={
+                                                                            typeof filePropertyEdit1.name ==
+                                                                            "string"
+                                                                                ? URL.createObjectURL(
+                                                                                      filePropertyEdit1
+                                                                                  )
+                                                                                : `${process.env.REACT_APP_API_IMG_URL}${filePropertyEdit1.picture}`
+                                                                        }
+                                                                        w={
+                                                                            "100px"
+                                                                        }
+                                                                        h={
+                                                                            "100px"
+                                                                        }
+                                                                        my={"4"}
+                                                                        mx={"4"}
+                                                                        style={{
+                                                                            maxWidth:
+                                                                                "100px",
+                                                                            maxHeight:
+                                                                                "100px",
+                                                                            aspectRatio:
+                                                                                "1/1",
+                                                                            objectFit:
+                                                                                "cover",
+                                                                            borderRadius:
+                                                                                "6px",
+                                                                            boxShadow:
+                                                                                "2px 2px 5px gray",
+                                                                        }}
+                                                                    />
+                                                                    <input
+                                                                        type="file"
+                                                                        id="file"
+                                                                        ref={
+                                                                            inputFile1
+                                                                        }
+                                                                        style={{
+                                                                            display:
+                                                                                "none",
+                                                                        }}
+                                                                        onChange={(
+                                                                            event
+                                                                        ) => {
+                                                                            onChangeFile1(
+                                                                                event,
+                                                                                filePropertyEdit1.id
+                                                                            );
+                                                                        }}
+                                                                    />
+                                                                </Box>
+                                                                <Button
+                                                                    type="button"
+                                                                    h={"35px"}
+                                                                    w={"35px"}
+                                                                    variant="outline"
+                                                                    alignItems={
+                                                                        "center"
+                                                                    }
+                                                                    alignSelf={
+                                                                        "center"
+                                                                    }
+                                                                    mx={"auto"}
+                                                                    mb={"4"}
+                                                                    onClick={() => {
+                                                                        setFilePropertyEdit1(
+                                                                            null
+                                                                        );
+                                                                        deleteImageProperty(
+                                                                            propertyData
+                                                                                .picture_properties[0]
+                                                                                .id
                                                                         );
                                                                     }}
-                                                                />
-                                                            </Box>
-                                                            <Button
-                                                                type="button"
-                                                                h={"35px"}
-                                                                w={"35px"}
-                                                                variant="outline"
-                                                                alignItems={
-                                                                    "center"
-                                                                }
-                                                                alignSelf={
-                                                                    "center"
-                                                                }
-                                                                mx={"auto"}
-                                                                mb={"4"}
-                                                                onClick={() => {
-                                                                    setFilePropertyEdit1(
-                                                                        null
-                                                                    );
-                                                                    deleteImageProperty(
-                                                                        propertyData
-                                                                            .picture_properties[0]
-                                                                            .id
-                                                                    );
-                                                                }}
-                                                                isLoading={
-                                                                    loading
-                                                                }
-                                                            >
-                                                                <Text
-                                                                    fontSize={
-                                                                        "xl"
+                                                                    isLoading={
+                                                                        loading
                                                                     }
                                                                 >
-                                                                    <HiTrash
-                                                                        fontWeight={
-                                                                            "extrabold"
+                                                                    <Text
+                                                                        fontSize={
+                                                                            "xl"
                                                                         }
-                                                                        color="#D3212D"
-                                                                    />
-                                                                </Text>
-                                                            </Button>
-                                                        </Flex>
-                                                    </>
-                                                ) : (
-                                                    <Button
-                                                        type="button"
-                                                        justifyContent={
-                                                            "center"
-                                                        }
-                                                        display={"flex"}
-                                                        flexDir="column"
-                                                        size="md"
-                                                        w={"100px"}
-                                                        h={"100px"}
-                                                        textAlign="center"
-                                                        my={"4"}
-                                                        mx={"4"}
-                                                        variant="outline"
-                                                        _hover={""}
-                                                        bgColor={"gray.100"}
-                                                        alignItems={"center"}
-                                                        onClick={() => {
-                                                            inputFile1.current.click();
-                                                        }}
-                                                        isLoading={loading}
-                                                    >
-                                                        <SlPicture
-                                                            fontSize={"35px"}
-                                                            color="#D3212D"
-                                                        />
-                                                        <input
-                                                            type="file"
-                                                            id="file"
-                                                            ref={inputFile1}
-                                                            style={{
-                                                                display: "none",
+                                                                    >
+                                                                        <HiTrash
+                                                                            fontWeight={
+                                                                                "extrabold"
+                                                                            }
+                                                                            color="#D3212D"
+                                                                        />
+                                                                    </Text>
+                                                                </Button>
+                                                            </Flex>
+                                                        </>
+                                                    ) : (
+                                                        <Button
+                                                            type="button"
+                                                            justifyContent={
+                                                                "center"
+                                                            }
+                                                            display={"flex"}
+                                                            flexDir="column"
+                                                            size="md"
+                                                            w={"100px"}
+                                                            h={"100px"}
+                                                            textAlign="center"
+                                                            my={"4"}
+                                                            mx={{
+                                                                base: "auto",
+                                                                md: "auto",
+                                                                lg: "4",
                                                             }}
-                                                            onChange={(
-                                                                event
-                                                            ) => {
-                                                                onChangeFile1(
-                                                                    event,
-                                                                    filePropertyEdit1.id
-                                                                );
+                                                            variant="outline"
+                                                            _hover={""}
+                                                            bgColor={"gray.100"}
+                                                            alignItems={
+                                                                "center"
+                                                            }
+                                                            onClick={() => {
+                                                                inputFile1.current.click();
                                                             }}
-                                                        />
-                                                        <Text
-                                                            textAlign={"center"}
-                                                            fontSize={"sm"}
+                                                            isLoading={loading}
                                                         >
-                                                            Choose Image
-                                                        </Text>
-                                                    </Button>
-                                                )}
+                                                            <SlPicture
+                                                                fontSize={
+                                                                    "35px"
+                                                                }
+                                                                color="#D3212D"
+                                                            />
+                                                            <input
+                                                                type="file"
+                                                                id="file"
+                                                                ref={inputFile1}
+                                                                style={{
+                                                                    display:
+                                                                        "none",
+                                                                }}
+                                                                onChange={(
+                                                                    event
+                                                                ) => {
+                                                                    onChangeFile1(
+                                                                        event,
+                                                                        filePropertyEdit1.id
+                                                                    );
+                                                                }}
+                                                            />
+                                                            <Text
+                                                                textAlign={
+                                                                    "center"
+                                                                }
+                                                                fontSize={"sm"}
+                                                            >
+                                                                Choose Image
+                                                            </Text>
+                                                        </Button>
+                                                    )}
 
-                                                {/* Button Image 2 */}
-                                                {filePropertyEdit2 ? (
-                                                    <>
-                                                        <Flex
-                                                            flexDir={"column"}
-                                                        >
-                                                            <Box
-                                                                onClick={() => {
-                                                                    inputFile2.current.click();
-                                                                }}
-                                                                isLoading={
-                                                                    loading
+                                                    {/* Button Image 2 */}
+                                                    {filePropertyEdit2 ? (
+                                                        <>
+                                                            <Flex
+                                                                flexDir={
+                                                                    "column"
                                                                 }
                                                             >
-                                                                <Image
-                                                                    src={
-                                                                        typeof filePropertyEdit2.name ==
-                                                                        "string"
-                                                                            ? URL.createObjectURL(
-                                                                                  filePropertyEdit2
-                                                                              )
-                                                                            : `${process.env.REACT_APP_API_IMG_URL}${filePropertyEdit2.picture}`
-                                                                    }
-                                                                    w={"100px"}
-                                                                    h={"100px"}
-                                                                    my={"4"}
-                                                                    mx={"4"}
-                                                                    style={{
-                                                                        maxWidth:
-                                                                            "100px",
-                                                                        maxHeight:
-                                                                            "100px",
-                                                                        aspectRatio:
-                                                                            "1/1",
-                                                                        objectFit:
-                                                                            "cover",
-                                                                        borderRadius:
-                                                                            "6px",
-                                                                        boxShadow:
-                                                                            "2px 2px 5px gray",
+                                                                <Box
+                                                                    onClick={() => {
+                                                                        inputFile2.current.click();
                                                                     }}
-                                                                />
-                                                                <input
-                                                                    type="file"
-                                                                    id="file"
-                                                                    ref={
-                                                                        inputFile2
+                                                                    isLoading={
+                                                                        loading
                                                                     }
-                                                                    style={{
-                                                                        display:
-                                                                            "none",
-                                                                    }}
-                                                                    onChange={(
-                                                                        event
-                                                                    ) => {
-                                                                        onChangeFile2(
-                                                                            event,
-                                                                            filePropertyEdit2.id
+                                                                    align="center"
+                                                                >
+                                                                    <Image
+                                                                        src={
+                                                                            typeof filePropertyEdit2.name ==
+                                                                            "string"
+                                                                                ? URL.createObjectURL(
+                                                                                      filePropertyEdit2
+                                                                                  )
+                                                                                : `${process.env.REACT_APP_API_IMG_URL}${filePropertyEdit2.picture}`
+                                                                        }
+                                                                        w={
+                                                                            "100px"
+                                                                        }
+                                                                        h={
+                                                                            "100px"
+                                                                        }
+                                                                        my={"4"}
+                                                                        mx={"4"}
+                                                                        style={{
+                                                                            maxWidth:
+                                                                                "100px",
+                                                                            maxHeight:
+                                                                                "100px",
+                                                                            aspectRatio:
+                                                                                "1/1",
+                                                                            objectFit:
+                                                                                "cover",
+                                                                            borderRadius:
+                                                                                "6px",
+                                                                            boxShadow:
+                                                                                "2px 2px 5px gray",
+                                                                        }}
+                                                                    />
+                                                                    <input
+                                                                        type="file"
+                                                                        id="file"
+                                                                        ref={
+                                                                            inputFile2
+                                                                        }
+                                                                        style={{
+                                                                            display:
+                                                                                "none",
+                                                                        }}
+                                                                        onChange={(
+                                                                            event
+                                                                        ) => {
+                                                                            onChangeFile2(
+                                                                                event,
+                                                                                filePropertyEdit2.id
+                                                                            );
+                                                                        }}
+                                                                    />
+                                                                </Box>
+                                                                <Button
+                                                                    type="button"
+                                                                    h={"35px"}
+                                                                    w={"35px"}
+                                                                    variant="outline"
+                                                                    alignItems={
+                                                                        "center"
+                                                                    }
+                                                                    alignSelf={
+                                                                        "center"
+                                                                    }
+                                                                    mx={"auto"}
+                                                                    mb={"4"}
+                                                                    onClick={() => {
+                                                                        setFilePropertyEdit2(
+                                                                            null
+                                                                        );
+                                                                        deleteImageProperty(
+                                                                            propertyData
+                                                                                .picture_properties[1]
+                                                                                .id
                                                                         );
                                                                     }}
-                                                                />
-                                                            </Box>
-                                                            <Button
-                                                                type="button"
-                                                                h={"35px"}
-                                                                w={"35px"}
-                                                                variant="outline"
-                                                                alignItems={
-                                                                    "center"
-                                                                }
-                                                                alignSelf={
-                                                                    "center"
-                                                                }
-                                                                mx={"auto"}
-                                                                mb={"4"}
-                                                                onClick={() => {
-                                                                    setFilePropertyEdit2(
-                                                                        null
-                                                                    );
-                                                                    deleteImageProperty(
-                                                                        propertyData
-                                                                            .picture_properties[1]
-                                                                            .id
-                                                                    );
-                                                                }}
-                                                                isLoading={
-                                                                    loading
-                                                                }
-                                                            >
-                                                                <Text
-                                                                    fontSize={
-                                                                        "xl"
+                                                                    isLoading={
+                                                                        loading
                                                                     }
                                                                 >
-                                                                    <HiTrash
-                                                                        fontWeight={
-                                                                            "extrabold"
+                                                                    <Text
+                                                                        fontSize={
+                                                                            "xl"
                                                                         }
-                                                                        color="#D3212D"
-                                                                    />
-                                                                </Text>
-                                                            </Button>
-                                                        </Flex>
-                                                    </>
-                                                ) : (
-                                                    <Button
-                                                        type="button"
-                                                        justifyContent={
-                                                            "center"
-                                                        }
-                                                        display={"flex"}
-                                                        flexDir="column"
-                                                        size="md"
-                                                        w={"100px"}
-                                                        h={"100px"}
-                                                        textAlign="center"
-                                                        my={"4"}
-                                                        mx={"4"}
-                                                        variant="outline"
-                                                        _hover={""}
-                                                        bgColor={"gray.100"}
-                                                        alignItems={"center"}
-                                                        onClick={() => {
-                                                            inputFile2.current.click();
-                                                        }}
-                                                        isLoading={loading}
-                                                    >
-                                                        <SlPicture
-                                                            fontSize={"35px"}
-                                                            color="#D3212D"
-                                                        />
-                                                        <input
-                                                            type="file"
-                                                            id="file"
-                                                            ref={inputFile2}
-                                                            style={{
-                                                                display: "none",
+                                                                    >
+                                                                        <HiTrash
+                                                                            fontWeight={
+                                                                                "extrabold"
+                                                                            }
+                                                                            color="#D3212D"
+                                                                        />
+                                                                    </Text>
+                                                                </Button>
+                                                            </Flex>
+                                                        </>
+                                                    ) : (
+                                                        <Button
+                                                            type="button"
+                                                            justifyContent={
+                                                                "center"
+                                                            }
+                                                            display={"flex"}
+                                                            flexDir="column"
+                                                            size="md"
+                                                            w={"100px"}
+                                                            h={"100px"}
+                                                            textAlign="center"
+                                                            my={"4"}
+                                                            mx={{
+                                                                base: "auto",
+                                                                md: "auto",
+                                                                lg: "4",
                                                             }}
-                                                            onChange={(
-                                                                event
-                                                            ) => {
-                                                                onChangeFile2(
-                                                                    event,
-                                                                    filePropertyEdit2.id
-                                                                );
+                                                            variant="outline"
+                                                            _hover={""}
+                                                            bgColor={"gray.100"}
+                                                            alignItems={
+                                                                "center"
+                                                            }
+                                                            onClick={() => {
+                                                                inputFile2.current.click();
                                                             }}
-                                                        />
-                                                        <Text
-                                                            textAlign={"center"}
-                                                            fontSize={"sm"}
+                                                            isLoading={loading}
                                                         >
-                                                            Choose Image
-                                                        </Text>
-                                                    </Button>
-                                                )}
-                                                {/* Button Image 3 */}
-                                                {filePropertyEdit3 ? (
-                                                    <>
-                                                        <Flex
-                                                            flexDir={"column"}
-                                                        >
-                                                            <Box
-                                                                onClick={() => {
-                                                                    inputFile3.current.click();
+                                                            <SlPicture
+                                                                fontSize={
+                                                                    "35px"
+                                                                }
+                                                                color="#D3212D"
+                                                            />
+                                                            <input
+                                                                type="file"
+                                                                id="file"
+                                                                ref={inputFile2}
+                                                                style={{
+                                                                    display:
+                                                                        "none",
                                                                 }}
-                                                                isLoading={
-                                                                    loading
+                                                                onChange={(
+                                                                    event
+                                                                ) => {
+                                                                    onChangeFile2(
+                                                                        event,
+                                                                        filePropertyEdit2.id
+                                                                    );
+                                                                }}
+                                                            />
+                                                            <Text
+                                                                textAlign={
+                                                                    "center"
+                                                                }
+                                                                fontSize={"sm"}
+                                                            >
+                                                                Choose Image
+                                                            </Text>
+                                                        </Button>
+                                                    )}
+                                                    {/* Button Image 3 */}
+                                                    {filePropertyEdit3 ? (
+                                                        <>
+                                                            <Flex
+                                                                flexDir={
+                                                                    "column"
                                                                 }
                                                             >
-                                                                <Image
-                                                                    src={
-                                                                        typeof filePropertyEdit3.name ==
-                                                                        "string"
-                                                                            ? URL.createObjectURL(
-                                                                                  filePropertyEdit3
-                                                                              )
-                                                                            : `${process.env.REACT_APP_API_IMG_URL}${filePropertyEdit3.picture}`
-                                                                    }
-                                                                    w={"100px"}
-                                                                    h={"100px"}
-                                                                    my={"4"}
-                                                                    mx={"4"}
-                                                                    style={{
-                                                                        maxWidth:
-                                                                            "100px",
-                                                                        maxHeight:
-                                                                            "100px",
-                                                                        aspectRatio:
-                                                                            "1/1",
-                                                                        objectFit:
-                                                                            "cover",
-                                                                        borderRadius:
-                                                                            "6px",
-                                                                        boxShadow:
-                                                                            "2px 2px 5px gray",
+                                                                <Box
+                                                                    onClick={() => {
+                                                                        inputFile3.current.click();
                                                                     }}
-                                                                />
-                                                                <input
-                                                                    type="file"
-                                                                    id="file"
-                                                                    ref={
-                                                                        inputFile3
+                                                                    isLoading={
+                                                                        loading
                                                                     }
-                                                                    style={{
-                                                                        display:
-                                                                            "none",
-                                                                    }}
-                                                                    onChange={(
-                                                                        event
-                                                                    ) => {
-                                                                        onChangeFile3(
-                                                                            event,
-                                                                            filePropertyEdit3.id
+                                                                    align="center"
+                                                                >
+                                                                    <Image
+                                                                        src={
+                                                                            typeof filePropertyEdit3.name ==
+                                                                            "string"
+                                                                                ? URL.createObjectURL(
+                                                                                      filePropertyEdit3
+                                                                                  )
+                                                                                : `${process.env.REACT_APP_API_IMG_URL}${filePropertyEdit3.picture}`
+                                                                        }
+                                                                        w={
+                                                                            "100px"
+                                                                        }
+                                                                        h={
+                                                                            "100px"
+                                                                        }
+                                                                        my={"4"}
+                                                                        mx={"4"}
+                                                                        style={{
+                                                                            maxWidth:
+                                                                                "100px",
+                                                                            maxHeight:
+                                                                                "100px",
+                                                                            aspectRatio:
+                                                                                "1/1",
+                                                                            objectFit:
+                                                                                "cover",
+                                                                            borderRadius:
+                                                                                "6px",
+                                                                            boxShadow:
+                                                                                "2px 2px 5px gray",
+                                                                        }}
+                                                                    />
+                                                                    <input
+                                                                        type="file"
+                                                                        id="file"
+                                                                        ref={
+                                                                            inputFile3
+                                                                        }
+                                                                        style={{
+                                                                            display:
+                                                                                "none",
+                                                                        }}
+                                                                        onChange={(
+                                                                            event
+                                                                        ) => {
+                                                                            onChangeFile3(
+                                                                                event,
+                                                                                filePropertyEdit3.id
+                                                                            );
+                                                                        }}
+                                                                    />
+                                                                </Box>
+                                                                <Button
+                                                                    type="button"
+                                                                    h={"35px"}
+                                                                    w={"35px"}
+                                                                    variant="outline"
+                                                                    alignItems={
+                                                                        "center"
+                                                                    }
+                                                                    alignSelf={
+                                                                        "center"
+                                                                    }
+                                                                    mx={"auto"}
+                                                                    mb={"4"}
+                                                                    onClick={() => {
+                                                                        setFilePropertyEdit3(
+                                                                            null
+                                                                        );
+                                                                        deleteImageProperty(
+                                                                            propertyData
+                                                                                .picture_properties[2]
+                                                                                .id
                                                                         );
                                                                     }}
-                                                                />
-                                                            </Box>
-                                                            <Button
-                                                                type="button"
-                                                                h={"35px"}
-                                                                w={"35px"}
-                                                                variant="outline"
-                                                                alignItems={
-                                                                    "center"
-                                                                }
-                                                                alignSelf={
-                                                                    "center"
-                                                                }
-                                                                mx={"auto"}
-                                                                mb={"4"}
-                                                                onClick={() => {
-                                                                    setFilePropertyEdit3(
-                                                                        null
-                                                                    );
-                                                                    deleteImageProperty(
-                                                                        propertyData
-                                                                            .picture_properties[2]
-                                                                            .id
-                                                                    );
-                                                                }}
-                                                                isLoading={
-                                                                    loading
-                                                                }
-                                                            >
-                                                                <Text
-                                                                    fontSize={
-                                                                        "xl"
+                                                                    isLoading={
+                                                                        loading
                                                                     }
                                                                 >
-                                                                    <HiTrash
-                                                                        fontWeight={
-                                                                            "extrabold"
+                                                                    <Text
+                                                                        fontSize={
+                                                                            "xl"
                                                                         }
-                                                                        color="#D3212D"
-                                                                    />
-                                                                </Text>
-                                                            </Button>
-                                                        </Flex>
-                                                    </>
-                                                ) : (
-                                                    <Button
-                                                        type="button"
-                                                        justifyContent={
-                                                            "center"
-                                                        }
-                                                        display={"flex"}
-                                                        flexDir="column"
-                                                        size="md"
-                                                        w={"100px"}
-                                                        h={"100px"}
-                                                        textAlign="center"
-                                                        my={"4"}
-                                                        mx={"4"}
-                                                        variant="outline"
-                                                        _hover={""}
-                                                        bgColor={"gray.100"}
-                                                        alignItems={"center"}
-                                                        onClick={() => {
-                                                            inputFile3.current.click();
-                                                        }}
-                                                        isLoading={loading}
-                                                    >
-                                                        <SlPicture
-                                                            fontSize={"35px"}
-                                                            color="#D3212D"
-                                                        />
-                                                        <input
-                                                            type="file"
-                                                            id="file"
-                                                            ref={inputFile3}
-                                                            style={{
-                                                                display: "none",
+                                                                    >
+                                                                        <HiTrash
+                                                                            fontWeight={
+                                                                                "extrabold"
+                                                                            }
+                                                                            color="#D3212D"
+                                                                        />
+                                                                    </Text>
+                                                                </Button>
+                                                            </Flex>
+                                                        </>
+                                                    ) : (
+                                                        <Button
+                                                            type="button"
+                                                            justifyContent={
+                                                                "center"
+                                                            }
+                                                            display={"flex"}
+                                                            flexDir="column"
+                                                            size="md"
+                                                            w={"100px"}
+                                                            h={"100px"}
+                                                            textAlign="center"
+                                                            my={"4"}
+                                                            mx={{
+                                                                base: "auto",
+                                                                md: "auto",
+                                                                lg: "4",
                                                             }}
-                                                            onChange={(
-                                                                event
-                                                            ) => {
-                                                                onChangeFile3(
-                                                                    event,
-                                                                    filePropertyEdit3.id
-                                                                );
+                                                            variant="outline"
+                                                            _hover={""}
+                                                            bgColor={"gray.100"}
+                                                            alignItems={
+                                                                "center"
+                                                            }
+                                                            onClick={() => {
+                                                                inputFile3.current.click();
                                                             }}
-                                                        />
-                                                        <Text
-                                                            textAlign={"center"}
-                                                            fontSize={"sm"}
+                                                            isLoading={loading}
                                                         >
-                                                            Choose Image
-                                                        </Text>
-                                                    </Button>
-                                                )}
-                                                {/* Button Image 4 */}
-                                                {filePropertyEdit4 ? (
-                                                    <>
-                                                        <Flex
-                                                            flexDir={"column"}
-                                                        >
-                                                            <Box
-                                                                onClick={() => {
-                                                                    inputFile4.current.click();
+                                                            <SlPicture
+                                                                fontSize={
+                                                                    "35px"
+                                                                }
+                                                                color="#D3212D"
+                                                            />
+                                                            <input
+                                                                type="file"
+                                                                id="file"
+                                                                ref={inputFile3}
+                                                                style={{
+                                                                    display:
+                                                                        "none",
                                                                 }}
-                                                                isLoading={
-                                                                    loading
+                                                                onChange={(
+                                                                    event
+                                                                ) => {
+                                                                    onChangeFile3(
+                                                                        event,
+                                                                        filePropertyEdit3.id
+                                                                    );
+                                                                }}
+                                                            />
+                                                            <Text
+                                                                textAlign={
+                                                                    "center"
+                                                                }
+                                                                fontSize={"sm"}
+                                                            >
+                                                                Choose Image
+                                                            </Text>
+                                                        </Button>
+                                                    )}
+                                                    {/* Button Image 4 */}
+                                                    {filePropertyEdit4 ? (
+                                                        <>
+                                                            <Flex
+                                                                flexDir={
+                                                                    "column"
                                                                 }
                                                             >
-                                                                <Image
-                                                                    src={
-                                                                        typeof filePropertyEdit4.name ==
-                                                                        "string"
-                                                                            ? URL.createObjectURL(
-                                                                                  filePropertyEdit4
-                                                                              )
-                                                                            : `${process.env.REACT_APP_API_IMG_URL}${filePropertyEdit4.picture}`
-                                                                    }
-                                                                    w={"100px"}
-                                                                    h={"100px"}
-                                                                    my={"4"}
-                                                                    mx={"4"}
-                                                                    style={{
-                                                                        maxWidth:
-                                                                            "100px",
-                                                                        maxHeight:
-                                                                            "100px",
-                                                                        aspectRatio:
-                                                                            "1/1",
-                                                                        objectFit:
-                                                                            "cover",
-                                                                        boxShadow:
-                                                                            "2px 2px 5px gray",
-                                                                        borderRadius:
-                                                                            "6px",
+                                                                <Box
+                                                                    onClick={() => {
+                                                                        inputFile4.current.click();
                                                                     }}
-                                                                />
-                                                                <input
-                                                                    type="file"
-                                                                    id="file"
-                                                                    ref={
-                                                                        inputFile4
+                                                                    isLoading={
+                                                                        loading
                                                                     }
-                                                                    style={{
-                                                                        display:
-                                                                            "none",
-                                                                    }}
-                                                                    onChange={(
-                                                                        event
-                                                                    ) => {
-                                                                        onChangeFile4(
-                                                                            event,
-                                                                            filePropertyEdit4.id
+                                                                    align="center"
+                                                                >
+                                                                    <Image
+                                                                        src={
+                                                                            typeof filePropertyEdit4.name ==
+                                                                            "string"
+                                                                                ? URL.createObjectURL(
+                                                                                      filePropertyEdit4
+                                                                                  )
+                                                                                : `${process.env.REACT_APP_API_IMG_URL}${filePropertyEdit4.picture}`
+                                                                        }
+                                                                        w={
+                                                                            "100px"
+                                                                        }
+                                                                        h={
+                                                                            "100px"
+                                                                        }
+                                                                        my={"4"}
+                                                                        mx={"4"}
+                                                                        style={{
+                                                                            maxWidth:
+                                                                                "100px",
+                                                                            maxHeight:
+                                                                                "100px",
+                                                                            aspectRatio:
+                                                                                "1/1",
+                                                                            objectFit:
+                                                                                "cover",
+                                                                            boxShadow:
+                                                                                "2px 2px 5px gray",
+                                                                            borderRadius:
+                                                                                "6px",
+                                                                        }}
+                                                                    />
+                                                                    <input
+                                                                        type="file"
+                                                                        id="file"
+                                                                        ref={
+                                                                            inputFile4
+                                                                        }
+                                                                        style={{
+                                                                            display:
+                                                                                "none",
+                                                                        }}
+                                                                        onChange={(
+                                                                            event
+                                                                        ) => {
+                                                                            onChangeFile4(
+                                                                                event,
+                                                                                filePropertyEdit4.id
+                                                                            );
+                                                                        }}
+                                                                    />
+                                                                </Box>
+                                                                <Button
+                                                                    type="button"
+                                                                    h={"35px"}
+                                                                    w={"35px"}
+                                                                    variant="outline"
+                                                                    alignItems={
+                                                                        "center"
+                                                                    }
+                                                                    alignSelf={
+                                                                        "center"
+                                                                    }
+                                                                    mx={"auto"}
+                                                                    mb={"4"}
+                                                                    onClick={() => {
+                                                                        setFilePropertyEdit4(
+                                                                            null
+                                                                        );
+                                                                        deleteImageProperty(
+                                                                            propertyData
+                                                                                .picture_properties[3]
+                                                                                .id
                                                                         );
                                                                     }}
-                                                                />
-                                                            </Box>
-                                                            <Button
-                                                                type="button"
-                                                                h={"35px"}
-                                                                w={"35px"}
-                                                                variant="outline"
-                                                                alignItems={
-                                                                    "center"
-                                                                }
-                                                                alignSelf={
-                                                                    "center"
-                                                                }
-                                                                mx={"auto"}
-                                                                mb={"4"}
-                                                                onClick={() => {
-                                                                    setFilePropertyEdit4(
-                                                                        null
-                                                                    );
-                                                                    deleteImageProperty(
-                                                                        propertyData
-                                                                            .picture_properties[3]
-                                                                            .id
-                                                                    );
-                                                                }}
-                                                                isLoading={
-                                                                    loading
-                                                                }
-                                                            >
-                                                                <Text
-                                                                    fontSize={
-                                                                        "xl"
+                                                                    isLoading={
+                                                                        loading
                                                                     }
                                                                 >
-                                                                    <HiTrash
-                                                                        fontWeight={
-                                                                            "extrabold"
+                                                                    <Text
+                                                                        fontSize={
+                                                                            "xl"
                                                                         }
-                                                                        color="#D3212D"
-                                                                    />
-                                                                </Text>
-                                                            </Button>
-                                                        </Flex>
-                                                    </>
-                                                ) : (
-                                                    <Button
-                                                        type="button"
-                                                        justifyContent={
-                                                            "center"
-                                                        }
-                                                        display={"flex"}
-                                                        flexDir="column"
-                                                        size="md"
-                                                        w={"100px"}
-                                                        h={"100px"}
-                                                        textAlign="center"
-                                                        my={"4"}
-                                                        mx={"4"}
-                                                        variant="outline"
-                                                        _hover={""}
-                                                        bgColor={"gray.100"}
-                                                        alignItems={"center"}
-                                                        onClick={() => {
-                                                            inputFile4.current.click();
-                                                        }}
-                                                        isLoading={loading}
-                                                    >
-                                                        <SlPicture
-                                                            fontSize={"35px"}
-                                                            color="#D3212D"
-                                                        />
-                                                        <input
-                                                            type="file"
-                                                            id="file"
-                                                            ref={inputFile4}
-                                                            style={{
-                                                                display: "none",
+                                                                    >
+                                                                        <HiTrash
+                                                                            fontWeight={
+                                                                                "extrabold"
+                                                                            }
+                                                                            color="#D3212D"
+                                                                        />
+                                                                    </Text>
+                                                                </Button>
+                                                            </Flex>
+                                                        </>
+                                                    ) : (
+                                                        <Button
+                                                            type="button"
+                                                            justifyContent={
+                                                                "center"
+                                                            }
+                                                            display={"flex"}
+                                                            flexDir="column"
+                                                            size="md"
+                                                            w={"100px"}
+                                                            h={"100px"}
+                                                            textAlign="center"
+                                                            my={"4"}
+                                                            mx={{
+                                                                base: "auto",
+                                                                md: "auto",
+                                                                lg: "4",
                                                             }}
-                                                            onChange={(
-                                                                event
-                                                            ) => {
-                                                                onChangeFile4(
-                                                                    event,
-                                                                    filePropertyEdit4.id
-                                                                );
+                                                            variant="outline"
+                                                            _hover={""}
+                                                            bgColor={"gray.100"}
+                                                            alignItems={
+                                                                "center"
+                                                            }
+                                                            onClick={() => {
+                                                                inputFile4.current.click();
                                                             }}
-                                                        />
-                                                        <Text
-                                                            textAlign={"center"}
-                                                            fontSize={"sm"}
+                                                            isLoading={loading}
                                                         >
-                                                            Choose Image
-                                                        </Text>
-                                                    </Button>
-                                                )}
-                                                {/* Button Image 5 */}
-                                                {filePropertyEdit5 ? (
-                                                    <>
-                                                        <Flex
-                                                            flexDir={"column"}
-                                                        >
-                                                            <Box
-                                                                onClick={() => {
-                                                                    inputFile5.current.click();
+                                                            <SlPicture
+                                                                fontSize={
+                                                                    "35px"
+                                                                }
+                                                                color="#D3212D"
+                                                            />
+                                                            <input
+                                                                type="file"
+                                                                id="file"
+                                                                ref={inputFile4}
+                                                                style={{
+                                                                    display:
+                                                                        "none",
                                                                 }}
-                                                                isLoading={
-                                                                    loading
+                                                                onChange={(
+                                                                    event
+                                                                ) => {
+                                                                    onChangeFile4(
+                                                                        event,
+                                                                        filePropertyEdit4.id
+                                                                    );
+                                                                }}
+                                                            />
+                                                            <Text
+                                                                textAlign={
+                                                                    "center"
+                                                                }
+                                                                fontSize={"sm"}
+                                                            >
+                                                                Choose Image
+                                                            </Text>
+                                                        </Button>
+                                                    )}
+                                                    {/* Button Image 5 */}
+                                                    {filePropertyEdit5 ? (
+                                                        <>
+                                                            <Flex
+                                                                flexDir={
+                                                                    "column"
                                                                 }
                                                             >
-                                                                <Image
-                                                                    src={
-                                                                        typeof filePropertyEdit5.name ==
-                                                                        "string"
-                                                                            ? URL.createObjectURL(
-                                                                                  filePropertyEdit5
-                                                                              )
-                                                                            : `${process.env.REACT_APP_API_IMG_URL}${filePropertyEdit5.picture}`
-                                                                    }
-                                                                    w={"100px"}
-                                                                    h={"100px"}
-                                                                    my={"4"}
-                                                                    mx={"4"}
-                                                                    style={{
-                                                                        maxWidth:
-                                                                            "100px",
-                                                                        maxHeight:
-                                                                            "100px",
-                                                                        aspectRatio:
-                                                                            "1/1",
-                                                                        objectFit:
-                                                                            "cover",
-                                                                        borderRadius:
-                                                                            "6px",
-                                                                        boxShadow:
-                                                                            "2px 2px 5px gray",
+                                                                <Box
+                                                                    onClick={() => {
+                                                                        inputFile5.current.click();
                                                                     }}
-                                                                />
-                                                                <input
-                                                                    type="file"
-                                                                    id="file"
-                                                                    ref={
-                                                                        inputFile5
+                                                                    isLoading={
+                                                                        loading
                                                                     }
-                                                                    style={{
-                                                                        display:
-                                                                            "none",
-                                                                    }}
-                                                                    onChange={(
-                                                                        event
-                                                                    ) => {
-                                                                        onChangeFile5(
-                                                                            event,
-                                                                            filePropertyEdit5.id
+                                                                    align="center"
+                                                                >
+                                                                    <Image
+                                                                        src={
+                                                                            typeof filePropertyEdit5.name ==
+                                                                            "string"
+                                                                                ? URL.createObjectURL(
+                                                                                      filePropertyEdit5
+                                                                                  )
+                                                                                : `${process.env.REACT_APP_API_IMG_URL}${filePropertyEdit5.picture}`
+                                                                        }
+                                                                        w={
+                                                                            "100px"
+                                                                        }
+                                                                        h={
+                                                                            "100px"
+                                                                        }
+                                                                        my={"4"}
+                                                                        mx={"4"}
+                                                                        style={{
+                                                                            maxWidth:
+                                                                                "100px",
+                                                                            maxHeight:
+                                                                                "100px",
+                                                                            aspectRatio:
+                                                                                "1/1",
+                                                                            objectFit:
+                                                                                "cover",
+                                                                            borderRadius:
+                                                                                "6px",
+                                                                            boxShadow:
+                                                                                "2px 2px 5px gray",
+                                                                        }}
+                                                                    />
+                                                                    <input
+                                                                        type="file"
+                                                                        id="file"
+                                                                        ref={
+                                                                            inputFile5
+                                                                        }
+                                                                        style={{
+                                                                            display:
+                                                                                "none",
+                                                                        }}
+                                                                        onChange={(
+                                                                            event
+                                                                        ) => {
+                                                                            onChangeFile5(
+                                                                                event,
+                                                                                filePropertyEdit5.id
+                                                                            );
+                                                                        }}
+                                                                    />
+                                                                </Box>
+                                                                <Button
+                                                                    type="button"
+                                                                    h={"35px"}
+                                                                    w={"35px"}
+                                                                    variant="outline"
+                                                                    alignItems={
+                                                                        "center"
+                                                                    }
+                                                                    alignSelf={
+                                                                        "center"
+                                                                    }
+                                                                    mx={"auto"}
+                                                                    mb={"4"}
+                                                                    onClick={() => {
+                                                                        setFilePropertyEdit5(
+                                                                            null
+                                                                        );
+                                                                        deleteImageProperty(
+                                                                            propertyData
+                                                                                .picture_properties[4]
+                                                                                .id
                                                                         );
                                                                     }}
-                                                                />
-                                                            </Box>
-                                                            <Button
-                                                                type="button"
-                                                                h={"35px"}
-                                                                w={"35px"}
-                                                                variant="outline"
-                                                                alignItems={
-                                                                    "center"
-                                                                }
-                                                                alignSelf={
-                                                                    "center"
-                                                                }
-                                                                mx={"auto"}
-                                                                mb={"4"}
-                                                                onClick={() => {
-                                                                    setFilePropertyEdit5(
-                                                                        null
-                                                                    );
-                                                                    deleteImageProperty(
-                                                                        propertyData
-                                                                            .picture_properties[4]
-                                                                            .id
-                                                                    );
-                                                                }}
-                                                                isLoading={
-                                                                    loading
-                                                                }
-                                                            >
-                                                                <Text
-                                                                    fontSize={
-                                                                        "xl"
+                                                                    isLoading={
+                                                                        loading
                                                                     }
                                                                 >
-                                                                    <HiTrash
-                                                                        fontWeight={
-                                                                            "extrabold"
+                                                                    <Text
+                                                                        fontSize={
+                                                                            "xl"
                                                                         }
-                                                                        color="#D3212D"
-                                                                    />
-                                                                </Text>
-                                                            </Button>
-                                                        </Flex>
-                                                    </>
-                                                ) : (
-                                                    <Button
-                                                        type="button"
-                                                        justifyContent={
-                                                            "center"
-                                                        }
-                                                        display={"flex"}
-                                                        flexDir="column"
-                                                        size="md"
-                                                        w={"100px"}
-                                                        h={"100px"}
-                                                        textAlign="center"
-                                                        my={"4"}
-                                                        mx={"4"}
-                                                        variant="outline"
-                                                        _hover={""}
-                                                        bgColor={"gray.100"}
-                                                        alignItems={"center"}
-                                                        onClick={() => {
-                                                            inputFile5.current.click();
-                                                        }}
-                                                        isLoading={loading}
-                                                    >
-                                                        <SlPicture
-                                                            fontSize={"35px"}
-                                                            color="#D3212D"
-                                                        />
-                                                        <input
-                                                            type="file"
-                                                            id="file"
-                                                            ref={inputFile5}
-                                                            style={{
-                                                                display: "none",
+                                                                    >
+                                                                        <HiTrash
+                                                                            fontWeight={
+                                                                                "extrabold"
+                                                                            }
+                                                                            color="#D3212D"
+                                                                        />
+                                                                    </Text>
+                                                                </Button>
+                                                            </Flex>
+                                                        </>
+                                                    ) : (
+                                                        <Button
+                                                            type="button"
+                                                            justifyContent={
+                                                                "center"
+                                                            }
+                                                            display={"flex"}
+                                                            flexDir="column"
+                                                            size="md"
+                                                            w={"100px"}
+                                                            h={"100px"}
+                                                            textAlign="center"
+                                                            my={"4"}
+                                                            mx={{
+                                                                base: "auto",
+                                                                md: "auto",
+                                                                lg: "4",
                                                             }}
-                                                            onChange={(
-                                                                event
-                                                            ) => {
-                                                                onChangeFile5(
-                                                                    event,
-                                                                    filePropertyEdit5.id
-                                                                );
+                                                            variant="outline"
+                                                            _hover={""}
+                                                            bgColor={"gray.100"}
+                                                            alignItems={
+                                                                "center"
+                                                            }
+                                                            onClick={() => {
+                                                                inputFile5.current.click();
                                                             }}
-                                                        />
-                                                        <Text
-                                                            textAlign={"center"}
-                                                            fontSize={"sm"}
+                                                            isLoading={loading}
                                                         >
-                                                            Choose Image
-                                                        </Text>
-                                                    </Button>
-                                                )}
+                                                            <SlPicture
+                                                                fontSize={
+                                                                    "35px"
+                                                                }
+                                                                color="#D3212D"
+                                                            />
+                                                            <input
+                                                                type="file"
+                                                                id="file"
+                                                                ref={inputFile5}
+                                                                style={{
+                                                                    display:
+                                                                        "none",
+                                                                }}
+                                                                onChange={(
+                                                                    event
+                                                                ) => {
+                                                                    onChangeFile5(
+                                                                        event,
+                                                                        filePropertyEdit5.id
+                                                                    );
+                                                                }}
+                                                            />
+                                                            <Text
+                                                                textAlign={
+                                                                    "center"
+                                                                }
+                                                                fontSize={"sm"}
+                                                            >
+                                                                Choose Image
+                                                            </Text>
+                                                        </Button>
+                                                    )}
+                                                </Box>
                                             </Box>
                                         </Box>
                                     </Box>
                                 </Box>
                             </Box>
-                        </Box>
-                        <Box as={Flex} my={"10"}>
-                            <Flex
-                                flex={1}
-                                fontWeight={"medium"}
-                                alignItems={"center"}
-                            >
-                                <Text>Edit Description</Text>
-                            </Flex>
-                            <Box flex={3}>
-                                <Box mx="4" my="2">
-                                    <Textarea
-                                        placeholder="Describe your property"
-                                        size={"md"}
-                                        resize={"none"}
-                                        h={"250px"}
-                                        maxLength={250}
-                                        // value={description}
-                                        defaultValue={propertyData?.description}
-                                        onChange={(e) => {
-                                            setDescription(e.target.value);
-                                            setDescriptionLength(
-                                                e.target.value.length
-                                            );
-                                        }}
-                                    />
-                                    <Text
-                                        textAlign={"right"}
-                                        color={"gray.300"}
-                                    >
-                                        {descriptionLength}/250
-                                    </Text>
+                            <Box as={Flex} my={"10"}>
+                                <Flex
+                                    flex={1}
+                                    fontWeight={"medium"}
+                                    alignItems={"center"}
+                                >
+                                    <Text>Edit Description</Text>
+                                </Flex>
+                                <Box flex={3}>
+                                    <Box mx="4" my="2">
+                                        <Textarea
+                                            placeholder="Describe your property"
+                                            size={"md"}
+                                            resize={"none"}
+                                            h={"250px"}
+                                            maxLength={250}
+                                            // value={description}
+                                            defaultValue={
+                                                propertyData?.description
+                                            }
+                                            onChange={(e) => {
+                                                setDescription(e.target.value);
+                                                setDescriptionLength(
+                                                    e.target.value.length
+                                                );
+                                            }}
+                                        />
+                                        <Text
+                                            textAlign={"right"}
+                                            color={"gray.300"}
+                                        >
+                                            {descriptionLength}/250
+                                        </Text>
+                                    </Box>
                                 </Box>
                             </Box>
                         </Box>
                     </Box>
-                    <Box textAlign="left" fontSize={"3xl"} fontWeight="bold">
+                    <Box
+                        textAlign="left"
+                        fontSize={{ base: "xl", md: "3xl", lg: "3xl" }}
+                        fontWeight="bold"
+                    >
                         <h2>Property Location</h2>
                     </Box>
-                    <Box as={Flex} my="10">
+                    <Box as={Flex} my="10" fontSize={{ base: "xs", md: "lg" }}>
                         <Flex
                             flex={1}
                             fontWeight="medium"
@@ -1423,7 +1566,11 @@ function ManageProperty(props) {
                         <Box flex={3} display="flex" flexDir={"column"}>
                             <Box display={"flex"} flexDir={"row"}>
                                 <FormControl mx={"4"}>
-                                    <FormLabel>Address</FormLabel>
+                                    <FormLabel
+                                        fontSize={{ base: "xs", md: "lg" }}
+                                    >
+                                        Address
+                                    </FormLabel>
                                     <Input
                                         isRequired
                                         type="text"
@@ -1438,7 +1585,11 @@ function ManageProperty(props) {
                                             setAddress(e.target.value);
                                         }}
                                     />
-                                    <FormLabel>Province</FormLabel>
+                                    <FormLabel
+                                        fontSize={{ base: "xs", md: "lg" }}
+                                    >
+                                        Province
+                                    </FormLabel>
                                     <Box
                                         display={"flex"}
                                         w={"full"}
@@ -1459,7 +1610,11 @@ function ManageProperty(props) {
                                             />
                                         </FormControl>
                                     </Box>
-                                    <FormLabel>Regency</FormLabel>
+                                    <FormLabel
+                                        fontSize={{ base: "xs", md: "lg" }}
+                                    >
+                                        Regency
+                                    </FormLabel>
                                     <Box
                                         display={"flex"}
                                         w={"full"}
@@ -1481,7 +1636,11 @@ function ManageProperty(props) {
                                         </FormControl>
                                     </Box>
 
-                                    <FormLabel>Zip Code</FormLabel>
+                                    <FormLabel
+                                        fontSize={{ base: "xs", md: "lg" }}
+                                    >
+                                        Zip Code
+                                    </FormLabel>
                                     <Input
                                         isRequired
                                         type="number"
@@ -1497,7 +1656,11 @@ function ManageProperty(props) {
                                         maxLength={5}
                                     />
 
-                                    <FormLabel>Country</FormLabel>
+                                    <FormLabel
+                                        fontSize={{ base: "xs", md: "lg" }}
+                                    >
+                                        Country
+                                    </FormLabel>
                                     <Input
                                         isRequired
                                         type="text"
@@ -1513,7 +1676,11 @@ function ManageProperty(props) {
                                         }}
                                     />
 
-                                    <FormLabel>Google Maps</FormLabel>
+                                    <FormLabel
+                                        fontSize={{ base: "xs", md: "lg" }}
+                                    >
+                                        Google Maps
+                                    </FormLabel>
                                     <Input
                                         isRequired
                                         type="url"

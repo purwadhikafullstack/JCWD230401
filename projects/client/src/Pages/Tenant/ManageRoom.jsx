@@ -277,7 +277,7 @@ function ManageRoom(props) {
                 >
                     <Box
                         textAlign="left"
-                        fontSize={"5xl"}
+                        fontSize={{ base: "2xl", md: "5xl", lg: "5xl" }}
                         fontWeight="bold"
                         mt="10"
                     >
@@ -286,920 +286,1037 @@ function ManageRoom(props) {
                     <Box mt={"10"}>
                         <Box
                             textAlign="left"
-                            fontSize={"3xl"}
+                            fontSize={{ base: "xl", md: "3xl", lg: "3xl" }}
                             fontWeight="bold"
                         >
                             <h2>Room Information</h2>
                         </Box>
-
-                        <Box as={Flex} my={"10"}>
-                            <Flex
-                                flex={1}
-                                fontWeight={"medium"}
-                                alignItems={"center"}
-                            >
-                                <Text>Edit room name</Text>
-                            </Flex>
-                            <Box flex={3}>
-                                <Box mx="4" my="2">
-                                    <InputGroup display={"flex"} size={"md"}>
-                                        <Input
-                                            isRequired
-                                            placeholder="Enter the name of your room"
-                                            type="text"
-                                            justifyItems={"self-end"}
-                                            h={"40px"}
-                                            defaultValue={
-                                                roomData?.room_category?.name
-                                            }
-                                            onChange={(e) =>
-                                                setRoomName(e.target.value)
-                                            }
-                                        />
-                                    </InputGroup>
+                        <Box fontSize={{ base: "xs", md: "lg" }}>
+                            <Box as={Flex} my={"10"}>
+                                <Flex
+                                    flex={1}
+                                    fontWeight={"medium"}
+                                    alignItems={"center"}
+                                >
+                                    <Text>Edit room name</Text>
+                                </Flex>
+                                <Box flex={3}>
+                                    <Box mx="4" my="2">
+                                        <InputGroup
+                                            display={"flex"}
+                                            size={"md"}
+                                        >
+                                            <Input
+                                                isRequired
+                                                placeholder="Enter the name of your room"
+                                                type="text"
+                                                justifyItems={"self-end"}
+                                                h={"40px"}
+                                                defaultValue={
+                                                    roomData?.room_category
+                                                        ?.name
+                                                }
+                                                onChange={(e) =>
+                                                    setRoomName(e.target.value)
+                                                }
+                                            />
+                                        </InputGroup>
+                                    </Box>
                                 </Box>
                             </Box>
-                        </Box>
-                        {/* Upload Photo/s */}
-                        <Box as={Flex} my={"10"}>
-                            <Flex
-                                flex={1}
-                                fontWeight={"medium"}
-                                alignItems={"center"}
-                            >
-                                <Text>Edit Room Photos</Text>
-                            </Flex>
-                            <Box flex={3}>
-                                <Box
-                                    display={"flex"}
-                                    flexDir={"column"}
-                                    placeItems={"center"}
+                            {/* Upload Photo/s */}
+                            <Box as={Flex} my={"10"}>
+                                <Flex
+                                    flex={1}
+                                    fontWeight={"medium"}
+                                    alignItems={"center"}
                                 >
+                                    <Text>Edit Room Photos</Text>
+                                </Flex>
+                                <Box flex={3}>
                                     <Box
-                                        border={"2px"}
-                                        borderStyle={"dashed"}
-                                        borderColor={"gray.200"}
-                                        borderRadius={"lg"}
-                                        mx="4"
-                                        my="2"
-                                        minW={"871px"}
+                                        display={"flex"}
+                                        flexDir={"column"}
+                                        placeItems={"center"}
                                     >
-                                        <Box as={Flex}>
-                                            <Box
-                                                display={"flex"}
-                                                w={"full"}
-                                                justifyContent={"space-between"}
-                                            >
-                                                {/* Button Image 1 */}
-                                                {fileRoomEdit1 ? (
-                                                    <>
-                                                        <Flex
-                                                            flexDir={"column"}
-                                                        >
-                                                            <Box
-                                                                onClick={() => {
-                                                                    inputFile1.current.click();
-                                                                }}
-                                                                isLoading={
-                                                                    loading
+                                        <Box
+                                            border={"2px"}
+                                            borderStyle={"dashed"}
+                                            borderColor={"gray.200"}
+                                            borderRadius={"lg"}
+                                            mx="4"
+                                            my="2"
+                                            minW={{
+                                                base: "187px",
+                                                md: "509px",
+                                                lg: "871px",
+                                            }}
+                                        >
+                                            <Box as={Flex}>
+                                                <Box
+                                                    display={"flex"}
+                                                    flexDir={{
+                                                        base: "column",
+                                                        md: "column",
+                                                        lg: "row",
+                                                    }}
+                                                    w={"full"}
+                                                    justifyContent={
+                                                        "space-between"
+                                                    }
+                                                >
+                                                    {/* Button Image 1 */}
+                                                    {fileRoomEdit1 ? (
+                                                        <>
+                                                            <Flex
+                                                                flexDir={
+                                                                    "column"
                                                                 }
                                                             >
-                                                                <Image
-                                                                    src={
-                                                                        typeof fileRoomEdit1.name ==
-                                                                        "string"
-                                                                            ? URL.createObjectURL(
-                                                                                  fileRoomEdit1
-                                                                              )
-                                                                            : `${process.env.REACT_APP_API_IMG_URL}${fileRoomEdit1.picture}`
-                                                                    }
-                                                                    w={"100px"}
-                                                                    h={"100px"}
-                                                                    my={"4"}
-                                                                    mx={"4"}
-                                                                    style={{
-                                                                        maxWidth:
-                                                                            "100px",
-                                                                        maxHeight:
-                                                                            "100px",
-                                                                        aspectRatio:
-                                                                            "1/1",
-                                                                        objectFit:
-                                                                            "cover",
-                                                                        borderRadius:
-                                                                            "6px",
-                                                                        boxShadow:
-                                                                            "2px 2px 5px gray",
+                                                                <Box
+                                                                    onClick={() => {
+                                                                        inputFile1.current.click();
                                                                     }}
-                                                                />
-                                                                <input
-                                                                    type="file"
-                                                                    id="file"
-                                                                    ref={
-                                                                        inputFile1
+                                                                    isLoading={
+                                                                        loading
                                                                     }
-                                                                    style={{
-                                                                        display:
-                                                                            "none",
-                                                                    }}
-                                                                    onChange={(
-                                                                        event
-                                                                    ) => {
-                                                                        onChangeFile1(
-                                                                            event,
-                                                                            fileRoomEdit1.id
+                                                                    align="center"
+                                                                >
+                                                                    <Image
+                                                                        src={
+                                                                            typeof fileRoomEdit1.name ==
+                                                                            "string"
+                                                                                ? URL.createObjectURL(
+                                                                                      fileRoomEdit1
+                                                                                  )
+                                                                                : `${process.env.REACT_APP_API_IMG_URL}${fileRoomEdit1.picture}`
+                                                                        }
+                                                                        w={
+                                                                            "100px"
+                                                                        }
+                                                                        h={
+                                                                            "100px"
+                                                                        }
+                                                                        my={"4"}
+                                                                        mx={"4"}
+                                                                        style={{
+                                                                            maxWidth:
+                                                                                "100px",
+                                                                            maxHeight:
+                                                                                "100px",
+                                                                            aspectRatio:
+                                                                                "1/1",
+                                                                            objectFit:
+                                                                                "cover",
+                                                                            borderRadius:
+                                                                                "6px",
+                                                                            boxShadow:
+                                                                                "2px 2px 5px gray",
+                                                                        }}
+                                                                    />
+                                                                    <input
+                                                                        type="file"
+                                                                        id="file"
+                                                                        ref={
+                                                                            inputFile1
+                                                                        }
+                                                                        style={{
+                                                                            display:
+                                                                                "none",
+                                                                        }}
+                                                                        onChange={(
+                                                                            event
+                                                                        ) => {
+                                                                            onChangeFile1(
+                                                                                event,
+                                                                                fileRoomEdit1.id
+                                                                            );
+                                                                        }}
+                                                                    />
+                                                                </Box>
+                                                                <Button
+                                                                    type="button"
+                                                                    h={"35px"}
+                                                                    w={"35px"}
+                                                                    variant="outline"
+                                                                    alignItems={
+                                                                        "center"
+                                                                    }
+                                                                    alignSelf={
+                                                                        "center"
+                                                                    }
+                                                                    mx={"auto"}
+                                                                    mb={"4"}
+                                                                    onClick={() => {
+                                                                        setFileRoomEdit1(
+                                                                            null
+                                                                        );
+                                                                        deleteImageRoom(
+                                                                            roomData
+                                                                                .picture_rooms[0]
+                                                                                .id
                                                                         );
                                                                     }}
-                                                                />
-                                                            </Box>
-                                                            <Button
-                                                                type="button"
-                                                                h={"35px"}
-                                                                w={"35px"}
-                                                                variant="outline"
-                                                                alignItems={
-                                                                    "center"
-                                                                }
-                                                                alignSelf={
-                                                                    "center"
-                                                                }
-                                                                mx={"auto"}
-                                                                mb={"4"}
-                                                                onClick={() => {
-                                                                    setFileRoomEdit1(
-                                                                        null
-                                                                    );
-                                                                    deleteImageRoom(
-                                                                        roomData
-                                                                            .picture_rooms[0]
-                                                                            .id
-                                                                    );
-                                                                }}
-                                                                isLoading={
-                                                                    loading
-                                                                }
-                                                            >
-                                                                <Text
-                                                                    fontSize={
-                                                                        "xl"
+                                                                    isLoading={
+                                                                        loading
                                                                     }
                                                                 >
-                                                                    <HiTrash
-                                                                        fontWeight={
-                                                                            "extrabold"
+                                                                    <Text
+                                                                        fontSize={
+                                                                            "xl"
                                                                         }
-                                                                        color="#D3212D"
-                                                                    />
-                                                                </Text>
-                                                            </Button>
-                                                        </Flex>
-                                                    </>
-                                                ) : (
-                                                    <Button
-                                                        type="button"
-                                                        justifyContent={
-                                                            "center"
-                                                        }
-                                                        display={"flex"}
-                                                        flexDir="column"
-                                                        size="md"
-                                                        w={"100px"}
-                                                        h={"100px"}
-                                                        textAlign="center"
-                                                        my={"4"}
-                                                        mx={"4"}
-                                                        variant="outline"
-                                                        _hover={""}
-                                                        bgColor={"gray.100"}
-                                                        alignItems={"center"}
-                                                        onClick={() => {
-                                                            inputFile1.current.click();
-                                                        }}
-                                                        isLoading={loading}
-                                                    >
-                                                        <SlPicture
-                                                            fontSize={"35px"}
-                                                            color="#D3212D"
-                                                        />
-                                                        <input
-                                                            type="file"
-                                                            id="file"
-                                                            ref={inputFile1}
-                                                            style={{
-                                                                display: "none",
+                                                                    >
+                                                                        <HiTrash
+                                                                            fontWeight={
+                                                                                "extrabold"
+                                                                            }
+                                                                            color="#D3212D"
+                                                                        />
+                                                                    </Text>
+                                                                </Button>
+                                                            </Flex>
+                                                        </>
+                                                    ) : (
+                                                        <Button
+                                                            type="button"
+                                                            justifyContent={
+                                                                "center"
+                                                            }
+                                                            display={"flex"}
+                                                            flexDir="column"
+                                                            size="md"
+                                                            w={"100px"}
+                                                            h={"100px"}
+                                                            textAlign="center"
+                                                            my={"4"}
+                                                            mx={{
+                                                                base: "auto",
+                                                                md: "auto",
+                                                                lg: "4",
                                                             }}
-                                                            onChange={(
-                                                                event
-                                                            ) => {
-                                                                onChangeFile1(
-                                                                    event,
-                                                                    fileRoomEdit1.id
-                                                                );
+                                                            variant="outline"
+                                                            _hover={""}
+                                                            bgColor={"gray.100"}
+                                                            alignItems={
+                                                                "center"
+                                                            }
+                                                            onClick={() => {
+                                                                inputFile1.current.click();
                                                             }}
-                                                        />
-                                                        <Text
-                                                            textAlign={"center"}
-                                                            fontSize={"sm"}
+                                                            isLoading={loading}
                                                         >
-                                                            Choose Image
-                                                        </Text>
-                                                    </Button>
-                                                )}
+                                                            <SlPicture
+                                                                fontSize={
+                                                                    "35px"
+                                                                }
+                                                                color="#D3212D"
+                                                            />
+                                                            <input
+                                                                type="file"
+                                                                id="file"
+                                                                ref={inputFile1}
+                                                                style={{
+                                                                    display:
+                                                                        "none",
+                                                                }}
+                                                                onChange={(
+                                                                    event
+                                                                ) => {
+                                                                    onChangeFile1(
+                                                                        event,
+                                                                        fileRoomEdit1.id
+                                                                    );
+                                                                }}
+                                                            />
+                                                            <Text
+                                                                textAlign={
+                                                                    "center"
+                                                                }
+                                                                fontSize={"sm"}
+                                                            >
+                                                                Choose Image
+                                                            </Text>
+                                                        </Button>
+                                                    )}
 
-                                                {/* Button Image 2 */}
-                                                {fileRoomEdit2 ? (
-                                                    <>
-                                                        <Flex
-                                                            flexDir={"column"}
-                                                        >
-                                                            <Box
-                                                                onClick={() => {
-                                                                    inputFile2.current.click();
-                                                                }}
-                                                                isLoading={
-                                                                    loading
+                                                    {/* Button Image 2 */}
+                                                    {fileRoomEdit2 ? (
+                                                        <>
+                                                            <Flex
+                                                                flexDir={
+                                                                    "column"
                                                                 }
                                                             >
-                                                                <Image
-                                                                    src={
-                                                                        typeof fileRoomEdit2.name ==
-                                                                        "string"
-                                                                            ? URL.createObjectURL(
-                                                                                  fileRoomEdit2
-                                                                              )
-                                                                            : `${process.env.REACT_APP_API_IMG_URL}${fileRoomEdit2.picture}`
-                                                                    }
-                                                                    w={"100px"}
-                                                                    h={"100px"}
-                                                                    my={"4"}
-                                                                    mx={"4"}
-                                                                    style={{
-                                                                        maxWidth:
-                                                                            "100px",
-                                                                        maxHeight:
-                                                                            "100px",
-                                                                        aspectRatio:
-                                                                            "1/1",
-                                                                        objectFit:
-                                                                            "cover",
-                                                                        borderRadius:
-                                                                            "6px",
-                                                                        boxShadow:
-                                                                            "2px 2px 5px gray",
+                                                                <Box
+                                                                    onClick={() => {
+                                                                        inputFile2.current.click();
                                                                     }}
-                                                                />
-                                                                <input
-                                                                    type="file"
-                                                                    id="file"
-                                                                    ref={
-                                                                        inputFile2
+                                                                    isLoading={
+                                                                        loading
                                                                     }
-                                                                    style={{
-                                                                        display:
-                                                                            "none",
-                                                                    }}
-                                                                    onChange={(
-                                                                        event
-                                                                    ) => {
-                                                                        onChangeFile2(
-                                                                            event,
-                                                                            fileRoomEdit2.id
+                                                                    align="center"
+                                                                >
+                                                                    <Image
+                                                                        src={
+                                                                            typeof fileRoomEdit2.name ==
+                                                                            "string"
+                                                                                ? URL.createObjectURL(
+                                                                                      fileRoomEdit2
+                                                                                  )
+                                                                                : `${process.env.REACT_APP_API_IMG_URL}${fileRoomEdit2.picture}`
+                                                                        }
+                                                                        w={
+                                                                            "100px"
+                                                                        }
+                                                                        h={
+                                                                            "100px"
+                                                                        }
+                                                                        my={"4"}
+                                                                        mx={"4"}
+                                                                        style={{
+                                                                            maxWidth:
+                                                                                "100px",
+                                                                            maxHeight:
+                                                                                "100px",
+                                                                            aspectRatio:
+                                                                                "1/1",
+                                                                            objectFit:
+                                                                                "cover",
+                                                                            borderRadius:
+                                                                                "6px",
+                                                                            boxShadow:
+                                                                                "2px 2px 5px gray",
+                                                                        }}
+                                                                    />
+                                                                    <input
+                                                                        type="file"
+                                                                        id="file"
+                                                                        ref={
+                                                                            inputFile2
+                                                                        }
+                                                                        style={{
+                                                                            display:
+                                                                                "none",
+                                                                        }}
+                                                                        onChange={(
+                                                                            event
+                                                                        ) => {
+                                                                            onChangeFile2(
+                                                                                event,
+                                                                                fileRoomEdit2.id
+                                                                            );
+                                                                        }}
+                                                                    />
+                                                                </Box>
+                                                                <Button
+                                                                    type="button"
+                                                                    h={"35px"}
+                                                                    w={"35px"}
+                                                                    variant="outline"
+                                                                    alignItems={
+                                                                        "center"
+                                                                    }
+                                                                    alignSelf={
+                                                                        "center"
+                                                                    }
+                                                                    mx={"auto"}
+                                                                    mb={"4"}
+                                                                    onClick={() => {
+                                                                        setFileRoomEdit2(
+                                                                            null
+                                                                        );
+                                                                        deleteImageRoom(
+                                                                            roomData
+                                                                                .picture_rooms[1]
+                                                                                .id
                                                                         );
                                                                     }}
-                                                                />
-                                                            </Box>
-                                                            <Button
-                                                                type="button"
-                                                                h={"35px"}
-                                                                w={"35px"}
-                                                                variant="outline"
-                                                                alignItems={
-                                                                    "center"
-                                                                }
-                                                                alignSelf={
-                                                                    "center"
-                                                                }
-                                                                mx={"auto"}
-                                                                mb={"4"}
-                                                                onClick={() => {
-                                                                    setFileRoomEdit2(
-                                                                        null
-                                                                    );
-                                                                    deleteImageRoom(
-                                                                        roomData
-                                                                            .picture_rooms[1]
-                                                                            .id
-                                                                    );
-                                                                }}
-                                                                isLoading={
-                                                                    loading
-                                                                }
-                                                            >
-                                                                <Text
-                                                                    fontSize={
-                                                                        "xl"
+                                                                    isLoading={
+                                                                        loading
                                                                     }
                                                                 >
-                                                                    <HiTrash
-                                                                        fontWeight={
-                                                                            "extrabold"
+                                                                    <Text
+                                                                        fontSize={
+                                                                            "xl"
                                                                         }
-                                                                        color="#D3212D"
-                                                                    />
-                                                                </Text>
-                                                            </Button>
-                                                        </Flex>
-                                                    </>
-                                                ) : (
-                                                    <Button
-                                                        type="button"
-                                                        justifyContent={
-                                                            "center"
-                                                        }
-                                                        display={"flex"}
-                                                        flexDir="column"
-                                                        size="md"
-                                                        w={"100px"}
-                                                        h={"100px"}
-                                                        textAlign="center"
-                                                        my={"4"}
-                                                        mx={"4"}
-                                                        variant="outline"
-                                                        _hover={""}
-                                                        bgColor={"gray.100"}
-                                                        alignItems={"center"}
-                                                        onClick={() => {
-                                                            inputFile2.current.click();
-                                                        }}
-                                                        isLoading={loading}
-                                                    >
-                                                        <SlPicture
-                                                            fontSize={"35px"}
-                                                            color="#D3212D"
-                                                        />
-                                                        <input
-                                                            type="file"
-                                                            id="file"
-                                                            ref={inputFile2}
-                                                            style={{
-                                                                display: "none",
+                                                                    >
+                                                                        <HiTrash
+                                                                            fontWeight={
+                                                                                "extrabold"
+                                                                            }
+                                                                            color="#D3212D"
+                                                                        />
+                                                                    </Text>
+                                                                </Button>
+                                                            </Flex>
+                                                        </>
+                                                    ) : (
+                                                        <Button
+                                                            type="button"
+                                                            justifyContent={
+                                                                "center"
+                                                            }
+                                                            display={"flex"}
+                                                            flexDir="column"
+                                                            size="md"
+                                                            w={"100px"}
+                                                            h={"100px"}
+                                                            textAlign="center"
+                                                            my={"4"}
+                                                            mx={{
+                                                                base: "auto",
+                                                                md: "auto",
+                                                                lg: "4",
                                                             }}
-                                                            onChange={(
-                                                                event
-                                                            ) => {
-                                                                onChangeFile2(
-                                                                    event,
-                                                                    fileRoomEdit2.id
-                                                                );
+                                                            variant="outline"
+                                                            _hover={""}
+                                                            bgColor={"gray.100"}
+                                                            alignItems={
+                                                                "center"
+                                                            }
+                                                            onClick={() => {
+                                                                inputFile2.current.click();
                                                             }}
-                                                        />
-                                                        <Text
-                                                            textAlign={"center"}
-                                                            fontSize={"sm"}
+                                                            isLoading={loading}
                                                         >
-                                                            Choose Image
-                                                        </Text>
-                                                    </Button>
-                                                )}
-                                                {/* Button Image 3 */}
-                                                {fileRoomEdit3 ? (
-                                                    <>
-                                                        <Flex
-                                                            flexDir={"column"}
-                                                        >
-                                                            <Box
-                                                                onClick={() => {
-                                                                    inputFile3.current.click();
+                                                            <SlPicture
+                                                                fontSize={
+                                                                    "35px"
+                                                                }
+                                                                color="#D3212D"
+                                                            />
+                                                            <input
+                                                                type="file"
+                                                                id="file"
+                                                                ref={inputFile2}
+                                                                style={{
+                                                                    display:
+                                                                        "none",
                                                                 }}
-                                                                isLoading={
-                                                                    loading
+                                                                onChange={(
+                                                                    event
+                                                                ) => {
+                                                                    onChangeFile2(
+                                                                        event,
+                                                                        fileRoomEdit2.id
+                                                                    );
+                                                                }}
+                                                            />
+                                                            <Text
+                                                                textAlign={
+                                                                    "center"
+                                                                }
+                                                                fontSize={"sm"}
+                                                            >
+                                                                Choose Image
+                                                            </Text>
+                                                        </Button>
+                                                    )}
+                                                    {/* Button Image 3 */}
+                                                    {fileRoomEdit3 ? (
+                                                        <>
+                                                            <Flex
+                                                                flexDir={
+                                                                    "column"
                                                                 }
                                                             >
-                                                                <Image
-                                                                    src={
-                                                                        typeof fileRoomEdit3.name ==
-                                                                        "string"
-                                                                            ? URL.createObjectURL(
-                                                                                  fileRoomEdit3
-                                                                              )
-                                                                            : `${process.env.REACT_APP_API_IMG_URL}${fileRoomEdit3.picture}`
-                                                                    }
-                                                                    w={"100px"}
-                                                                    h={"100px"}
-                                                                    my={"4"}
-                                                                    mx={"4"}
-                                                                    style={{
-                                                                        maxWidth:
-                                                                            "100px",
-                                                                        maxHeight:
-                                                                            "100px",
-                                                                        aspectRatio:
-                                                                            "1/1",
-                                                                        objectFit:
-                                                                            "cover",
-                                                                        borderRadius:
-                                                                            "6px",
-                                                                        boxShadow:
-                                                                            "2px 2px 5px gray",
+                                                                <Box
+                                                                    onClick={() => {
+                                                                        inputFile3.current.click();
                                                                     }}
-                                                                />
-                                                                <input
-                                                                    type="file"
-                                                                    id="file"
-                                                                    ref={
-                                                                        inputFile3
+                                                                    isLoading={
+                                                                        loading
                                                                     }
-                                                                    style={{
-                                                                        display:
-                                                                            "none",
-                                                                    }}
-                                                                    onChange={(
-                                                                        event
-                                                                    ) => {
-                                                                        onChangeFile3(
-                                                                            event,
-                                                                            fileRoomEdit3.id
+                                                                    align="center"
+                                                                >
+                                                                    <Image
+                                                                        src={
+                                                                            typeof fileRoomEdit3.name ==
+                                                                            "string"
+                                                                                ? URL.createObjectURL(
+                                                                                      fileRoomEdit3
+                                                                                  )
+                                                                                : `${process.env.REACT_APP_API_IMG_URL}${fileRoomEdit3.picture}`
+                                                                        }
+                                                                        w={
+                                                                            "100px"
+                                                                        }
+                                                                        h={
+                                                                            "100px"
+                                                                        }
+                                                                        my={"4"}
+                                                                        mx={"4"}
+                                                                        style={{
+                                                                            maxWidth:
+                                                                                "100px",
+                                                                            maxHeight:
+                                                                                "100px",
+                                                                            aspectRatio:
+                                                                                "1/1",
+                                                                            objectFit:
+                                                                                "cover",
+                                                                            borderRadius:
+                                                                                "6px",
+                                                                            boxShadow:
+                                                                                "2px 2px 5px gray",
+                                                                        }}
+                                                                    />
+                                                                    <input
+                                                                        type="file"
+                                                                        id="file"
+                                                                        ref={
+                                                                            inputFile3
+                                                                        }
+                                                                        style={{
+                                                                            display:
+                                                                                "none",
+                                                                        }}
+                                                                        onChange={(
+                                                                            event
+                                                                        ) => {
+                                                                            onChangeFile3(
+                                                                                event,
+                                                                                fileRoomEdit3.id
+                                                                            );
+                                                                        }}
+                                                                    />
+                                                                </Box>
+                                                                <Button
+                                                                    type="button"
+                                                                    h={"35px"}
+                                                                    w={"35px"}
+                                                                    variant="outline"
+                                                                    alignItems={
+                                                                        "center"
+                                                                    }
+                                                                    alignSelf={
+                                                                        "center"
+                                                                    }
+                                                                    mx={"auto"}
+                                                                    mb={"4"}
+                                                                    onClick={() => {
+                                                                        setFileRoomEdit3(
+                                                                            null
+                                                                        );
+                                                                        deleteImageRoom(
+                                                                            roomData
+                                                                                .picture_rooms[2]
+                                                                                .id
                                                                         );
                                                                     }}
-                                                                />
-                                                            </Box>
-                                                            <Button
-                                                                type="button"
-                                                                h={"35px"}
-                                                                w={"35px"}
-                                                                variant="outline"
-                                                                alignItems={
-                                                                    "center"
-                                                                }
-                                                                alignSelf={
-                                                                    "center"
-                                                                }
-                                                                mx={"auto"}
-                                                                mb={"4"}
-                                                                onClick={() => {
-                                                                    setFileRoomEdit3(
-                                                                        null
-                                                                    );
-                                                                    deleteImageRoom(
-                                                                        roomData
-                                                                            .picture_rooms[2]
-                                                                            .id
-                                                                    );
-                                                                }}
-                                                                isLoading={
-                                                                    loading
-                                                                }
-                                                            >
-                                                                <Text
-                                                                    fontSize={
-                                                                        "xl"
+                                                                    isLoading={
+                                                                        loading
                                                                     }
                                                                 >
-                                                                    <HiTrash
-                                                                        fontWeight={
-                                                                            "extrabold"
+                                                                    <Text
+                                                                        fontSize={
+                                                                            "xl"
                                                                         }
-                                                                        color="#D3212D"
-                                                                    />
-                                                                </Text>
-                                                            </Button>
-                                                        </Flex>
-                                                    </>
-                                                ) : (
-                                                    <Button
-                                                        type="button"
-                                                        justifyContent={
-                                                            "center"
-                                                        }
-                                                        display={"flex"}
-                                                        flexDir="column"
-                                                        size="md"
-                                                        w={"100px"}
-                                                        h={"100px"}
-                                                        textAlign="center"
-                                                        my={"4"}
-                                                        mx={"4"}
-                                                        variant="outline"
-                                                        _hover={""}
-                                                        bgColor={"gray.100"}
-                                                        alignItems={"center"}
-                                                        onClick={() => {
-                                                            inputFile3.current.click();
-                                                        }}
-                                                        isLoading={loading}
-                                                    >
-                                                        <SlPicture
-                                                            fontSize={"35px"}
-                                                            color="#D3212D"
-                                                        />
-                                                        <input
-                                                            type="file"
-                                                            id="file"
-                                                            ref={inputFile3}
-                                                            style={{
-                                                                display: "none",
+                                                                    >
+                                                                        <HiTrash
+                                                                            fontWeight={
+                                                                                "extrabold"
+                                                                            }
+                                                                            color="#D3212D"
+                                                                        />
+                                                                    </Text>
+                                                                </Button>
+                                                            </Flex>
+                                                        </>
+                                                    ) : (
+                                                        <Button
+                                                            type="button"
+                                                            justifyContent={
+                                                                "center"
+                                                            }
+                                                            display={"flex"}
+                                                            flexDir="column"
+                                                            size="md"
+                                                            w={"100px"}
+                                                            h={"100px"}
+                                                            textAlign="center"
+                                                            my={"4"}
+                                                            mx={{
+                                                                base: "auto",
+                                                                md: "auto",
+                                                                lg: "4",
                                                             }}
-                                                            onChange={(
-                                                                event
-                                                            ) => {
-                                                                onChangeFile3(
-                                                                    event,
-                                                                    fileRoomEdit3.id
-                                                                );
+                                                            variant="outline"
+                                                            _hover={""}
+                                                            bgColor={"gray.100"}
+                                                            alignItems={
+                                                                "center"
+                                                            }
+                                                            onClick={() => {
+                                                                inputFile3.current.click();
                                                             }}
-                                                        />
-                                                        <Text
-                                                            textAlign={"center"}
-                                                            fontSize={"sm"}
+                                                            isLoading={loading}
                                                         >
-                                                            Choose Image
-                                                        </Text>
-                                                    </Button>
-                                                )}
-                                                {/* Button Image 4 */}
-                                                {fileRoomEdit4 ? (
-                                                    <>
-                                                        <Flex
-                                                            flexDir={"column"}
-                                                        >
-                                                            <Box
-                                                                onClick={() => {
-                                                                    inputFile4.current.click();
+                                                            <SlPicture
+                                                                fontSize={
+                                                                    "35px"
+                                                                }
+                                                                color="#D3212D"
+                                                            />
+                                                            <input
+                                                                type="file"
+                                                                id="file"
+                                                                ref={inputFile3}
+                                                                style={{
+                                                                    display:
+                                                                        "none",
                                                                 }}
-                                                                isLoading={
-                                                                    loading
+                                                                onChange={(
+                                                                    event
+                                                                ) => {
+                                                                    onChangeFile3(
+                                                                        event,
+                                                                        fileRoomEdit3.id
+                                                                    );
+                                                                }}
+                                                            />
+                                                            <Text
+                                                                textAlign={
+                                                                    "center"
+                                                                }
+                                                                fontSize={"sm"}
+                                                            >
+                                                                Choose Image
+                                                            </Text>
+                                                        </Button>
+                                                    )}
+                                                    {/* Button Image 4 */}
+                                                    {fileRoomEdit4 ? (
+                                                        <>
+                                                            <Flex
+                                                                flexDir={
+                                                                    "column"
                                                                 }
                                                             >
-                                                                <Image
-                                                                    src={
-                                                                        typeof fileRoomEdit4.name ==
-                                                                        "string"
-                                                                            ? URL.createObjectURL(
-                                                                                  fileRoomEdit4
-                                                                              )
-                                                                            : `${process.env.REACT_APP_API_IMG_URL}${fileRoomEdit4.picture}`
-                                                                    }
-                                                                    w={"100px"}
-                                                                    h={"100px"}
-                                                                    my={"4"}
-                                                                    mx={"4"}
-                                                                    style={{
-                                                                        maxWidth:
-                                                                            "100px",
-                                                                        maxHeight:
-                                                                            "100px",
-                                                                        aspectRatio:
-                                                                            "1/1",
-                                                                        objectFit:
-                                                                            "cover",
-                                                                        borderRadius:
-                                                                            "6px",
-                                                                        boxShadow:
-                                                                            "2px 2px 5px gray",
+                                                                <Box
+                                                                    onClick={() => {
+                                                                        inputFile4.current.click();
                                                                     }}
-                                                                />
-                                                                <input
-                                                                    type="file"
-                                                                    id="file"
-                                                                    ref={
-                                                                        inputFile4
+                                                                    isLoading={
+                                                                        loading
                                                                     }
-                                                                    style={{
-                                                                        display:
-                                                                            "none",
-                                                                    }}
-                                                                    onChange={(
-                                                                        event
-                                                                    ) => {
-                                                                        onChangeFile4(
-                                                                            event,
-                                                                            fileRoomEdit4.id
+                                                                    align="center"
+                                                                >
+                                                                    <Image
+                                                                        src={
+                                                                            typeof fileRoomEdit4.name ==
+                                                                            "string"
+                                                                                ? URL.createObjectURL(
+                                                                                      fileRoomEdit4
+                                                                                  )
+                                                                                : `${process.env.REACT_APP_API_IMG_URL}${fileRoomEdit4.picture}`
+                                                                        }
+                                                                        w={
+                                                                            "100px"
+                                                                        }
+                                                                        h={
+                                                                            "100px"
+                                                                        }
+                                                                        my={"4"}
+                                                                        mx={"4"}
+                                                                        style={{
+                                                                            maxWidth:
+                                                                                "100px",
+                                                                            maxHeight:
+                                                                                "100px",
+                                                                            aspectRatio:
+                                                                                "1/1",
+                                                                            objectFit:
+                                                                                "cover",
+                                                                            borderRadius:
+                                                                                "6px",
+                                                                            boxShadow:
+                                                                                "2px 2px 5px gray",
+                                                                        }}
+                                                                    />
+                                                                    <input
+                                                                        type="file"
+                                                                        id="file"
+                                                                        ref={
+                                                                            inputFile4
+                                                                        }
+                                                                        style={{
+                                                                            display:
+                                                                                "none",
+                                                                        }}
+                                                                        onChange={(
+                                                                            event
+                                                                        ) => {
+                                                                            onChangeFile4(
+                                                                                event,
+                                                                                fileRoomEdit4.id
+                                                                            );
+                                                                        }}
+                                                                    />
+                                                                </Box>
+                                                                <Button
+                                                                    type="button"
+                                                                    h={"35px"}
+                                                                    w={"35px"}
+                                                                    variant="outline"
+                                                                    alignItems={
+                                                                        "center"
+                                                                    }
+                                                                    alignSelf={
+                                                                        "center"
+                                                                    }
+                                                                    mx={"auto"}
+                                                                    mb={"4"}
+                                                                    onClick={() => {
+                                                                        setFileRoomEdit1(
+                                                                            null
+                                                                        );
+                                                                        deleteImageRoom(
+                                                                            roomData
+                                                                                .picture_rooms[3]
+                                                                                .id
                                                                         );
                                                                     }}
-                                                                />
-                                                            </Box>
-                                                            <Button
-                                                                type="button"
-                                                                h={"35px"}
-                                                                w={"35px"}
-                                                                variant="outline"
-                                                                alignItems={
-                                                                    "center"
-                                                                }
-                                                                alignSelf={
-                                                                    "center"
-                                                                }
-                                                                mx={"auto"}
-                                                                mb={"4"}
-                                                                onClick={() => {
-                                                                    setFileRoomEdit1(
-                                                                        null
-                                                                    );
-                                                                    deleteImageRoom(
-                                                                        roomData
-                                                                            .picture_rooms[3]
-                                                                            .id
-                                                                    );
-                                                                }}
-                                                                isLoading={
-                                                                    loading
-                                                                }
-                                                            >
-                                                                <Text
-                                                                    fontSize={
-                                                                        "xl"
+                                                                    isLoading={
+                                                                        loading
                                                                     }
                                                                 >
-                                                                    <HiTrash
-                                                                        fontWeight={
-                                                                            "extrabold"
+                                                                    <Text
+                                                                        fontSize={
+                                                                            "xl"
                                                                         }
-                                                                        color="#D3212D"
-                                                                    />
-                                                                </Text>
-                                                            </Button>
-                                                        </Flex>
-                                                    </>
-                                                ) : (
-                                                    <Button
-                                                        type="button"
-                                                        justifyContent={
-                                                            "center"
-                                                        }
-                                                        display={"flex"}
-                                                        flexDir="column"
-                                                        size="md"
-                                                        w={"100px"}
-                                                        h={"100px"}
-                                                        textAlign="center"
-                                                        my={"4"}
-                                                        mx={"4"}
-                                                        variant="outline"
-                                                        _hover={""}
-                                                        bgColor={"gray.100"}
-                                                        alignItems={"center"}
-                                                        onClick={() => {
-                                                            inputFile4.current.click();
-                                                        }}
-                                                        isLoading={loading}
-                                                    >
-                                                        <SlPicture
-                                                            fontSize={"35px"}
-                                                            color="#D3212D"
-                                                        />
-                                                        <input
-                                                            type="file"
-                                                            id="file"
-                                                            ref={inputFile4}
-                                                            style={{
-                                                                display: "none",
+                                                                    >
+                                                                        <HiTrash
+                                                                            fontWeight={
+                                                                                "extrabold"
+                                                                            }
+                                                                            color="#D3212D"
+                                                                        />
+                                                                    </Text>
+                                                                </Button>
+                                                            </Flex>
+                                                        </>
+                                                    ) : (
+                                                        <Button
+                                                            type="button"
+                                                            justifyContent={
+                                                                "center"
+                                                            }
+                                                            display={"flex"}
+                                                            flexDir="column"
+                                                            size="md"
+                                                            w={"100px"}
+                                                            h={"100px"}
+                                                            textAlign="center"
+                                                            my={"4"}
+                                                            mx={{
+                                                                base: "auto",
+                                                                md: "auto",
+                                                                lg: "4",
                                                             }}
-                                                            onChange={(
-                                                                event
-                                                            ) => {
-                                                                onChangeFile4(
-                                                                    event,
-                                                                    fileRoomEdit4.id
-                                                                );
+                                                            variant="outline"
+                                                            _hover={""}
+                                                            bgColor={"gray.100"}
+                                                            alignItems={
+                                                                "center"
+                                                            }
+                                                            onClick={() => {
+                                                                inputFile4.current.click();
                                                             }}
-                                                        />
-                                                        <Text
-                                                            textAlign={"center"}
-                                                            fontSize={"sm"}
+                                                            isLoading={loading}
                                                         >
-                                                            Choose Image
-                                                        </Text>
-                                                    </Button>
-                                                )}
-                                                {/* Button Image 5 */}
-                                                {fileRoomEdit5 ? (
-                                                    <>
-                                                        <Flex
-                                                            flexDir={"column"}
-                                                        >
-                                                            <Box
-                                                                onClick={() => {
-                                                                    inputFile5.current.click();
+                                                            <SlPicture
+                                                                fontSize={
+                                                                    "35px"
+                                                                }
+                                                                color="#D3212D"
+                                                            />
+                                                            <input
+                                                                type="file"
+                                                                id="file"
+                                                                ref={inputFile4}
+                                                                style={{
+                                                                    display:
+                                                                        "none",
                                                                 }}
-                                                                isLoading={
-                                                                    loading
+                                                                onChange={(
+                                                                    event
+                                                                ) => {
+                                                                    onChangeFile4(
+                                                                        event,
+                                                                        fileRoomEdit4.id
+                                                                    );
+                                                                }}
+                                                            />
+                                                            <Text
+                                                                textAlign={
+                                                                    "center"
+                                                                }
+                                                                fontSize={"sm"}
+                                                            >
+                                                                Choose Image
+                                                            </Text>
+                                                        </Button>
+                                                    )}
+                                                    {/* Button Image 5 */}
+                                                    {fileRoomEdit5 ? (
+                                                        <>
+                                                            <Flex
+                                                                flexDir={
+                                                                    "column"
                                                                 }
                                                             >
-                                                                <Image
-                                                                    src={
-                                                                        typeof fileRoomEdit5.name ==
-                                                                        "string"
-                                                                            ? URL.createObjectURL(
-                                                                                  fileRoomEdit5
-                                                                              )
-                                                                            : `${process.env.REACT_APP_API_IMG_URL}${fileRoomEdit5.picture}`
-                                                                    }
-                                                                    w={"100px"}
-                                                                    h={"100px"}
-                                                                    my={"4"}
-                                                                    mx={"4"}
-                                                                    style={{
-                                                                        maxWidth:
-                                                                            "100px",
-                                                                        maxHeight:
-                                                                            "100px",
-                                                                        aspectRatio:
-                                                                            "1/1",
-                                                                        objectFit:
-                                                                            "cover",
-                                                                        borderRadius:
-                                                                            "6px",
-                                                                        boxShadow:
-                                                                            "2px 2px 5px gray",
+                                                                <Box
+                                                                    onClick={() => {
+                                                                        inputFile5.current.click();
                                                                     }}
-                                                                />
-                                                                <input
-                                                                    type="file"
-                                                                    id="file"
-                                                                    ref={
-                                                                        inputFile5
+                                                                    isLoading={
+                                                                        loading
                                                                     }
-                                                                    style={{
-                                                                        display:
-                                                                            "none",
-                                                                    }}
-                                                                    onChange={(
-                                                                        event
-                                                                    ) => {
-                                                                        onChangeFile5(
-                                                                            event,
-                                                                            fileRoomEdit5.id
+                                                                    align="center"
+                                                                >
+                                                                    <Image
+                                                                        src={
+                                                                            typeof fileRoomEdit5.name ==
+                                                                            "string"
+                                                                                ? URL.createObjectURL(
+                                                                                      fileRoomEdit5
+                                                                                  )
+                                                                                : `${process.env.REACT_APP_API_IMG_URL}${fileRoomEdit5.picture}`
+                                                                        }
+                                                                        w={
+                                                                            "100px"
+                                                                        }
+                                                                        h={
+                                                                            "100px"
+                                                                        }
+                                                                        my={"4"}
+                                                                        mx={"4"}
+                                                                        style={{
+                                                                            maxWidth:
+                                                                                "100px",
+                                                                            maxHeight:
+                                                                                "100px",
+                                                                            aspectRatio:
+                                                                                "1/1",
+                                                                            objectFit:
+                                                                                "cover",
+                                                                            borderRadius:
+                                                                                "6px",
+                                                                            boxShadow:
+                                                                                "2px 2px 5px gray",
+                                                                        }}
+                                                                    />
+                                                                    <input
+                                                                        type="file"
+                                                                        id="file"
+                                                                        ref={
+                                                                            inputFile5
+                                                                        }
+                                                                        style={{
+                                                                            display:
+                                                                                "none",
+                                                                        }}
+                                                                        onChange={(
+                                                                            event
+                                                                        ) => {
+                                                                            onChangeFile5(
+                                                                                event,
+                                                                                fileRoomEdit5.id
+                                                                            );
+                                                                        }}
+                                                                    />
+                                                                </Box>
+                                                                <Button
+                                                                    type="button"
+                                                                    h={"35px"}
+                                                                    w={"35px"}
+                                                                    variant="outline"
+                                                                    alignItems={
+                                                                        "center"
+                                                                    }
+                                                                    alignSelf={
+                                                                        "center"
+                                                                    }
+                                                                    mx={"auto"}
+                                                                    mb={"4"}
+                                                                    onClick={() => {
+                                                                        setFileRoomEdit5(
+                                                                            null
+                                                                        );
+                                                                        deleteImageRoom(
+                                                                            roomData
+                                                                                .picture_rooms[4]
+                                                                                .id
                                                                         );
                                                                     }}
-                                                                />
-                                                            </Box>
-                                                            <Button
-                                                                type="button"
-                                                                h={"35px"}
-                                                                w={"35px"}
-                                                                variant="outline"
-                                                                alignItems={
-                                                                    "center"
-                                                                }
-                                                                alignSelf={
-                                                                    "center"
-                                                                }
-                                                                mx={"auto"}
-                                                                mb={"4"}
-                                                                onClick={() => {
-                                                                    setFileRoomEdit5(
-                                                                        null
-                                                                    );
-                                                                    deleteImageRoom(
-                                                                        roomData
-                                                                            .picture_rooms[4]
-                                                                            .id
-                                                                    );
-                                                                }}
-                                                                isLoading={
-                                                                    loading
-                                                                }
-                                                            >
-                                                                <Text
-                                                                    fontSize={
-                                                                        "xl"
+                                                                    isLoading={
+                                                                        loading
                                                                     }
                                                                 >
-                                                                    <HiTrash
-                                                                        fontWeight={
-                                                                            "extrabold"
+                                                                    <Text
+                                                                        fontSize={
+                                                                            "xl"
                                                                         }
-                                                                        color="#D3212D"
-                                                                    />
-                                                                </Text>
-                                                            </Button>
-                                                        </Flex>
-                                                    </>
-                                                ) : (
-                                                    <Button
-                                                        type="button"
-                                                        justifyContent={
-                                                            "center"
-                                                        }
-                                                        display={"flex"}
-                                                        flexDir="column"
-                                                        size="md"
-                                                        w={"100px"}
-                                                        h={"100px"}
-                                                        textAlign="center"
-                                                        my={"4"}
-                                                        mx={"4"}
-                                                        variant="outline"
-                                                        _hover={""}
-                                                        bgColor={"gray.100"}
-                                                        alignItems={"center"}
-                                                        onClick={() => {
-                                                            inputFile5.current.click();
-                                                        }}
-                                                        isLoading={loading}
-                                                    >
-                                                        <SlPicture
-                                                            fontSize={"35px"}
-                                                            color="#D3212D"
-                                                        />
-                                                        <input
-                                                            type="file"
-                                                            id="file"
-                                                            ref={inputFile5}
-                                                            style={{
-                                                                display: "none",
+                                                                    >
+                                                                        <HiTrash
+                                                                            fontWeight={
+                                                                                "extrabold"
+                                                                            }
+                                                                            color="#D3212D"
+                                                                        />
+                                                                    </Text>
+                                                                </Button>
+                                                            </Flex>
+                                                        </>
+                                                    ) : (
+                                                        <Button
+                                                            type="button"
+                                                            justifyContent={
+                                                                "center"
+                                                            }
+                                                            display={"flex"}
+                                                            flexDir="column"
+                                                            size="md"
+                                                            w={"100px"}
+                                                            h={"100px"}
+                                                            textAlign="center"
+                                                            my={"4"}
+                                                            mx={{
+                                                                base: "auto",
+                                                                md: "auto",
+                                                                lg: "4",
                                                             }}
-                                                            onChange={(
-                                                                event
-                                                            ) => {
-                                                                onChangeFile5(
-                                                                    event,
-                                                                    fileRoomEdit5.id
-                                                                );
+                                                            variant="outline"
+                                                            _hover={""}
+                                                            bgColor={"gray.100"}
+                                                            alignItems={
+                                                                "center"
+                                                            }
+                                                            onClick={() => {
+                                                                inputFile5.current.click();
                                                             }}
-                                                        />
-                                                        <Text
-                                                            textAlign={"center"}
-                                                            fontSize={"sm"}
+                                                            isLoading={loading}
                                                         >
-                                                            Choose Image
-                                                        </Text>
-                                                    </Button>
-                                                )}
+                                                            <SlPicture
+                                                                fontSize={
+                                                                    "35px"
+                                                                }
+                                                                color="#D3212D"
+                                                            />
+                                                            <input
+                                                                type="file"
+                                                                id="file"
+                                                                ref={inputFile5}
+                                                                style={{
+                                                                    display:
+                                                                        "none",
+                                                                }}
+                                                                onChange={(
+                                                                    event
+                                                                ) => {
+                                                                    onChangeFile5(
+                                                                        event,
+                                                                        fileRoomEdit5.id
+                                                                    );
+                                                                }}
+                                                            />
+                                                            <Text
+                                                                textAlign={
+                                                                    "center"
+                                                                }
+                                                                fontSize={"sm"}
+                                                            >
+                                                                Choose Image
+                                                            </Text>
+                                                        </Button>
+                                                    )}
+                                                </Box>
                                             </Box>
                                         </Box>
                                     </Box>
                                 </Box>
                             </Box>
-                        </Box>
-                        {/* Description */}
-                        <Box as={Flex} my={"10"}>
-                            <Flex
-                                flex={1}
-                                fontWeight={"medium"}
-                                alignItems={"center"}
-                            >
-                                <Text>Edit Room Description</Text>
-                            </Flex>
-                            <Box flex={3}>
-                                <Box mx="4" my="2">
-                                    <Textarea
-                                        isRequired
-                                        placeholder="Enter room description"
-                                        size={"md"}
-                                        resize={"none"}
-                                        h={"250px"}
-                                        maxLength={250}
-                                        defaultValue={roomData?.description}
-                                        onChange={(e) => {
-                                            setDescription(e.target.value);
-                                            setDescriptionLength(
-                                                e.target.value.length
-                                            );
-                                        }}
-                                    />
-                                    <Text
-                                        textAlign={"right"}
-                                        color={"gray.300"}
-                                    >
-                                        {descriptionLength}/250
-                                    </Text>
+                            {/* Description */}
+                            <Box as={Flex} my={"10"}>
+                                <Flex
+                                    flex={1}
+                                    fontWeight={"medium"}
+                                    alignItems={"center"}
+                                >
+                                    <Text>Edit Room Description</Text>
+                                </Flex>
+                                <Box flex={3}>
+                                    <Box mx="4" my="2">
+                                        <Textarea
+                                            isRequired
+                                            placeholder="Enter room description"
+                                            size={"md"}
+                                            resize={"none"}
+                                            h={"250px"}
+                                            maxLength={250}
+                                            defaultValue={roomData?.description}
+                                            onChange={(e) => {
+                                                setDescription(e.target.value);
+                                                setDescriptionLength(
+                                                    e.target.value.length
+                                                );
+                                            }}
+                                        />
+                                        <Text
+                                            textAlign={"right"}
+                                            color={"gray.300"}
+                                        >
+                                            {descriptionLength}/250
+                                        </Text>
+                                    </Box>
                                 </Box>
                             </Box>
-                        </Box>
-                        {/* Capacity */}
-                        <Box as={Flex} my={"10"}>
-                            <Flex
-                                flex={1}
-                                fontWeight={"medium"}
-                                alignItems={"center"}
-                            >
-                                <Text>Edit Room Capactiy</Text>
-                            </Flex>
-                            <Box flex={3}>
-                                <Box mx="4" my="2">
-                                    <InputGroup display={"flex"} size={"md"}>
-                                        <Input
-                                            isRequired
-                                            placeholder="Enter room capacity"
-                                            type="number"
-                                            justifyItems={"self-end"}
-                                            h={"40px"}
-                                            defaultValue={roomData?.capacity}
-                                            onChange={(e) =>
-                                                setRoomCapacity(e.target.value)
-                                            }
-                                        />
-                                    </InputGroup>
+                            {/* Capacity */}
+                            <Box as={Flex} my={"10"}>
+                                <Flex
+                                    flex={1}
+                                    fontWeight={"medium"}
+                                    alignItems={"center"}
+                                >
+                                    <Text>Edit Room Capactiy</Text>
+                                </Flex>
+                                <Box flex={3}>
+                                    <Box mx="4" my="2">
+                                        <InputGroup
+                                            display={"flex"}
+                                            size={"md"}
+                                        >
+                                            <Input
+                                                isRequired
+                                                placeholder="Enter room capacity"
+                                                type="number"
+                                                justifyItems={"self-end"}
+                                                h={"40px"}
+                                                defaultValue={
+                                                    roomData?.capacity
+                                                }
+                                                onChange={(e) =>
+                                                    setRoomCapacity(
+                                                        e.target.value
+                                                    )
+                                                }
+                                            />
+                                        </InputGroup>
+                                    </Box>
                                 </Box>
                             </Box>
                         </Box>
                     </Box>
                     {/* Price */}
-                    <Box textAlign="left" fontSize={"3xl"} fontWeight="bold">
+                    <Box
+                        textAlign="left"
+                        fontSize={{ base: "xl", md: "3xl", lg: "3xl" }}
+                        fontWeight="bold"
+                    >
                         <h2>Edit Room Price</h2>
                     </Box>
-                    <Box as={Flex} my="10">
+                    <Box as={Flex} my="10" fontSize={{ base: "xs", md: "lg" }}>
                         <Flex
                             flex={1}
                             fontWeight="medium"
@@ -1210,7 +1327,7 @@ function ManageRoom(props) {
                         <Box flex={3} display="flex" flexDir={"column"}>
                             <Box display={"flex"} flexDir={"row"}>
                                 <FormControl mx={"4"}>
-                                    <FormLabel>Price (Rp)</FormLabel>
+                                    <FormLabel fontSize={{ base: "xs", md: "lg" }}>Price (Rp)</FormLabel>
                                     <Input
                                         isRequired
                                         type="number"
@@ -1225,7 +1342,6 @@ function ManageRoom(props) {
                             </Box>
                         </Box>
                     </Box>
-                    <Box></Box>
                     <Box
                         display="flex"
                         mb="10"
