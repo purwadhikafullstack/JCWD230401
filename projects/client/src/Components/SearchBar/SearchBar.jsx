@@ -13,18 +13,26 @@ import DatePicker from "react-datepicker";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { useDispatch } from "react-redux";
+import moment from "moment";
 
 export default function SearchBar(props) {
     const navigate = useNavigate();
+    const checkIn = new Date(props?.stateUseLocation?.inputCheckIn)
+    // checkIn.setDate(checkIn.getDate() + 1)
+    checkIn.setHours(0, 0, 0, 0);
+    const checkOut = new Date(props?.stateUseLocation?.inputCheckOut)
+    // checkOut.setDate(checkOut.getDate() + 1)
+    checkOut.setHours(0, 0, 0, 0);
+
+    console.log("CheckInnn", checkIn);
+    console.log("CheckOuttt", checkOut);
     //For Search Bar
-    const [checkInDate, setCheckInDate] = useState(null);
-    const [checkOutDate, setCheckOutDate] = useState(null);
-    const [inputCheckIn, setInputCheckIn] = useState("");
-    const [inputCheckOut, setInputCheckOut] = useState("");
+    const [checkInDate, setCheckInDate] = useState(props?.stateUseLocation?.inputCheckIn === "1970-01-01" ? null : checkIn);
+    const [checkOutDate, setCheckOutDate] = useState(props?.stateUseLocation?.inputCheckOut === "1970-01-01" ? null : checkOut);
     const currentDate = new Date();
     const minDate = currentDate;
     const [duration, setDuration] = useState(0);
-    const [guest, setGuest] = useState(0);
+    const [guest, setGuest] = useState(props.guest);
     //Location Search Bar
     const [inputLocation, setInputLocation] = useState("");
     const [showLocation, setShowLocation] = useState([]);
@@ -106,7 +114,8 @@ export default function SearchBar(props) {
                             selected={checkInDate}
                             onChange={(date) => {
                                 setCheckInDate(date)
-                                props.setInputCheckIn(new Date(date).toISOString().split('T')[0])
+                                let tgl = moment(date)
+                                props.setInputCheckIn(tgl.format().split('T')[0])
                             }}
                             dateFormat="dd/MM/yyyy"
                             placeholderText="Choose Date"
@@ -120,7 +129,8 @@ export default function SearchBar(props) {
                             selected={checkOutDate}
                             onChange={(date) => {
                                 setCheckOutDate(date)
-                                props.setInputCheckOut(new Date(date).toISOString().split('T')[0])
+                                let tgl = moment(date)
+                                props.setInputCheckOut(tgl.format().split('T')[0])
                             }}
                             dateFormat="dd/MM/yyyy"
                             placeholderText="Choose Date"
