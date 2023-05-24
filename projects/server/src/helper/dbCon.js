@@ -6,7 +6,7 @@ const con = new sequelize(
     process.env.DATABASE_USERNAME,
     process.env.DATABASE_PASSWORD || '',
     {
-        host: "purwadhikabootcamp.com",
+        host: "localhost",
         dialect: "mysql",
         operatorsAliases: false,
         pool: {
