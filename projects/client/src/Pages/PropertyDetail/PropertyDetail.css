@@ -50,7 +50,7 @@
 }
 
 .edit-event-highlight .fc-event-title {
-    margin-top: 2px;
+    margin-top: 11px;
     color: white;
     width: 100%;
 }
@@ -58,7 +58,7 @@
 /* -----media query for product details page---------- */
 @media only screen and (max-width: 700px) {
     .fc .fc-view-harness{
-        font-size: 0.7rem;
+        font-size: 0.8rem;
     }
 
     .fc-button-group {
@@ -67,32 +67,26 @@
     }
 
     .fc .fc-button-primary {
-        font-size: 1rem;
+        font-size: 0.9rem;
       }
 
     .fc .fc-toolbar-title {
-        font-size: 1rem;
+        font-size: 1.1rem;
     }
 }
 
 @media (max-width: 480px) {
     .fc .fc-view-harness{
-        font-size: 0.7rem;
+        font-size: 0.8rem;
     }
     .fc .fc-toolbar-title {
-        font-size: 1rem;
+        font-size: 1.1rem;
     }
     .fc-button-group {
       font-size: 0.01rem;
       padding: 0.1rem;
     }
     .fc .fc-button-primary {
-        font-size: 0.7rem;
-        padding: 0.3rem;
+        font-size: 0.8rem;
       }
-    /* .fc td {
-    padding: 0;
-    vertical-align: top;
-    height: 70%;
-    } */
   }
