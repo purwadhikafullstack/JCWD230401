@@ -26,7 +26,7 @@ passport.use(
       clientID:
         process.env.GOOGLE_CLIENT_ID, //passing CLIENT ID
       clientSecret: process.env.GOOGLE_CLIENT_SECRET, //Passing CLIENT SECRET
-      callbackURL: "http://localhost:2341/api/auth/google/callback", //This means after signin on what route google should redirect
+      callbackURL: "https://jcwd230401.purwadhikabootcamp.com/api/auth/google/callback", //This means after signin on what route google should redirect
       passReqToCallback: true,
     },
     async (request, accessToken, refreshToken, profile, done) => {
