@@ -66,7 +66,14 @@ passport.use(
             }
           );
           await ormTransaction.commit();
-          return done(null, profile);
+          //search user in database after register
+          let user = await model.user.findAll({
+            where: { email: profile.emails[0].value },
+          });
+          if (user && user.length > 0) {
+            //if email exist in database login after register
+            return done(null, user);
+          }
         }
       } catch (error) {
         if (ormTransaction.finished === "commit") {
@@ -118,8 +125,6 @@ route.get(
         secure: true,
       });
       // console.log("Cookie created di google callback:", req.cookies.googleAuthToken);
-      res.redirect(process.env.FE_URL);
-    } else {
       res.redirect(process.env.FE_URL);
     }
   }
