@@ -23,10 +23,10 @@ passport.deserializeUser((user, done) => {
 passport.use(
   new googleStrategy(
     {
-      clientID:
-        process.env.GOOGLE_CLIENT_ID, //passing CLIENT ID
+      clientID: process.env.GOOGLE_CLIENT_ID, //passing CLIENT ID
       clientSecret: process.env.GOOGLE_CLIENT_SECRET, //Passing CLIENT SECRET
-      callbackURL: "https://jcwd230401.purwadhikabootcamp.com/api/auth/google/callback", //This means after signin on what route google should redirect
+      callbackURL:
+        "https://jcwd230401.purwadhikabootcamp.com/api/auth/google/callback", //This means after signin on what route google should redirect
       passReqToCallback: true,
     },
     async (request, accessToken, refreshToken, profile, done) => {
@@ -118,7 +118,7 @@ route.get(
         secure: true,
       });
       // console.log("Cookie created di google callback:", req.cookies.googleAuthToken);
-      res.redirect("http://localhost:3000");
+      res.redirect(process.env.FE_URL);
     }
   }
 );
@@ -142,7 +142,7 @@ route.get("/login/success", async (req, res, next) => {
         ],
       });
       // resolve cors blocked
-      res.header("Access-Control-Allow-Origin", "http://localhost:3000");
+      res.header("Access-Control-Allow-Origin", process.env.FE_URL);
       res.header("Access-Control-Allow-Credentials", true);
       res.status(200).json({
         success: true,
@@ -163,11 +163,11 @@ route.get("/login/success", async (req, res, next) => {
 
 route.get("/logout", (req, res) => {
   // resolve cors blocked
-  res.header("Access-Control-Allow-Origin", "http://localhost:3000");
+  res.header("Access-Control-Allow-Origin", process.env.FE_URL);
   res.header("Access-Control-Allow-Credentials", true);
   req.session = null;
   res.clearCookie("googleAuthToken");
-  res.redirect("http://localhost:3000");
+  res.redirect(process.env.FE_URL);
 });
 
 module.exports = route;
