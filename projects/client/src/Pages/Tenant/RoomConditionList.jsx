@@ -4,12 +4,8 @@ import {
     Flex,
     Table,
     Thead,
-    Tbody,
-    Tfoot,
     Tr,
     Th,
-    Td,
-    TableCaption,
     TableContainer,
     Box,
     Button,
@@ -35,22 +31,24 @@ import {
     Tab,
     TabPanel,
 } from "@chakra-ui/react";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import Pagination from "../../Components/Pagination";
-import SpecialPriceTable from "../../Components/SpecialPriceTable";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import SpecialPriceTable from "../../Components/SpecialPriceTable";
 import MaintenanceTable from "../../Components/MaintenanceTable";
+import SpecialPriceModal from "../../Components/SpecialPriceModal";
+import MaintenanceModal from "../../Components/SpecialPriceModal";
 import Sidebar from "../../Components/Sidebar";
+import Loading from "../../Components/Loading";
 
 function RoomConditionList(props) {
+    const [loadingPage, setLoadingPage] = useState(true);
     const location = useLocation();
     const params = new URLSearchParams(location.search);
     const params1 = useParams();
 
     const toast = useToast();
-
-    const navigate = useNavigate();
 
     const [dataSpecialPrice, setDataSpecialPrice] = useState([]);
 
@@ -117,8 +115,7 @@ function RoomConditionList(props) {
             setDataSpecialPrice(get.data.data);
             setTotalDataSpecialPrice(get.data.datanum);
             setRoomName(get.data.data[0].room.room_category.name);
-            console.log("get special price list only:", get.data);
-            console.log("get special price data:", get);
+            // setLoadingPage(false);
         } catch (error) {
             console.log(error);
         }
@@ -138,8 +135,6 @@ function RoomConditionList(props) {
 
             setDataMaintenance(get.data.data);
             setTotalDataMaintenance(get.data.datanum);
-            console.log("get maintenance list only:", get.data);
-            console.log("get maintenance data:", get);
         } catch (error) {
             console.log(error);
         }
@@ -187,319 +182,20 @@ function RoomConditionList(props) {
         });
     };
 
-    function SpecialPriceModal() {
-        const { isOpen, onOpen, onClose } = useDisclosure();
-        const [specialStartDate, setSpecialStartDate] = useState(null);
-        const [specialEndDate, setSpecialEndDate] = useState(null);
-        const [price, setPrice] = useState("");
-        const [percentage, setPercentage] = useState("");
-        const [loading, setLoading] = useState(false);
+    useEffect(() => {
+        setTimeout(() => {
+            setLoadingPage(false);
+        }, 1700);
+    }, []);
 
-        const handlePriceChange = (event) => {
-            const inputPrice = event.target.value;
-            setPrice(inputPrice);
-
-            if (inputPrice !== "") {
-                const calculatedPercentage =
-                    (Number(inputPrice) * 100) / dataSpecialPrice[0].room.price;
-                setPercentage(calculatedPercentage.toFixed(2));
-            } else {
-                setPercentage("");
-            }
-        };
-
-        const handlePercentageChange = (event) => {
-            const inputPercentage = event.target.value;
-            setPercentage(inputPercentage);
-
-            if (inputPercentage !== "") {
-                const calculatedPrice =
-                    (Number(inputPercentage) * dataSpecialPrice[0].room.price) /
-                    100;
-                setPrice(calculatedPrice.toFixed(2));
-            } else {
-                setPrice("");
-            }
-        };
-
-        const handleSpecialStartDateChange = (date) => {
-            setSpecialStartDate(date);
-        };
-
-        const handleSpecialEndDateChange = (date) => {
-            setSpecialEndDate(date);
-        };
-
-        const handleSubmitSpecialPrice = async () => {
-            try {
-                setLoading(true);
-                let token = localStorage.getItem("tempatku_login");
-                let add = await axios.post(
-                    `${process.env.REACT_APP_API_BASE_URL}/special/create`,
-                    {
-                        specialStartDate: specialStartDate,
-                        specialEndDate: specialEndDate,
-                        price: price,
-                        roomId: dataSpecialPrice[0].roomId,
-                    },
-                    {
-                        headers: {
-                            Authorization: `Bearer ${token}`,
-                        },
-                    }
-                );
-                if (add.data.success) {
-                    toast({
-                        title: "Created Special Price",
-                        description: `Created Special Price for ${roomName}`,
-                        status: "success",
-                        duration: 2000,
-                        isClosable: true,
-                    });
-                }
-                onClose();
-            } catch (error) {
-                console.log(error);
-                toast({
-                    title: "Failed to add special price",
-                    description: `${roomName} special price already exists on the selected date.`,
-                    status: "error",
-                    duration: 4000,
-                    isClosable: true,
-                });
-            } finally {
-                getSpecialPriceData();
-                setPrice("");
-                setPercentage("");
-                setSpecialStartDate(null);
-                setSpecialEndDate(null);
-                setLoading(false);
-            }
-        };
-        return (
-            <>
-                <Button onClick={onOpen} bgColor="green.400" _hover={""}>
-                    <Text textColor={"white"}> Add Special Price</Text>
-                </Button>
-
-                <Modal isOpen={isOpen} onClose={onClose}>
-                    <ModalOverlay />
-                    <ModalContent>
-                        <ModalHeader>Set Special Price</ModalHeader>
-                        <ModalCloseButton />
-                        <ModalBody>
-                            <VStack spacing={4}>
-                                <HStack spacing={12}>
-                                    <FormControl>
-                                        <FormLabel>Choose Start Date</FormLabel>
-                                        <DatePicker
-                                            selected={specialStartDate}
-                                            onChange={
-                                                handleSpecialStartDateChange
-                                            }
-                                            dateFormat="yyyy/dd/MM"
-                                            minDate={new Date()}
-                                            placeholderText="Select date"
-                                        />
-                                    </FormControl>
-                                    <FormControl>
-                                        <FormLabel>Choose End Date</FormLabel>
-                                        <DatePicker
-                                            selected={specialEndDate}
-                                            onChange={
-                                                handleSpecialEndDateChange
-                                            }
-                                            dateFormat="yyyy/dd/MM"
-                                            minDate={new Date(specialStartDate)}
-                                            placeholderText="Select date"
-                                        />
-                                    </FormControl>
-                                </HStack>
-                                <FormControl>
-                                    <FormLabel>Special Price</FormLabel>
-                                    <Input
-                                        type="number"
-                                        value={price}
-                                        onChange={handlePriceChange}
-                                        placeholder="Enter price"
-                                    />
-                                </FormControl>
-                                <FormControl>
-                                    <FormLabel>Percentage (%)</FormLabel>
-                                    <Input
-                                        type="number"
-                                        value={percentage}
-                                        onChange={handlePercentageChange}
-                                        placeholder="Enter percentage"
-                                    />
-                                </FormControl>
-                            </VStack>
-                        </ModalBody>
-                        <ModalFooter>
-                            <Button
-                                bgColor={"green.400"}
-                                type="button"
-                                onClick={handleSubmitSpecialPrice}
-                                textColor={"white"}
-                                mr={"4"}
-                                _hover=""
-                                isLoading={loading}
-                            >
-                                Save
-                            </Button>
-                            <Button variant="outline" onClick={onClose}>
-                                Cancel
-                            </Button>
-                        </ModalFooter>
-                    </ModalContent>
-                </Modal>
-            </>
-        );
-    }
-
-    function MaintenanceModal() {
-        const { isOpen, onOpen, onClose } = useDisclosure();
-        const [maintenanceStartDate, setMaintenanceStartDate] = useState(null);
-        const [maintenanceEndDate, setMaintenanceEndDate] = useState(null);
-        const [remarks, setRemarks] = useState("");
-        const [loading, setLoading] = useState(false);
-
-        const handleRemarksChange = (event) => {
-            const inputRemarks = event.target.value;
-            setRemarks(inputRemarks);
-        };
-
-        const handleMaintenanceStartDateChange = (date) => {
-            setMaintenanceStartDate(date);
-        };
-
-        const handleMaintenanceEndDateChange = (date) => {
-            setMaintenanceEndDate(date);
-        };
-
-        const handleSubmitMaintenance = async () => {
-            try {
-                setLoading(true);
-                let token = localStorage.getItem("tempatku_login");
-                let add = await axios.post(
-                    `${process.env.REACT_APP_API_BASE_URL}/maintenance/create`,
-                    {
-                        maintenanceStartDate: maintenanceStartDate,
-                        maintenanceEndDate: maintenanceEndDate,
-                        remarks: remarks,
-                        roomId: dataMaintenance[0].roomId,
-                    },
-                    {
-                        headers: {
-                            Authorization: `Bearer ${token}`,
-                        },
-                    }
-                );
-                if (add.data.success) {
-                    toast({
-                        title: "Added Maintenance",
-                        description: `Created Maintenance for ${roomName}`,
-                        status: "success",
-                        duration: 2000,
-                        isClosable: true,
-                    });
-                }
-                onClose();
-            } catch (error) {
-                console.log(error);
-                toast({
-                    title: "Failed to add maintenance",
-                    description: `${roomName} maintenance already exists on the selected date.`,
-                    status: "error",
-                    duration: 4000,
-                    isClosable: true,
-                });
-            } finally {
-                getMaintenanceData();
-                setMaintenanceStartDate(null);
-                setMaintenanceEndDate(null);
-                setRemarks("");
-                setLoading(false);
-            }
-        };
-        return (
-            <>
-                <Button onClick={onOpen} bgColor="green.400" _hover={""}>
-                    <Text textColor={"white"}> Add Maintenance</Text>
-                </Button>
-                <Modal isOpen={isOpen} onClose={onClose}>
-                    <ModalOverlay />
-                    <ModalContent>
-                        <ModalHeader>Set Maintenance</ModalHeader>
-                        <ModalCloseButton />
-                        <ModalBody>
-                            <VStack spacing={4}>
-                                <HStack spacing={12}>
-                                    <FormControl>
-                                        <FormLabel>Start Date</FormLabel>
-                                        <DatePicker
-                                            selected={maintenanceStartDate}
-                                            onChange={
-                                                handleMaintenanceStartDateChange
-                                            }
-                                            dateFormat="yyyy/dd/MM"
-                                            minDate={new Date()}
-                                            placeholderText="Select date"
-                                        />
-                                    </FormControl>
-                                    <FormControl>
-                                        <FormLabel>End Date</FormLabel>
-                                        <DatePicker
-                                            selected={maintenanceEndDate}
-                                            onChange={
-                                                handleMaintenanceEndDateChange
-                                            }
-                                            dateFormat="yyyy/dd/MM"
-                                            minDate={maintenanceStartDate}
-                                            placeholderText="Select date"
-                                        />
-                                    </FormControl>
-                                </HStack>
-                                <FormControl>
-                                    <FormLabel>Remarks</FormLabel>
-                                    <Input
-                                        type="text"
-                                        value={remarks}
-                                        onChange={handleRemarksChange}
-                                        placeholder="Enter reason of maintenance"
-                                    />
-                                </FormControl>
-                            </VStack>
-                        </ModalBody>
-                        <ModalFooter>
-                            <Button
-                                bgColor={"green.400"}
-                                type="button"
-                                onClick={handleSubmitMaintenance}
-                                textColor={"white"}
-                                mr={"4"}
-                                isLoading={loading}
-                            >
-                                Save
-                            </Button>
-                            <Button variant="ghost" onClick={onClose}>
-                                Cancel
-                            </Button>
-                        </ModalFooter>
-                    </ModalContent>
-                </Modal>
-            </>
-        );
-    }
     useEffect(() => {
         getSpecialPriceData();
         getMaintenanceData();
     }, [pageSpecialPrice, pageMaintenance]);
 
-    // console.log("DataSpecialPrice:", dataSpecialPrice);
-    // console.log("DataMaintenance:", dataMaintenance);
-    // console.log("pageSpecialPrice:", pageSpecialPrice);
-
+    if (loadingPage === true) {
+        return <Loading />;
+    }
     return (
         <>
             <Flex minH={"93vh"}>
@@ -555,10 +251,8 @@ function RoomConditionList(props) {
                                     <TabPanel>
                                         {/* TABLE SPECIAL PRICE */}
                                         <Box
-                                            style={{
-                                                borderRadius: "10px",
-                                                boxShadow: "4px 4px 20px gray",
-                                            }}
+                                            borderColor={"gray.300"}
+                                            borderWidth={"1px"}
                                             borderRadius={"2xl"}
                                         >
                                             <Box
@@ -574,7 +268,12 @@ function RoomConditionList(props) {
                                                     py={"4"}
                                                     mr={"4"}
                                                 >
-                                                    {SpecialPriceModal()}
+                                                    <SpecialPriceModal
+                                                        roomname={roomName}
+                                                        getSpecialPriceData={
+                                                            getSpecialPriceData
+                                                        }
+                                                    />
                                                 </Flex>
 
                                                 <TableContainer flex={"1"}>
@@ -671,10 +370,8 @@ function RoomConditionList(props) {
                                     <TabPanel>
                                         {/* TABLE MAINTENANCE */}
                                         <Box
-                                            style={{
-                                                borderRadius: "10px",
-                                                boxShadow: "4px 4px 20px gray",
-                                            }}
+                                            borderColor={"gray.300"}
+                                            borderWidth={"1px"}
                                             borderRadius={"2xl"}
                                         >
                                             <Box
@@ -691,7 +388,7 @@ function RoomConditionList(props) {
                                                     py={"4"}
                                                     mr="4"
                                                 >
-                                                    {MaintenanceModal()}
+                                                    <MaintenanceModal />
                                                 </Flex>
 
                                                 <TableContainer flex={"1"}>

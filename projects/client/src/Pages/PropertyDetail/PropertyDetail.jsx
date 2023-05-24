@@ -79,7 +79,7 @@ export default function PropertyDetail() {
     );
     const getPropertyDetail = async () => {
         let get = await axios.get(
-            `${process.env.REACT_APP_API_BASE_URL}/property/getpropertydetail?uuid=${params.uuid}&start=${inputCheckIn}&end=${inputCheckOut}`,
+            `${process.env.REACT_APP_API_BASE_URL}/property/detail?uuid=${params.uuid}&start=${inputCheckIn}&end=${inputCheckOut}`,
             {
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -122,7 +122,7 @@ export default function PropertyDetail() {
     const getRoomAvailable = async () => {
         setLoadingButton(true)
         let get = await axios.get(
-            `${process.env.REACT_APP_API_BASE_URL}/property/getroomavailable?uuid=${params.uuid}&start=${inputCheckIn}&end=${inputCheckOut}`,
+            `${process.env.REACT_APP_API_BASE_URL}/property/room-available?uuid=${params.uuid}&start=${inputCheckIn}&end=${inputCheckOut}`,
             {
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -154,7 +154,7 @@ export default function PropertyDetail() {
     const [pictureProperty, setPictureProperty] = useState([]);
     const getPictureProperty = async () => {
         let get = await axios.get(
-            `${process.env.REACT_APP_API_BASE_URL}/property/getpictureproperty?uuid=${params.uuid}`,
+            `${process.env.REACT_APP_API_BASE_URL}/property/picture?uuid=${params.uuid}`,
             {
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -398,6 +398,7 @@ export default function PropertyDetail() {
                                     borderRadius="10px"
                                     boxSize="100%"
                                     maxH={'50vh'}
+                                    objectFit='cover'
                                 />
                             </Box>
                             <Box>
@@ -405,6 +406,7 @@ export default function PropertyDetail() {
                                     borderRadius="10px"
                                     boxSize="100%"
                                     maxH={'25vh'}
+                                    objectFit='cover'
                                 />
                             </Box>
                             <Box>
@@ -412,6 +414,7 @@ export default function PropertyDetail() {
                                     borderRadius="10px"
                                     boxSize="100%"
                                     maxH={'25vh'}
+                                    objectFit='cover'
                                 />
                             </Box>
                             <Box>
@@ -419,6 +422,7 @@ export default function PropertyDetail() {
                                     borderRadius="10px"
                                     boxSize="100%"
                                     maxH={'25vh'}
+                                    objectFit='cover'
                                 />
                             </Box>
                             <Box>
@@ -426,6 +430,7 @@ export default function PropertyDetail() {
                                     borderRadius="10px"
                                     boxSize="100%"
                                     maxH={'25vh'}
+                                    objectFit='cover'
                                 />
                             </Box>
                         </Box>
@@ -554,7 +559,8 @@ export default function PropertyDetail() {
                         </Box>
                     </Flex>
                     {/* CALENDAR */}
-                    <Box marginBottom="50px" w={{ base: 'full', lg: '100%' }}>
+                    <Box overflowX={"auto"}>
+                    <Box marginBottom="50px"  w={{ base: "200vw", sm: "150vw", lg:"full" }} >
                         <Fullcalendar
                             className="my-calendar"
                             w='full'
@@ -569,6 +575,7 @@ export default function PropertyDetail() {
                             events={calendarEvents}
                             eventChange={handleEventChange}
                         />
+                    </Box>
                     </Box>
                     <Divider my='10' />
                     <Box>

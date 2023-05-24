@@ -3,7 +3,7 @@ const { readToken } = require("../helper/jwt");
 const route = require("express").Router();
 const uploader = require("../helper/uploader");
 const uploader2mb = require("../helper/uploader2");
-route.get("/roompayment", roomController.getDetailRoomTransaction);
+route.get("/payment", readToken, roomController.getDetailRoomTransaction);
 
 route.get(
     "/property-name-and-id",
@@ -16,7 +16,7 @@ route.post(
     uploader2mb("/ImgRoom", "ROM").array("images", 5),
     roomController.addRoom
 );
-route.patch("/edit/:uuid", roomController.editRoom);
+route.patch("/edit/:uuid", readToken, roomController.editRoom);
 route.get("/data/:uuid", roomController.getRoomData);
 route.patch(
     "/update-image",

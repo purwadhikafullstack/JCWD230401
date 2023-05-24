@@ -6,10 +6,10 @@ const uploader = require("../helper/uploader");
 const uploader2mb = require("../helper/uploader2");
 
 route.get("/", propertyController.getAllProperty);
-route.get("/filter", propertyController.filterProperty);
-route.get("/getroomavailable", propertyController.getRoomAvailable);
-route.get("/getpropertydetail", propertyController.getPropertyDetail);
-route.get("/getpictureproperty", propertyController.getPicturePropertyDetail);
+route.get("/filter", propertyController.filterProperty); // gak kepake
+route.get("/room-available", readToken, propertyController.getRoomAvailable);
+route.get("/detail", readToken, propertyController.getPropertyDetail);
+route.get("/picture", readToken, propertyController.getPicturePropertyDetail);
 route.get("/alltenants", propertyController.getAllPropertyTenant);
 route.get("/provinces", propertyController.getProvince);
 route.post("/regencies", propertyController.getRegencyByProvinceId);
@@ -29,6 +29,6 @@ route.patch(
     propertyController.updateImageProperty
 );
 route.patch("/delete-image", propertyController.deletePropertyPicture);
-route.get("/available", propertyController.getAvailableProperty);
+route.get("/available", readToken, propertyController.getAvailableProperty);
 
 module.exports = route;

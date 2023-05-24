@@ -1,5 +1,5 @@
 import {
-    Flex, Text, Box, Heading, Stack, Button, VStack, useBreakpointValue,
+    Flex, Text, Box, Heading, Stack, Button, VStack,
     Image, Input,
     List, ListItem, Spinner
 } from "@chakra-ui/react";
@@ -239,13 +239,15 @@ export default function LandingNew() {
 
     //react-slick slider property recommendation
     const numberOfProperties = recommendProperty.length;
-    let slidesToShowValue = 4;
+    let slidesToShowValue = 5;
     if (numberOfProperties === 1) {
         slidesToShowValue = 1;
     } else if (numberOfProperties === 2) {
         slidesToShowValue = 2;
     } else if (numberOfProperties === 3) {
         slidesToShowValue = 3;
+    } else if (numberOfProperties === 4) {
+        slidesToShowValue = 4;
     };
 
     const settingsRecommendation = {
@@ -255,9 +257,17 @@ export default function LandingNew() {
         initialSlide: 0,
         responsive: [
             {
+                breakpoint: 1440, 
+                settings: {
+                    slidesToShow: slidesToShowValue <= 4 ? slidesToShowValue : 4,
+                    slidesToScroll: 1,
+                    infinite: true,
+                },
+            },
+            {
                 breakpoint: 1024,
                 settings: {
-                    slidesToShow: 2,
+                    slidesToShow: slidesToShowValue <= 2 ? slidesToShowValue : 2,
                     slidesToScroll: 1,
                     infinite: true,
                 },
@@ -265,7 +275,7 @@ export default function LandingNew() {
             {
                 breakpoint: 600,
                 settings: {
-                    slidesToShow: 1,
+                    slidesToShow: slidesToShowValue <= 1 ? slidesToShowValue : 1,
                     slidesToScroll: 1,
                     infinite: true,
                 },
@@ -273,7 +283,7 @@ export default function LandingNew() {
             {
                 breakpoint: 480,
                 settings: {
-                    slidesToShow: 1,
+                    slidesToShow: slidesToShowValue <= 1 ? slidesToShowValue : 1,
                     slidesToScroll: 1,
                     infinite: true,
                 },

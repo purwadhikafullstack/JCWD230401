@@ -21,7 +21,7 @@ export default function AlertDialogTenant(props) {
 
     const updateTransactionStatus = async () => {
         setLoadingButton(true)
-        let update = await axios.patch(`${process.env.REACT_APP_API_BASE_URL}/transaction/updatetransactionstatus`, {
+        let update = await axios.patch(`${process.env.REACT_APP_API_BASE_URL}/transaction/status`, {
             transaction_statusId: 5, // 5 = cancel
             uuid: props.uuidTransaction
         }, {

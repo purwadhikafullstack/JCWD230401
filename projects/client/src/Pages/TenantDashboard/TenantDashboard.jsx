@@ -1,4 +1,3 @@
-import "./TenantDashboard.css";
 import React, { useState } from "react";
 import Fullcalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
@@ -19,7 +18,6 @@ import Loading from "../../Components/Loading";
 
 function TenantDashboard() {
   const [loadingPage, setLoadingPage] = useState(true);
-
   const name = useSelector((state) => state.authReducer.name);
   const [roomOrders, setRoomOrders] = useState([]);
   const [roomMaintenances, setRoomMaintenances] = useState([]);
@@ -227,11 +225,13 @@ function TenantDashboard() {
 
   //react-slick slider property listing
   const numberOfProperties = propertyListing.length;
-  let slidesToShowValue = 3;
+  let slidesToShowValue = 4;
   if (numberOfProperties === 1) {
     slidesToShowValue = 1;
   } else if (numberOfProperties === 2) {
     slidesToShowValue = 2;
+  } else if (numberOfProperties === 3) {
+    slidesToShowValue = 3;
   };
   const settingsMyProperty = {
     infinite: true,
@@ -240,9 +240,17 @@ function TenantDashboard() {
     initialSlide: 0,
     responsive: [
       {
+        breakpoint: 1440,
+        settings: {
+          slidesToShow: slidesToShowValue <= 3 ? slidesToShowValue : 3,
+          slidesToScroll: 1,
+          infinite: true,
+        },
+      },
+      {
         breakpoint: 1024,
         settings: {
-          slidesToShow: 2,
+          slidesToShow: slidesToShowValue <= 2 ? slidesToShowValue : 2,
           slidesToScroll: 1,
           infinite: true,
         },
@@ -250,7 +258,7 @@ function TenantDashboard() {
       {
         breakpoint: 600,
         settings: {
-          slidesToShow: 1,
+          slidesToShow: slidesToShowValue <= 1 ? slidesToShowValue : 1,
           slidesToScroll: 1,
           infinite: true,
         },
@@ -258,7 +266,7 @@ function TenantDashboard() {
       {
         breakpoint: 480,
         settings: {
-          slidesToShow: 1,
+          slidesToShow: slidesToShowValue <= 1 ? slidesToShowValue : 1,
           slidesToScroll: 1,
           infinite: true,
         },
@@ -277,22 +285,22 @@ function TenantDashboard() {
         <Box>
           <Sidebar />
         </Box>
-        <Box w="50vw" flex="5" px={{ base: "4", sm: "10" }} bg={"white"} >
+        <Box w={"50vw"} flex="5" px={{ base: "4", sm: "10" }} bg={"white"} >
           <br />
           <Heading mb={{ base: "8", sm: "10" }} textAlign={{ base: "center", sm: "left" }} >
             Welcome, {name} 👋
           </Heading>
+          <Text fontSize={{ base: "20", sm: "28" }} fontWeight={"semibold"} my={{ base: "6", sm: "10" }} textAlign={{ base: "center", sm: "left" }}>Your Property Listings</Text>
           <Box p={{ base: "2", sm: "10" }} bg={"white"} rounded={"xl"} borderWidth={"1px"}
-            borderColor={{ base: "white", sm: "gray.300" }}
+            borderColor={{ base: "white", sm: "gray.300" }} pb={{ base: "20" }}
           >
             {/* MY PROPERTY */}
             <Box>
-              <Text fontSize={{ base: "20", sm: "28" }} fontWeight={"semibold"} mb={{ base: "6", sm: "10" }} textAlign={{ base: "center", sm: "left" }}>Your Property Listings</Text>
               {
                 loading ? (
                   <Text textAlign="center"><Spinner color='red.500' /></Text>
                 ) : propertyListing.length === 0 ? (
-                  <Text>No property listings yet</Text>
+                  <Text textAlign={{ base: "center", sm: "left" }}>No property listings yet</Text>
                 ) : (
                   <Slider {...settingsMyProperty} prevArrow={<FaChevronLeft color="#E2E8F0" />} nextArrow={<FaChevronRight color="#E2E8F0" />}>
                     {printMyProperty()}
@@ -302,30 +310,33 @@ function TenantDashboard() {
             </Box>
           </Box>
           <br />
+          <Text fontSize={{ base: "20", sm: "28" }} fontWeight={"semibold"} my={{ base: "6", sm: "10" }} textAlign={{ base: "center", sm: "left" }}>See Availability by Calendar Date</Text>
           <Box p={{ base: "2", sm: "10" }} bg={"white"} rounded={"xl"} borderWidth={"1px"}
             borderColor={{ base: "white", sm: "gray.300" }}
+            overflowX={"auto"}
           >
-            <Text fontSize={{ base: "20", sm: "28" }} fontWeight={"semibold"} mb={{ base: "6", sm: "10" }} textAlign={{ base: "center", sm: "left" }}>See Availability by Calendar Date</Text>
-            {
-              loadingOrder || loadingMaintenance ? (
-                <Text textAlign="center"><Spinner color='red.500' /></Text>
-              ) : (
-                <Fullcalendar
-                  className="my-calendar"
-                  plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-                  initialView={"dayGridMonth"}
-                  headerToolbar={{
-                    start: "today prev,next",
-                    center: "title",
-                    end: "dayGridMonth,timeGridWeek,timeGridDay",
-                  }}
-                  height={"90vh"}
-                  events=
-                  {roomEvents}
-                  dayMaxEvents={2} // max number of events displayed per day
-                  dateClick={dateClick}
-                />
-              )}
+            <Box  w={{ base: "200vw", sm: "150vw", lg:"full" }} pr={{base:"0", sm:"10", lg:"0"}}>
+              {
+                loadingOrder || loadingMaintenance ? (
+                  <Text textAlign="center"><Spinner color='red.500' /></Text>
+                ) : (
+                  <Fullcalendar
+                    className="my-calendar-dashboard"
+                    plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+                    initialView={"dayGridMonth"}
+                    headerToolbar={{
+                      start: "today prev,next",
+                      center: "title",
+                      end: "dayGridMonth,timeGridWeek,timeGridDay",
+                    }}
+                    height={"90vh"}
+                    events=
+                    {roomEvents}
+                    dayMaxEvents={2} // max number of events displayed per day
+                    dateClick={dateClick}
+                  />
+                )}
+            </Box>
             <Modal isOpen={modalIsOpen} onClose={() => setModalIsOpen(false)} scrollBehavior={"inside"}>
               <ModalOverlay />
               <ModalContent>

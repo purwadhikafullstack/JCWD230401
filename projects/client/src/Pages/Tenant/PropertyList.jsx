@@ -21,8 +21,11 @@ import { useLocation, useNavigate } from "react-router-dom";
 import Pagination from "../../Components/Pagination";
 import Sidebar from "../../Components/Sidebar";
 import { useSelector } from "react-redux";
+import Loading from "../../Components/Loading";
+
 
 function PropertyList(props) {
+    const [loadingPage, setLoadingPage] = useState(true);
     const location = useLocation();
     const params = new URLSearchParams(location.search);
     const navigate = useNavigate();
@@ -71,8 +74,6 @@ function PropertyList(props) {
             );
             setDataAllProperty(get.data.data);
             setTotalData(get.data.datanum);
-            console.log("get property list", get.data.data);
-            console.log("get property list only", get);
         } catch (error) {
             console.log(error);
         }
@@ -90,153 +91,164 @@ function PropertyList(props) {
     useEffect(() => {
         getAllPropertyList();
     }, [sortby, order, page]);
-    return (
-        <>
-            <Flex minH="93vh">
-                <Box>
-                    <Sidebar />
-                </Box>
-                <Box w="full" flex={"5"} px={{ base: "1", sm: "4" }} mt="5">
-                    <Flex justifyContent={"space-between"}>
-                        <Heading
-                            lineHeight={1.1}
-                            fontSize={{ base: "2xl", md: "3xl" }}
-                            textAlign={{ base: "center", sm: "start" }}
-                            mb={"5"}
-                        >
-                            Properties
-                        </Heading>
-                        <Box display={"flex"}>
-                            <Button
-                                mr="4"
-                                color="#D3212D"
-                                variant={"outline"}
-                                onClick={() => navigate("/listing")}
+
+    useEffect(() => {
+        setTimeout(() => {
+            setLoadingPage(false);
+        }, 1700);
+    }, []);
+
+    if (loadingPage) {
+        return <Loading />
+    } else {
+        return (
+            <>
+                <Flex minH="93vh">
+                    <Box>
+                        <Sidebar />
+                    </Box>
+                    <Box w="full" flex={"5"} px={{ base: "1", sm: "4" }} mt="5">
+                        <Flex justifyContent={"space-between"}>
+                            <Heading
+                                lineHeight={1.1}
+                                fontSize={{ base: "2xl", md: "3xl" }}
+                                textAlign={{ base: "center", sm: "start" }}
+                                mb={"5"}
                             >
-                                New Property
-                            </Button>
-                            <Button
-                                color="#D3212D"
-                                variant={"outline"}
-                                onClick={() => navigate("/room")}
-                            >
-                                New Room
-                            </Button>
-                        </Box>
-                    </Flex>
-                    {dataAllProperty.length ? (
-                        <>
-                            <Box
-                                w={"full"}
-                                h={"82.5vh"}
-                                display={"flex"}
-                                flexDir={"column"}
-                                justifyContent={"space-between"}
-                            >
-                                <TableContainer>
-                                    <Table variant="simple" color={"#EEEEEE"}>
-                                        <Thead>
-                                            <Tr>
-                                                <Th
-                                                    fontSize={"lg"}
-                                                    textAlign={"center"}
-                                                >
-                                                    No
-                                                </Th>
-                                                <Th
-                                                    fontSize={"lg"}
-                                                    textAlign={"center"}
-                                                >
-                                                    Property
-                                                </Th>
-                                                <Th
-                                                    fontSize={"lg"}
-                                                    textAlign={"center"}
-                                                >
-                                                    Address
-                                                </Th>
-                                                <Th
-                                                    fontSize={"lg"}
-                                                    textAlign={"center"}
-                                                >
-                                                    Controls
-                                                </Th>
-                                            </Tr>
-                                        </Thead>
-                                        {printPropertyData()}
-                                    </Table>
-                                </TableContainer>
-                                <Flex
-                                    justify="center"
-                                    align={"center"}
-                                    mb={"0"}
+                                Properties
+                            </Heading>
+                            <Box display={"flex"}>
+                                <Button
+                                    mr="4"
+                                    color="#D3212D"
+                                    variant={"outline"}
+                                    onClick={() => navigate("/listing")}
                                 >
-                                    <Pagination
-                                        paginate={paginate}
-                                        size={size}
-                                        totalData={totalData}
-                                    />
-                                </Flex>
-                            </Box>
-                        </>
-                    ) : (
-                        <>
-                            <Text>
-                                You don't have any properties. Click "New
-                                Property" to add a new property.
-                            </Text>
-                            <Box w={"full"} h={"82.5vh"}>
-                                <TableContainer>
-                                    <Table variant="simple" color={"#EEEEEE"}>
-                                        <Thead>
-                                            <Tr>
-                                                <Th
-                                                    fontSize={"lg"}
-                                                    textAlign={"center"}
-                                                >
-                                                    No
-                                                </Th>
-                                                <Th
-                                                    fontSize={"lg"}
-                                                    textAlign={"center"}
-                                                >
-                                                    Property
-                                                </Th>
-                                                <Th
-                                                    fontSize={"lg"}
-                                                    textAlign={"center"}
-                                                >
-                                                    Address
-                                                </Th>
-                                                <Th
-                                                    fontSize={"lg"}
-                                                    textAlign={"center"}
-                                                >
-                                                    Controls
-                                                </Th>
-                                            </Tr>
-                                        </Thead>
-                                        {printPropertyData()}
-                                    </Table>
-                                </TableContainer>
-                                <Flex
-                                    justify="center"
-                                    align={"center"}
-                                    mb={"0"}
+                                    New Property
+                                </Button>
+                                <Button
+                                    color="#D3212D"
+                                    variant={"outline"}
+                                    onClick={() => navigate("/room")}
                                 >
-                                    <Pagination
-                                        paginate={paginate}
-                                        size={size}
-                                        totalData={totalData}
-                                    />
-                                </Flex>
+                                    New Room
+                                </Button>
                             </Box>
-                        </>
-                    )}
-                </Box>
-            </Flex>
-        </>
-    );
+                        </Flex>
+                        {dataAllProperty.length ? (
+                            <>
+                                <Box
+                                    w={"full"}
+                                    h={"82.5vh"}
+                                    display={"flex"}
+                                    flexDir={"column"}
+                                    justifyContent={"space-between"}
+                                >
+                                    <TableContainer>
+                                        <Table variant="simple" color={"#EEEEEE"}>
+                                            <Thead>
+                                                <Tr>
+                                                    <Th
+                                                        fontSize={"lg"}
+                                                        textAlign={"center"}
+                                                    >
+                                                        No
+                                                    </Th>
+                                                    <Th
+                                                        fontSize={"lg"}
+                                                        textAlign={"center"}
+                                                    >
+                                                        Property
+                                                    </Th>
+                                                    <Th
+                                                        fontSize={"lg"}
+                                                        textAlign={"center"}
+                                                    >
+                                                        Address
+                                                    </Th>
+                                                    <Th
+                                                        fontSize={"lg"}
+                                                        textAlign={"center"}
+                                                    >
+                                                        Controls
+                                                    </Th>
+                                                </Tr>
+                                            </Thead>
+                                            {printPropertyData()}
+                                        </Table>
+                                    </TableContainer>
+                                    <Flex
+                                        justify="center"
+                                        align={"center"}
+                                        mb={"0"}
+                                    >
+                                        <Pagination
+                                            paginate={paginate}
+                                            size={size}
+                                            totalData={totalData}
+                                        />
+                                    </Flex>
+                                </Box>
+                            </>
+                        ) : (
+                            <>
+                                <Text>
+                                    You don't have any properties. Click "New
+                                    Property" to add a new property.
+                                </Text>
+                                <Box w={"full"} h={"82.5vh"}>
+                                    <TableContainer>
+                                        <Table variant="simple" color={"#EEEEEE"}>
+                                            <Thead>
+                                                <Tr>
+                                                    <Th
+                                                        fontSize={"lg"}
+                                                        textAlign={"center"}
+                                                    >
+                                                        No
+                                                    </Th>
+                                                    <Th
+                                                        fontSize={"lg"}
+                                                        textAlign={"center"}
+                                                    >
+                                                        Property
+                                                    </Th>
+                                                    <Th
+                                                        fontSize={"lg"}
+                                                        textAlign={"center"}
+                                                    >
+                                                        Address
+                                                    </Th>
+                                                    <Th
+                                                        fontSize={"lg"}
+                                                        textAlign={"center"}
+                                                    >
+                                                        Controls
+                                                    </Th>
+                                                </Tr>
+                                            </Thead>
+                                            {printPropertyData()}
+                                        </Table>
+                                    </TableContainer>
+                                    <Flex
+                                        justify="center"
+                                        align={"center"}
+                                        mb={"0"}
+                                    >
+                                        <Pagination
+                                            paginate={paginate}
+                                            size={size}
+                                            totalData={totalData}
+                                        />
+                                    </Flex>
+                                </Box>
+                            </>
+                        )}
+                    </Box>
+                </Flex>
+            </>
+        );
+    }
 }
 
 export default PropertyList;

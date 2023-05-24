@@ -1,8 +1,8 @@
 const schedule = require('node-schedule');
-const sequelize = require("sequelize");
 const model = require("../models");
 const nodemailer = require("nodemailer");
 const hbs = require("nodemailer-express-handlebars");
+const { join } = require("path");
 
 module.exports = {
     reminderCheckInUser: () => {
@@ -15,7 +15,7 @@ module.exports = {
             let orders = await model.order.findAll({
                 attributes: ['start_date', 'end_date', 'price'],
                 where: {
-                    start_date: '2023-05-03' // DIGANTI JADI VARIABLE NEXTDAY
+                    start_date: nextDay // DIGANTI JADI VARIABLE NEXTDAY
                 },
                 include: [
                     {
@@ -67,8 +67,8 @@ module.exports = {
                     const transporter = nodemailer.createTransport({
                         service: "gmail",
                         auth: {
-                            user: "noreply.tempatku@gmail.com",
-                            pass: "vjuuvolabsuuxqex",
+                            user: `${process.env.NODEMAILER_TRANSPORTER_USERNAME}`,
+                            pass: `${process.env.NODEMAILER_TRANSPORTER_PASSWORD}`,
                         },
                     });
                     transporter.use(
@@ -76,11 +76,11 @@ module.exports = {
                         hbs({
                             viewEngine: {
                                 extname: ".html", // html extension
-                                layoutsDir: "./src/helper", // location of handlebars templates
+                                layoutsDir: __dirname, // location of handlebars templates
                                 defaultLayout: "checkin-reminder", // name of main template
-                                partialsDir: "./src/helper", // location of your subtemplates aka. header, footer etc
+                                partialsDir: __dirname, // location of your subtemplates aka. header, footer etc
                             },
-                            viewPath: "./src/helper",
+                            viewPath: __dirname,
                             extName: ".html",
                         })
                     );
