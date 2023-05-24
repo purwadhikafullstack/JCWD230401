@@ -331,7 +331,7 @@ export default function LandingNew() {
                 <Box mb={{ base: "40px", md: "80px" }}>
                     <Flex
                         w="full"
-                        h={{ base: "80vh", lg: "100vh" }}
+                        h={{ base: "80vh", sm:"125vh", lg: "100vh" }}
                         backgroundImage={BannerImage}
                         backgroundSize="cover"
                         backgroundPosition={"center center"}
@@ -346,11 +346,12 @@ export default function LandingNew() {
                                     color={"white"}
                                     fontWeight={400}
                                     lineHeight={1.2}
-                                    fontSize={{ base: "3xl", md: "55px" }}>
+                                    mt={{base:"0", md:"4", lg:"0"}}
+                                    fontSize={{ base: "3xl", md:"4xl", lg: "55px" }}>
                                     Find Your Next Stay
                                 </Text>
                                 {/* SEARCH BAR */}
-                                <Box bg="white" w={{ base: "80vw", md: "45vw", lg: "80vw" }} m="30px auto" p="6px 10px 6px 25px" borderRadius="10px" py={{ base: "4", lg: "1.5" }}>
+                                <Box bg="white" w={{ base: "80vw", md: "50vw", lg: "80vw" }} m="30px auto" p="6px 10px 6px 25px" borderRadius="10px" py={{ base: "4", md: "3", lg: "1.5" }}>
                                     <Flex align={{ base: "left", lg: "center" }} justify={"space-between"} flexWrap={"wrap"} flexDirection={{ base: "column", lg: "row" }}>
                                         <Box
                                             flex="1.5"
