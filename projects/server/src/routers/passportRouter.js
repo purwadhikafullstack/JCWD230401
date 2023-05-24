@@ -119,6 +119,8 @@ route.get(
       });
       // console.log("Cookie created di google callback:", req.cookies.googleAuthToken);
       res.redirect(process.env.FE_URL);
+    } else {
+      res.redirect(process.env.FE_URL);
     }
   }
 );
