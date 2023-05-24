@@ -137,7 +137,7 @@ export default function ChangePassword() {
     } else {
         return (
             <Flex
-                minH={{ base: "50vh", sm: "100vh" }}
+                minH={{ base: "100vh", sm: "100vh" }}
                 align={{ base: "none", sm: "center" }}
                 justify={"center"}
                 bg={"white"}>
