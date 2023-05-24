@@ -19,7 +19,6 @@ import { SlPicture } from "react-icons/sl";
 import { useParams } from "react-router-dom";
 import Loading from "../../Components/Loading";
 
-
 function ManageRoom(props) {
     const [loadingPage, setLoadingPage] = useState(true);
     const params = useParams();
@@ -258,7 +257,7 @@ function ManageRoom(props) {
     }, []);
 
     if (loadingPage) {
-        return <Loading />
+        return <Loading />;
     } else {
         return (
             <Container
@@ -285,7 +284,11 @@ function ManageRoom(props) {
                         <h1>Edit Existing Room</h1>
                     </Box>
                     <Box mt={"10"}>
-                        <Box textAlign="left" fontSize={"3xl"} fontWeight="bold">
+                        <Box
+                            textAlign="left"
+                            fontSize={"3xl"}
+                            fontWeight="bold"
+                        >
                             <h2>Room Information</h2>
                         </Box>
 
@@ -350,20 +353,24 @@ function ManageRoom(props) {
                                                 {/* Button Image 1 */}
                                                 {fileRoomEdit1 ? (
                                                     <>
-                                                        <Flex flexDir={"column"}>
+                                                        <Flex
+                                                            flexDir={"column"}
+                                                        >
                                                             <Box
                                                                 onClick={() => {
                                                                     inputFile1.current.click();
                                                                 }}
-                                                                isLoading={loading}
+                                                                isLoading={
+                                                                    loading
+                                                                }
                                                             >
                                                                 <Image
                                                                     src={
                                                                         typeof fileRoomEdit1.name ==
-                                                                            "string"
+                                                                        "string"
                                                                             ? URL.createObjectURL(
-                                                                                fileRoomEdit1
-                                                                            )
+                                                                                  fileRoomEdit1
+                                                                              )
                                                                             : `${process.env.REACT_APP_API_IMG_URL}${fileRoomEdit1.picture}`
                                                                     }
                                                                     w={"100px"}
@@ -388,7 +395,9 @@ function ManageRoom(props) {
                                                                 <input
                                                                     type="file"
                                                                     id="file"
-                                                                    ref={inputFile1}
+                                                                    ref={
+                                                                        inputFile1
+                                                                    }
                                                                     style={{
                                                                         display:
                                                                             "none",
@@ -401,9 +410,6 @@ function ManageRoom(props) {
                                                                             fileRoomEdit1.id
                                                                         );
                                                                     }}
-                                                                    isLoading={
-                                                                        loading
-                                                                    }
                                                                 />
                                                             </Box>
                                                             <Button
@@ -414,7 +420,9 @@ function ManageRoom(props) {
                                                                 alignItems={
                                                                     "center"
                                                                 }
-                                                                alignSelf={"center"}
+                                                                alignSelf={
+                                                                    "center"
+                                                                }
                                                                 mx={"auto"}
                                                                 mb={"4"}
                                                                 onClick={() => {
@@ -427,10 +435,14 @@ function ManageRoom(props) {
                                                                             .id
                                                                     );
                                                                 }}
-                                                                isLoading={loading}
+                                                                isLoading={
+                                                                    loading
+                                                                }
                                                             >
                                                                 <Text
-                                                                    fontSize={"xl"}
+                                                                    fontSize={
+                                                                        "xl"
+                                                                    }
                                                                 >
                                                                     <HiTrash
                                                                         fontWeight={
@@ -445,7 +457,9 @@ function ManageRoom(props) {
                                                 ) : (
                                                     <Button
                                                         type="button"
-                                                        justifyContent={"center"}
+                                                        justifyContent={
+                                                            "center"
+                                                        }
                                                         display={"flex"}
                                                         flexDir="column"
                                                         size="md"
@@ -474,13 +488,14 @@ function ManageRoom(props) {
                                                             style={{
                                                                 display: "none",
                                                             }}
-                                                            onChange={(event) => {
+                                                            onChange={(
+                                                                event
+                                                            ) => {
                                                                 onChangeFile1(
                                                                     event,
                                                                     fileRoomEdit1.id
                                                                 );
                                                             }}
-                                                            isLoading={loading}
                                                         />
                                                         <Text
                                                             textAlign={"center"}
@@ -494,20 +509,24 @@ function ManageRoom(props) {
                                                 {/* Button Image 2 */}
                                                 {fileRoomEdit2 ? (
                                                     <>
-                                                        <Flex flexDir={"column"}>
+                                                        <Flex
+                                                            flexDir={"column"}
+                                                        >
                                                             <Box
                                                                 onClick={() => {
                                                                     inputFile2.current.click();
                                                                 }}
-                                                                isLoading={loading}
+                                                                isLoading={
+                                                                    loading
+                                                                }
                                                             >
                                                                 <Image
                                                                     src={
                                                                         typeof fileRoomEdit2.name ==
-                                                                            "string"
+                                                                        "string"
                                                                             ? URL.createObjectURL(
-                                                                                fileRoomEdit2
-                                                                            )
+                                                                                  fileRoomEdit2
+                                                                              )
                                                                             : `${process.env.REACT_APP_API_IMG_URL}${fileRoomEdit2.picture}`
                                                                     }
                                                                     w={"100px"}
@@ -532,7 +551,9 @@ function ManageRoom(props) {
                                                                 <input
                                                                     type="file"
                                                                     id="file"
-                                                                    ref={inputFile2}
+                                                                    ref={
+                                                                        inputFile2
+                                                                    }
                                                                     style={{
                                                                         display:
                                                                             "none",
@@ -545,9 +566,6 @@ function ManageRoom(props) {
                                                                             fileRoomEdit2.id
                                                                         );
                                                                     }}
-                                                                    isLoading={
-                                                                        loading
-                                                                    }
                                                                 />
                                                             </Box>
                                                             <Button
@@ -558,7 +576,9 @@ function ManageRoom(props) {
                                                                 alignItems={
                                                                     "center"
                                                                 }
-                                                                alignSelf={"center"}
+                                                                alignSelf={
+                                                                    "center"
+                                                                }
                                                                 mx={"auto"}
                                                                 mb={"4"}
                                                                 onClick={() => {
@@ -571,10 +591,14 @@ function ManageRoom(props) {
                                                                             .id
                                                                     );
                                                                 }}
-                                                                isLoading={loading}
+                                                                isLoading={
+                                                                    loading
+                                                                }
                                                             >
                                                                 <Text
-                                                                    fontSize={"xl"}
+                                                                    fontSize={
+                                                                        "xl"
+                                                                    }
                                                                 >
                                                                     <HiTrash
                                                                         fontWeight={
@@ -589,7 +613,9 @@ function ManageRoom(props) {
                                                 ) : (
                                                     <Button
                                                         type="button"
-                                                        justifyContent={"center"}
+                                                        justifyContent={
+                                                            "center"
+                                                        }
                                                         display={"flex"}
                                                         flexDir="column"
                                                         size="md"
@@ -618,13 +644,14 @@ function ManageRoom(props) {
                                                             style={{
                                                                 display: "none",
                                                             }}
-                                                            onChange={(event) => {
+                                                            onChange={(
+                                                                event
+                                                            ) => {
                                                                 onChangeFile2(
                                                                     event,
                                                                     fileRoomEdit2.id
                                                                 );
                                                             }}
-                                                            isLoading={loading}
                                                         />
                                                         <Text
                                                             textAlign={"center"}
@@ -637,20 +664,24 @@ function ManageRoom(props) {
                                                 {/* Button Image 3 */}
                                                 {fileRoomEdit3 ? (
                                                     <>
-                                                        <Flex flexDir={"column"}>
+                                                        <Flex
+                                                            flexDir={"column"}
+                                                        >
                                                             <Box
                                                                 onClick={() => {
                                                                     inputFile3.current.click();
                                                                 }}
-                                                                isLoading={loading}
+                                                                isLoading={
+                                                                    loading
+                                                                }
                                                             >
                                                                 <Image
                                                                     src={
                                                                         typeof fileRoomEdit3.name ==
-                                                                            "string"
+                                                                        "string"
                                                                             ? URL.createObjectURL(
-                                                                                fileRoomEdit3
-                                                                            )
+                                                                                  fileRoomEdit3
+                                                                              )
                                                                             : `${process.env.REACT_APP_API_IMG_URL}${fileRoomEdit3.picture}`
                                                                     }
                                                                     w={"100px"}
@@ -675,7 +706,9 @@ function ManageRoom(props) {
                                                                 <input
                                                                     type="file"
                                                                     id="file"
-                                                                    ref={inputFile3}
+                                                                    ref={
+                                                                        inputFile3
+                                                                    }
                                                                     style={{
                                                                         display:
                                                                             "none",
@@ -688,9 +721,6 @@ function ManageRoom(props) {
                                                                             fileRoomEdit3.id
                                                                         );
                                                                     }}
-                                                                    isLoading={
-                                                                        loading
-                                                                    }
                                                                 />
                                                             </Box>
                                                             <Button
@@ -701,7 +731,9 @@ function ManageRoom(props) {
                                                                 alignItems={
                                                                     "center"
                                                                 }
-                                                                alignSelf={"center"}
+                                                                alignSelf={
+                                                                    "center"
+                                                                }
                                                                 mx={"auto"}
                                                                 mb={"4"}
                                                                 onClick={() => {
@@ -714,10 +746,14 @@ function ManageRoom(props) {
                                                                             .id
                                                                     );
                                                                 }}
-                                                                isLoading={loading}
+                                                                isLoading={
+                                                                    loading
+                                                                }
                                                             >
                                                                 <Text
-                                                                    fontSize={"xl"}
+                                                                    fontSize={
+                                                                        "xl"
+                                                                    }
                                                                 >
                                                                     <HiTrash
                                                                         fontWeight={
@@ -732,7 +768,9 @@ function ManageRoom(props) {
                                                 ) : (
                                                     <Button
                                                         type="button"
-                                                        justifyContent={"center"}
+                                                        justifyContent={
+                                                            "center"
+                                                        }
                                                         display={"flex"}
                                                         flexDir="column"
                                                         size="md"
@@ -761,13 +799,14 @@ function ManageRoom(props) {
                                                             style={{
                                                                 display: "none",
                                                             }}
-                                                            onChange={(event) => {
+                                                            onChange={(
+                                                                event
+                                                            ) => {
                                                                 onChangeFile3(
                                                                     event,
                                                                     fileRoomEdit3.id
                                                                 );
                                                             }}
-                                                            isLoading={loading}
                                                         />
                                                         <Text
                                                             textAlign={"center"}
@@ -780,20 +819,24 @@ function ManageRoom(props) {
                                                 {/* Button Image 4 */}
                                                 {fileRoomEdit4 ? (
                                                     <>
-                                                        <Flex flexDir={"column"}>
+                                                        <Flex
+                                                            flexDir={"column"}
+                                                        >
                                                             <Box
                                                                 onClick={() => {
                                                                     inputFile4.current.click();
                                                                 }}
-                                                                isLoading={loading}
+                                                                isLoading={
+                                                                    loading
+                                                                }
                                                             >
                                                                 <Image
                                                                     src={
                                                                         typeof fileRoomEdit4.name ==
-                                                                            "string"
+                                                                        "string"
                                                                             ? URL.createObjectURL(
-                                                                                fileRoomEdit4
-                                                                            )
+                                                                                  fileRoomEdit4
+                                                                              )
                                                                             : `${process.env.REACT_APP_API_IMG_URL}${fileRoomEdit4.picture}`
                                                                     }
                                                                     w={"100px"}
@@ -818,7 +861,9 @@ function ManageRoom(props) {
                                                                 <input
                                                                     type="file"
                                                                     id="file"
-                                                                    ref={inputFile4}
+                                                                    ref={
+                                                                        inputFile4
+                                                                    }
                                                                     style={{
                                                                         display:
                                                                             "none",
@@ -831,9 +876,6 @@ function ManageRoom(props) {
                                                                             fileRoomEdit4.id
                                                                         );
                                                                     }}
-                                                                    isLoading={
-                                                                        loading
-                                                                    }
                                                                 />
                                                             </Box>
                                                             <Button
@@ -844,7 +886,9 @@ function ManageRoom(props) {
                                                                 alignItems={
                                                                     "center"
                                                                 }
-                                                                alignSelf={"center"}
+                                                                alignSelf={
+                                                                    "center"
+                                                                }
                                                                 mx={"auto"}
                                                                 mb={"4"}
                                                                 onClick={() => {
@@ -857,10 +901,14 @@ function ManageRoom(props) {
                                                                             .id
                                                                     );
                                                                 }}
-                                                                isLoading={loading}
+                                                                isLoading={
+                                                                    loading
+                                                                }
                                                             >
                                                                 <Text
-                                                                    fontSize={"xl"}
+                                                                    fontSize={
+                                                                        "xl"
+                                                                    }
                                                                 >
                                                                     <HiTrash
                                                                         fontWeight={
@@ -875,7 +923,9 @@ function ManageRoom(props) {
                                                 ) : (
                                                     <Button
                                                         type="button"
-                                                        justifyContent={"center"}
+                                                        justifyContent={
+                                                            "center"
+                                                        }
                                                         display={"flex"}
                                                         flexDir="column"
                                                         size="md"
@@ -904,13 +954,14 @@ function ManageRoom(props) {
                                                             style={{
                                                                 display: "none",
                                                             }}
-                                                            onChange={(event) => {
+                                                            onChange={(
+                                                                event
+                                                            ) => {
                                                                 onChangeFile4(
                                                                     event,
                                                                     fileRoomEdit4.id
                                                                 );
                                                             }}
-                                                            isLoading={loading}
                                                         />
                                                         <Text
                                                             textAlign={"center"}
@@ -923,20 +974,24 @@ function ManageRoom(props) {
                                                 {/* Button Image 5 */}
                                                 {fileRoomEdit5 ? (
                                                     <>
-                                                        <Flex flexDir={"column"}>
+                                                        <Flex
+                                                            flexDir={"column"}
+                                                        >
                                                             <Box
                                                                 onClick={() => {
                                                                     inputFile5.current.click();
                                                                 }}
-                                                                isLoading={loading}
+                                                                isLoading={
+                                                                    loading
+                                                                }
                                                             >
                                                                 <Image
                                                                     src={
                                                                         typeof fileRoomEdit5.name ==
-                                                                            "string"
+                                                                        "string"
                                                                             ? URL.createObjectURL(
-                                                                                fileRoomEdit5
-                                                                            )
+                                                                                  fileRoomEdit5
+                                                                              )
                                                                             : `${process.env.REACT_APP_API_IMG_URL}${fileRoomEdit5.picture}`
                                                                     }
                                                                     w={"100px"}
@@ -961,7 +1016,9 @@ function ManageRoom(props) {
                                                                 <input
                                                                     type="file"
                                                                     id="file"
-                                                                    ref={inputFile5}
+                                                                    ref={
+                                                                        inputFile5
+                                                                    }
                                                                     style={{
                                                                         display:
                                                                             "none",
@@ -974,9 +1031,6 @@ function ManageRoom(props) {
                                                                             fileRoomEdit5.id
                                                                         );
                                                                     }}
-                                                                    isLoading={
-                                                                        loading
-                                                                    }
                                                                 />
                                                             </Box>
                                                             <Button
@@ -987,7 +1041,9 @@ function ManageRoom(props) {
                                                                 alignItems={
                                                                     "center"
                                                                 }
-                                                                alignSelf={"center"}
+                                                                alignSelf={
+                                                                    "center"
+                                                                }
                                                                 mx={"auto"}
                                                                 mb={"4"}
                                                                 onClick={() => {
@@ -1000,10 +1056,14 @@ function ManageRoom(props) {
                                                                             .id
                                                                     );
                                                                 }}
-                                                                isLoading={loading}
+                                                                isLoading={
+                                                                    loading
+                                                                }
                                                             >
                                                                 <Text
-                                                                    fontSize={"xl"}
+                                                                    fontSize={
+                                                                        "xl"
+                                                                    }
                                                                 >
                                                                     <HiTrash
                                                                         fontWeight={
@@ -1018,7 +1078,9 @@ function ManageRoom(props) {
                                                 ) : (
                                                     <Button
                                                         type="button"
-                                                        justifyContent={"center"}
+                                                        justifyContent={
+                                                            "center"
+                                                        }
                                                         display={"flex"}
                                                         flexDir="column"
                                                         size="md"
@@ -1047,13 +1109,14 @@ function ManageRoom(props) {
                                                             style={{
                                                                 display: "none",
                                                             }}
-                                                            onChange={(event) => {
+                                                            onChange={(
+                                                                event
+                                                            ) => {
                                                                 onChangeFile5(
                                                                     event,
                                                                     fileRoomEdit5.id
                                                                 );
                                                             }}
-                                                            isLoading={loading}
                                                         />
                                                         <Text
                                                             textAlign={"center"}
@@ -1095,7 +1158,10 @@ function ManageRoom(props) {
                                             );
                                         }}
                                     />
-                                    <Text textAlign={"right"} color={"gray.300"}>
+                                    <Text
+                                        textAlign={"right"}
+                                        color={"gray.300"}
+                                    >
                                         {descriptionLength}/250
                                     </Text>
                                 </Box>
@@ -1134,7 +1200,11 @@ function ManageRoom(props) {
                         <h2>Edit Room Price</h2>
                     </Box>
                     <Box as={Flex} my="10">
-                        <Flex flex={1} fontWeight="medium" alignItems={"center"}>
+                        <Flex
+                            flex={1}
+                            fontWeight="medium"
+                            alignItems={"center"}
+                        >
                             Set Your Price
                         </Flex>
                         <Box flex={3} display="flex" flexDir={"column"}>

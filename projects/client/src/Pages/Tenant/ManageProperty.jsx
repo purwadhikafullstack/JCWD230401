@@ -22,7 +22,6 @@ import { HiTrash } from "react-icons/hi2";
 import { SlPicture } from "react-icons/sl";
 import Loading from "../../Components/Loading";
 
-
 function ManageProperty(props) {
     const [loadingPage, setLoadingPage] = useState(true);
     const params = useParams();
@@ -349,7 +348,7 @@ function ManageProperty(props) {
     }, []);
 
     if (loadingPage) {
-        return <Loading />
+        return <Loading />;
     } else {
         return (
             <Container
@@ -376,7 +375,11 @@ function ManageProperty(props) {
                         <h1>Edit Listing</h1>
                     </Box>
                     <Box mt={"10"}>
-                        <Box textAlign="left" fontSize={"3xl"} fontWeight="bold">
+                        <Box
+                            textAlign="left"
+                            fontSize={"3xl"}
+                            fontWeight="bold"
+                        >
                             <h2>Basic Information</h2>
                         </Box>
                         {/* CHOOSE/EDIT CATEGORY */}
@@ -411,7 +414,9 @@ function ManageProperty(props) {
                                                 : "gray.200"
                                         }
                                         borderWidth={
-                                            activeButton === "Hotel" ? "2px" : "1px"
+                                            activeButton === "Hotel"
+                                                ? "2px"
+                                                : "1px"
                                         }
                                         value={"Hotel"}
                                         onClick={() => {
@@ -448,7 +453,9 @@ function ManageProperty(props) {
                                                 : "gray.200"
                                         }
                                         borderWidth={
-                                            activeButton === "Villa" ? "2px" : "1px"
+                                            activeButton === "Villa"
+                                                ? "2px"
+                                                : "1px"
                                         }
                                         value={"Villa"}
                                         onClick={() => {
@@ -497,7 +504,9 @@ function ManageProperty(props) {
                                             fontSize={"45px"}
                                             color="#D3212D"
                                         />
-                                        <Text textAlign={"center"}>Apartment</Text>
+                                        <Text textAlign={"center"}>
+                                            Apartment
+                                        </Text>
                                     </Button>
                                 </Box>
                                 <Box mx="4" my="2">
@@ -513,7 +522,7 @@ function ManageProperty(props) {
                                             defaultValue={
                                                 !category
                                                     ? propertyData?.category
-                                                        ?.category
+                                                          ?.category
                                                     : category
                                             }
                                             onChange={(e) => {
@@ -542,7 +551,9 @@ function ManageProperty(props) {
                                             justifyItems={"self-end"}
                                             h={"40px"}
                                             // value={property}
-                                            defaultValue={propertyData?.property}
+                                            defaultValue={
+                                                propertyData?.property
+                                            }
                                             onChange={(e) =>
                                                 setProperty(e.target.value)
                                             }
@@ -584,20 +595,24 @@ function ManageProperty(props) {
                                                 {/* Button Image 1 */}
                                                 {filePropertyEdit1 ? (
                                                     <>
-                                                        <Flex flexDir={"column"}>
+                                                        <Flex
+                                                            flexDir={"column"}
+                                                        >
                                                             <Box
                                                                 onClick={() => {
                                                                     inputFile1.current.click();
                                                                 }}
-                                                                isLoading={loading}
+                                                                isLoading={
+                                                                    loading
+                                                                }
                                                             >
                                                                 <Image
                                                                     src={
                                                                         typeof filePropertyEdit1.name ==
-                                                                            "string"
+                                                                        "string"
                                                                             ? URL.createObjectURL(
-                                                                                filePropertyEdit1
-                                                                            )
+                                                                                  filePropertyEdit1
+                                                                              )
                                                                             : `${process.env.REACT_APP_API_IMG_URL}${filePropertyEdit1.picture}`
                                                                     }
                                                                     w={"100px"}
@@ -622,7 +637,9 @@ function ManageProperty(props) {
                                                                 <input
                                                                     type="file"
                                                                     id="file"
-                                                                    ref={inputFile1}
+                                                                    ref={
+                                                                        inputFile1
+                                                                    }
                                                                     style={{
                                                                         display:
                                                                             "none",
@@ -645,7 +662,9 @@ function ManageProperty(props) {
                                                                 alignItems={
                                                                     "center"
                                                                 }
-                                                                alignSelf={"center"}
+                                                                alignSelf={
+                                                                    "center"
+                                                                }
                                                                 mx={"auto"}
                                                                 mb={"4"}
                                                                 onClick={() => {
@@ -658,10 +677,14 @@ function ManageProperty(props) {
                                                                             .id
                                                                     );
                                                                 }}
-                                                                isLoading={loading}
+                                                                isLoading={
+                                                                    loading
+                                                                }
                                                             >
                                                                 <Text
-                                                                    fontSize={"xl"}
+                                                                    fontSize={
+                                                                        "xl"
+                                                                    }
                                                                 >
                                                                     <HiTrash
                                                                         fontWeight={
@@ -676,7 +699,9 @@ function ManageProperty(props) {
                                                 ) : (
                                                     <Button
                                                         type="button"
-                                                        justifyContent={"center"}
+                                                        justifyContent={
+                                                            "center"
+                                                        }
                                                         display={"flex"}
                                                         flexDir="column"
                                                         size="md"
@@ -705,7 +730,9 @@ function ManageProperty(props) {
                                                             style={{
                                                                 display: "none",
                                                             }}
-                                                            onChange={(event) => {
+                                                            onChange={(
+                                                                event
+                                                            ) => {
                                                                 onChangeFile1(
                                                                     event,
                                                                     filePropertyEdit1.id
@@ -724,20 +751,24 @@ function ManageProperty(props) {
                                                 {/* Button Image 2 */}
                                                 {filePropertyEdit2 ? (
                                                     <>
-                                                        <Flex flexDir={"column"}>
+                                                        <Flex
+                                                            flexDir={"column"}
+                                                        >
                                                             <Box
                                                                 onClick={() => {
                                                                     inputFile2.current.click();
                                                                 }}
-                                                                isLoading={loading}
+                                                                isLoading={
+                                                                    loading
+                                                                }
                                                             >
                                                                 <Image
                                                                     src={
                                                                         typeof filePropertyEdit2.name ==
-                                                                            "string"
+                                                                        "string"
                                                                             ? URL.createObjectURL(
-                                                                                filePropertyEdit2
-                                                                            )
+                                                                                  filePropertyEdit2
+                                                                              )
                                                                             : `${process.env.REACT_APP_API_IMG_URL}${filePropertyEdit2.picture}`
                                                                     }
                                                                     w={"100px"}
@@ -762,7 +793,9 @@ function ManageProperty(props) {
                                                                 <input
                                                                     type="file"
                                                                     id="file"
-                                                                    ref={inputFile2}
+                                                                    ref={
+                                                                        inputFile2
+                                                                    }
                                                                     style={{
                                                                         display:
                                                                             "none",
@@ -775,9 +808,6 @@ function ManageProperty(props) {
                                                                             filePropertyEdit2.id
                                                                         );
                                                                     }}
-                                                                    isLoading={
-                                                                        loading
-                                                                    }
                                                                 />
                                                             </Box>
                                                             <Button
@@ -788,7 +818,9 @@ function ManageProperty(props) {
                                                                 alignItems={
                                                                     "center"
                                                                 }
-                                                                alignSelf={"center"}
+                                                                alignSelf={
+                                                                    "center"
+                                                                }
                                                                 mx={"auto"}
                                                                 mb={"4"}
                                                                 onClick={() => {
@@ -801,10 +833,14 @@ function ManageProperty(props) {
                                                                             .id
                                                                     );
                                                                 }}
-                                                                isLoading={loading}
+                                                                isLoading={
+                                                                    loading
+                                                                }
                                                             >
                                                                 <Text
-                                                                    fontSize={"xl"}
+                                                                    fontSize={
+                                                                        "xl"
+                                                                    }
                                                                 >
                                                                     <HiTrash
                                                                         fontWeight={
@@ -819,7 +855,9 @@ function ManageProperty(props) {
                                                 ) : (
                                                     <Button
                                                         type="button"
-                                                        justifyContent={"center"}
+                                                        justifyContent={
+                                                            "center"
+                                                        }
                                                         display={"flex"}
                                                         flexDir="column"
                                                         size="md"
@@ -848,13 +886,14 @@ function ManageProperty(props) {
                                                             style={{
                                                                 display: "none",
                                                             }}
-                                                            onChange={(event) => {
+                                                            onChange={(
+                                                                event
+                                                            ) => {
                                                                 onChangeFile2(
                                                                     event,
                                                                     filePropertyEdit2.id
                                                                 );
                                                             }}
-                                                            isLoading={loading}
                                                         />
                                                         <Text
                                                             textAlign={"center"}
@@ -867,20 +906,24 @@ function ManageProperty(props) {
                                                 {/* Button Image 3 */}
                                                 {filePropertyEdit3 ? (
                                                     <>
-                                                        <Flex flexDir={"column"}>
+                                                        <Flex
+                                                            flexDir={"column"}
+                                                        >
                                                             <Box
                                                                 onClick={() => {
                                                                     inputFile3.current.click();
                                                                 }}
-                                                                isLoading={loading}
+                                                                isLoading={
+                                                                    loading
+                                                                }
                                                             >
                                                                 <Image
                                                                     src={
                                                                         typeof filePropertyEdit3.name ==
-                                                                            "string"
+                                                                        "string"
                                                                             ? URL.createObjectURL(
-                                                                                filePropertyEdit3
-                                                                            )
+                                                                                  filePropertyEdit3
+                                                                              )
                                                                             : `${process.env.REACT_APP_API_IMG_URL}${filePropertyEdit3.picture}`
                                                                     }
                                                                     w={"100px"}
@@ -905,7 +948,9 @@ function ManageProperty(props) {
                                                                 <input
                                                                     type="file"
                                                                     id="file"
-                                                                    ref={inputFile3}
+                                                                    ref={
+                                                                        inputFile3
+                                                                    }
                                                                     style={{
                                                                         display:
                                                                             "none",
@@ -918,9 +963,6 @@ function ManageProperty(props) {
                                                                             filePropertyEdit3.id
                                                                         );
                                                                     }}
-                                                                    isLoading={
-                                                                        loading
-                                                                    }
                                                                 />
                                                             </Box>
                                                             <Button
@@ -931,7 +973,9 @@ function ManageProperty(props) {
                                                                 alignItems={
                                                                     "center"
                                                                 }
-                                                                alignSelf={"center"}
+                                                                alignSelf={
+                                                                    "center"
+                                                                }
                                                                 mx={"auto"}
                                                                 mb={"4"}
                                                                 onClick={() => {
@@ -944,10 +988,14 @@ function ManageProperty(props) {
                                                                             .id
                                                                     );
                                                                 }}
-                                                                isLoading={loading}
+                                                                isLoading={
+                                                                    loading
+                                                                }
                                                             >
                                                                 <Text
-                                                                    fontSize={"xl"}
+                                                                    fontSize={
+                                                                        "xl"
+                                                                    }
                                                                 >
                                                                     <HiTrash
                                                                         fontWeight={
@@ -962,7 +1010,9 @@ function ManageProperty(props) {
                                                 ) : (
                                                     <Button
                                                         type="button"
-                                                        justifyContent={"center"}
+                                                        justifyContent={
+                                                            "center"
+                                                        }
                                                         display={"flex"}
                                                         flexDir="column"
                                                         size="md"
@@ -991,13 +1041,14 @@ function ManageProperty(props) {
                                                             style={{
                                                                 display: "none",
                                                             }}
-                                                            onChange={(event) => {
+                                                            onChange={(
+                                                                event
+                                                            ) => {
                                                                 onChangeFile3(
                                                                     event,
                                                                     filePropertyEdit3.id
                                                                 );
                                                             }}
-                                                            isLoading={loading}
                                                         />
                                                         <Text
                                                             textAlign={"center"}
@@ -1010,20 +1061,24 @@ function ManageProperty(props) {
                                                 {/* Button Image 4 */}
                                                 {filePropertyEdit4 ? (
                                                     <>
-                                                        <Flex flexDir={"column"}>
+                                                        <Flex
+                                                            flexDir={"column"}
+                                                        >
                                                             <Box
                                                                 onClick={() => {
                                                                     inputFile4.current.click();
                                                                 }}
-                                                                isLoading={loading}
+                                                                isLoading={
+                                                                    loading
+                                                                }
                                                             >
                                                                 <Image
                                                                     src={
                                                                         typeof filePropertyEdit4.name ==
-                                                                            "string"
+                                                                        "string"
                                                                             ? URL.createObjectURL(
-                                                                                filePropertyEdit4
-                                                                            )
+                                                                                  filePropertyEdit4
+                                                                              )
                                                                             : `${process.env.REACT_APP_API_IMG_URL}${filePropertyEdit4.picture}`
                                                                     }
                                                                     w={"100px"}
@@ -1048,7 +1103,9 @@ function ManageProperty(props) {
                                                                 <input
                                                                     type="file"
                                                                     id="file"
-                                                                    ref={inputFile4}
+                                                                    ref={
+                                                                        inputFile4
+                                                                    }
                                                                     style={{
                                                                         display:
                                                                             "none",
@@ -1061,9 +1118,6 @@ function ManageProperty(props) {
                                                                             filePropertyEdit4.id
                                                                         );
                                                                     }}
-                                                                    isLoading={
-                                                                        loading
-                                                                    }
                                                                 />
                                                             </Box>
                                                             <Button
@@ -1074,7 +1128,9 @@ function ManageProperty(props) {
                                                                 alignItems={
                                                                     "center"
                                                                 }
-                                                                alignSelf={"center"}
+                                                                alignSelf={
+                                                                    "center"
+                                                                }
                                                                 mx={"auto"}
                                                                 mb={"4"}
                                                                 onClick={() => {
@@ -1087,10 +1143,14 @@ function ManageProperty(props) {
                                                                             .id
                                                                     );
                                                                 }}
-                                                                isLoading={loading}
+                                                                isLoading={
+                                                                    loading
+                                                                }
                                                             >
                                                                 <Text
-                                                                    fontSize={"xl"}
+                                                                    fontSize={
+                                                                        "xl"
+                                                                    }
                                                                 >
                                                                     <HiTrash
                                                                         fontWeight={
@@ -1105,7 +1165,9 @@ function ManageProperty(props) {
                                                 ) : (
                                                     <Button
                                                         type="button"
-                                                        justifyContent={"center"}
+                                                        justifyContent={
+                                                            "center"
+                                                        }
                                                         display={"flex"}
                                                         flexDir="column"
                                                         size="md"
@@ -1134,13 +1196,14 @@ function ManageProperty(props) {
                                                             style={{
                                                                 display: "none",
                                                             }}
-                                                            onChange={(event) => {
+                                                            onChange={(
+                                                                event
+                                                            ) => {
                                                                 onChangeFile4(
                                                                     event,
                                                                     filePropertyEdit4.id
                                                                 );
                                                             }}
-                                                            isLoading={loading}
                                                         />
                                                         <Text
                                                             textAlign={"center"}
@@ -1153,20 +1216,24 @@ function ManageProperty(props) {
                                                 {/* Button Image 5 */}
                                                 {filePropertyEdit5 ? (
                                                     <>
-                                                        <Flex flexDir={"column"}>
+                                                        <Flex
+                                                            flexDir={"column"}
+                                                        >
                                                             <Box
                                                                 onClick={() => {
                                                                     inputFile5.current.click();
                                                                 }}
-                                                                isLoading={loading}
+                                                                isLoading={
+                                                                    loading
+                                                                }
                                                             >
                                                                 <Image
                                                                     src={
                                                                         typeof filePropertyEdit5.name ==
-                                                                            "string"
+                                                                        "string"
                                                                             ? URL.createObjectURL(
-                                                                                filePropertyEdit5
-                                                                            )
+                                                                                  filePropertyEdit5
+                                                                              )
                                                                             : `${process.env.REACT_APP_API_IMG_URL}${filePropertyEdit5.picture}`
                                                                     }
                                                                     w={"100px"}
@@ -1191,7 +1258,9 @@ function ManageProperty(props) {
                                                                 <input
                                                                     type="file"
                                                                     id="file"
-                                                                    ref={inputFile5}
+                                                                    ref={
+                                                                        inputFile5
+                                                                    }
                                                                     style={{
                                                                         display:
                                                                             "none",
@@ -1204,9 +1273,6 @@ function ManageProperty(props) {
                                                                             filePropertyEdit5.id
                                                                         );
                                                                     }}
-                                                                    isLoading={
-                                                                        loading
-                                                                    }
                                                                 />
                                                             </Box>
                                                             <Button
@@ -1217,7 +1283,9 @@ function ManageProperty(props) {
                                                                 alignItems={
                                                                     "center"
                                                                 }
-                                                                alignSelf={"center"}
+                                                                alignSelf={
+                                                                    "center"
+                                                                }
                                                                 mx={"auto"}
                                                                 mb={"4"}
                                                                 onClick={() => {
@@ -1230,10 +1298,14 @@ function ManageProperty(props) {
                                                                             .id
                                                                     );
                                                                 }}
-                                                                isLoading={loading}
+                                                                isLoading={
+                                                                    loading
+                                                                }
                                                             >
                                                                 <Text
-                                                                    fontSize={"xl"}
+                                                                    fontSize={
+                                                                        "xl"
+                                                                    }
                                                                 >
                                                                     <HiTrash
                                                                         fontWeight={
@@ -1248,7 +1320,9 @@ function ManageProperty(props) {
                                                 ) : (
                                                     <Button
                                                         type="button"
-                                                        justifyContent={"center"}
+                                                        justifyContent={
+                                                            "center"
+                                                        }
                                                         display={"flex"}
                                                         flexDir="column"
                                                         size="md"
@@ -1277,7 +1351,9 @@ function ManageProperty(props) {
                                                             style={{
                                                                 display: "none",
                                                             }}
-                                                            onChange={(event) => {
+                                                            onChange={(
+                                                                event
+                                                            ) => {
                                                                 onChangeFile5(
                                                                     event,
                                                                     filePropertyEdit5.id
@@ -1323,7 +1399,10 @@ function ManageProperty(props) {
                                             );
                                         }}
                                     />
-                                    <Text textAlign={"right"} color={"gray.300"}>
+                                    <Text
+                                        textAlign={"right"}
+                                        color={"gray.300"}
+                                    >
                                         {descriptionLength}/250
                                     </Text>
                                 </Box>
@@ -1334,7 +1413,11 @@ function ManageProperty(props) {
                         <h2>Property Location</h2>
                     </Box>
                     <Box as={Flex} my="10">
-                        <Flex flex={1} fontWeight="medium" alignItems={"center"}>
+                        <Flex
+                            flex={1}
+                            fontWeight="medium"
+                            alignItems={"center"}
+                        >
                             Edit Location
                         </Flex>
                         <Box flex={3} display="flex" flexDir={"column"}>
@@ -1348,7 +1431,8 @@ function ManageProperty(props) {
                                         mb={"2"}
                                         // value={address}
                                         defaultValue={
-                                            propertyData?.property_location?.address
+                                            propertyData?.property_location
+                                                ?.address
                                         }
                                         onChange={(e) => {
                                             setAddress(e.target.value);
@@ -1369,10 +1453,9 @@ function ManageProperty(props) {
                                                 placeholder="Select province"
                                                 closeMenuOnSelect={true}
                                                 {...selectProvince}
-                                                defaultInputValue={province?.label}
-
-                                            // propertyData?.property_location
-                                            //     ?.provinceId
+                                                defaultInputValue={
+                                                    province?.label
+                                                }
                                             />
                                         </FormControl>
                                     </Box>
@@ -1391,7 +1474,9 @@ function ManageProperty(props) {
                                                 placeholder="Select regency"
                                                 closeMenuOnSelect={true}
                                                 {...selectRegency}
-                                                defaultInputValue={regency?.label}
+                                                defaultInputValue={
+                                                    regency?.label
+                                                }
                                             />
                                         </FormControl>
                                     </Box>
@@ -1420,7 +1505,8 @@ function ManageProperty(props) {
                                         mb={"2"}
                                         // value={country}
                                         defaultValue={
-                                            propertyData?.property_location?.country
+                                            propertyData?.property_location
+                                                ?.country
                                         }
                                         onChange={(e) => {
                                             setCountry(e.target.value);
@@ -1434,7 +1520,8 @@ function ManageProperty(props) {
                                         placeholder="Enter Google Maps Link"
                                         mb={"2"}
                                         defaultValue={
-                                            propertyData?.property_location.gmaps
+                                            propertyData?.property_location
+                                                .gmaps
                                         }
                                         onChange={(e) => {
                                             setMapsUrl(e.target.value);
