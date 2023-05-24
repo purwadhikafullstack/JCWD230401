@@ -202,7 +202,12 @@ function RoomConditionList(props) {
                 <Box>
                     <Sidebar />
                 </Box>
-                <Box w="full" flex={"5"} px={{ base: "1", sm: "4" }} mt="5">
+                <Box
+                    w={{ base: "100%", md: "500px", lg: "full" }}
+                    flex={"5"}
+                    px={{ base: "1", sm: "4" }}
+                    mt="5"
+                >
                     <Flex>
                         <Heading
                             lineHeight={1.1}
@@ -229,7 +234,7 @@ function RoomConditionList(props) {
                                     <Tab>
                                         <Heading
                                             fontWeight={"bold"}
-                                            size={"xl"}
+                                            size={"md"}
                                             ml="4"
                                         >
                                             <Text alignSelf={"center"}>
@@ -240,7 +245,7 @@ function RoomConditionList(props) {
                                     <Tab>
                                         <Heading
                                             fontWeight={"bold"}
-                                            size={"xl"}
+                                            size={"md"}
                                             ml="4"
                                         >
                                             <Text>Maintenance</Text>
@@ -263,7 +268,7 @@ function RoomConditionList(props) {
                                                 justifyContent={"space-between"}
                                             >
                                                 <Flex
-                                                    justifyContent={"right"}
+                                                    justifyContent={{base:"center",md:"center",lg:"right"}}
                                                     alignContent={"center"}
                                                     py={"4"}
                                                     mr={"4"}
@@ -275,7 +280,7 @@ function RoomConditionList(props) {
                                                         }
                                                     />
                                                 </Flex>
-
+                                                
                                                 <TableContainer flex={"1"}>
                                                     <Table
                                                         variant="simple"
