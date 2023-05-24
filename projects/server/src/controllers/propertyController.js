@@ -170,6 +170,9 @@ module.exports = {
                 },
             });
 
+            const start = req.query.start || ''
+            const end = req.query.end || ''
+
             let get = await model.room.findAll({
                 where: {
                     propertyId: getPropertyId[0].dataValues.id,
@@ -212,11 +215,11 @@ module.exports = {
             const query = `
                 SELECT s.id, s.startDate, s.endDate, s.priceOnDate, s.isActive, s.roomId ,r.propertyId FROM special_prices s join rooms r
                 on s.roomId = r.id 
-                WHERE  '${req.query.start}' >= startDate 
+                WHERE :start >= startDate 
                 AND (
-                    (startDate >= '${req.query.start}' and startDate <= '${req.query.end}') 
+                    (startDate >= :start and startDate <= :end) 
                     or 
-                    (endDate >= '${req.query.start}' and endDate <= '${req.query.end}')
+                    (endDate >= :start and endDate <= :end)
                 )
                 AND 
                 isActive = 1
@@ -224,6 +227,7 @@ module.exports = {
             `;
 
             const special_prices = await con.query(query, {
+                replacements: { start: start, end: end },
                 type: sequelize.QueryTypes.SELECT,
             });
 
@@ -452,22 +456,27 @@ module.exports = {
                 },
             });
 
+            const start = req.query.start || ''
+            const end = req.query.end || ''
+            const uuid = req.query.uuid
+
             const query = `
                 SELECT s.id, s.startDate, s.endDate, s.priceOnDate, s.isActive, s.roomId ,r.propertyId FROM special_prices s join rooms r
                 on s.roomId = r.id 
                 join properties p on r.propertyId = p.id
-                WHERE  '${req.query.start}' >= startDate 
+                WHERE :start >= startDate 
                 AND (
-                    (startDate >= '${req.query.start}' and startDate <= '${req.query.end}') 
+                    (startDate >= :start and startDate <= :end) 
                     or 
-                    (endDate >= '${req.query.start}' and endDate <= '${req.query.end}')
+                    (endDate >= :start and endDate <= :end)
                 )
                 AND s.isActive = 1
-                AND p.uuid = '${req.query.uuid}'
+                AND p.uuid = :uuid
                 ;
             `;
 
             const special_prices = await con.query(query, {
+                replacements: { start: start, end: end, uuid: uuid },
                 type: sequelize.QueryTypes.SELECT,
             });
             console.log("sssss", get);
@@ -744,14 +753,9 @@ module.exports = {
         }
     },
     getAvailableProperty: async (req, res, next) => {
-        let today = new Date().toISOString().split("T")[0];
-        let tomorrow = new Date(today);
-        tomorrow.setDate(tomorrow.getDate() + 1);
-
         let name = req.query.name || "";
-        let start = req.query.start || today;
-        let end =
-            req.query.end || new Date(tomorrow).toISOString().split("T")[0];
+        let start = req.query.start
+        let end = req.query.end
         let capacity = req.query.capacity || "";
         let category = req.query.category || "";
         let sortby = req.query.sortby || "property";
@@ -790,13 +794,13 @@ module.exports = {
                 where 
                 transactions.transaction_statusId IN (1,2,3,4)
                 and (
-                (start_date >= '${start}' and start_date <= '${end}') 
+                (start_date >= :start and start_date <= :end) 
                 or 
-                (end_date >= '${start}' and end_date <= '${end}'))
+                (end_date >= :start and end_date <= :end))
             ) AND rooms.id not in (
-                SELECT roomId FROM maintenances WHERE (startDate >= '${start}' and startDate <= '${end}') 
+                SELECT roomId FROM maintenances WHERE (startDate >= :start and startDate <= :end) 
                 or 
-                (endDate >= '${start}' and endDate <= '${end}') 
+                (endDate >= :start and endDate <= :end) 
             ) AND properties.isDeleted = 0 AND rooms.capacity >= '${capacity}'
         ) AND categories.category LIKE '%${category}%' AND provinces.name LIKE '%${city}%'
         group by properties.id, properties.property, picture_properties.picture, provinces.name, 
@@ -809,11 +813,11 @@ module.exports = {
         const query2 = `
         SELECT s.id, s.startDate, s.endDate, s.priceOnDate, s.isActive, r.propertyId FROM special_prices s join rooms r
         on s.roomId = r.id 
-        WHERE  '${start}' >= startDate 
+        WHERE  :start >= startDate 
         AND (
-            (startDate >= '${start}' and startDate <= '${end}') 
+            (startDate >= :start and startDate <= :end) 
             or 
-            (endDate >= '${start}' and endDate <= '${end}')
+            (endDate >= :start and endDate <= :end)
         )
         AND 
         isActive = 1
@@ -838,13 +842,13 @@ module.exports = {
                 where 
                 transactions.transaction_statusId IN (1,2,3,4)
                 and (
-                (start_date >= '${start}' and start_date <= '${end}') 
+                (start_date >= :start and start_date <= :end) 
                 or 
-                (end_date >= '${start}' and end_date <= '${end}'))
+                (end_date >= :start and end_date <= :end))
             ) AND rooms.id not in (
-                SELECT roomId FROM maintenances WHERE (startDate >= '${start}' and startDate <= '${end}') 
+                SELECT roomId FROM maintenances WHERE (startDate >= :start and startDate <= :end) 
                 or 
-                (endDate >= '${start}' and endDate <= '${end}') 
+                (endDate >= :start and endDate <= :end) 
             ) AND properties.isDeleted = 0 AND rooms.capacity >= '${capacity}'
         ) AND categories.category LIKE '%${category}%' AND provinces.name LIKE '%${city}%'
         group by properties.id, properties.property, picture_properties.picture, provinces.name, 
@@ -852,14 +856,17 @@ module.exports = {
         ;`;
 
         const room_available = await con.query(query1, {
+            replacements: { start: start, end: end, capacity: capacity },
             type: sequelize.QueryTypes.SELECT,
         });
 
         const special_prices = await con.query(query2, {
+            replacements: { start: start, end: end },
             type: sequelize.QueryTypes.SELECT,
         });
 
         const total_data = await con.query(query3, {
+            replacements: { start: start, end: end, capacity: capacity },
             type: sequelize.QueryTypes.SELECT,
         });
         console.log("room_available", room_available);

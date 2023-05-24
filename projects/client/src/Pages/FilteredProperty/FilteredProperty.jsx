@@ -59,7 +59,7 @@ export default function FilteredProperty() {
     const [currentPage, setCurrentPage] = useState(1);
     const [sortBy, setSortBy] = useState("property");
     const [order, setOrder] = useState("ASC");
-    const [guest, setGuest] = useState(1);
+    const [guest, setGuest] = useState(parseInt(location.state?.guest) || 1);
     const [city, setCity] = useState(location.state?.inputLocation || "");
     const [category, setCategory] = useState(location.state?.category);
 

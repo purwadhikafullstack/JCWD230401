@@ -28,6 +28,7 @@ import { useDispatch } from "react-redux";
 import { loginActionGoogle } from "../../reducers/auth";
 import { formatRupiah } from "../../helper";
 import Loading from "../../Components/Loading";
+import moment from "moment";
 
 export default function LandingNew() {
     const [loadingPage, setLoadingPage] = useState(true);
@@ -94,25 +95,29 @@ export default function LandingNew() {
         setInputCheckOut("date");
     };
 
+    let today = moment().format().split('T')[0];
+    let tomorrow = moment().add(1, 'days').format().split('T')[0];
     // For Searchbar Button 
     const handleSearch = () => {
         navigate("/property/", {
             state: {
                 inputLocation: inputLocation,
-                inputCheckIn: inputCheckIn,
-                inputCheckOut: inputCheckOut,
+                inputCheckIn: checkInDate ? moment(checkInDate).format().split('T')[0] : today,
+                inputCheckOut: checkOutDate ? moment(checkOutDate).format().split('T')[0] : tomorrow,
                 guest: guest,
             }
         })
     };
+    console.log("checkInDate", checkInDate);
+    console.log("checkOutDate", checkOutDate);
 
     // For Browse by Property Type
     const handleSearchCategory = (category) => {
         navigate('/property/', {
             state: {
                 inputLocation: inputLocation,
-                inputCheckIn: inputCheckIn,
-                inputCheckOut: inputCheckOut,
+                inputCheckIn: checkInDate,
+                inputCheckOut: checkOutDate,
                 guest: guest,
                 category: category
             }
