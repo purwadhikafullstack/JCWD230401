@@ -15,8 +15,10 @@ import { useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import { useSelector } from "react-redux";
+import Loading from "../Components/Loading";
 
 export default function ChangePassword() {
+    const [loadingPage, setLoadingPage] = useState(true);
     const [showOldPassword, setShowOldPassword] = useState(false);
     const [showNewPassword, setShowNewPassword] = useState(false);
     const [showPasswordConfirmation, setShowPasswordConfirmation] = useState(false);
@@ -124,130 +126,140 @@ export default function ChangePassword() {
         formik.setFieldValue(event.target.name, event.target.value);
     };
 
-    return (
-        <Flex
-            minH={{ base: "50vh", sm: "100vh" }}
-            align={{ base: "none", sm: "center" }}
-            justify={"center"}
-            bg={"white"}>
-            <Stack
-                spacing={6}
-                w={"full"}
-                maxW={"md"}
-                bg={"white"}
-                rounded={"xl"}
-                borderWidth={"1px"}
-                borderColor={{ base: "white", sm: "gray.300" }}
-                p={6}
-                my={12}>
-                <Heading lineHeight={1.1} fontSize={{ base: "2xl", md: "3xl" }}>
-                    Enter new password
-                </Heading>
-                <FormControl id="password" isInvalid={formik.errors.oldPassword}>
-                    {/* Old Password Field */}
-                    <FormLabel>Old Password</FormLabel>
-                    <InputGroup>
-                        <Input
-                            type={showOldPassword ? "text" : "password"}
-                            onChange={handleForm}
-                            name="oldPassword"
-                        />
-                        <InputRightElement h={"full"}>
-                            <Button
-                                variant={"ghost"}
-                                _hover={"none"}
-                                _active={"none"}
-                                onClick={() =>
-                                    setShowOldPassword(
-                                        (showOldPassword) => !showOldPassword
-                                    )
-                                }
-                            >
-                                {showOldPassword ? (
-                                    <ViewIcon />
-                                ) : (
-                                    <ViewOffIcon />
-                                )}
-                            </Button>
-                        </InputRightElement>
-                    </InputGroup>
-                    <FormErrorMessage fontSize="xs" style={{ position: "absolute", top: "100%", marginTop: "0.30rem" }}>{formik.errors.oldPassword}</FormErrorMessage>
-                </FormControl>
-                {/* New Password Field */}
-                <FormControl id="newpassword" isInvalid={formik.errors.newPassword}>
-                    <FormLabel>New Password</FormLabel>
-                    <InputGroup>
-                        <Input
-                            type={showNewPassword ? "text" : "password"}
-                            onChange={handleForm}
-                            name="newPassword"
-                        />
-                        <InputRightElement h={"full"}>
-                            <Button
-                                variant={"ghost"}
-                                _hover={"none"}
-                                _active={"none"}
-                                onClick={() =>
-                                    setShowNewPassword(
-                                        (showNewPassword) => !showNewPassword
-                                    )
-                                }
-                            >
-                                {showNewPassword ? (
-                                    <ViewIcon />
-                                ) : (
-                                    <ViewOffIcon />
-                                )}
-                            </Button>
-                        </InputRightElement>
-                    </InputGroup>
-                    <FormErrorMessage fontSize="xs" style={{ position: "absolute", top: "100%", marginTop: "0.30rem" }}>{formik.errors.newPassword}</FormErrorMessage>
-                </FormControl>
-                {/* Confirm New Password  */}
-                <FormControl id="confirmation_password" isInvalid={formik.errors.passwordConfirmation}>
-                    <FormLabel>Confirm New Password</FormLabel>
-                    <InputGroup>
-                        <Input
-                            type={showPasswordConfirmation ? "text" : "password"}
-                            onChange={handleForm}
-                            name="passwordConfirmation"
-                        />
-                        <InputRightElement h={"full"}>
-                            <Button
-                                variant={"ghost"}
-                                _hover={"none"}
-                                _active={"none"}
-                                onClick={() =>
-                                    setShowPasswordConfirmation(
-                                        (showPasswordConfirmation) =>
-                                            !showPasswordConfirmation
-                                    )
-                                }
-                            >
-                                {showPasswordConfirmation ? (
-                                    <ViewIcon />
-                                ) : (
-                                    <ViewOffIcon />
-                                )}
-                            </Button>
-                        </InputRightElement>
-                    </InputGroup>
-                    <FormErrorMessage fontSize="xs" style={{ position: "absolute", top: "100%", marginTop: "0.30rem" }}>{formik.errors.passwordConfirmation}</FormErrorMessage>
-                </FormControl>
-                <Stack pt="4">
-                    <Button
-                        bg={"#D3212D"}
-                        color={"white"}
-                        _hover={{
-                            bg: "#D3212D",
-                        }}
-                        onClick={onBtnChangePassword}
-                        isLoading={loading}
-                    >
-                        Change Password
-                    </Button>
+    React.useEffect(() => {
+        setTimeout(() => {
+            setLoadingPage(false);
+        }, 1700);
+    }, []);
+
+    if (loadingPage) {
+        return <Loading />
+    } else {
+        return (
+            <Flex
+                minH={{ base: "50vh", sm: "100vh" }}
+                align={{ base: "none", sm: "center" }}
+                justify={"center"}
+                bg={"white"}>
+                <Stack
+                    spacing={8}
+                    w={"full"}
+                    maxW={"md"}
+                    bg={"white"}
+                    rounded={"xl"}
+                    borderWidth={"1px"}
+                    borderColor={{ base: "white", sm: "gray.300" }}
+                    p={6}
+                    my={12}>
+                    <Heading lineHeight={1.1} fontSize={{ base: "2xl", md: "3xl" }}>
+                        Enter new password
+                    </Heading>
+                    <FormControl id="password" isInvalid={formik.errors.oldPassword}>
+                        {/* Old Password Field */}
+                        <FormLabel>Old Password</FormLabel>
+                        <InputGroup>
+                            <Input
+                                type={showOldPassword ? "text" : "password"}
+                                onChange={handleForm}
+                                name="oldPassword"
+                            />
+                            <InputRightElement h={"full"}>
+                                <Button
+                                    variant={"ghost"}
+                                    _hover={"none"}
+                                    _active={"none"}
+                                    onClick={() =>
+                                        setShowOldPassword(
+                                            (showOldPassword) => !showOldPassword
+                                        )
+                                    }
+                                >
+                                    {showOldPassword ? (
+                                        <ViewIcon />
+                                    ) : (
+                                        <ViewOffIcon />
+                                    )}
+                                </Button>
+                            </InputRightElement>
+                        </InputGroup>
+                        <FormErrorMessage fontSize="xs" style={{ position: "absolute", top: "100%", marginTop: "0.30rem" }}>{formik.errors.oldPassword}</FormErrorMessage>
+                    </FormControl>
+                    {/* New Password Field */}
+                    <FormControl id="newpassword" isInvalid={formik.errors.newPassword}>
+                        <FormLabel>New Password</FormLabel>
+                        <InputGroup>
+                            <Input
+                                type={showNewPassword ? "text" : "password"}
+                                onChange={handleForm}
+                                name="newPassword"
+                            />
+                            <InputRightElement h={"full"}>
+                                <Button
+                                    variant={"ghost"}
+                                    _hover={"none"}
+                                    _active={"none"}
+                                    onClick={() =>
+                                        setShowNewPassword(
+                                            (showNewPassword) => !showNewPassword
+                                        )
+                                    }
+                                >
+                                    {showNewPassword ? (
+                                        <ViewIcon />
+                                    ) : (
+                                        <ViewOffIcon />
+                                    )}
+                                </Button>
+                            </InputRightElement>
+                        </InputGroup>
+                        <FormErrorMessage fontSize="xs" style={{ position: "absolute", top: "100%", marginTop: "0.30rem" }}>{formik.errors.newPassword}</FormErrorMessage>
+                    </FormControl>
+                    {/* Confirm New Password  */}
+                    <FormControl id="confirmation_password" isInvalid={formik.errors.passwordConfirmation}>
+                        <FormLabel>Confirm New Password</FormLabel>
+                        <InputGroup>
+                            <Input
+                                type={showPasswordConfirmation ? "text" : "password"}
+                                onChange={handleForm}
+                                name="passwordConfirmation"
+                            />
+                            <InputRightElement h={"full"}>
+                                <Button
+                                    variant={"ghost"}
+                                    _hover={"none"}
+                                    _active={"none"}
+                                    onClick={() =>
+                                        setShowPasswordConfirmation(
+                                            (showPasswordConfirmation) =>
+                                                !showPasswordConfirmation
+                                        )
+                                    }
+                                >
+                                    {showPasswordConfirmation ? (
+                                        <ViewIcon />
+                                    ) : (
+                                        <ViewOffIcon />
+                                    )}
+                                </Button>
+                            </InputRightElement>
+                        </InputGroup>
+                        <FormErrorMessage fontSize="xs" style={{ position: "absolute", top: "100%", marginTop: "0.30rem" }}>{formik.errors.passwordConfirmation}</FormErrorMessage>
+                    </FormControl>
+                    <Stack pt="4">
+                        <Button
+                            bg={"#D3212D"}
+                            color={"white"}
+                            _hover={{
+                                bg: "#D3212D",
+                            }}
+                            onClick={onBtnChangePassword}
+                            isLoading={loading}
+                        >
+                            Change Password
+                        </Button>
+                    </Stack>
                 </Stack>
-            </Stack>
-        </Flex>
-    );
+            </Flex>
+        );
+    }
 }

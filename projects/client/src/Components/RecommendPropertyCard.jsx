@@ -52,7 +52,7 @@ export default function RecommendPropertyCard(props) {
                         align={"start"}
                     >
                         <Text fontWeight={600} fontSize={{ base: "lg", lg: "sm" }} isTruncated
-                         noOfLines={1}
+                            noOfLines={1}
                         >
                             {props.property}
                         </Text>
@@ -68,9 +68,9 @@ export default function RecommendPropertyCard(props) {
                             </Text>
                             <Flex alignItems={"center"} justifyContent="center">
                                 <Box>
-                                    <StarIcon color={"yellow.500"} fontSize={{ base: "lg", lg: "sm" }} mb="1" />
+                                    <StarIcon color={"yellow.500"} fontSize={{ base: "md", lg: "sm" }} mb="1" />
                                 </Box>
-                                <Text fontWeight={600} fontSize={{ base: "lg", lg: "sm" }} textAlign="right" ml="1">
+                                <Text fontWeight={600} fontSize={{ base: "md", md: "sm" }} textAlign="right" ml="1">
                                     {props.rating}
                                 </Text>
                             </Flex>

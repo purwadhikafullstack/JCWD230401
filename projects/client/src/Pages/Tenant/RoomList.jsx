@@ -20,8 +20,12 @@ import {
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import Pagination from "../../Components/Pagination";
 import Sidebar from "../../Components/Sidebar";
+import { formatRupiah } from "../../helper/index";
+import Loading from "../../Components/Loading";
+
 
 function RoomList(props) {
+    const [loadingPage, setLoadingPage] = useState(true);
     const location = useLocation();
     const params = new URLSearchParams(location.search);
     const param = useParams();
@@ -41,7 +45,6 @@ function RoomList(props) {
     const [order, setOrder] = React.useState(defaultOrder);
     const [filter, setFilter] = React.useState(defaultFilter);
 
-    console.log("dataAllRoom:", dataAllRoom);
 
     const printRoomData = () => {
         const actualRowNumber = page * size;
@@ -53,7 +56,7 @@ function RoomList(props) {
                     idx={rowNumber}
                     name={val.room_category.name}
                     capacity={val.capacity}
-                    price={val.price}
+                    price={formatRupiah(val.price)}
                     uuid={val.uuid}
                     getAllRoomList={getAllRoomList}
                 />
@@ -74,8 +77,6 @@ function RoomList(props) {
             );
             setDataAllRoom(get.data.data);
             setTotalData(get.data.datanum);
-            console.log("get room list", get.data.data);
-            console.log("get room list only", get);
         } catch (error) {
             console.log(error);
         }
@@ -94,78 +95,42 @@ function RoomList(props) {
         getAllRoomList();
     }, []);
 
-    return (
-        <>
-            <Flex minH={"93vh"}>
-                <Box>
-                    <Sidebar />
-                </Box>
-                <Box w="full" flex={"5"} px={{ base: "1", sm: "4" }} mt="5">
-                    <Flex justifyContent={"space-between"}>
-                        <Heading
-                            lineHeight={1.1}
-                            fontSize={{ base: "2xl", md: "3xl" }}
-                            textAlign={{ base: "center", sm: "start" }}
-                            mb={"5"}
-                        >
-                            Rooms
-                        </Heading>
-                        <Button
-                            color="#D3212D"
-                            variant={"outline"}
-                            onClick={() => navigate("/room")}
-                        >
-                            New Room
-                        </Button>
-                    </Flex>
+    useEffect(() => {
+        setTimeout(() => {
+            setLoadingPage(false);
+        }, 1700);
+    }, []);
 
-                    <Box mt="4" w={"full"}>
-                        {dataAllRoom.length ? (
-                            <TableContainer>
-                                <Table variant="simple" color={"#EEEEEE"}>
-                                    <Thead>
-                                        <Tr>
-                                            <Th
-                                                fontSize={"lg"}
-                                                textAlign={"center"}
-                                            >
-                                                No
-                                            </Th>
-                                            <Th
-                                                fontSize={"lg"}
-                                                textAlign={"center"}
-                                            >
-                                                Room
-                                            </Th>
-                                            <Th
-                                                fontSize={"lg"}
-                                                textAlign={"center"}
-                                            >
-                                                Capacity
-                                            </Th>
-                                            <Th
-                                                fontSize={"lg"}
-                                                textAlign={"center"}
-                                            >
-                                                Price
-                                            </Th>
-                                            <Th
-                                                fontSize={"lg"}
-                                                textAlign={"center"}
-                                            >
-                                                Controls
-                                            </Th>
-                                        </Tr>
-                                    </Thead>
-                                    {printRoomData()}
-                                </Table>
-                            </TableContainer>
-                        ) : (
-                            <>
-                                <Text>
-                                    This Property doesn't have any rooms. Click
-                                    "New Room" to add a new room.
-                                </Text>
+    if (loadingPage) {
+        return <Loading />
+    } else {
+        return (
+            <>
+                <Flex minH={"93vh"}>
+                    <Box>
+                        <Sidebar />
+                    </Box>
+                    <Box w="full" flex={"5"} px={{ base: "1", sm: "4" }} mt="5">
+                        <Flex justifyContent={"space-between"}>
+                            <Heading
+                                lineHeight={1.1}
+                                fontSize={{ base: "2xl", md: "3xl" }}
+                                textAlign={{ base: "center", sm: "start" }}
+                                mb={"5"}
+                            >
+                                Rooms
+                            </Heading>
+                            <Button
+                                color="#D3212D"
+                                variant={"outline"}
+                                onClick={() => navigate("/room")}
+                            >
+                                New Room
+                            </Button>
+                        </Flex>
+
+                        <Box mt="4" w={"full"}>
+                            {dataAllRoom.length ? (
                                 <TableContainer>
                                     <Table variant="simple" color={"#EEEEEE"}>
                                         <Thead>
@@ -205,23 +170,69 @@ function RoomList(props) {
                                         {printRoomData()}
                                     </Table>
                                 </TableContainer>
-                            </>
-                        )}
+                            ) : (
+                                <>
+                                    <Text>
+                                        This Property doesn't have any rooms. Click
+                                        "New Room" to add a new room.
+                                    </Text>
+                                    <TableContainer>
+                                        <Table variant="simple" color={"#EEEEEE"}>
+                                            <Thead>
+                                                <Tr>
+                                                    <Th
+                                                        fontSize={"lg"}
+                                                        textAlign={"center"}
+                                                    >
+                                                        No
+                                                    </Th>
+                                                    <Th
+                                                        fontSize={"lg"}
+                                                        textAlign={"center"}
+                                                    >
+                                                        Room
+                                                    </Th>
+                                                    <Th
+                                                        fontSize={"lg"}
+                                                        textAlign={"center"}
+                                                    >
+                                                        Capacity
+                                                    </Th>
+                                                    <Th
+                                                        fontSize={"lg"}
+                                                        textAlign={"center"}
+                                                    >
+                                                        Price
+                                                    </Th>
+                                                    <Th
+                                                        fontSize={"lg"}
+                                                        textAlign={"center"}
+                                                    >
+                                                        Controls
+                                                    </Th>
+                                                </Tr>
+                                            </Thead>
+                                            {printRoomData()}
+                                        </Table>
+                                    </TableContainer>
+                                </>
+                            )}
 
-                        {
-                            <Flex justify="center">
-                                <Pagination
-                                    paginate={paginate}
-                                    size={size}
-                                    totalData={totalData}
-                                />
-                            </Flex>
-                        }
+                            {
+                                <Flex justify="center">
+                                    <Pagination
+                                        paginate={paginate}
+                                        size={size}
+                                        totalData={totalData}
+                                    />
+                                </Flex>
+                            }
+                        </Box>
                     </Box>
-                </Box>
-            </Flex>
-        </>
-    );
+                </Flex>
+            </>
+        );
+    }
 }
 
 export default RoomList;

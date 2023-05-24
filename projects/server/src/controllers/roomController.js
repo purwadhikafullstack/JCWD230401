@@ -69,7 +69,6 @@ module.exports = {
                 },
                 { transaction: ormTransaction }
             );
-            console.log("Data addRoomCategory:", addRoomCategory);
 
             let addRoom = await model.room.create(
                 {
@@ -82,7 +81,6 @@ module.exports = {
                 },
                 { transaction: ormTransaction }
             );
-            console.log("Data addRoom:", addRoom);
             if (req.files.length) {
                 let newArr = req.files.map((val, idx) => {
                     delete val.fieldname;
@@ -96,7 +94,6 @@ module.exports = {
                     delete val.filename;
                     return { ...val, roomId: addRoom.dataValues.id };
                 });
-                console.log("Req.files:", req.files);
                 await model.picture_room.bulkCreate(newArr);
             }
 
@@ -131,7 +128,6 @@ module.exports = {
                     },
                 ],
             });
-            console.log("getRoomData:", get[0].dataValues);
             return res.status(200).send({
                 success: true,
                 data: get,
@@ -163,7 +159,7 @@ module.exports = {
                 },
                 include: [{ model: model.room_category, attributes: ["id"] }],
             });
-            console.log("getRoomByUuid:", getRoomByUuid[0].dataValues);
+
             let editRoomName = await model.room_category.update(
                 {
                     name: req.body.name,
@@ -195,8 +191,7 @@ module.exports = {
                         id: req.query.id,
                     },
                 });
-                // console.log("ini get data picture", get[0].dataValues.id);
-                console.log("ini req.files", req.files);
+                
                 let update = await model.picture_room.update(
                     {
                         picture: `/ImgRoom/${req.files[0].filename}`,
@@ -265,6 +260,9 @@ module.exports = {
             let get = await model.room.findAndCountAll({
                 offset: parseInt(page * size),
                 limit: parseInt(size),
+                where: {
+                    isDeleted: 0,
+                },
                 include: [
                     {
                         model: model.room_category,
@@ -278,8 +276,6 @@ module.exports = {
                     },
                 ],
             });
-
-            console.log("get list:", get);
             return res.status(200).send({
                 data: get.rows,
                 totalPages: Math.ceil(get.count / size),

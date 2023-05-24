@@ -74,7 +74,7 @@ export default function PaymentDetail() {
         );
 
         let getOther = await axios.get(
-            `${process.env.REACT_APP_API_BASE_URL}/room/roompayment?uuid=${get.data.timeAndPrice[0].orders[0].room.uuid}`,
+            `${process.env.REACT_APP_API_BASE_URL}/room/payment?uuid=${get.data.timeAndPrice[0].orders[0].room.uuid}`,
             {
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -98,7 +98,7 @@ export default function PaymentDetail() {
     const cancelOrReject = async (req, res, next) => {
         setIsLoadingButton(true);
         let update = await axios.patch(
-            `${process.env.REACT_APP_API_BASE_URL}/transaction/updatetransactionstatus`,
+            `${process.env.REACT_APP_API_BASE_URL}/transaction/status`,
             {
                 transaction_statusId: statusId,
                 uuid: params.uuid,
@@ -440,7 +440,7 @@ export default function PaymentDetail() {
             formData.append("images", imageFile);
 
             let add = await axios.patch(
-                `${process.env.REACT_APP_API_BASE_URL}/transaction/uploadimagepayment/${params.uuid}`,
+                `${process.env.REACT_APP_API_BASE_URL}/transaction/upload-image-payment/${params.uuid}`,
                 formData,
                 {
                     headers: {

@@ -6,11 +6,11 @@ const uploader = require('../helper/uploader');
 route.post('/',
     readToken,
     transactionController.newTransaction)
-route.get('/detail', transactionController.getTransactionTimeAndBank)
-route.patch('/uploadimagepayment/:uuid', readToken, uploader('/ImgPayment', 'PAY').array('images', 1), transactionController.uploadImagePayment)
-route.patch('/updatetransactionstatus', transactionController.updateTransactionStatus)
-route.patch('/rejecttransaction', transactionController.rejectTransaction)
-route.patch('/confirmtransaction', transactionController.confirmTransaction)
+route.get('/detail', readToken, transactionController.getTransactionTimeAndBank)
+route.patch('/upload-image-payment/:uuid', readToken, uploader('/ImgPayment', 'PAY').array('images', 1), transactionController.uploadImagePayment)
+route.patch('/status', readToken, transactionController.updateTransactionStatus)
+route.patch('/reject', readToken, transactionController.rejectTransaction)
+route.patch('/confirm', readToken, transactionController.confirmTransaction)
 
 
 route.get('/testget', transactionController.testGet)
