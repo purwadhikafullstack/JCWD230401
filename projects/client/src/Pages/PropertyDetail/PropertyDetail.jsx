@@ -559,7 +559,8 @@ export default function PropertyDetail() {
                         </Box>
                     </Flex>
                     {/* CALENDAR */}
-                    <Box marginBottom="50px" w={{ base: 'full', lg: '100%' }}>
+                    <Box overflowX={"auto"}>
+                    <Box marginBottom="50px"  w={{ base: "200vw", sm: "150vw", lg:"full" }} >
                         <Fullcalendar
                             className="my-calendar"
                             w='full'
@@ -574,6 +575,7 @@ export default function PropertyDetail() {
                             events={calendarEvents}
                             eventChange={handleEventChange}
                         />
+                    </Box>
                     </Box>
                     <Divider my='10' />
                     <Box>
