@@ -170,8 +170,8 @@ module.exports = {
                 },
             });
 
-            const start = req.query.start || ''
-            const end = req.query.end || ''
+            const start = req.query.start || "";
+            const end = req.query.end || "";
 
             let get = await model.room.findAll({
                 where: {
@@ -405,7 +405,7 @@ module.exports = {
                     zip: zipcode,
                     country: country,
                     gmaps: gmaps,
-                    regencyId: regencyId,
+                    regency_id: regencyId,
                     provinceId: provinceId,
                     propertyId: addProperty.dataValues.id,
                 },
@@ -455,9 +455,9 @@ module.exports = {
                 },
             });
 
-            const start = req.query.start || ''
-            const end = req.query.end || ''
-            const uuid = req.query.uuid
+            const start = req.query.start || "";
+            const end = req.query.end || "";
+            const uuid = req.query.uuid;
 
             const query = `
                 SELECT s.id, s.startDate, s.endDate, s.priceOnDate, s.isActive, s.roomId ,r.propertyId FROM special_prices s join rooms r
@@ -749,8 +749,8 @@ module.exports = {
     },
     getAvailableProperty: async (req, res, next) => {
         let name = req.query.name || "";
-        let start = req.query.start
-        let end = req.query.end
+        let start = req.query.start;
+        let end = req.query.end;
         let capacity = req.query.capacity || "";
         let category = req.query.category || "";
         let sortby = req.query.sortby || "property";

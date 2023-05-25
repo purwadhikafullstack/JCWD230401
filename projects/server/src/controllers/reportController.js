@@ -13,6 +13,15 @@ module.exports = {
                 where: {
                     createdAt: { [sequelize.Op.between]: [start, end] },
                 },
+                include: [
+                    {
+                        model: model.transaction.findAll({
+                            where: {
+                                userId: req.decrypt.id,
+                            },
+                        }),
+                    },
+                ],
             });
 
             res.status(200).send({
@@ -107,7 +116,10 @@ module.exports = {
 
             let chart = await model.order.findAll({
                 attributes: [
-                    [sequelize.fn("sum", sequelize.col("order.price")), "price"],
+                    [
+                        sequelize.fn("sum", sequelize.col("order.price")),
+                        "price",
+                    ],
                     "createdAt",
                 ],
                 where: {

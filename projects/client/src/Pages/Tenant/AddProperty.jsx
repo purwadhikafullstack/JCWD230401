@@ -29,8 +29,8 @@ function AddProperty(props) {
     const [description, setDescription] = useState(""); // useState description
     const [descriptionLength, setDescriptionLength] = useState(0);
     const [address, setAddress] = useState(""); // useState address
-    const [regency, setRegency] = useState(null); // useState regency
-    const [province, setProvince] = useState(null); // useState province
+    const [regency, setRegency] = useState(0); // useState regency
+    const [province, setProvince] = useState(0); // useState province
     const [zipcode, setZipcode] = useState(""); // useState zip
     const [country, setCountry] = useState(""); // useState country
     const [allProvince, setAllProvince] = useState([]);
@@ -238,7 +238,9 @@ function AddProperty(props) {
             setLoadingPage(false);
         }, 1700);
     }, []);
-
+    console.log("awuidhiawdhuidwahuiadw");
+    console.log("province", province);
+    console.log("regency", regency);
     if (loadingPage) {
         return <Loading />;
     } else {

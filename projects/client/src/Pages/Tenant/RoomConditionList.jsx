@@ -38,7 +38,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import SpecialPriceTable from "../../Components/SpecialPriceTable";
 import MaintenanceTable from "../../Components/MaintenanceTable";
 import SpecialPriceModal from "../../Components/SpecialPriceModal";
-import MaintenanceModal from "../../Components/SpecialPriceModal";
+import MaintenanceModal from "../../Components/MaintenanceModal";
 import Sidebar from "../../Components/Sidebar";
 import Loading from "../../Components/Loading";
 
@@ -393,7 +393,10 @@ function RoomConditionList(props) {
                                                     py={"4"}
                                                     mr="4"
                                                 >
-                                                    <MaintenanceModal />
+                                                    <MaintenanceModal 
+                                                    roomname={roomName}
+                                                    getMaintenanceData={getMaintenanceData}
+                                                    />
                                                 </Flex>
 
                                                 <TableContainer flex={"1"}>
