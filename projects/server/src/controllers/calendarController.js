@@ -30,6 +30,9 @@ module.exports = {
               attributes: ["property"],
             },
           ],
+          where: {
+            isDeleted: 0,
+          },
         },
       ],
     });
@@ -48,7 +51,7 @@ module.exports = {
         attributes: ["startDate", "endDate"],
         where: {
           isDeleted: 0,
-          isActive: 1
+          isActive: 1,
         },
         include: [
           {
@@ -67,6 +70,9 @@ module.exports = {
                 attributes: ["property"],
               },
             ],
+            where: {
+              isDeleted: 0,
+            },
           },
         ],
       });
@@ -110,7 +116,7 @@ module.exports = {
       next(error);
     }
   },
-  
+
   //4. GET ALL MY PROPERTY
   propertyListing: async (req, res, next) => {
     try {
@@ -122,7 +128,12 @@ module.exports = {
         include: [
           {
             model: model.room,
-            attributes: [[sequelize.fn('MIN', sequelize.col('rooms.price')), 'lowest_price']],
+            attributes: [
+              [
+                sequelize.fn("MIN", sequelize.col("rooms.price")),
+                "lowest_price",
+              ],
+            ],
             include: [
               {
                 model: model.review,
@@ -143,10 +154,12 @@ module.exports = {
                   `(SELECT COUNT(*) FROM reviews WHERE reviews.roomId = rooms.id) = 0`
                 ),
               ],
+              isDeleted: 0,
             },
           },
           {
             model: model.picture_property,
+            attributes: ["picture"],
           },
           {
             model: model.property_location,
