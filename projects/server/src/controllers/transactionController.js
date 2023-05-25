@@ -555,7 +555,7 @@ module.exports = {
                 totalDays: countDays(get.dataValues.orders[0].start_date, get.dataValues.orders[0].end_date),
                 totalPrice: formatRupiah(countDays(get.dataValues.orders[0].start_date, get.dataValues.orders[0].end_date) * get.dataValues.orders[0].price),
                 tenantName: getTenant.dataValues.user.user_detail.name,
-                tenantNorek: getTenant.dataValues.user.user_detail.account_number,
+                tenantNorek: getTenant.dataValues.user.user_detail.dataValues.account_number,
                 expiredDate: get.dataValues.expiredAt,
             }
 
