@@ -139,7 +139,7 @@ export default function OrderListTenant() {
             return (
                 <Tr key={idx}>
                     <Td>{val.transaction.invoice_number}</Td>
-                    <Td>{val.transaction.user.user_detail.name}</Td>
+                    <Td>{val.transaction.user?.user_detail?.name}</Td>
                     <Td>{val.room.property.property}</Td>
                     <Td>{val.room.room_category.name}</Td>
                     <Td>{formatDateIndo(val.start_date)}</Td>
@@ -221,7 +221,7 @@ export default function OrderListTenant() {
                                     {actionsNeeded.length ? (
                                         printCardOrderList()
                                     ) : (
-                                        <Text>Takdee Orderann cekguu</Text>
+                                        <Text>NO ORDERS</Text>
                                     )}
                                 </Flex>
                                 <Flex justify={"center"}>
