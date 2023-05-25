@@ -15,11 +15,21 @@ module.exports = {
                 },
                 include: [
                     {
-                        model: model.transaction.findAll({
-                            where: {
-                                userId: req.decrypt.id,
+                        model: model.transaction,
+                        where: {
+                            transaction_statusId: 3,
+                        },
+                    },
+                    {
+                        model: model.room,
+                        include: [
+                            {
+                                model: model.property,
+                                where: {
+                                    userId: req.decrypt.id,
+                                },
                             },
-                        }),
+                        ],
                     },
                 ],
             });
@@ -68,6 +78,17 @@ module.exports = {
                         where: {
                             transaction_statusId: 3,
                         },
+                    },
+                    {
+                        model: model.room,
+                        include: [
+                            {
+                                model: model.property,
+                                where: {
+                                    userId: req.decrypt.id,
+                                },
+                            },
+                        ],
                     },
                 ],
                 group: ["createdAt"],
@@ -141,6 +162,14 @@ module.exports = {
                         where: {
                             propertyId: idProperty,
                         },
+                        include: [
+                            {
+                                model: model.property,
+                                where: {
+                                    userId: req.decrypt.id,
+                                },
+                            },
+                        ],
                     },
                 ],
                 group: ["createdAt"],
@@ -221,6 +250,14 @@ module.exports = {
                     {
                         model: model.room,
                         attributes: ["id", "capacity"],
+                        include: [
+                            {
+                                model: model.property,
+                                where: {
+                                    userId: req.decrypt.id,
+                                },
+                            },
+                        ],
                     },
                 ],
             });
