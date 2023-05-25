@@ -24,7 +24,6 @@ import { HiTrash } from "react-icons/hi2";
 import { SlPicture } from "react-icons/sl";
 import Loading from "../../Components/Loading";
 
-
 function AddRoom(props) {
     const [loadingPage, setLoadingPage] = useState(true);
     const toast = useToast();
@@ -101,7 +100,6 @@ function AddRoom(props) {
             console.log(error);
         }
     };
-
 
     const propertyOptions = allPropertyByUserId.map((val, idx) => {
         return { value: val.value, label: val.label };
@@ -180,7 +178,7 @@ function AddRoom(props) {
     }, []);
 
     if (loadingPage) {
-        return <Loading />
+        return <Loading />;
     } else {
         return (
             <Container
@@ -200,283 +198,349 @@ function AddRoom(props) {
                 >
                     <Box
                         textAlign="left"
-                        fontSize={"5xl"}
+                        fontSize={{ base: "2xl", md: "5xl", lg: "5xl" }}
                         fontWeight="bold"
                         mt="10"
                     >
                         <h1>Add New Room</h1>
                     </Box>
                     <Box mt={"10"}>
-                        <Box textAlign="left" fontSize={"3xl"} fontWeight="bold">
+                        <Box
+                            textAlign="left"
+                            fontSize={{ base: "xl", md: "3xl", lg: "3xl" }}
+                            fontWeight="bold"
+                        >
                             <h2>Room Information</h2>
                         </Box>
-                        <Box as={Flex} my={"10"}>
-                            <Flex
-                                flex={1}
-                                fontWeight={"medium"}
-                                alignItems={"center"}
-                            >
-                                <Text>Select Property</Text>
-                            </Flex>
-                            <Box flex={3}>
-                                <Box mx="4" my="2">
-                                    <FormLabel>Property</FormLabel>
+                        <Box fontSize={{ base: "xs", md: "lg" }}>
+                            <Box as={Flex} my={"10"}>
+                                <Flex
+                                    flex={1}
+                                    fontWeight={"medium"}
+                                    alignItems={"center"}
+                                >
+                                    <Text>Select Property</Text>
+                                </Flex>
+                                <Box flex={3}>
+                                    <Box mx="4" my="2">
+                                        <FormLabel>Property</FormLabel>
+                                        <Box
+                                            display={"flex"}
+                                            w={"full"}
+                                            justifyContent={"center"}
+                                            mb={"2"}
+                                        >
+                                            <FormControl>
+                                                <Select
+                                                    useBasicStyles
+                                                    name="property"
+                                                    options={propertyOptions}
+                                                    placeholder="Select property"
+                                                    closeMenuOnSelect={true}
+                                                    {...selectProperty}
+                                                />
+                                            </FormControl>
+                                        </Box>
+                                    </Box>
+                                </Box>
+                            </Box>
+                            <Box as={Flex} my={"10"}>
+                                <Flex
+                                    flex={1}
+                                    fontWeight={"medium"}
+                                    alignItems={"center"}
+                                >
+                                    <Text>What's The Name Of Your Room ?</Text>
+                                </Flex>
+                                <Box flex={3}>
+                                    <Box mx="4" my="2">
+                                        <InputGroup
+                                            display={"flex"}
+                                            size={"md"}
+                                        >
+                                            <Input
+                                                isRequired
+                                                placeholder="Enter name"
+                                                type="text"
+                                                justifyItems={"self-end"}
+                                                h={"40px"}
+                                                value={roomName}
+                                                onChange={(e) =>
+                                                    setRoomName(e.target.value)
+                                                }
+                                            />
+                                        </InputGroup>
+                                    </Box>
+                                </Box>
+                            </Box>
+                            {/* Upload Photo/s */}
+                            <Box as={Flex} my={"10"}>
+                                <Flex
+                                    flex={1}
+                                    fontWeight={"medium"}
+                                    alignItems={"center"}
+                                >
+                                    <Text>Upload Photos Of Your Room</Text>
+                                </Flex>
+                                <Box flex={3}>
                                     <Box
                                         display={"flex"}
-                                        w={"full"}
-                                        justifyContent={"center"}
-                                        mb={"2"}
+                                        flexDir={"column"}
+                                        placeItems={"center"}
                                     >
-                                        <FormControl>
-                                            <Select
-                                                useBasicStyles
-                                                name="property"
-                                                options={propertyOptions}
-                                                placeholder="Select property"
-                                                closeMenuOnSelect={true}
-                                                {...selectProperty}
-                                            />
-                                        </FormControl>
-                                    </Box>
-                                </Box>
-                            </Box>
-                        </Box>
-                        <Box as={Flex} my={"10"}>
-                            <Flex
-                                flex={1}
-                                fontWeight={"medium"}
-                                alignItems={"center"}
-                            >
-                                <Text>What's The Name Of Your Room ?</Text>
-                            </Flex>
-                            <Box flex={3}>
-                                <Box mx="4" my="2">
-                                    <InputGroup display={"flex"} size={"md"}>
-                                        <Input
-                                            isRequired
-                                            placeholder="Enter the name of your room"
-                                            type="text"
-                                            justifyItems={"self-end"}
-                                            h={"40px"}
-                                            value={roomName}
-                                            onChange={(e) =>
-                                                setRoomName(e.target.value)
-                                            }
-                                        />
-                                    </InputGroup>
-                                </Box>
-                            </Box>
-                        </Box>
-                        {/* Upload Photo/s */}
-                        <Box as={Flex} my={"10"}>
-                            <Flex
-                                flex={1}
-                                fontWeight={"medium"}
-                                alignItems={"center"}
-                            >
-                                <Text>Upload Photos Of Your Room</Text>
-                            </Flex>
-                            <Box flex={3}>
-                                <Box
-                                    display={"flex"}
-                                    flexDir={"column"}
-                                    placeItems={"center"}
-                                >
-                                    <Box
-                                        border={"2px"}
-                                        borderStyle={"dashed"}
-                                        borderColor={"gray.200"}
-                                        borderRadius={"lg"}
-                                        p={"4"}
-                                    >
-                                        <Button
-                                            type="button"
-                                            justifyContent={"center"}
-                                            display={"flex"}
-                                            flexDir="column"
-                                            size="md"
-                                            w={"800px"}
-                                            h={"100px"}
-                                            textAlign="center"
-                                            my={"4"}
-                                            mx={"4"}
-                                            variant="outline"
-                                            _hover={""}
-                                            bgColor={"gray.100"}
-                                            alignItems={"center"}
-                                            onClick={() => {
-                                                inputFile.current.click();
+                                        <Box
+                                            border={"2px"}
+                                            borderStyle={"dashed"}
+                                            borderColor={"gray.200"}
+                                            borderRadius={"lg"}
+                                            p={"4"}
+                                            minW={{
+                                                base: "187px",
+                                                md: "509px",
+                                                lg: "871px",
                                             }}
                                         >
-                                            <SlPicture
-                                                fontSize={"35px"}
-                                                color="#D3212D"
-                                            />
-                                            <input
-                                                type="file"
-                                                id="file"
-                                                ref={inputFile}
-                                                style={{ display: "none" }}
-                                                multiple
-                                                onChange={onChangeFile}
-                                            />
-                                            <Text textAlign={"center"}>
-                                                Upload picture/s
-                                            </Text>
-                                        </Button>
-                                        <Flex
-                                            justify={"space-between"}
-                                            w="96%"
-                                            mx={"4"}
-                                            mb={"4"}
-                                        >
-                                            {fileRoom ? (
-                                                <>
-                                                    <Text alignSelf={"center"}>
-                                                        Your file/files:
-                                                    </Text>
-                                                    <Box
-                                                        display={"flex"}
-                                                        justifyContent={"left"}
-                                                    >
-                                                        {fileRoom ? (
-                                                            Array.from(
-                                                                fileRoom
-                                                            ).map((file, index) => (
-                                                                <Image
-                                                                    key={index}
-                                                                    src={URL.createObjectURL(
-                                                                        file
-                                                                    )}
-                                                                    style={{
-                                                                        maxWidth:
-                                                                            "100px",
-                                                                        maxHeight:
-                                                                            "100px",
-                                                                        margin: "8px",
-                                                                        aspectRatio:
-                                                                            "1/1",
-                                                                        objectFit:
-                                                                            "cover",
-                                                                        borderRadius:
-                                                                            "6px",
-                                                                        boxShadow:
-                                                                            "2px 2px 5px gray",
-                                                                    }}
-                                                                />
-                                                            ))
-                                                        ) : (
-                                                            <Text>
-                                                                Choose a file to
-                                                                upload
-                                                            </Text>
-                                                        )}
-                                                    </Box>
-                                                    <Button
-                                                        type="button"
-                                                        display={"flex"}
-                                                        flexDir="column"
-                                                        h={"35px"}
-                                                        w={"35px"}
-                                                        variant="outline"
-                                                        alignItems={"center"}
-                                                        alignSelf={"center"}
-                                                        onClick={() =>
-                                                            setFileRoom(null)
-                                                        }
-                                                    >
-                                                        <Text fontSize={"xl"}>
-                                                            <HiTrash
-                                                                fontWeight={
-                                                                    "extrabold"
-                                                                }
-                                                                color="#D3212D"
-                                                            />
+                                            <Button
+                                                type="button"
+                                                justifyContent={"center"}
+                                                display={"flex"}
+                                                flexDir="column"
+                                                size="md"
+                                                w={{
+                                                    base: "100px",
+                                                    md: "400px",
+                                                    lg: "800px",
+                                                }}
+                                                h={"100px"}
+                                                textAlign="center"
+                                                my={"4"}
+                                                mx={{
+                                                    base: "auto",
+                                                    md: "auto",
+                                                    lg: "4",
+                                                }}
+                                                variant="outline"
+                                                _hover={""}
+                                                bgColor={"gray.100"}
+                                                alignItems={"center"}
+                                                onClick={() => {
+                                                    inputFile.current.click();
+                                                }}
+                                            >
+                                                <SlPicture
+                                                    fontSize={"35px"}
+                                                    color="#D3212D"
+                                                />
+                                                <input
+                                                    type="file"
+                                                    id="file"
+                                                    ref={inputFile}
+                                                    style={{ display: "none" }}
+                                                    multiple
+                                                    onChange={onChangeFile}
+                                                />
+                                                <Text
+                                                    textAlign={"center"}
+                                                    fontSize={{
+                                                        base: "10px",
+                                                        md: "unset",
+                                                    }}
+                                                >
+                                                    Upload picture/s
+                                                </Text>
+                                            </Button>
+                                            <Flex
+                                                justify={"space-between"}
+                                                w="96%"
+                                                mx={"4"}
+                                                mb={"4"}
+                                            >
+                                                {fileRoom ? (
+                                                    <>
+                                                        <Text
+                                                            alignSelf={"center"}
+                                                        >
+                                                            Your file/files:
                                                         </Text>
-                                                    </Button>
-                                                </>
-                                            ) : null}
-                                        </Flex>
+                                                        <Box
+                                                            display={"flex"}
+                                                            justifyContent={
+                                                                "left"
+                                                            }
+                                                        >
+                                                            {fileRoom ? (
+                                                                Array.from(
+                                                                    fileRoom
+                                                                ).map(
+                                                                    (
+                                                                        file,
+                                                                        index
+                                                                    ) => (
+                                                                        <Image
+                                                                            key={
+                                                                                index
+                                                                            }
+                                                                            src={URL.createObjectURL(
+                                                                                file
+                                                                            )}
+                                                                            style={{
+                                                                                maxWidth:
+                                                                                    "100px",
+                                                                                maxHeight:
+                                                                                    "100px",
+                                                                                margin: "8px",
+                                                                                aspectRatio:
+                                                                                    "1/1",
+                                                                                objectFit:
+                                                                                    "cover",
+                                                                                borderRadius:
+                                                                                    "6px",
+                                                                                boxShadow:
+                                                                                    "2px 2px 5px gray",
+                                                                            }}
+                                                                        />
+                                                                    )
+                                                                )
+                                                            ) : (
+                                                                <Text>
+                                                                    Choose a
+                                                                    file to
+                                                                    upload
+                                                                </Text>
+                                                            )}
+                                                        </Box>
+                                                        <Button
+                                                            type="button"
+                                                            display={"flex"}
+                                                            flexDir="column"
+                                                            h={"35px"}
+                                                            w={"35px"}
+                                                            variant="outline"
+                                                            alignItems={
+                                                                "center"
+                                                            }
+                                                            alignSelf={"center"}
+                                                            onClick={() =>
+                                                                setFileRoom(
+                                                                    null
+                                                                )
+                                                            }
+                                                        >
+                                                            <Text
+                                                                fontSize={"xl"}
+                                                            >
+                                                                <HiTrash
+                                                                    fontWeight={
+                                                                        "extrabold"
+                                                                    }
+                                                                    color="#D3212D"
+                                                                />
+                                                            </Text>
+                                                        </Button>
+                                                    </>
+                                                ) : null}
+                                            </Flex>
+                                        </Box>
                                     </Box>
                                 </Box>
                             </Box>
-                        </Box>
-                        {/* Description */}
-                        <Box as={Flex} my={"10"}>
-                            <Flex
-                                flex={1}
-                                fontWeight={"medium"}
-                                alignItems={"center"}
-                            >
-                                <Text>Tell Us A Story About The Room</Text>
-                            </Flex>
-                            <Box flex={3}>
-                                <Box mx="4" my="2">
-                                    <Textarea
-                                        isRequired
-                                        placeholder="Enter room description"
-                                        size={"md"}
-                                        resize={"none"}
-                                        h={"250px"}
-                                        maxLength={250}
-                                        value={description}
-                                        onChange={(e) => {
-                                            setDescription(e.target.value);
-                                            setDescriptionLength(
-                                                e.target.value.length
-                                            );
-                                        }}
-                                    />
-                                    <Text textAlign={"right"} color={"gray.300"}>
-                                        {descriptionLength}/250
-                                    </Text>
+                            {/* Description */}
+                            <Box as={Flex} my={"10"}>
+                                <Flex
+                                    flex={1}
+                                    fontWeight={"medium"}
+                                    alignItems={"center"}
+                                >
+                                    <Text>Tell Us A Story About The Room</Text>
+                                </Flex>
+                                <Box flex={3}>
+                                    <Box mx="4" my="2">
+                                        <Textarea
+                                            isRequired
+                                            placeholder="Enter description"
+                                            size={"md"}
+                                            resize={"none"}
+                                            h={"250px"}
+                                            maxLength={250}
+                                            value={description}
+                                            onChange={(e) => {
+                                                setDescription(e.target.value);
+                                                setDescriptionLength(
+                                                    e.target.value.length
+                                                );
+                                            }}
+                                        />
+                                        <Text
+                                            textAlign={"right"}
+                                            color={"gray.300"}
+                                        >
+                                            {descriptionLength}/250
+                                        </Text>
+                                    </Box>
                                 </Box>
                             </Box>
-                        </Box>
-                        {/* Capacity */}
-                        <Box as={Flex} my={"10"}>
-                            <Flex
-                                flex={1}
-                                fontWeight={"medium"}
-                                alignItems={"center"}
-                            >
-                                <Text>Set the Room Capactiy</Text>
-                            </Flex>
-                            <Box flex={3}>
-                                <Box mx="4" my="2">
-                                    <InputGroup display={"flex"} size={"md"}>
-                                        <Input
-                                            isRequired
-                                            placeholder="Enter room capacity"
-                                            type="number"
-                                            justifyItems={"self-end"}
-                                            h={"40px"}
-                                            value={roomCapacity}
-                                            onChange={(e) =>
-                                                setRoomCapacity(e.target.value)
-                                            }
-                                        />
-                                    </InputGroup>
+                            {/* Capacity */}
+                            <Box as={Flex} my={"10"}>
+                                <Flex
+                                    flex={1}
+                                    fontWeight={"medium"}
+                                    alignItems={"center"}
+                                >
+                                    <Text>Set the Room Capactiy</Text>
+                                </Flex>
+                                <Box flex={3}>
+                                    <Box mx="4" my="2">
+                                        <InputGroup
+                                            display={"flex"}
+                                            size={"md"}
+                                        >
+                                            <Input
+                                                isRequired
+                                                placeholder="Enter capacity"
+                                                type="number"
+                                                justifyItems={"self-end"}
+                                                h={"40px"}
+                                                value={roomCapacity}
+                                                onChange={(e) =>
+                                                    setRoomCapacity(
+                                                        e.target.value
+                                                    )
+                                                }
+                                            />
+                                        </InputGroup>
+                                    </Box>
                                 </Box>
                             </Box>
                         </Box>
                     </Box>
                     {/* Price */}
-                    <Box textAlign="left" fontSize={"3xl"} fontWeight="bold">
+                    <Box
+                        textAlign="left"
+                        fontSize={{ base: "xl", md: "3xl", lg: "3xl" }}
+                        fontWeight="bold"
+                    >
                         <h2>Room Price</h2>
                     </Box>
-                    <Box as={Flex} my="10">
-                        <Flex flex={1} fontWeight="medium" alignItems={"center"}>
+                    <Box as={Flex} my="10" fontSize={{ base: "xs", md: "lg" }}>
+                        <Flex
+                            flex={1}
+                            fontWeight="medium"
+                            alignItems={"center"}
+                        >
                             Set Your Price
                         </Flex>
                         <Box flex={3} display="flex" flexDir={"column"}>
                             <Box display={"flex"} flexDir={"row"}>
                                 <FormControl mx={"4"}>
-                                    <FormLabel>Price (Rp)</FormLabel>
+                                    <FormLabel
+                                        fontSize={{ base: "xs", md: "lg" }}
+                                    >
+                                        Price (Rp)
+                                    </FormLabel>
                                     <Input
                                         isRequired
                                         type="number"
-                                        placeholder="Enter price per night"
+                                        placeholder="Enter price"
                                         mb={"2"}
                                         value={roomPrice}
                                         onChange={(e) =>
@@ -495,7 +559,12 @@ function AddRoom(props) {
                         w={"full"}
                         py={"2"}
                     >
-                        <Button type="button" w={"300px"} mr={"4"} rounded={"3xl"}>
+                        <Button
+                            type="button"
+                            w={"300px"}
+                            mr={"4"}
+                            rounded={"3xl"}
+                        >
                             <Text>Reset</Text>
                         </Button>
                         <Button

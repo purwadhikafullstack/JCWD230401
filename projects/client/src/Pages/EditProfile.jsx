@@ -496,7 +496,7 @@ export default function EditProfile(props) {
                         <FormControl id="birth" isInvalid={formik.errors.birth}>
                             <FormLabel>Birthdate</FormLabel>
                             <Input
-                                placeholder={currentBirth}
+                                placeholder={currentBirth ? currentBirth : "DD/MM/YYYY"}
                                 _placeholder={{ color: "gray.800" }}
                                 type="date"
                                 value={formik.values.birth}

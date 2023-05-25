@@ -14,7 +14,7 @@ import {
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import userRegisterBanner from "../assets/user-register-banner.jpg";
+import userRegisterBanner from "../assets/user-register-banner.webp";
 import { FcGoogle } from "react-icons/fc";
 import { useFormik } from "formik";
 import * as yup from "yup";

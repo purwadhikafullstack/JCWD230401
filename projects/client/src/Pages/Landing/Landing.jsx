@@ -7,18 +7,18 @@ import React, { useState, useEffect } from "react";
 import { SearchIcon } from "@chakra-ui/icons";
 import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
-import BannerImage from "./images/banner.png"
+import BannerImage from "./images/banner.webp"
 import DatePicker from "react-datepicker";
-import SpecialDeals from "./images/banner-1.png";
-import TenantRegisterBanner from "./images/banner-2.png";
-import Apartment1 from "./images/image-s1.png";
-import Hotels1 from "./images/image-s3.png";
-import Villas1 from "./images/image-s4.png";
-import Jakarta1 from "./images/jakarta-1.jpg";
-import Uluwatu1 from "./images/uluwatu-1.jpg";
-import Kuta1 from "./images/kuta-1.jpg";
-import Ubud1 from "./images/ubud-1.jpg";
-import Yogyakarta1 from "./images/yogyakarta-1.jpg";
+import SpecialDeals from "./images/banner-1.webp";
+import TenantRegisterBanner from "./images/banner-2.webp";
+import Apartment1 from "./images/image-s1.webp";
+import Hotels1 from "./images/image-s3.webp";
+import Villas1 from "./images/image-s4.webp";
+import Jakarta1 from "./images/jakarta-1.webp";
+import Uluwatu1 from "./images/uluwatu-1.webp";
+import Kuta1 from "./images/kuta-1.webp";
+import Ubud1 from "./images/ubud-1.webp";
+import Yogyakarta1 from "./images/yogyakarta-1.webp";
 import RecommendPropertyCard from "../../Components/RecommendPropertyCard";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
@@ -331,7 +331,7 @@ export default function LandingNew() {
                 <Box mb={{ base: "40px", md: "80px" }}>
                     <Flex
                         w="full"
-                        h={{ base: "80vh", lg: "100vh" }}
+                        h={{ base: "80vh", sm:"125vh", lg: "100vh" }}
                         backgroundImage={BannerImage}
                         backgroundSize="cover"
                         backgroundPosition={"center center"}
@@ -346,11 +346,12 @@ export default function LandingNew() {
                                     color={"white"}
                                     fontWeight={400}
                                     lineHeight={1.2}
-                                    fontSize={{ base: "3xl", md: "55px" }}>
+                                    mt={{base:"0", md:"4", lg:"0"}}
+                                    fontSize={{ base: "3xl", md:"4xl", lg: "55px" }}>
                                     Find Your Next Stay
                                 </Text>
                                 {/* SEARCH BAR */}
-                                <Box bg="white" w={{ base: "80vw", md: "45vw", lg: "80vw" }} m="30px auto" p="6px 10px 6px 25px" borderRadius="10px" py={{ base: "4", lg: "1.5" }}>
+                                <Box bg="white" w={{ base: "80vw", md: "50vw", lg: "80vw" }} m="30px auto" p="6px 10px 6px 25px" borderRadius="10px" py={{ base: "4", md: "3", lg: "1.5" }}>
                                     <Flex align={{ base: "left", lg: "center" }} justify={"space-between"} flexWrap={"wrap"} flexDirection={{ base: "column", lg: "row" }}>
                                         <Box
                                             flex="1.5"

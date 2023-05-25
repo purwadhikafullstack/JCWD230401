@@ -23,7 +23,6 @@ import Sidebar from "../../Components/Sidebar";
 import { useSelector } from "react-redux";
 import Loading from "../../Components/Loading";
 
-
 function PropertyList(props) {
     const [loadingPage, setLoadingPage] = useState(true);
     const location = useLocation();
@@ -99,16 +98,28 @@ function PropertyList(props) {
     }, []);
 
     if (loadingPage) {
-        return <Loading />
+        return <Loading />;
     } else {
         return (
             <>
-                <Flex minH="93vh">
+                <Flex minH="93vh" w={"100%"}>
                     <Box>
                         <Sidebar />
                     </Box>
-                    <Box w="full" flex={"5"} px={{ base: "1", sm: "4" }} mt="5">
-                        <Flex justifyContent={"space-between"}>
+                    <Box
+                        w={{ base: "100%", md: "500px", lg: "full" }}
+                        flex={"5"}
+                        px={{ base: "1", md: "4" }}
+                        mt="5"
+                    >
+                        <Flex
+                            justifyContent={"space-between"}
+                            flexDir={{
+                                base: "column",
+                                md: "column",
+                                lg: "row",
+                            }}
+                        >
                             <Heading
                                 lineHeight={1.1}
                                 fontSize={{ base: "2xl", md: "3xl" }}
@@ -117,24 +128,34 @@ function PropertyList(props) {
                             >
                                 Properties
                             </Heading>
-                            <Box display={"flex"}>
+                            <Box
+                                display={"flex"}
+                                justifyContent={{
+                                    base: "center",
+                                    md: "center",
+                                }}
+                                mb={{ base: "4", md: "4" }}
+                            >
                                 <Button
                                     mr="4"
                                     color="#D3212D"
                                     variant={"outline"}
                                     onClick={() => navigate("/listing")}
+                                    w={"150px"}
                                 >
                                     New Property
                                 </Button>
                                 <Button
                                     color="#D3212D"
                                     variant={"outline"}
+                                    w={"150px"}
                                     onClick={() => navigate("/room")}
                                 >
                                     New Room
                                 </Button>
                             </Box>
                         </Flex>
+                        
                         {dataAllProperty.length ? (
                             <>
                                 <Box
@@ -145,7 +166,10 @@ function PropertyList(props) {
                                     justifyContent={"space-between"}
                                 >
                                     <TableContainer>
-                                        <Table variant="simple" color={"#EEEEEE"}>
+                                        <Table
+                                            variant="simple"
+                                            color={"#EEEEEE"}
+                                        >
                                             <Thead>
                                                 <Tr>
                                                     <Th
@@ -198,7 +222,10 @@ function PropertyList(props) {
                                 </Text>
                                 <Box w={"full"} h={"82.5vh"}>
                                     <TableContainer>
-                                        <Table variant="simple" color={"#EEEEEE"}>
+                                        <Table
+                                            variant="simple"
+                                            color={"#EEEEEE"}
+                                        >
                                             <Thead>
                                                 <Tr>
                                                     <Th
