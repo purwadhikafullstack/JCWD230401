@@ -29,7 +29,7 @@ export default function NotFound() {
             <Flex
                 justify={"center"}
                 align={{ base: "none", sm: "center" }}
-                minH={{ base: "50vh", lg: "100vh" }}
+                minH={{ base: "100vh", lg: "100vh" }}
             >
                 <Box
                     textAlign="center"

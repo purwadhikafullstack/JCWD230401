@@ -17,7 +17,7 @@ import axios from "axios";
 import { FiUpload } from "react-icons/fi";
 import { useFormik } from "formik";
 import * as yup from "yup";
-import tenantRegisterBanner from "../assets/tenant-register-banner.jpg";
+import tenantRegisterBanner from "../assets/tenant-register-banner.webp";
 import Loading from "../Components/Loading";
 
 
