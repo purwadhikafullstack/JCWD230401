@@ -105,7 +105,7 @@ module.exports = {
                         options
                     )
                 );
-                totalArr.push(chart[i].totalPrice);
+                totalArr.push(chart[i].dataValues.totalPrice);
             }
 
             res.status(200).send({
@@ -186,7 +186,7 @@ module.exports = {
                         options
                     )
                 );
-                totalArr.push(chart[i].totalPrice);
+                totalArr.push(chart[i].dataValues.totalPrice);
             }
 
             res.status(200).send({
