@@ -13,6 +13,25 @@ module.exports = {
                 where: {
                     createdAt: { [sequelize.Op.between]: [start, end] },
                 },
+                include: [
+                    {
+                        model: model.transaction,
+                        where: {
+                            transaction_statusId: 3,
+                        },
+                    },
+                    {
+                        model: model.room,
+                        include: [
+                            {
+                                model: model.property,
+                                where: {
+                                    userId: req.decrypt.id,
+                                },
+                            },
+                        ],
+                    },
+                ],
             });
 
             res.status(200).send({
@@ -59,6 +78,17 @@ module.exports = {
                         where: {
                             transaction_statusId: 3,
                         },
+                    },
+                    {
+                        model: model.room,
+                        include: [
+                            {
+                                model: model.property,
+                                where: {
+                                    userId: req.decrypt.id,
+                                },
+                            },
+                        ],
                     },
                 ],
                 group: ["createdAt"],
@@ -107,7 +137,10 @@ module.exports = {
 
             let chart = await model.order.findAll({
                 attributes: [
-                    [sequelize.fn("sum", sequelize.col("order.price")), "price"],
+                    [
+                        sequelize.fn("sum", sequelize.col("order.price")),
+                        "price",
+                    ],
                     "createdAt",
                 ],
                 where: {
@@ -129,6 +162,14 @@ module.exports = {
                         where: {
                             propertyId: idProperty,
                         },
+                        include: [
+                            {
+                                model: model.property,
+                                where: {
+                                    userId: req.decrypt.id,
+                                },
+                            },
+                        ],
                     },
                 ],
                 group: ["createdAt"],
@@ -209,6 +250,14 @@ module.exports = {
                     {
                         model: model.room,
                         attributes: ["id", "capacity"],
+                        include: [
+                            {
+                                model: model.property,
+                                where: {
+                                    userId: req.decrypt.id,
+                                },
+                            },
+                        ],
                     },
                 ],
             });

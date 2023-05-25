@@ -100,15 +100,14 @@ module.exports = {
             attributes: ["property"],
           },
         ],
-        where: sequelize.literal(`
-          room.id NOT IN (
-            SELECT roomId FROM orders WHERE start_date <= '${req.body.date}' AND end_date >= '${req.body.date}'
-          ) AND
-          room.id NOT IN (
-            SELECT roomId FROM maintenances WHERE startDate <= '${req.body.date}' AND endDate >= '${req.body.date}'
-          ) AND
-          room.isDeleted = 0 
-        `),
+        where: {
+          [sequelize.Op.and]: [
+            sequelize.literal(`room.id NOT IN (SELECT roomId FROM orders WHERE start_date <= :date AND end_date >= :date)`),
+            sequelize.literal(`room.id NOT IN (SELECT roomId FROM maintenances WHERE startDate <= :date AND endDate >= :date AND isActive = 1 AND isDeleted = 0)`),
+            { isDeleted: 0 }
+          ],
+        },
+        replacements: { date: req.body.date },
       });
       res.status(200).send(getdata);
     } catch (error) {

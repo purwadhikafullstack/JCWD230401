@@ -35,7 +35,7 @@ import { useLocation, useParams } from "react-router-dom";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
-function MaintenanceModal() {
+function MaintenanceModal(props) {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [maintenanceStartDate, setMaintenanceStartDate] = useState(null);
     const [maintenanceEndDate, setMaintenanceEndDate] = useState(null);
@@ -43,7 +43,9 @@ function MaintenanceModal() {
     const [loading, setLoading] = useState(false);
 
     const [roomId, setRoomId] = useState("");
+    const params1 = useParams();
 
+    const toast = useToast();
     const getRoomId = async () => {
         let token = localStorage.getItem("tempatku_login");
         let get = await axios.get(
@@ -91,7 +93,7 @@ function MaintenanceModal() {
             if (add.data.success) {
                 toast({
                     title: "Added Maintenance",
-                    description: `Created Maintenance for ${roomName}`,
+                    description: `Created Maintenance for ${props.roomname}`,
                     status: "success",
                     duration: 2000,
                     isClosable: true,
@@ -102,13 +104,13 @@ function MaintenanceModal() {
             console.log(error);
             toast({
                 title: "Failed to add maintenance",
-                description: `${roomName} maintenance already exists on the selected date.`,
+                description: `${props.roomname} maintenance already exists on the selected date.`,
                 status: "error",
                 duration: 4000,
                 isClosable: true,
             });
         } finally {
-            getMaintenanceData();
+            props.getMaintenanceData();
             setMaintenanceStartDate(null);
             setMaintenanceEndDate(null);
             setRemarks("");

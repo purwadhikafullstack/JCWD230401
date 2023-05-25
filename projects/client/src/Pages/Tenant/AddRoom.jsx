@@ -486,7 +486,7 @@ function AddRoom(props) {
                                     fontWeight={"medium"}
                                     alignItems={"center"}
                                 >
-                                    <Text>Set the Room Capactiy</Text>
+                                    <Text>Set the Room Capacity</Text>
                                 </Flex>
                                 <Box flex={3}>
                                     <Box mx="4" my="2">

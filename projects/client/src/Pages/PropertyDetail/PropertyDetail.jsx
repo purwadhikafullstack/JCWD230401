@@ -202,26 +202,26 @@ export default function PropertyDetail() {
         }
     };
 
-    const getSpecialPrice = async () => {
-        if (uuidRoom) {
-            try {
-                const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/property/getspecialprice/${uuidRoom}`, {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                });
-                console.log("ini isi response.data getSpecialPrice:", response.data);
-                console.log("ini isi response getSpecialPrice:", response);
-                setSpecialPrice(response.data);
-            } catch (error) {
-                console.error("Error fetching special price:", error);
-            }
-        }
-    }
+    // const getSpecialPrice = async () => {
+    //     if (uuidRoom) {
+    //         try {
+    //             const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/property/special-price/${uuidRoom}`, {
+    //                 headers: {
+    //                     Authorization: `Bearer ${token}`,
+    //                 },
+    //             });
+    //             console.log("ini isi response.data getSpecialPrice:", response.data);
+    //             console.log("ini isi response getSpecialPrice:", response);
+    //             setSpecialPrice(response.data);
+    //         } catch (error) {
+    //             console.error("Error fetching special price:", error);
+    //         }
+    //     }
+    // }
 
-    useEffect(() => {
-        getSpecialPrice();
-    }, [uuidRoom])
+    // useEffect(() => {
+    //     getSpecialPrice();
+    // }, [uuidRoom])
 
     useEffect(() => {
         getPropertyDetail();
@@ -237,36 +237,36 @@ export default function PropertyDetail() {
     }, [inputCheckIn, inputCheckOut]);
 
     //print special price
-    const printSpecialPrice = () => {
-        let print = specialPrice.map((val, idx) => {
-            const { startDate, endDate, priceOnDate } = val;
-            return { startDate, endDate, priceOnDate };
-        });
-        return print;
-    };
+    // const printSpecialPrice = () => {
+    //     let print = specialPrice.map((val, idx) => {
+    //         const { startDate, endDate, priceOnDate } = val;
+    //         return { startDate, endDate, priceOnDate };
+    //     });
+    //     return print;
+    // };
 
     //print format calendar special price 
-    const specialPriceEvents = printSpecialPrice()
-        .filter(val => val !== null)
-        .flatMap(val => {
-            const { startDate, endDate, priceOnDate } = val;
-            const startDateObj = new Date(startDate);
-            const endDateObj = new Date(endDate);
-            const events = [];
+    // const specialPriceEvents = printSpecialPrice()
+    //     .filter(val => val !== null)
+    //     .flatMap(val => {
+    //         const { startDate, endDate, priceOnDate } = val;
+    //         const startDateObj = new Date(startDate);
+    //         const endDateObj = new Date(endDate);
+    //         const events = [];
 
-            // Iterate over each day in the date range
-            for (let date = startDateObj; date <= endDateObj; date.setDate(date.getDate() + 1)) {
-                const eventDate = new Date(date);
+    //         // Iterate over each day in the date range
+    //         for (let date = startDateObj; date <= endDateObj; date.setDate(date.getDate() + 1)) {
+    //             const eventDate = new Date(date);
 
-                events.push({
-                    title: `special price: ${formatRupiah(priceOnDate)}`,
-                    start: eventDate.toISOString().split('T')[0],
-                    end: eventDate.toISOString().split('T')[0],
-                });
-            }
+    //             events.push({
+    //                 title: `special price: ${formatRupiah(priceOnDate)}`,
+    //                 start: eventDate.toISOString().split('T')[0],
+    //                 end: eventDate.toISOString().split('T')[0],
+    //             });
+    //         }
 
-            return events;
-        });
+    //         return events;
+    //     });
 
 
 
@@ -349,7 +349,7 @@ export default function PropertyDetail() {
     //gabungin special price event sama normal price event sama yg bisa edit sendiri check in out
     const calendarEvents = [
         ...events,
-        ...specialPriceEvents,
+        // ...specialPriceEvents,
         ...calendarEdit.map((event) => ({
             ...event,
             editable: true, // Make the calendarEdit event draggable and editable
@@ -562,22 +562,22 @@ export default function PropertyDetail() {
                     </Flex>
                     {/* CALENDAR */}
                     <Box overflowX={"auto"}>
-                    <Box marginBottom="50px"  w={{ base: "200vw", sm: "150vw", lg:"full" }} >
-                        <Fullcalendar
-                            className="my-calendar"
-                            w='full'
-                            plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-                            initialView={"dayGridMonth"}
-                            headerToolbar={{
-                                start: "today prev,next",
-                                center: "title",
-                                end: "dayGridMonth,timeGridWeek,timeGridDay",
-                            }}
-                            height={"90vh"}
-                            events={calendarEvents}
-                            eventChange={handleEventChange}
-                        />
-                    </Box>
+                        <Box marginBottom="50px" w={{ base: "200vw", sm: "150vw", lg: "full" }} >
+                            <Fullcalendar
+                                className="my-calendar"
+                                w='full'
+                                plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+                                initialView={"dayGridMonth"}
+                                headerToolbar={{
+                                    start: "today prev,next",
+                                    center: "title",
+                                    end: "dayGridMonth,timeGridWeek,timeGridDay",
+                                }}
+                                height={"90vh"}
+                                events={calendarEvents}
+                                eventChange={handleEventChange}
+                            />
+                        </Box>
                     </Box>
                     <Divider my='10' />
                     <Box>
