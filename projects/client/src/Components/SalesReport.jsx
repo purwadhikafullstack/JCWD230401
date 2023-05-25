@@ -51,8 +51,14 @@ function SalesReport(props) {
 
     const getIncome = async () => {
         try {
+            let token = localStorage.getItem("tempatku_login");
             let get = await axios.get(
-                `${process.env.REACT_APP_API_BASE_URL}/report/income?start=${startDateTransaction}&end=${endDateTransaction}`
+                `${process.env.REACT_APP_API_BASE_URL}/report/income?start=${startDateTransaction}&end=${endDateTransaction}`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
             );
 
             setIncome(get.data.income);

@@ -116,8 +116,8 @@ export default function LandingNew() {
         navigate('/property/', {
             state: {
                 inputLocation: inputLocation,
-                inputCheckIn: checkInDate,
-                inputCheckOut: checkOutDate,
+                inputCheckIn:  checkInDate ? moment(checkInDate).format().split('T')[0] : today,
+                inputCheckOut: checkOutDate ? moment(checkOutDate).format().split('T')[0] : tomorrow,
                 guest: guest,
                 category: category
             }
@@ -129,8 +129,8 @@ export default function LandingNew() {
         navigate('/property/', {
             state: {
                 inputLocation: inputLocation,
-                inputCheckIn: inputCheckIn,
-                inputCheckOut: inputCheckOut,
+                inputCheckIn:  checkInDate ? moment(checkInDate).format().split('T')[0] : today,
+                inputCheckOut: checkOutDate ? moment(checkOutDate).format().split('T')[0] : tomorrow,
                 guest: guest,
             }
         })
@@ -667,7 +667,7 @@ export default function LandingNew() {
                                 _hover={{ bg: "#D3212D", color: "white" }}
                                 p={{ base: "3", sm: "6" }}
                                 textAlign="center"
-                                onClick={() => navigate("/property/")}
+                                onClick={handleSearch}
                             >
                                 <Text>
                                     See more properties

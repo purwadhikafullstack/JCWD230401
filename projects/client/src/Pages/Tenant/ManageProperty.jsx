@@ -37,7 +37,7 @@ function ManageProperty(props) {
     const [loading, setLoading] = useState(false);
 
     const [propertyData, setPropertyData] = useState(null);
-    const [category, setCategory] = useState("");
+    const [category, setCategory] = useState(null);
     const [property, setProperty] = useState(propertyData?.property);
     const [description, setDescription] = useState(propertyData?.description);
     const [descriptionLength, setDescriptionLength] = useState(0);
@@ -83,6 +83,7 @@ function ManageProperty(props) {
             setFilePropertyEdit3(get.data.data[0].picture_properties[2]);
             setFilePropertyEdit4(get.data.data[0].picture_properties[3]);
             setFilePropertyEdit5(get.data.data[0].picture_properties[4]);
+            setActiveButton(get.data.data[0].category.category);
         } catch (error) {
             console.log(error);
         }
@@ -551,6 +552,7 @@ function ManageProperty(props) {
                                                 type="text"
                                                 justifyItems={"self-end"}
                                                 h={"40px"}
+                                                value={category}
                                                 defaultValue={
                                                     !category
                                                         ? propertyData?.category
