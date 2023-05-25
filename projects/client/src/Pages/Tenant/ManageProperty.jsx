@@ -37,7 +37,7 @@ function ManageProperty(props) {
     const [loading, setLoading] = useState(false);
 
     const [propertyData, setPropertyData] = useState(null);
-    const [category, setCategory] = useState("");
+    const [category, setCategory] = useState(null);
     const [property, setProperty] = useState(propertyData?.property);
     const [description, setDescription] = useState(propertyData?.description);
     const [descriptionLength, setDescriptionLength] = useState(0);
