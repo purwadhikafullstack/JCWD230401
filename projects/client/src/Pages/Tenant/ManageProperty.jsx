@@ -44,8 +44,12 @@ function ManageProperty(props) {
     const [address, setAddress] = useState(
         propertyData?.property_location?.address
     );
-    const [province, setProvince] = useState(null);
-    const [regency, setRegency] = useState(null);
+    const [province, setProvince] = useState(
+        propertyData.property_location.provinceId
+    );
+    const [regency, setRegency] = useState(
+        propertyData.property_location.regency_id
+    );
     const [zipcode, setZipcode] = useState(
         propertyData?.property_location?.zip
     );
