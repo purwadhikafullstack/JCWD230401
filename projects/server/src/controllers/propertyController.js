@@ -523,6 +523,7 @@ module.exports = {
                 ],
             });
             console.log("ini isi get :", get);
+            console.log("ini isi params :", req.params.uuid);
             res.status(200).send(get);
         } catch (error) {
             console.log(error);
