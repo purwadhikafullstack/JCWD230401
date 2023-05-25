@@ -28,7 +28,7 @@ import { Rating } from "@smastrom/react-rating";
 import Loading from "../Components/Loading";
 
 export default function OrderLists() {
-    const [loadingPage, setLoadingPage] = useState(true)
+    const [loadingPage, setLoadingPage] = useState(false)
     let token = localStorage.getItem("tempatku_login");
 
     // PAGINATION
@@ -59,7 +59,7 @@ export default function OrderLists() {
                 },
             }
         );
-        console.log("gett order listt", get.data);
+        console.log("gett order listt", get);
         setOrderList(get.data.data);
         setTotalData(get.data.datanum);
         setLoadingButton(false)
