@@ -32,6 +32,9 @@ module.exports = {
                         include: [
                             {
                                 model: model.transaction_status, attributes: ['status']
+                            },
+                            {
+                                model: model.review, attributes: ['review', 'rating'], group: ['transactionId']
                             }
                         ]
                     },
