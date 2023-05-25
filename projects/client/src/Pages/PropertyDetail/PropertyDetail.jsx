@@ -205,7 +205,7 @@ export default function PropertyDetail() {
     const getSpecialPrice = async () => {
         if (uuidRoom) {
             try {
-                const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/property/getspecialprice/${uuidRoom}`, {
+                const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/property/special-price/${uuidRoom}`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
@@ -562,22 +562,22 @@ export default function PropertyDetail() {
                     </Flex>
                     {/* CALENDAR */}
                     <Box overflowX={"auto"}>
-                    <Box marginBottom="50px"  w={{ base: "200vw", sm: "150vw", lg:"full" }} >
-                        <Fullcalendar
-                            className="my-calendar"
-                            w='full'
-                            plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-                            initialView={"dayGridMonth"}
-                            headerToolbar={{
-                                start: "today prev,next",
-                                center: "title",
-                                end: "dayGridMonth,timeGridWeek,timeGridDay",
-                            }}
-                            height={"90vh"}
-                            events={calendarEvents}
-                            eventChange={handleEventChange}
-                        />
-                    </Box>
+                        <Box marginBottom="50px" w={{ base: "200vw", sm: "150vw", lg: "full" }} >
+                            <Fullcalendar
+                                className="my-calendar"
+                                w='full'
+                                plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+                                initialView={"dayGridMonth"}
+                                headerToolbar={{
+                                    start: "today prev,next",
+                                    center: "title",
+                                    end: "dayGridMonth,timeGridWeek,timeGridDay",
+                                }}
+                                height={"90vh"}
+                                events={calendarEvents}
+                                eventChange={handleEventChange}
+                            />
+                        </Box>
                     </Box>
                     <Divider my='10' />
                     <Box>
