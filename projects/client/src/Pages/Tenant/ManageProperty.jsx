@@ -44,12 +44,8 @@ function ManageProperty(props) {
     const [address, setAddress] = useState(
         propertyData?.property_location?.address
     );
-    const [province, setProvince] = useState(
-        propertyData.property_location.provinceId
-    );
-    const [regency, setRegency] = useState(
-        propertyData.property_location.regency_id
-    );
+    const [province, setProvince] = useState(null);
+    const [regency, setRegency] = useState(null);
     const [zipcode, setZipcode] = useState(
         propertyData?.property_location?.zip
     );
@@ -87,6 +83,7 @@ function ManageProperty(props) {
             setFilePropertyEdit3(get.data.data[0].picture_properties[2]);
             setFilePropertyEdit4(get.data.data[0].picture_properties[3]);
             setFilePropertyEdit5(get.data.data[0].picture_properties[4]);
+            setActiveButton(get.data.data[0].category.category);
         } catch (error) {
             console.log(error);
         }
@@ -555,6 +552,7 @@ function ManageProperty(props) {
                                                 type="text"
                                                 justifyItems={"self-end"}
                                                 h={"40px"}
+                                                value={category}
                                                 defaultValue={
                                                     !category
                                                         ? propertyData?.category
