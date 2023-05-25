@@ -511,13 +511,13 @@ module.exports = {
     getSpecialPrice: async (req, res, next) => {
         try {
             let get = await model.special_price.findAll({
+                where: { isActive: 1 },
                 include: [
                     {
                         model: model.room,
                         attributes: ["id", "uuid", "price"],
                         where: {
                             uuid: req.params.uuid,
-                            isActive: 1,
                         },
                     },
                 ],
@@ -759,7 +759,7 @@ module.exports = {
         let limit = parseInt(parseInt(req.query.size) || 3);
         let offset = parseInt(
             ((parseInt(req.query.page) || 1) - 1) *
-                (parseInt(req.query.size) || 3)
+            (parseInt(req.query.size) || 3)
         );
 
         // Available Property
