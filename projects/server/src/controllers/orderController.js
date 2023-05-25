@@ -34,7 +34,7 @@ module.exports = {
                                 model: model.transaction_status, attributes: ['status']
                             },
                             {
-                                model: model.review, attributes: ['review', 'rating'], group: ['transactionId']
+                                model: model.review, attributes: ['review', 'rating']
                             }
                         ]
                     },
