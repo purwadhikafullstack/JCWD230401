@@ -30,5 +30,6 @@ route.patch(
 );
 route.patch("/delete-image", propertyController.deletePropertyPicture);
 route.get("/available", readToken, propertyController.getAvailableProperty);
+route.get('/special-price/:uuid', propertyController.getSpecialPrice)
 
 module.exports = route;
