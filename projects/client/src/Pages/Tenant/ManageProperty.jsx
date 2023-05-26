@@ -283,9 +283,9 @@ function ManageProperty(props) {
                     description: description,
                     address: address,
                     zipcode: zipcode,
-                    country: country,
+                    provinceId: province.value,
                     regencyId: regency,
-                    provinceId: province,
+                    country: country,
                     gmaps: mapsUrl,
                 },
                 {
