@@ -199,7 +199,7 @@ export default function PropertyDetail() {
                 );
             });
         } else {
-            return <Text>No review cekguuu</Text>;
+            return <Text>No Review</Text>;
         }
     };
 
