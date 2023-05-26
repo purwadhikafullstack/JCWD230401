@@ -88,7 +88,7 @@ app.use((req, res, next) => {
 });
 
 // SEND EMAIL REMINDER H-1
-reminderCheckInUser()
+// reminderCheckInUser()
 
 
 // error
