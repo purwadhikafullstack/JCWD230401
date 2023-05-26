@@ -265,8 +265,8 @@ module.exports = {
                     uuid: req.params.uuid
                 }
             });
-            if (fs.existsSync(`./src/public${get[0].dataValues.image_payment}`)) {
-                fs.unlinkSync(`./src/public${get[0].dataValues.image_payment}`);
+            if (fs.existsSync(join(__dirname, `../public${get[0].dataValues.image_payment}`))) {
+                fs.unlinkSync(join(__dirname, `../public${get[0].dataValues.image_payment}`));
             }
             res.status(200).send({
                 success: true,

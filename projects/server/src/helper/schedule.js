@@ -7,7 +7,7 @@ const { join } = require("path");
 module.exports = {
     reminderCheckInUser: () => {
         // schedule.scheduleJob('*/1 * * * *', async () => { // every 1 minute
-        schedule.scheduleJob('* 11 * * *', async () => { // everyday at 11.00AM
+        schedule.scheduleJob('0 11 * * *', async () => { // everyday at 11.00AM
             const today = new Date();
             const nextDay = new Date(today.getTime() + 24 * 60 * 60 * 1000).toISOString().split('T')[0];
 

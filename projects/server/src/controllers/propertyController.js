@@ -3,6 +3,8 @@ const model = require("../models");
 const { v4: uuidv4 } = require("uuid");
 const con = require("../helper/dbCon");
 const fs = require("fs");
+const { join } = require("path");
+
 
 module.exports = {
     getAllProperty: async (req, res, next) => {
@@ -108,10 +110,6 @@ module.exports = {
             const query = `
             Select r.*, o.start_date, o.end_date, t.transaction_statusId FROM rooms r left join orders o on r.id=o.roomId 
             left join transactions t on o.transactionId = t.id WHERE start_date is null OR start_date < '${start}' OR start_date > '${end}' OR end_date < '${start}' OR end_date > '${end}' OR t.transaction_statusId = 5 order by r.propertyId;`;
-
-            // const query = `
-            // Select r.*, o.start_date, o.end_date, t.transaction_statusId FROM rooms r left join orders o on r.id=o.roomId
-            // left join transactions t on o.transactionId = t.id WHERE (start_date >= '${start}' AND start_date <= '${end}' AND t.transaction_statusId = 5) OR (end_date >= '${start}' AND end_date <= '${end}' AND t.transaction_statusId = 5) OR start_date is null `
 
             const getAvailable = await con.query(query, {
                 type: sequelize.QueryTypes.SELECT,
@@ -246,6 +244,8 @@ module.exports = {
             });
 
             console.log("get room available", final);
+
+            final.sort((a, b) => a.price - b.price)
 
             res.status(200).send(final);
         } catch (error) {
@@ -478,7 +478,7 @@ module.exports = {
                 replacements: { start: start, end: end, uuid: uuid },
                 type: sequelize.QueryTypes.SELECT,
             });
-            console.log("sssss", get);
+            console.log("sssss", get[0].dataValues.rooms);
 
             if (special_prices.length) {
                 let newRoomPrice = get[0].dataValues.rooms.map((val, idx) => {
@@ -486,10 +486,7 @@ module.exports = {
                         return val2.roomId === val.dataValues.id;
                     });
                     val.dataValues = {
-                        ...val.dataValues,
-                        price: special_price
-                            ? special_price.priceOnDate
-                            : val.dataValues.price,
+                        ...val.dataValues, price: special_price ? special_price.priceOnDate : val.dataValues.price,
                     };
                     return val;
                 });
@@ -616,8 +613,15 @@ module.exports = {
                         },
                     }
                 );
-                if (fs.existsSync(`./src/public${get[0].dataValues.picture}`)) {
-                    fs.unlinkSync(`./src/public${get[0].dataValues.picture}`);
+
+                if (
+                    fs.existsSync(
+                        join(__dirname, `../public${get[0].dataValues.picture}`)
+                    )
+                ) {
+                    fs.unlinkSync(
+                        join(__dirname, `../public${get[0].dataValues.picture}`)
+                    );
                 }
             } else {
                 let add = await model.picture_property.create({
@@ -636,16 +640,25 @@ module.exports = {
     },
     deletePropertyPicture: async (req, res, next) => {
         try {
-            let del = await model.picture_property.update(
-                {
-                    isDeleted: 1,
+            let get = await model.picture_property.findAll({
+                where: {
+                    id: req.query.id,
                 },
-                {
-                    where: {
-                        id: req.query.id,
-                    },
-                }
-            );
+            });
+            let del = await model.picture_property.destroy({
+                where: {
+                    id: req.query.id,
+                },
+            });
+            if (
+                fs.existsSync(
+                    join(__dirname, `../public${get[0].dataValues.picture}`)
+                )
+            ) {
+                fs.unlinkSync(
+                    join(__dirname, `../public${get[0].dataValues.picture}`)
+                );
+            }
             res.status(200).send({
                 success: true,
                 message: "Image Deleted",
@@ -794,12 +807,14 @@ module.exports = {
                 or 
                 (end_date >= :start and end_date <= :end))
             ) AND rooms.id not in (
-                SELECT roomId FROM maintenances WHERE (startDate >= :start and startDate <= :end) 
+                SELECT roomId FROM maintenances WHERE (
+                (startDate >= :start and startDate <= :end) 
                 or 
-                (endDate >= :start and endDate <= :end) 
+                (endDate >= :start and endDate <= :end)
+                ) AND maintenances.isActive = true AND maintenances.isDeleted = false
             ) AND properties.isDeleted = 0 AND rooms.capacity >= '${capacity}'
         ) AND categories.category LIKE '%${category}%' AND provinces.name LIKE '%${city}%'
-        group by properties.id, properties.property, picture_properties.picture, provinces.name, 
+        group by properties.id, properties.property, provinces.name,
         regencies.name
         order by properties.property ${order} 
         limit ${limit} offset ${offset}
@@ -815,8 +830,7 @@ module.exports = {
             or 
             (endDate >= :start and endDate <= :end)
         )
-        AND 
-        isActive = 1
+        AND isActive = 1
         ;`;
 
         // Total Data (count)
@@ -842,12 +856,14 @@ module.exports = {
                 or 
                 (end_date >= :start and end_date <= :end))
             ) AND rooms.id not in (
-                SELECT roomId FROM maintenances WHERE (startDate >= :start and startDate <= :end) 
-                or 
-                (endDate >= :start and endDate <= :end) 
+                SELECT roomId FROM maintenances WHERE (
+                    (startDate >= :start and startDate <= :end) 
+                    or 
+                    (endDate >= :start and endDate <= :end)
+                    ) AND maintenances.isActive = true AND maintenances.isDeleted = false 
             ) AND properties.isDeleted = 0 AND rooms.capacity >= '${capacity}'
         ) AND categories.category LIKE '%${category}%' AND provinces.name LIKE '%${city}%'
-        group by properties.id, properties.property, picture_properties.picture, provinces.name, 
+        group by properties.id, properties.property, provinces.name, 
         regencies.name 
         ;`;
 
@@ -896,14 +912,14 @@ module.exports = {
                     return val1;
                 }
             });
-            console.log("final result");
+            console.log("final result", final_result);
             res.status(200).send({
                 success: true,
                 data: sortbyFunc(final_result),
                 total_data: total_data.length,
             });
         } else {
-            console.log("room_available");
+            console.log("final result", room_available);
             res.status(200).send({
                 success: true,
                 data: sortbyFunc(room_available),
