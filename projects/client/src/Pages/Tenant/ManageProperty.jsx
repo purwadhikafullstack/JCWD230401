@@ -283,9 +283,9 @@ function ManageProperty(props) {
                     description: description,
                     address: address,
                     zipcode: zipcode,
-                    country: country,
+                    provinceId: province.value,
                     regencyId: regency,
-                    provinceId: province,
+                    country: country,
                     gmaps: mapsUrl,
                 },
                 {
@@ -706,7 +706,7 @@ function ManageProperty(props) {
                                                                         ) => {
                                                                             onChangeFile1(
                                                                                 event,
-                                                                                filePropertyEdit1.id
+                                                                                filePropertyEdit1?.id
                                                                             );
                                                                         }}
                                                                     />
@@ -801,7 +801,7 @@ function ManageProperty(props) {
                                                                 ) => {
                                                                     onChangeFile1(
                                                                         event,
-                                                                        filePropertyEdit1.id
+                                                                        filePropertyEdit1?.id
                                                                     );
                                                                 }}
                                                             />
@@ -880,7 +880,7 @@ function ManageProperty(props) {
                                                                         ) => {
                                                                             onChangeFile2(
                                                                                 event,
-                                                                                filePropertyEdit2.id
+                                                                                filePropertyEdit2?.id
                                                                             );
                                                                         }}
                                                                     />
@@ -1494,7 +1494,7 @@ function ManageProperty(props) {
                                                                 ) => {
                                                                     onChangeFile5(
                                                                         event,
-                                                                        filePropertyEdit5.id
+                                                                        filePropertyEdit5?.id
                                                                     );
                                                                 }}
                                                             />

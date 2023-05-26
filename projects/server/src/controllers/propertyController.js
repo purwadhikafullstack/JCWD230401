@@ -3,6 +3,7 @@ const model = require("../models");
 const { v4: uuidv4 } = require("uuid");
 const con = require("../helper/dbCon");
 const fs = require("fs");
+const { join } = require("path");
 
 
 module.exports = {
@@ -616,8 +617,15 @@ module.exports = {
                         },
                     }
                 );
-                if (fs.existsSync(`./src/public${get[0].dataValues.picture}`)) {
-                    fs.unlinkSync(`./src/public${get[0].dataValues.picture}`);
+
+                if (
+                    fs.existsSync(
+                        join(__dirname, `../public${get[0].dataValues.picture}`)
+                    )
+                ) {
+                    fs.unlinkSync(
+                        join(__dirname, `../public${get[0].dataValues.picture}`)
+                    );
                 }
             } else {
                 let add = await model.picture_property.create({
@@ -636,16 +644,25 @@ module.exports = {
     },
     deletePropertyPicture: async (req, res, next) => {
         try {
-            let del = await model.picture_property.update(
-                {
-                    isDeleted: 1,
+            let get = await model.picture_property.findAll({
+                where: {
+                    id: req.query.id,
                 },
-                {
-                    where: {
-                        id: req.query.id,
-                    },
-                }
-            );
+            });
+            let del = await model.picture_property.destroy({
+                where: {
+                    id: req.query.id,
+                },
+            });
+            if (
+                fs.existsSync(
+                    join(__dirname, `../public${get[0].dataValues.picture}`)
+                )
+            ) {
+                fs.unlinkSync(
+                    join(__dirname, `../public${get[0].dataValues.picture}`)
+                );
+            }
             res.status(200).send({
                 success: true,
                 message: "Image Deleted",
@@ -760,7 +777,7 @@ module.exports = {
         let limit = parseInt(parseInt(req.query.size) || 3);
         let offset = parseInt(
             ((parseInt(req.query.page) || 1) - 1) *
-            (parseInt(req.query.size) || 3)
+                (parseInt(req.query.size) || 3)
         );
 
         // Available Property
