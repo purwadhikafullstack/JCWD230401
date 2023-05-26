@@ -92,7 +92,7 @@ export default function PropertyDetail() {
         console.log("proeeeee", get);
         setPropertyDetail(get.data);
         setRegency(get.data.property_location.regency.name);
-        setPropertyPrice(get.data.rooms[0].price);
+        // setPropertyPrice(get.data.rooms[0].price);
         setTenantEmail(get.data.user.email);
         setUuidRoom(get.data.rooms[0]?.uuid);
         setTenantProfile(get.data.user.user_detail?.image_profile);
@@ -132,6 +132,7 @@ export default function PropertyDetail() {
             }
         );
         setRoomAvailable(get.data);
+        setPropertyPrice(get.data[0].price)
         setLoadingButton(false)
     };
     console.log("room available", roomAvailable);
@@ -202,27 +203,6 @@ export default function PropertyDetail() {
         }
     };
 
-    // const getSpecialPrice = async () => {
-    //     if (uuidRoom) {
-    //         try {
-    //             const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/property/special-price/${uuidRoom}`, {
-    //                 headers: {
-    //                     Authorization: `Bearer ${token}`,
-    //                 },
-    //             });
-    //             console.log("ini isi response.data getSpecialPrice:", response.data);
-    //             console.log("ini isi response getSpecialPrice:", response);
-    //             setSpecialPrice(response.data);
-    //         } catch (error) {
-    //             console.error("Error fetching special price:", error);
-    //         }
-    //     }
-    // }
-
-    // useEffect(() => {
-    //     getSpecialPrice();
-    // }, [uuidRoom])
-
     useEffect(() => {
         getPropertyDetail();
         getRoomAvailable();
@@ -235,39 +215,6 @@ export default function PropertyDetail() {
         getRoomAvailable();
         getPropertyDetail();
     }, [inputCheckIn, inputCheckOut]);
-
-    //print special price
-    // const printSpecialPrice = () => {
-    //     let print = specialPrice.map((val, idx) => {
-    //         const { startDate, endDate, priceOnDate } = val;
-    //         return { startDate, endDate, priceOnDate };
-    //     });
-    //     return print;
-    // };
-
-    //print format calendar special price 
-    // const specialPriceEvents = printSpecialPrice()
-    //     .filter(val => val !== null)
-    //     .flatMap(val => {
-    //         const { startDate, endDate, priceOnDate } = val;
-    //         const startDateObj = new Date(startDate);
-    //         const endDateObj = new Date(endDate);
-    //         const events = [];
-
-    //         // Iterate over each day in the date range
-    //         for (let date = startDateObj; date <= endDateObj; date.setDate(date.getDate() + 1)) {
-    //             const eventDate = new Date(date);
-
-    //             events.push({
-    //                 title: `special price: ${formatRupiah(priceOnDate)}`,
-    //                 start: eventDate.toISOString().split('T')[0],
-    //                 end: eventDate.toISOString().split('T')[0],
-    //             });
-    //         }
-
-    //         return events;
-    //     });
-
 
 
     //2. generates events with prices for each day of the year 
@@ -349,7 +296,6 @@ export default function PropertyDetail() {
     //gabungin special price event sama normal price event sama yg bisa edit sendiri check in out
     const calendarEvents = [
         ...events,
-        // ...specialPriceEvents,
         ...calendarEdit.map((event) => ({
             ...event,
             editable: true, // Make the calendarEdit event draggable and editable
@@ -452,15 +398,9 @@ export default function PropertyDetail() {
                     <Box
                     >
                         <Heading
-                            fontSize={{ base: "14px", sm: "16px" }} marginTop={{ base: '20px', md: '16px' }}
+                            fontSize={{ base: "14px", sm: "20px" }} marginTop={{ base: '20px', md: '16px' }}
                             fontWeight="500">
                             Hosted by {propertyDetail?.user?.user_detail?.name}
-                        </Heading>
-                        <Heading
-                            marginTop={{ base: '20px', md: '16px' }}
-                            textAlign={{ base: 'left', md: 'right' }} fontSize={{ base: "14px", sm: "16px" }} margin={{ base: '10px 0 10px 10', md: 'inherit' }}
-                        >
-                            Starting at : {formatRupiah(propertyPrice)} / day
                         </Heading>
                     </Box>
                     <Flex w='full' direction={{ base: 'column', lg: 'row' }}>

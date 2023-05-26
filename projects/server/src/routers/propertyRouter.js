@@ -7,9 +7,9 @@ const uploader2mb = require("../helper/uploader2");
 
 route.get("/", propertyController.getAllProperty);
 route.get("/filter", propertyController.filterProperty); // gak kepake
-route.get("/room-available", readToken, propertyController.getRoomAvailable);
-route.get("/detail", readToken, propertyController.getPropertyDetail);
-route.get("/picture", readToken, propertyController.getPicturePropertyDetail);
+route.get("/room-available", propertyController.getRoomAvailable);
+route.get("/detail", propertyController.getPropertyDetail);
+route.get("/picture", propertyController.getPicturePropertyDetail);
 route.get("/alltenants", propertyController.getAllPropertyTenant);
 route.get("/provinces", propertyController.getProvince);
 route.post("/regencies", propertyController.getRegencyByProvinceId);

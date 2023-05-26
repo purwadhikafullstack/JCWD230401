@@ -4,6 +4,7 @@ const { v4: uuidv4 } = require("uuid");
 const con = require("../helper/dbCon");
 const fs = require("fs");
 
+
 module.exports = {
     getAllProperty: async (req, res, next) => {
         let get = await model.property.findAll({
@@ -247,6 +248,8 @@ module.exports = {
 
             console.log("get room available", final);
 
+            final.sort((a, b) => a.price - b.price)
+
             res.status(200).send(final);
         } catch (error) {
             console.log(error);
@@ -478,7 +481,7 @@ module.exports = {
                 replacements: { start: start, end: end, uuid: uuid },
                 type: sequelize.QueryTypes.SELECT,
             });
-            console.log("sssss", get);
+            console.log("sssss", get[0].dataValues.rooms);
 
             if (special_prices.length) {
                 let newRoomPrice = get[0].dataValues.rooms.map((val, idx) => {
@@ -486,10 +489,7 @@ module.exports = {
                         return val2.roomId === val.dataValues.id;
                     });
                     val.dataValues = {
-                        ...val.dataValues,
-                        price: special_price
-                            ? special_price.priceOnDate
-                            : val.dataValues.price,
+                        ...val.dataValues, price: special_price ? special_price.priceOnDate : val.dataValues.price,
                     };
                     return val;
                 });
@@ -799,7 +799,7 @@ module.exports = {
                 (endDate >= :start and endDate <= :end) 
             ) AND properties.isDeleted = 0 AND rooms.capacity >= '${capacity}'
         ) AND categories.category LIKE '%${category}%' AND provinces.name LIKE '%${city}%'
-        group by properties.id, properties.property, picture_properties.picture, provinces.name, 
+        group by properties.id, properties.property, provinces.name,
         regencies.name
         order by properties.property ${order} 
         limit ${limit} offset ${offset}
@@ -847,7 +847,7 @@ module.exports = {
                 (endDate >= :start and endDate <= :end) 
             ) AND properties.isDeleted = 0 AND rooms.capacity >= '${capacity}'
         ) AND categories.category LIKE '%${category}%' AND provinces.name LIKE '%${city}%'
-        group by properties.id, properties.property, picture_properties.picture, provinces.name, 
+        group by properties.id, properties.property, provinces.name, 
         regencies.name 
         ;`;
 
@@ -896,14 +896,14 @@ module.exports = {
                     return val1;
                 }
             });
-            console.log("final result");
+            console.log("final result", final_result);
             res.status(200).send({
                 success: true,
                 data: sortbyFunc(final_result),
                 total_data: total_data.length,
             });
         } else {
-            console.log("room_available");
+            console.log("final result", room_available);
             res.status(200).send({
                 success: true,
                 data: sortbyFunc(room_available),
