@@ -49,6 +49,8 @@ function SalesReport(props) {
         currency: "IDR",
     }).format(income);
 
+    let token = localStorage.getItem("tempatku_login");
+
     const getIncome = async () => {
         try {
             let token = localStorage.getItem("tempatku_login");
@@ -97,7 +99,12 @@ function SalesReport(props) {
     const getTransactionChart = async () => {
         try {
             let get = await axios.get(
-                `${process.env.REACT_APP_API_BASE_URL}/report/transaction-chart?start=${startDateTransaction}&end=${endDateTransaction}`
+                `${process.env.REACT_APP_API_BASE_URL}/report/transaction-chart?start=${startDateTransaction}&end=${endDateTransaction}`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
             );
             setTransactionDataChart(get.data.data);
         } catch (error) {
@@ -108,7 +115,12 @@ function SalesReport(props) {
     const getPropertyChart = async () => {
         try {
             let get = await axios.get(
-                `${process.env.REACT_APP_API_BASE_URL}/report/property-chart/${property.value}?start=${startDateProperty}&end=${endDateProperty}`
+                `${process.env.REACT_APP_API_BASE_URL}/report/property-chart/${property.value}?start=${startDateProperty}&end=${endDateProperty}`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
             );
             setPropertyDataChart(get.data.data);
         } catch (error) {
@@ -119,7 +131,12 @@ function SalesReport(props) {
     const getUsers = async () => {
         try {
             let get = await axios.get(
-                `${process.env.REACT_APP_API_BASE_URL}/report/users?start=${startDateUsers}&end=${endDateUsers}`
+                `${process.env.REACT_APP_API_BASE_URL}/report/users?start=${startDateUsers}&end=${endDateUsers}`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
             );
             setUsers();
         } catch (error) {
@@ -130,7 +147,12 @@ function SalesReport(props) {
     const getUserChart = async () => {
         try {
             let get = await axios.get(
-                `${process.env.REACT_APP_API_BASE_URL}/report/user-chart?start=${startDateUsers}&end=${endDateUsers}`
+                `${process.env.REACT_APP_API_BASE_URL}/report/user-chart?start=${startDateUsers}&end=${endDateUsers}`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
             );
             setUserDataChart(get.data.data);
         } catch (error) {
