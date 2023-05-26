@@ -47,7 +47,8 @@ export default function Booking(props) {
             <Box
                 rounded={'lg'}
                 p={8}
-                w={{ sm: '150px', md: '450px' }}
+                maxW={{ sm: '150px', md: '450px' }}
+                overflow='hidden'
                 border='1px'
                 borderColor={'gray.300'}
             >

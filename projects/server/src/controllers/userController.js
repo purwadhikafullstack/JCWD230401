@@ -72,11 +72,11 @@ module.exports = {
             hbs({
               viewEngine: {
                 extname: ".html", // html extension
-                layoutsDir: join(__dirname,"../helper"), // location of handlebars templates
+                layoutsDir: join(__dirname, "../helper"), // location of handlebars templates
                 defaultLayout: "register-verification-email", // name of main template
-                partialsDir: join(__dirname,"../helper"), // location of your subtemplates
+                partialsDir: join(__dirname, "../helper"), // location of your subtemplates
               },
-              viewPath: join(__dirname,"../helper"),
+              viewPath: join(__dirname, "../helper"),
               extName: ".html",
             })
           );
@@ -172,7 +172,7 @@ module.exports = {
               image_profile,
               gender,
               birth,
-              uuid
+              uuid,
             });
           } else {
             //jika salah passwordnya attempt + 1 sampe 5 kali nanti akun suspended
@@ -255,7 +255,7 @@ module.exports = {
         image_profile,
         gender,
         birth,
-        uuid
+        uuid,
       });
     } catch (error) {
       console.log(error);
@@ -277,7 +277,7 @@ module.exports = {
       if (getData.length > 0) {
         let comparecurrentpw = bcrypt.compareSync(
           req.body.password,
-          getData[0].dataValues.password  //currentpw
+          getData[0].dataValues.password //currentpw
         );
         if (comparecurrentpw) {
           // compare newpassword & confirmationpassword
@@ -377,11 +377,11 @@ module.exports = {
           hbs({
             viewEngine: {
               extname: ".html", // html extension
-              layoutsDir: join(__dirname,"../helper"), // location of handlebars templates
+              layoutsDir: join(__dirname, "../helper"), // location of handlebars templates
               defaultLayout: "reset-password-email", // name of main template
-              partialsDir: join(__dirname,"../helper"), // location of your subtemplates
+              partialsDir: join(__dirname, "../helper"), // location of your subtemplates
             },
-            viewPath: join(__dirname,"../helper"),
+            viewPath: join(__dirname, "../helper"),
             extName: ".html",
           })
         );
@@ -663,11 +663,11 @@ module.exports = {
             hbs({
               viewEngine: {
                 extname: ".html", // html extension
-                layoutsDir: join(__dirname,"../helper"), // location of handlebars templates
+                layoutsDir: join(__dirname, "../helper"), // location of handlebars templates
                 defaultLayout: "account-verification-email", // name of main template
-                partialsDir: join(__dirname,"../helper"), // location of your subtemplates
+                partialsDir: join(__dirname, "../helper"), // location of your subtemplates
               },
-              viewPath: join(__dirname,"../helper"),
+              viewPath: join(__dirname, "../helper"),
               extName: ".html",
             })
           );
@@ -687,7 +687,7 @@ module.exports = {
             success: true,
             message: `You received an email to verify your account. Please check your email.
               OTP sent today : ${otpCount + 1}.`,
-            checkverifieduser, 
+            checkverifieduser,
           });
         } else {
           res.status(400).send({
@@ -756,8 +756,14 @@ module.exports = {
         attributes: ["image_profile"],
       });
       // if old image exists, delete old replace with new
-      if (fs.existsSync(`./src/public/${get[0].dataValues.image_profile}`)) {
-        fs.unlinkSync(`./src/public/${get[0].dataValues.image_profile}`);
+      if (
+        fs.existsSync(
+          join(__dirname, `../public${get[0].dataValues.image_profile}`)
+        )
+      ) {
+        fs.unlinkSync(
+          join(__dirname, `../public${get[0].dataValues.image_profile}`)
+        );
       }
       await model.user_detail.update(
         {
@@ -774,12 +780,13 @@ module.exports = {
       });
     } catch (error) {
       // delete image if encountered error
-      fs.unlinkSync(`src\\public\\profileImage\\${req.files[0].filename}`);
+      fs.unlinkSync(
+        join(__dirname, `\\public\\profileImage\\${req.files[0].filename}`)
+      );
       console.log(error);
       next(error);
     }
   },
-
   //12. SHOW KTP PHOTO
   showKTP: async (req, res, next) => {
     try {
