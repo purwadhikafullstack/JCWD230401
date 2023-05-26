@@ -202,7 +202,7 @@ export default function FilteredProperty() {
                                     >
                                         <option value="Hotel">Hotel</option>
                                         <option value="Apart">Apartemen</option>
-                                        <option value="Resort">Resort</option>
+                                        <option value="Villa">Villa</option>
                                     </Select>
                                 </MenuOptionGroup>
                             </MenuList>

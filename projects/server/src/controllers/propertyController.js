@@ -111,10 +111,6 @@ module.exports = {
             Select r.*, o.start_date, o.end_date, t.transaction_statusId FROM rooms r left join orders o on r.id=o.roomId 
             left join transactions t on o.transactionId = t.id WHERE start_date is null OR start_date < '${start}' OR start_date > '${end}' OR end_date < '${start}' OR end_date > '${end}' OR t.transaction_statusId = 5 order by r.propertyId;`;
 
-            // const query = `
-            // Select r.*, o.start_date, o.end_date, t.transaction_statusId FROM rooms r left join orders o on r.id=o.roomId
-            // left join transactions t on o.transactionId = t.id WHERE (start_date >= '${start}' AND start_date <= '${end}' AND t.transaction_statusId = 5) OR (end_date >= '${start}' AND end_date <= '${end}' AND t.transaction_statusId = 5) OR start_date is null `
-
             const getAvailable = await con.query(query, {
                 type: sequelize.QueryTypes.SELECT,
             });
@@ -777,7 +773,7 @@ module.exports = {
         let limit = parseInt(parseInt(req.query.size) || 3);
         let offset = parseInt(
             ((parseInt(req.query.page) || 1) - 1) *
-                (parseInt(req.query.size) || 3)
+            (parseInt(req.query.size) || 3)
         );
 
         // Available Property
@@ -811,9 +807,11 @@ module.exports = {
                 or 
                 (end_date >= :start and end_date <= :end))
             ) AND rooms.id not in (
-                SELECT roomId FROM maintenances WHERE (startDate >= :start and startDate <= :end) 
+                SELECT roomId FROM maintenances WHERE (
+                (startDate >= :start and startDate <= :end) 
                 or 
-                (endDate >= :start and endDate <= :end) 
+                (endDate >= :start and endDate <= :end)
+                ) AND maintenances.isActive = true AND maintenances.isDeleted = false
             ) AND properties.isDeleted = 0 AND rooms.capacity >= '${capacity}'
         ) AND categories.category LIKE '%${category}%' AND provinces.name LIKE '%${city}%'
         group by properties.id, properties.property, provinces.name,
@@ -832,8 +830,7 @@ module.exports = {
             or 
             (endDate >= :start and endDate <= :end)
         )
-        AND 
-        isActive = 1
+        AND isActive = 1
         ;`;
 
         // Total Data (count)
@@ -859,9 +856,11 @@ module.exports = {
                 or 
                 (end_date >= :start and end_date <= :end))
             ) AND rooms.id not in (
-                SELECT roomId FROM maintenances WHERE (startDate >= :start and startDate <= :end) 
-                or 
-                (endDate >= :start and endDate <= :end) 
+                SELECT roomId FROM maintenances WHERE (
+                    (startDate >= :start and startDate <= :end) 
+                    or 
+                    (endDate >= :start and endDate <= :end)
+                    ) AND maintenances.isActive = true AND maintenances.isDeleted = false 
             ) AND properties.isDeleted = 0 AND rooms.capacity >= '${capacity}'
         ) AND categories.category LIKE '%${category}%' AND provinces.name LIKE '%${city}%'
         group by properties.id, properties.property, provinces.name, 
