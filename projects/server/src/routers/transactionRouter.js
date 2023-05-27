@@ -1,7 +1,7 @@
 const { transactionController } = require('../controllers');
 const { readToken } = require('../helper/jwt');
 const route = require('express').Router();
-const uploader = require('../helper/uploader');
+const uploader = require('../helper/uploader3');
 
 route.post('/',
     readToken,
