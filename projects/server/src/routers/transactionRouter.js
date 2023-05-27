@@ -13,6 +13,4 @@ route.patch('/reject', readToken, transactionController.rejectTransaction)
 route.patch('/confirm', readToken, transactionController.confirmTransaction)
 
 
-route.get('/testget', transactionController.testGet)
-
 module.exports = route;

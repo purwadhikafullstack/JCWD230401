@@ -50,20 +50,24 @@ export default function OrderLists() {
     const [orderList, setOrderList] = useState([]);
     const [loadingButton, setLoadingButton] = useState(false);
     const getOrderList = async () => {
-        setLoadingButton(true)
-        let get = await axios.get(
-            `${process.env.REACT_APP_API_BASE_URL}/order?page=${page}&size=${size}&status=${transactionStatusId}&invoice=${invoice}&sortby=${sortBy}&order=${order}&start=${start}&end=${end}`,
-            {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            }
-        );
-        console.log("gett order listt", get);
-        setOrderList(get.data.data);
-        setTotalData(get.data.datanum);
-        setLoadingButton(false)
-        setLoadingPage(false)
+        try {
+            setLoadingButton(true)
+            let get = await axios.get(
+                `${process.env.REACT_APP_API_BASE_URL}/order?page=${page}&size=${size}&status=${transactionStatusId}&invoice=${invoice}&sortby=${sortBy}&order=${order}&start=${start}&end=${end}`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
+            console.log("gett order listt", get);
+            setOrderList(get.data.data);
+            setTotalData(get.data.datanum);
+            setLoadingButton(false)
+            setLoadingPage(false)
+        } catch (error) {
+            console.log(error);
+        }
     };
     console.log("order list", orderList.rows);
 

@@ -8,21 +8,26 @@ const { join } = require("path");
 
 module.exports = {
     getAllProperty: async (req, res, next) => {
-        let get = await model.property.findAll({
-            include: [
-                { model: model.picture_property },
-                {
-                    model: model.property_location,
-                    include: [{ model: model.province }],
-                },
-                {
-                    model: model.room,
-                    order: [["price", "DESC"]], // belom kelar msh tunggu dri mas abdi
-                },
-            ],
-        });
-        console.log("resss", get);
-        res.status(200).send(get);
+        try {
+            let get = await model.property.findAll({
+                include: [
+                    { model: model.picture_property },
+                    {
+                        model: model.property_location,
+                        include: [{ model: model.province }],
+                    },
+                    {
+                        model: model.room,
+                        order: [["price", "DESC"]], // belom kelar msh tunggu dri mas abdi
+                    },
+                ],
+            });
+            console.log("resss", get);
+            res.status(200).send(get);
+        } catch (error) {
+            console.log(error);
+            next(error);
+        }
     },
     filterProperty: async (req, res, next) => {
         try {
@@ -286,16 +291,21 @@ module.exports = {
         }
     },
     getPicturePropertyDetail: async (req, res, next) => {
-        let getProperty = await model.property.findAll({
-            where: {
-                uuid: req.body.uuid,
-            },
-        });
-        let getPictureProperty = await model.picture_property.findAll({
-            where: {
-                propertyId: getProperty[0].dataValues.id,
-            },
-        });
+        try {
+            let getProperty = await model.property.findAll({
+                where: {
+                    uuid: req.body.uuid,
+                },
+            });
+            let getPictureProperty = await model.picture_property.findAll({
+                where: {
+                    propertyId: getProperty[0].dataValues.id,
+                },
+            });
+        } catch (error) {
+            console.log(error);
+            next(error)
+        }
     },
     getAllPropertyTenant: async (req, res, next) => {
         try {
@@ -762,22 +772,23 @@ module.exports = {
         }
     },
     getAvailableProperty: async (req, res, next) => {
-        let name = req.query.name || "";
-        let start = req.query.start;
-        let end = req.query.end;
-        let capacity = req.query.capacity || "";
-        let category = req.query.category || "";
-        let sortby = req.query.sortby || "property";
-        let order = req.query.order || "DESC";
-        let city = req.query.city || "";
-        let limit = parseInt(parseInt(req.query.size) || 3);
-        let offset = parseInt(
-            ((parseInt(req.query.page) || 1) - 1) *
-            (parseInt(req.query.size) || 3)
-        );
+        try {
+            let name = req.query.name || "";
+            let start = req.query.start;
+            let end = req.query.end;
+            let capacity = req.query.capacity || "";
+            let category = req.query.category || "";
+            let sortby = req.query.sortby || "property";
+            let order = req.query.order || "DESC";
+            let city = req.query.city || "";
+            let limit = parseInt(parseInt(req.query.size) || 3);
+            let offset = parseInt(
+                ((parseInt(req.query.page) || 1) - 1) *
+                (parseInt(req.query.size) || 3)
+            );
 
-        // Available Property
-        const query1 = `select properties.id, 
+            // Available Property
+            const query1 = `select properties.id, 
         properties.uuid as uuid,
         properties.property as property_name ,
         min(rooms.price) as property_price, 
@@ -820,8 +831,8 @@ module.exports = {
         limit ${limit} offset ${offset}
         ;`;
 
-        // Special Price
-        const query2 = `
+            // Special Price
+            const query2 = `
         SELECT s.id, s.startDate, s.endDate, s.priceOnDate, s.isActive, r.propertyId FROM special_prices s join rooms r
         on s.roomId = r.id 
         WHERE  :start >= startDate 
@@ -833,8 +844,8 @@ module.exports = {
         AND isActive = 1
         ;`;
 
-        // Total Data (count)
-        const query3 = `select 
+            // Total Data (count)
+            const query3 = `select 
         count(*) OVER() AS total_data
         from properties
         join rooms on properties.id = rooms.propertyId
@@ -867,8 +878,8 @@ module.exports = {
         regencies.name 
         ;`;
 
-        // property min price jika ada maintenance
-        const query4 = `
+            // property min price jika ada maintenance
+            const query4 = `
         select min(price) as price, propertyId from rooms where rooms.id not in (
             select roomId from maintenances where isActive = true and (
             (startDate >= :start and startDate <= :end) 
@@ -877,78 +888,83 @@ module.exports = {
             )
         ) group by propertyId;`
 
-        const property = await con.query(query1, {
-            replacements: { start: start, end: end, capacity: capacity },
-            type: sequelize.QueryTypes.SELECT,
-        });
+            const property = await con.query(query1, {
+                replacements: { start: start, end: end, capacity: capacity },
+                type: sequelize.QueryTypes.SELECT,
+            });
 
-        const special_prices = await con.query(query2, {
-            replacements: { start: start, end: end },
-            type: sequelize.QueryTypes.SELECT,
-        });
+            const special_prices = await con.query(query2, {
+                replacements: { start: start, end: end },
+                type: sequelize.QueryTypes.SELECT,
+            });
 
-        const total_data = await con.query(query3, {
-            replacements: { start: start, end: end, capacity: capacity },
-            type: sequelize.QueryTypes.SELECT,
-        });
+            const total_data = await con.query(query3, {
+                replacements: { start: start, end: end, capacity: capacity },
+                type: sequelize.QueryTypes.SELECT,
+            });
 
-        const property_price = await con.query(query4, {
-            replacements: { start: start, end: end },
-            type: sequelize.QueryTypes.SELECT,
-        });
-        console.log("property", property);
+            const property_price = await con.query(query4, {
+                replacements: { start: start, end: end },
+                type: sequelize.QueryTypes.SELECT,
+            });
+            console.log("property", property);
 
-        // function sort by
-        const sortbyFunc = (result) => {
-            if (sortby === "price" && order === "ASC") {
-                return result.sort(
-                    (a, b) => a.property_price - b.property_price
-                );
-            } else if (sortby === "price" && order === "DESC") {
-                return result.sort(
-                    (a, b) => b.property_price - a.property_price
-                );
-            } else {
-                return result;
-            }
-        };
-
-        const property_available = property.map((val, idx) => {
-            let price = property_price.find((val2) => val2.propertyId === val.id)
-            if (price) {
-                return { ...val, property_price: price.price };
-            } else {
-                return val;
-            }
-        })
-
-        if (special_prices.length) {
-            const final_result = property_available.map((val1) => {
-                let special_price = special_prices.find(
-                    (val2) => val2.propertyId === val1.id
-                );
-                if (special_price) {
-                    return {
-                        ...val1,
-                        property_price: special_price.priceOnDate,
-                    };
+            // function sort by
+            const sortbyFunc = (result) => {
+                if (sortby === "price" && order === "ASC") {
+                    return result.sort(
+                        (a, b) => a.property_price - b.property_price
+                    );
+                } else if (sortby === "price" && order === "DESC") {
+                    return result.sort(
+                        (a, b) => b.property_price - a.property_price
+                    );
                 } else {
-                    return val1;
+                    return result;
                 }
-            });
-            console.log("final result", final_result);
-            res.status(200).send({
-                success: true,
-                data: sortbyFunc(final_result),
-                total_data: total_data.length,
-            });
-        } else {
-            console.log("final result", property_available);
-            res.status(200).send({
-                success: true,
-                data: sortbyFunc(property_available),
-                total_data: total_data.length,
-            });
+            };
+
+            const property_available = property.map((val, idx) => {
+                let price = property_price.find((val2) => val2.propertyId === val.id)
+                if (price) {
+                    return { ...val, property_price: price.price };
+                } else {
+                    return val;
+                }
+            })
+
+            if (special_prices.length) {
+                const final_result = property_available.map((val1) => {
+                    let special_price = special_prices.find(
+                        (val2) => val2.propertyId === val1.id
+                    );
+                    if (special_price) {
+                        return {
+                            ...val1,
+                            property_price: special_price.priceOnDate,
+                        };
+                    } else {
+                        return val1;
+                    }
+                });
+                console.log("final result", final_result);
+                res.status(200).send({
+                    success: true,
+                    data: sortbyFunc(final_result),
+                    total_data: total_data.length,
+                });
+            } else {
+                console.log("final result", property_available);
+                res.status(200).send({
+                    success: true,
+                    data: sortbyFunc(property_available),
+                    total_data: total_data.length,
+                });
+            }
+        } catch (error) {
+            console.log(error);
+            next(error)
         }
+
     },
 };
