@@ -261,7 +261,11 @@ export default function Navbar(props) {
                       <MenuItem onClick={() => navigate("/")}>Home</MenuItem>
                       <MenuItem onClick={() => navigate("/profile/edit")}>Profile</MenuItem>
                       <MenuItem onClick={() => navigate("/order/list")}>Bookings</MenuItem>
-
+                      {password != "NULL" ? (
+                        <div>
+                          <MenuItem onClick={() => navigate("/password/change")}>Change Password</MenuItem>
+                        </div>
+                      ) : null }
                       {password === "NULL" ? (
                         <div>
                           <MenuItem
@@ -270,8 +274,6 @@ export default function Navbar(props) {
                         </div>
                       ) : (
                         <div>
-
-                          <MenuItem onClick={() => navigate("/password/change")}>Change Password</MenuItem>
                           <MenuItem
                             onClick={onBtnLogout}
                           >Logout</MenuItem>
