@@ -386,7 +386,7 @@ export default function PropertyDetail() {
                         </Box>
                         <Modal isOpen={modalProperty.isOpen} onClose={modalProperty.onClose}>
                             {/* <ModalOverlay /> */}
-                            <ModalContent>
+                            <ModalContent maxH="700px" maxW="700px">
                                 <ModalHeader>Picture Property</ModalHeader>
                                 <ModalCloseButton />
                                 <ModalBody>
