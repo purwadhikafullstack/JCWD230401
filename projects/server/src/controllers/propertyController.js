@@ -867,7 +867,17 @@ module.exports = {
         regencies.name 
         ;`;
 
-        const room_available = await con.query(query1, {
+        // property min price jika ada maintenance
+        const query4 = `
+        select min(price) as price, propertyId from rooms where rooms.id not in (
+            select roomId from maintenances where isActive = true and (
+            (startDate >= :start and startDate <= :end) 
+            or 
+            (endDate >= :start and endDate <= :end)
+            )
+        ) group by propertyId;`
+
+        const property = await con.query(query1, {
             replacements: { start: start, end: end, capacity: capacity },
             type: sequelize.QueryTypes.SELECT,
         });
@@ -881,7 +891,12 @@ module.exports = {
             replacements: { start: start, end: end, capacity: capacity },
             type: sequelize.QueryTypes.SELECT,
         });
-        console.log("room_available", room_available);
+
+        const property_price = await con.query(query4, {
+            replacements: { start: start, end: end },
+            type: sequelize.QueryTypes.SELECT,
+        });
+        console.log("property", property);
 
         // function sort by
         const sortbyFunc = (result) => {
@@ -898,8 +913,17 @@ module.exports = {
             }
         };
 
+        const property_available = property.map((val, idx) => {
+            let price = property_price.find((val2) => val2.propertyId === val.id)
+            if (price) {
+                return { ...val, property_price: price.price };
+            } else {
+                return val;
+            }
+        })
+
         if (special_prices.length) {
-            const final_result = room_available.map((val1) => {
+            const final_result = property_available.map((val1) => {
                 let special_price = special_prices.find(
                     (val2) => val2.propertyId === val1.id
                 );
@@ -919,10 +943,10 @@ module.exports = {
                 total_data: total_data.length,
             });
         } else {
-            console.log("final result", room_available);
+            console.log("final result", property_available);
             res.status(200).send({
                 success: true,
-                data: sortbyFunc(room_available),
+                data: sortbyFunc(property_available),
                 total_data: total_data.length,
             });
         }
