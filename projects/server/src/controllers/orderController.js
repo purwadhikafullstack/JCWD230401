@@ -48,7 +48,7 @@ module.exports = {
                                 model: model.property, attributes: ['property']
                             },
                             {
-                                model: model.picture_room, attributes: ['picture']
+                                model: model.picture_room, attributes: ['picture'], limit: 1
                             },
                         ]
                     }

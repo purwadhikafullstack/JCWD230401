@@ -33,7 +33,7 @@ export default function OrderLists() {
 
     // PAGINATION
     const [page, setPage] = useState(1);
-    const [size, setSize] = useState(3);
+    const [size, setSize] = useState(5);
     const [transactionStatusId, setTransactionStatusId] = useState("");
     const [invoice, setInvoice] = useState("");
     const [sortBy, setSortBy] = useState("");
@@ -150,7 +150,7 @@ export default function OrderLists() {
         return (
             <Container maxW={"7xl"}>
                 {/* TITLE & FILTER */}
-                <Flex justifyContent={"space-between"} alignItems="center" my="5">
+                <Flex display={{ base: 'block', sm: 'flex', md: 'flex' }} justifyContent={"space-between"} alignItems="center" my="5">
                     <Text fontWeight={"bold"} fontSize={"3xl"}>
                         My order
                     </Text>
