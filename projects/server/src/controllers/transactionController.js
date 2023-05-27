@@ -143,6 +143,7 @@ module.exports = {
                 subject: "Payment Guidelines for Your Booking",
                 template: "payment-guidelines",
                 context: data,
+                priority: 'high'
             });
 
 
@@ -182,6 +183,7 @@ module.exports = {
                         subject: "Your order has been cancelled",
                         template: "cancel-payment",
                         context: data,
+                        priority: 'high'
                     });
                     console.log("transaction status di ubah ke canceled karena tidak membayar")
                 }
@@ -358,6 +360,7 @@ module.exports = {
                 subject: "Your order has been cancelled",
                 template: "cancel-payment",
                 context: data,
+                priority: 'high'
             });
 
 
@@ -438,6 +441,7 @@ module.exports = {
                 subject: "Your order has been rejected",
                 template: "reject-payment",
                 context: data,
+                priority: 'high'
             });
 
             console.log("email terkirim");
@@ -476,6 +480,7 @@ module.exports = {
                         subject: "Your order has been cancelled",
                         template: "cancel-payment",
                         context: data,
+                        priority: 'high'
                     });
                     console.log("transaction status di ubah ke canceled karena tidak membayar")
                 }
@@ -630,6 +635,7 @@ module.exports = {
                         path: destinationPath,
                     },
                 ],
+                priority: 'high'
             });
 
             console.log("Send Pdf Success");
