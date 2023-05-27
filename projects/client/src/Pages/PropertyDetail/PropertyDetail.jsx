@@ -176,7 +176,7 @@ export default function PropertyDetail() {
                 }
             );
             setPictureProperty(get.data);
-            console.log("picture property", get);  
+            console.log("picture property", get);
         } catch (error) {
             console.log(error);
         }
@@ -194,7 +194,7 @@ export default function PropertyDetail() {
                 }
             );
             console.log("review", review);
-            setReviews(review.data);          
+            setReviews(review.data);
         } catch (error) {
             console.log(error);
         }
@@ -250,7 +250,6 @@ export default function PropertyDetail() {
     //3. for calendar price (pricing inside calendar for a year in 2023) --> normal price event
     // Generate events for each day of the year
     const generateEventsPrices = (startOfYear, endOfYear, propertyPrice) => {
-        console.log("Property Price in generateEventsPrices:", propertyPrice);
         const eventsData = [];
         let currentDate = new Date(startOfYear);
         while (currentDate <= endOfYear) {
@@ -265,7 +264,6 @@ export default function PropertyDetail() {
         return eventsData;
     };
 
-
     // User can edit calendar :  (Drag Event of FullCalendar)
     const todayCalendar = new Date();
     todayCalendar.setDate(todayCalendar.getDate());
@@ -275,7 +273,6 @@ export default function PropertyDetail() {
         const day = String(date.getDate()).padStart(2, '0');
         return `${year}-${month}-${day}`;
     };
-    console.log("hari ini:", todayCalendar);
 
     const [calendarEdit, setCalendarEdit] = useState([
         {
@@ -307,18 +304,9 @@ export default function PropertyDetail() {
         });
     };
 
-    console.log("ini isi calendarEdit :", calendarEdit);
-    console.log("ini isi inputCheckIn :", inputCheckIn);
-    console.log("ini isi inputCheckOut :", inputCheckOut);
-
-    //gabungin special price event sama normal price event sama yg bisa edit sendiri check in out
     const calendarEvents = [
         ...events,
-        ...calendarEdit.map((event) => ({
-            ...event,
-            editable: true, // Make the calendarEdit event draggable and editable
-            droppable: true,
-        })),
+        ...calendarEdit
     ];
     if (loadingPage) {
         return <Loading />
