@@ -190,7 +190,7 @@ function TenantDashboard() {
           Authorization: `Bearer ${token}`,
         },
       });
-      console.log("ini response getmyproperty :", response.data);
+      // console.log("ini response getmyproperty :", response.data);
       setPropertyListing(response.data);
     } catch (error) {
       console.log("ini error dari getmyproperty:", error);
