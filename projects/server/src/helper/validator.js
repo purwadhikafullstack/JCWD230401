@@ -233,7 +233,6 @@ module.exports = {
       }
 
       const validation = validationResult(req);
-      console.log("Validation result : ", validation); 
 
       if (validation.isEmpty()) {
         next();
