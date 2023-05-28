@@ -19,7 +19,7 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 import tenantRegisterBanner from "../assets/tenant-register-banner.webp";
 import Loading from "../Components/Loading";
-
+import noimage from "../assets/noimage.png";
 
 export default function TenantRegister() {
     const [loadingPage, setLoadingPage] = useState(true);
@@ -27,7 +27,7 @@ export default function TenantRegister() {
     const [showPasswordConfirmation, setShowPasswordConfirmation] = useState(false);
     const navigate = useNavigate();
     const inputFile = useRef(null);
-    const [image, setImage] = useState("https://fakeimg.pl/350x200/");
+    const [image, setImage] = useState(noimage);
     const [loading, setLoading] = React.useState(false);
     const toast = useToast();
 
