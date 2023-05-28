@@ -618,7 +618,6 @@ module.exports = {
   //9. SEND VERIFICATION EMAIL
   sendVerificationEmail: async (req, res, next) => {
     try {
-      //find user by read token from login
       let checkverifieduser = await model.user.findAll({
         where: {
           id: req.decrypt.id,
@@ -638,9 +637,7 @@ module.exports = {
         }
         // if otpCount is 5 for the day, cannot send anymore verification email
         if (otpCount < 5) {
-          // create otp
           const otp = Math.floor(1000 + Math.random() * 9000);
-          // patch old otp & otpCount + 1 & otpCountDate
           await model.user.update(
             {
               otp: otp,

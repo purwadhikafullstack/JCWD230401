@@ -3,7 +3,6 @@ const { check, validationResult } = require("express-validator");
 module.exports = {
   checkUser: async (req, res, next) => {
     try {
-      console.log("request path", req.path); 
       if (req.path == "/register") {
         await check("name")
           .notEmpty()
