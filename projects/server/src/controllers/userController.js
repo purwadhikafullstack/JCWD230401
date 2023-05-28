@@ -348,6 +348,7 @@ module.exports = {
         },
         include: [{ model: model.user_detail }],
       });
+      if (getData[0].dataValues.password !== "NULL") {
       if (getData.length > 0) {
         // create otp
         const otp = Math.floor(1000 + Math.random() * 9000);
@@ -408,6 +409,12 @@ module.exports = {
           message: "Account with this email not found.",
         });
       }
+    } else {
+      res.status(400).send({
+        success: false,
+        message: "Account with this email not found.",
+      });
+    }
     } catch (error) {
       console.log(error);
       next(error);
@@ -625,7 +632,6 @@ module.exports = {
         let { name } = checkverifieduser[0].user_detail;
         // get last time otpCount is updated (send otp email)
         const lastUpdateDate = moment(otpCountDate);
-        console.log(!moment().isSame(lastUpdateDate, "day")); //return boolean
         // if last update date is not 'today' otpCount reset to zero
         if (!moment().isSame(lastUpdateDate, "day")) {
           otpCount = 0;
@@ -634,7 +640,6 @@ module.exports = {
         if (otpCount < 5) {
           // create otp
           const otp = Math.floor(1000 + Math.random() * 9000);
-          console.log("random numbers generated for otp :", otp);
           // patch old otp & otpCount + 1 & otpCountDate
           await model.user.update(
             {
@@ -798,10 +803,8 @@ module.exports = {
         attributes: ["image_ktp"],
       });
       // output from db: binary data of the image
-      console.log("ini isi dari get image_ktp: ", get[0].dataValues.image_ktp);
       // convert binary data to base64 encoded string
       let imageData = get[0].dataValues.image_ktp.toString("utf8");
-      console.log("ini jadi text data:", imageData);
       res.status(200).send(imageData);
     } catch (error) {
       console.log(error);

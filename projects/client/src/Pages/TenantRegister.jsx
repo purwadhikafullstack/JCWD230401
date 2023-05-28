@@ -51,7 +51,6 @@ export default function TenantRegister() {
                 });
             const fileBase64 = await toBase64(formik.values.fileImage);
             formData.append("images", fileBase64);
-            // console.log("ini isi dari formData", formData);
             if (!formik.isValid) {
                 return;
             }
@@ -158,7 +157,6 @@ export default function TenantRegister() {
 
     //untuk upload ktp
     const onChangeFile = (event) => {
-        // console.log("ini isi dari event.target.files onchangefile :", event.target.files);
         formik.setFieldValue(event.target.name, event.target.files[0]);
     };
 
