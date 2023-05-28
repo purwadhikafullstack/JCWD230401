@@ -53,7 +53,7 @@ module.exports = {
                         ]
                     }
                 ],
-                order: [[req.query.sortby || 'start_date', req.query.order || 'DESC']] // order by date or order id
+                order: [[req.query.sortby || 'id', req.query.order || 'DESC']] // order by date or order id
             });
             res.status(200).send({
                 data: get,
