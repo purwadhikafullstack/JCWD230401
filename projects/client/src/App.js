@@ -12,7 +12,7 @@ import ForgotPassword from "./Pages/ForgotPassword";
 import ResetPassword from "./Pages/ResetPassword";
 import Landing from "./Pages/Landing/Landing";
 import TenantRegister from "./Pages/TenantRegister";
-import TenantDashboard from "./Pages/TenantDashboard/TenantDashboard";
+import TenantDashboard from "./Pages/Tenant/TenantDashboard";
 import NotFound from "./Pages/NotFound";
 import Verification from "./Pages/Verification";
 import FilteredProperty from "./Pages/FilteredProperty/FilteredProperty";
