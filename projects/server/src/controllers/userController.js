@@ -783,7 +783,7 @@ module.exports = {
     } catch (error) {
       // delete image if encountered error
       fs.unlinkSync(
-        join(__dirname, `\\public\\profileImage\\${req.files[0].filename}`)
+        join(__dirname, `../public/profileImage/${req.files[0].filename}`)
       );
       console.log(error);
       next(error);

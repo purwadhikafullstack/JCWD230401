@@ -12,7 +12,7 @@ import ForgotPassword from "./Pages/ForgotPassword";
 import ResetPassword from "./Pages/ResetPassword";
 import Landing from "./Pages/Landing/Landing";
 import TenantRegister from "./Pages/TenantRegister";
-import TenantDashboard from "./Pages/TenantDashboard/TenantDashboard";
+import TenantDashboard from "./Pages/Tenant/TenantDashboard";
 import NotFound from "./Pages/NotFound";
 import Verification from "./Pages/Verification";
 import FilteredProperty from "./Pages/User/FilteredProperty/FilteredProperty";
@@ -76,10 +76,6 @@ function App() {
                             element={<ChangePassword />}
                         />
                         <Route
-                            path="/register/user"
-                            element={<UserRegister />}
-                        />
-                        <Route
                             path="/register/tenant"
                             element={<TenantRegister />}
                         />
@@ -122,103 +118,96 @@ function App() {
                         <Route path="/order/list" element={<OrderLists />} />
                     </Routes>
                 ) : // Tenant
-                    role == "Tenant" ? (
-                        <Routes>
-                            <Route
-                                path="/password/change"
-                                element={<ChangePassword />}
-                            />
-                            <Route
-                                path="/register/tenant"
-                                element={<TenantRegister />}
-                            />
-                            <Route
-                                path="/password/forgot"
-                                element={<ForgotPassword />}
-                            />
-                            <Route
-                                path="/password/reset/:token"
-                                element={<ResetPassword />}
-                            />
-                            <Route
-                                path="/dashboard"
-                                element={<TenantDashboard />}
-                            />
-                            <Route path="*" element={<NotFound />} />
-                            <Route
-                                path="/profile/edit"
-                                element={
-                                    <EditProfile
-                                        keepLogin={() => dispatch(keepLogin())}
-                                        isLoading={isLoading}
-                                    />
-                                }
-                            />
-                            <Route
-                                path="/property/detail/:uuid"
-                                element={<PropertyDetail />}
-                            />
-                            <Route path="/listing" element={<AddProperty />} />
-                            <Route
-                                path="/listing/edit/:uuid"
-                                element={<ManageProperty />}
-                            />
-                            <Route path="/room" element={<AddRoom />} />
-                            <Route
-                                path="/room/edit/:uuid"
-                                element={<ManageRoom />}
-                            />
-                            <Route path="/properties" element={<PropertyList />} />
-                            <Route path="/rooms/:uuid" element={<RoomList />} />
-                            <Route
-                                path="/special/:uuid"
-                                element={<RoomConditionList />}
-                            />
-                            <Route path="/statistics" element={<SalesReport />} />
-                            <Route
-                                path="/tenantorderlist"
-                                element={<OrderListTenant />}
-                            />
-                        </Routes>
-                    ) : (
-                        // Not logged in
-                        <Routes>
-                            <Route
-                                path="/password/change"
-                                element={<ChangePassword />}
-                            />
-                            <Route
-                                path="/register/user"
-                                element={<UserRegister />}
-                            />
-                            <Route
-                                path="/register/tenant"
-                                element={<TenantRegister />}
-                            />
-                            <Route
-                                path="/password/forgot"
-                                element={<ForgotPassword />}
-                            />
-                            <Route
-                                path="/password/reset/:token"
-                                element={<ResetPassword />}
-                            />
-                            <Route
-                                path="/account/verification/:token"
-                                element={<Verification />}
-                            />
-                            <Route path="/" element={<Landing />} />
-                            <Route path="*" element={<NotFound />} />
-                            <Route
-                                path="/property"
-                                element={<FilteredProperty />}
-                            />
-                            <Route
-                                path="/property/detail/:uuid"
-                                element={<PropertyDetail />}
-                            />
-                        </Routes>
-                    )
+
+                role == "Tenant" ? (
+                    <Routes>
+                        <Route
+                            path="/password/change"
+                            element={<ChangePassword />}
+                        />
+                        <Route
+                            path="/password/forgot"
+                            element={<ForgotPassword />}
+                        />
+                        <Route
+                            path="/password/reset/:token"
+                            element={<ResetPassword />}
+                        />
+                        <Route
+                            path="/dashboard"
+                            element={<TenantDashboard />}
+                        />
+                        <Route path="*" element={<NotFound />} />
+                        <Route
+                            path="/profile/edit"
+                            element={
+                                <EditProfile
+                                    keepLogin={() => dispatch(keepLogin())}
+                                    isLoading={isLoading}
+                                />
+                            }
+                        />
+                        <Route path="/listing" element={<AddProperty />} />
+                        <Route
+                            path="/listing/edit/:uuid"
+                            element={<ManageProperty />}
+                        />
+                        <Route path="/room" element={<AddRoom />} />
+                        <Route
+                            path="/room/edit/:uuid"
+                            element={<ManageRoom />}
+                        />
+                        <Route path="/properties" element={<PropertyList />} />
+                        <Route path="/rooms/:uuid" element={<RoomList />} />
+                        <Route
+                            path="/special/:uuid"
+                            element={<RoomConditionList />}
+                        />
+                        <Route path="/statistics" element={<SalesReport />} />
+                        <Route
+                            path="/tenantorderlist"
+                            element={<OrderListTenant />}
+                        />
+                    </Routes>
+                ) : (
+                    // Not logged in
+                    <Routes>
+                        <Route
+                            path="/password/change"
+                            element={<ChangePassword />}
+                        />
+                        <Route
+                            path="/register/user"
+                            element={<UserRegister />}
+                        />
+                        <Route
+                            path="/register/tenant"
+                            element={<TenantRegister />}
+                        />
+                        <Route
+                            path="/password/forgot"
+                            element={<ForgotPassword />}
+                        />
+                        <Route
+                            path="/password/reset/:token"
+                            element={<ResetPassword />}
+                        />
+                        <Route
+                            path="/account/verification/:token"
+                            element={<Verification />}
+                        />
+                        <Route path="/" element={<Landing />} />
+                        <Route path="*" element={<NotFound />} />
+                        <Route
+                            path="/property"
+                            element={<FilteredProperty />}
+                        />
+                        <Route
+                            path="/property/detail/:uuid"
+                            element={<PropertyDetail />}
+                        />
+                    </Routes>
+                )
             }
             <Footer />
         </>
