@@ -18,7 +18,7 @@ import {
     ModalCloseButton,
     Image, Heading, Divider, List, Link, Grid,
 } from "@chakra-ui/react";
-import SwiperCarousel from "../../Components/SwiperCarousel/SwiperCarousel";
+import SwiperCarousel from "../../../Components/SwiperCarousel/SwiperCarousel";
 
 import "./PropertyDetail.css";
 import {
@@ -28,19 +28,19 @@ import {
     FaHeart,
     FaStar,
 } from "react-icons/fa";
-import { capitalizeFirstWord, formatRupiah } from "../../helper";
+import { capitalizeFirstWord, formatRupiah } from "../../../helper";
 import axios from "axios";
 import { useParams, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
-import RoomCard from "../../Components/RoomCard";
-import Booking from "../../Components/Booking";
-import noimage from "../../assets/noimage.png";
-import Review from "../../Components/Review";
+import RoomCard from "../../../Components/RoomCard";
+import Booking from "../../../Components/Booking";
+import noimage from "../../../assets/noimage.png";
+import Review from "../../../Components/Review";
 import Fullcalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
-import Loading from "../../Components/Loading";
+import Loading from "../../../Components/Loading";
 import moment from "moment";
 
 

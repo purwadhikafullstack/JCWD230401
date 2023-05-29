@@ -15,11 +15,11 @@ import TenantRegister from "./Pages/TenantRegister";
 import TenantDashboard from "./Pages/Tenant/TenantDashboard";
 import NotFound from "./Pages/NotFound";
 import Verification from "./Pages/Verification";
-import FilteredProperty from "./Pages/FilteredProperty/FilteredProperty";
-import PropertyDetail from "./Pages/PropertyDetail/PropertyDetail";
-import Payments from "./Pages/Payments/Payments";
-import PaymentDetail from "./Pages/PaymentDetail";
-import OrderLists from "./Pages/OrderLists";
+import FilteredProperty from "./Pages/User/FilteredProperty/FilteredProperty";
+import PropertyDetail from "./Pages/User/PropertyDetail/PropertyDetail";
+import Payments from "./Pages/User/Payments";
+import PaymentDetail from "./Pages/User/PaymentDetail";
+import OrderLists from "./Pages/User/OrderLists";
 import EditProfile from "./Pages/EditProfile";
 import AddProperty from "./Pages/Tenant/AddProperty";
 import ManageProperty from "./Pages/Tenant/ManageProperty";
@@ -29,12 +29,12 @@ import PropertyList from "./Pages/Tenant/PropertyList";
 import RoomList from "./Pages/Tenant/RoomList";
 import RoomConditionList from "./Pages/Tenant/RoomConditionList";
 import SalesReport from "./Components/SalesReport";
-import OrderListTenant from "./Pages/TenantPages/OrderListTenant";
+import OrderListTenant from "./Pages/Tenant/OrderListTenant";
 
 function App() {
     const dispatch = useDispatch();
     const role = useSelector((state) => state.authReducer.role);
-  const [isLoading, setIsLoading] = React.useState(false);
+    const [isLoading, setIsLoading] = React.useState(false);
 
 
     const keepLogin = async () => {
@@ -57,7 +57,7 @@ function App() {
             console.log("ini error dari keeplogin : ", error);
         } finally {
             setIsLoading(false);
-          }
+        }
     };
 
     React.useEffect(() => {
@@ -118,6 +118,7 @@ function App() {
                         <Route path="/order/list" element={<OrderLists />} />
                     </Routes>
                 ) : // Tenant
+
                 role == "Tenant" ? (
                     <Routes>
                         <Route
