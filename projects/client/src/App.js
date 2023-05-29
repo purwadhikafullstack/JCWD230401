@@ -76,10 +76,6 @@ function App() {
                             element={<ChangePassword />}
                         />
                         <Route
-                            path="/register/user"
-                            element={<UserRegister />}
-                        />
-                        <Route
                             path="/register/tenant"
                             element={<TenantRegister />}
                         />
@@ -129,10 +125,6 @@ function App() {
                             element={<ChangePassword />}
                         />
                         <Route
-                            path="/register/tenant"
-                            element={<TenantRegister />}
-                        />
-                        <Route
                             path="/password/forgot"
                             element={<ForgotPassword />}
                         />
@@ -153,10 +145,6 @@ function App() {
                                     isLoading={isLoading}
                                 />
                             }
-                        />
-                        <Route
-                            path="/property/detail/:uuid"
-                            element={<PropertyDetail />}
                         />
                         <Route path="/listing" element={<AddProperty />} />
                         <Route
