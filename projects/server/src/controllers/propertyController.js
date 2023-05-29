@@ -211,7 +211,7 @@ module.exports = {
                 },
                 include: [
                     { model: model.room_category, attributes: ["name"] },
-                    { model: model.picture_room, attributes: ["picture"] },
+                    { model: model.picture_room, attributes: ["picture"], where: { isDeleted: false } },
                 ],
             });
 
@@ -288,23 +288,6 @@ module.exports = {
         } catch (error) {
             console.log(error);
             next(error);
-        }
-    },
-    getPicturePropertyDetail: async (req, res, next) => {
-        try {
-            let getProperty = await model.property.findAll({
-                where: {
-                    uuid: req.body.uuid,
-                },
-            });
-            let getPictureProperty = await model.picture_property.findAll({
-                where: {
-                    propertyId: getProperty[0].dataValues.id,
-                },
-            });
-        } catch (error) {
-            console.log(error);
-            next(error)
         }
     },
     getAllPropertyTenant: async (req, res, next) => {
@@ -761,6 +744,7 @@ module.exports = {
             let getPictureProperty = await model.picture_property.findAll({
                 where: {
                     propertyId: getProperty[0].dataValues.id,
+                    isDeleted: false
                 },
             });
 
