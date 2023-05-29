@@ -108,8 +108,6 @@ export default function LandingNew() {
             }
         })
     };
-    console.log("checkInDate", checkInDate);
-    console.log("checkOutDate", checkOutDate);
 
     // For Browse by Property Type
     const handleSearchCategory = (category) => {
@@ -140,7 +138,6 @@ export default function LandingNew() {
         try {
             setLoading2(true);
             let response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/landing/property-recommendation`);
-            console.log("ini response dari getRecommendProperty :", response.data);
             setRecommendProperty(response.data);
         } catch (error) {
             console.log("ini error dari getRecommendProperty:", error);
@@ -149,7 +146,6 @@ export default function LandingNew() {
             setLoadingPage(false);
         }
     };
-    console.log("ini isi RecommendProperty:", recommendProperty);
 
     const printRecommendProperty = () => {
         return recommendProperty.map((val, idx) => {
@@ -302,8 +298,6 @@ export default function LandingNew() {
                 withCredentials: true,
             });
             const cookieValue = document.cookie;
-            console.log("ini isi dari cookieValue :", cookieValue);
-            console.log("tipe data cookieValue :", typeof cookieValue);
             // Find idx of the equals sign (=) and remove substring starting (=)
             var equalsIndex = cookieValue.indexOf("=");
             var token = cookieValue.substring(equalsIndex + 1);

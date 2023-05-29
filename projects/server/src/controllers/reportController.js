@@ -11,7 +11,10 @@ module.exports = {
 
             let get = await model.order.sum("order.price", {
                 where: {
-                    createdAt: { [sequelize.Op.between]: [start, end] },
+                    createdAt: {
+                        [sequelize.Op.gte]: start,
+                        [sequelize.Op.lte]: end,
+                    },
                 },
                 include: [
                     {

@@ -51,44 +51,48 @@ export default function PaymentDetail() {
     const [propertyRegency, setPropertyRegency] = useState("");
     const [propertyCountry, setPropertyCountry] = useState("");
     const getTransactionTimeAndBank = async () => {
-        let get = await axios.get(
-            `${process.env.REACT_APP_API_BASE_URL}/transaction/detail?uuid=${params.uuid}`,
-            {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            }
-        );
-        console.log("get time bank", get);
-        setExpiredAt(get.data.timeAndPrice[0].expiredAt);
-        setRoomName(get.data.timeAndPrice[0].orders[0].room.room_category.name);
-        setCustomer(get.data.timeAndPrice[0].user.user_detail.name);
-        setCreatedAt(get.data.timeAndPrice[0].createdAt);
-        setInvoiceNumber(get.data.timeAndPrice[0].invoice_number);
-        setStartDate(get.data.timeAndPrice[0].orders[0].start_date);
-        setEndDate(get.data.timeAndPrice[0].orders[0].end_date);
-        setPrice(get.data.timeAndPrice[0].orders[0].price);
-        setBank(get.data.bank[0].user_detail);
-        setTransactionStatus(
-            get.data.timeAndPrice[0].transaction_status.status
-        );
+        try {
+            let get = await axios.get(
+                `${process.env.REACT_APP_API_BASE_URL}/transaction/detail?uuid=${params.uuid}`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
+            console.log("get time bank", get);
+            setExpiredAt(get.data.timeAndPrice[0].expiredAt);
+            setRoomName(get.data.timeAndPrice[0].orders[0].room.room_category.name);
+            setCustomer(get.data.timeAndPrice[0].user.user_detail.name);
+            setCreatedAt(get.data.timeAndPrice[0].createdAt);
+            setInvoiceNumber(get.data.timeAndPrice[0].invoice_number);
+            setStartDate(get.data.timeAndPrice[0].orders[0].start_date);
+            setEndDate(get.data.timeAndPrice[0].orders[0].end_date);
+            setPrice(get.data.timeAndPrice[0].orders[0].price);
+            setBank(get.data.bank[0].user_detail);
+            setTransactionStatus(
+                get.data.timeAndPrice[0].transaction_status.status
+            );
 
-        let getOther = await axios.get(
-            `${process.env.REACT_APP_API_BASE_URL}/room/payment?uuid=${get.data.timeAndPrice[0].orders[0].room.uuid}`,
-            {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            }
-        );
-        console.log("get other detail", getOther);
-        setPropertyName(getOther.data[0].property.property);
-        setPropertyAddress(getOther.data[0].property.property_location.address);
-        setPropertyRegency(
-            getOther.data[0].property.property_location.regency.name
-        );
-        setPropertyCountry(getOther.data[0].property.property_location.country);
-        setLoadingPage(false);
+            let getOther = await axios.get(
+                `${process.env.REACT_APP_API_BASE_URL}/room/payment?uuid=${get.data.timeAndPrice[0].orders[0].room.uuid}`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
+            console.log("get other detail", getOther);
+            setPropertyName(getOther.data[0].property.property);
+            setPropertyAddress(getOther.data[0].property.property_location.address);
+            setPropertyRegency(
+                getOther.data[0].property.property_location.regency.name
+            );
+            setPropertyCountry(getOther.data[0].property.property_location.country);
+            setLoadingPage(false);
+        } catch (error) {
+            console.log(error);
+        }
     };
 
     // CANCEL BUTTON
@@ -96,21 +100,25 @@ export default function PaymentDetail() {
     const cancelRef = React.useRef();
     const [statusId, setStatusId] = useState(5);
     const cancelOrReject = async (req, res, next) => {
-        setIsLoadingButton(true);
-        let update = await axios.patch(
-            `${process.env.REACT_APP_API_BASE_URL}/transaction/status`,
-            {
-                transaction_statusId: statusId,
-                uuid: params.uuid,
-            },
-            {
-                headers: {
-                    Authorization: `Bearer ${token}`,
+        try {
+            setIsLoadingButton(true);
+            let update = await axios.patch(
+                `${process.env.REACT_APP_API_BASE_URL}/transaction/status`,
+                {
+                    transaction_statusId: statusId,
+                    uuid: params.uuid,
                 },
-            }
-        );
-        setIsLoadingButton(false);
-        getTransactionTimeAndBank();
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
+            setIsLoadingButton(false);
+            getTransactionTimeAndBank();
+        } catch (error) {
+            console.log(error);
+        }
     };
 
     // FIND TOTAL DAYS

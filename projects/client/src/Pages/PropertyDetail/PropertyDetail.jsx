@@ -80,40 +80,46 @@ export default function PropertyDetail() {
         moment(location.state.inputCheckOut).format().split('T')[0] || nextDay
     );
     const getPropertyDetail = async () => {
-        let get = await axios.get(
-            `${process.env.REACT_APP_API_BASE_URL}/property/detail?uuid=${params.uuid}&start=${inputCheckIn}&end=${inputCheckOut}`,
-            {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            }
-        );
+        try {
+            let get = await axios.get(
+                `${process.env.REACT_APP_API_BASE_URL}/property/detail?uuid=${params.uuid}&start=${inputCheckIn}&end=${inputCheckOut}`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
 
-        console.log("proeeeee", get);
-        setPropertyDetail(get.data);
-        setRegency(get.data.property_location.regency.name);
-        // setPropertyPrice(get.data.rooms[0].price);
-        setTenantEmail(get.data.user.email);
-        setUuidRoom(get.data.rooms[0]?.uuid);
-        setTenantProfile(get.data.user.user_detail?.image_profile);
-        setGmaps(get.data.property_location.gmaps);
+            console.log("proeeeee", get);
+            setPropertyDetail(get.data);
+            setRegency(get.data.property_location.regency.name);
+            // setPropertyPrice(get.data.rooms[0].price);
+            setTenantEmail(get.data.user.email);
+            setUuidRoom(get.data.rooms[0]?.uuid);
+            setTenantProfile(get.data.user.user_detail?.image_profile);
+            setGmaps(get.data.property_location.gmaps);
+        } catch (error) {
+            console.log(error);
+        }
     };
-    console.log("proeprtyy detaillll : ", propertyDetail);
-    console.log("gmaps : ", gmaps);
 
     const [average, setAverage] = useState(0);
     const getAverage = async () => {
-        let get = await axios.get(
-            `${process.env.REACT_APP_API_BASE_URL}/review/average?uuid=${params.uuid}`,
-            {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            }
-        );
-        setAverage(get.data.avg_rating);
-        console.log("average", get.data.avg_rating);
-        setLoadingPage(false)
+        try {
+            let get = await axios.get(
+                `${process.env.REACT_APP_API_BASE_URL}/review/average?uuid=${params.uuid}`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
+            setAverage(get.data.avg_rating);
+            console.log("average", get.data.avg_rating);
+            setLoadingPage(false)
+        } catch (error) {
+            console.log(error);
+        }
     };
 
     // MODAL
@@ -122,18 +128,22 @@ export default function PropertyDetail() {
     // Get Room Available
     const [roomAvailable, setRoomAvailable] = useState([]);
     const getRoomAvailable = async () => {
-        setLoadingButton(true)
-        let get = await axios.get(
-            `${process.env.REACT_APP_API_BASE_URL}/property/room-available?uuid=${params.uuid}&start=${inputCheckIn}&end=${inputCheckOut}`,
-            {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            }
-        );
-        setRoomAvailable(get.data);
-        setPropertyPrice(get.data[0].price)
-        setLoadingButton(false)
+        try {
+            setLoadingButton(true)
+            let get = await axios.get(
+                `${process.env.REACT_APP_API_BASE_URL}/property/room-available?uuid=${params.uuid}&start=${inputCheckIn}&end=${inputCheckOut}`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
+            setRoomAvailable(get.data);
+            setPropertyPrice(get.data[0].price)
+            setLoadingButton(false)
+        } catch (error) {
+            console.log(error);
+        }
     };
     console.log("room available", roomAvailable);
 
@@ -156,30 +166,38 @@ export default function PropertyDetail() {
 
     const [pictureProperty, setPictureProperty] = useState([]);
     const getPictureProperty = async () => {
-        let get = await axios.get(
-            `${process.env.REACT_APP_API_BASE_URL}/property/picture?uuid=${params.uuid}`,
-            {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            }
-        );
-        setPictureProperty(get.data);
-        console.log("picture property", get);
+        try {
+            let get = await axios.get(
+                `${process.env.REACT_APP_API_BASE_URL}/property/picture?uuid=${params.uuid}`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
+            setPictureProperty(get.data);
+            console.log("picture property", get);
+        } catch (error) {
+            console.log(error);
+        }
     };
 
     const [reviews, setReviews] = useState([]);
     const getReviews = async () => {
-        let review = await axios.get(
-            `${process.env.REACT_APP_API_BASE_URL}/review?uuid=${params.uuid}`,
-            {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            }
-        );
-        console.log("review", review);
-        setReviews(review.data);
+        try {
+            let review = await axios.get(
+                `${process.env.REACT_APP_API_BASE_URL}/review?uuid=${params.uuid}`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
+            console.log("review", review);
+            setReviews(review.data);
+        } catch (error) {
+            console.log(error);
+        }
     };
     console.log("state reviews", reviews);
 
@@ -232,7 +250,6 @@ export default function PropertyDetail() {
     //3. for calendar price (pricing inside calendar for a year in 2023) --> normal price event
     // Generate events for each day of the year
     const generateEventsPrices = (startOfYear, endOfYear, propertyPrice) => {
-        console.log("Property Price in generateEventsPrices:", propertyPrice);
         const eventsData = [];
         let currentDate = new Date(startOfYear);
         while (currentDate <= endOfYear) {
@@ -247,7 +264,6 @@ export default function PropertyDetail() {
         return eventsData;
     };
 
-
     // User can edit calendar :  (Drag Event of FullCalendar)
     const todayCalendar = new Date();
     todayCalendar.setDate(todayCalendar.getDate());
@@ -257,7 +273,6 @@ export default function PropertyDetail() {
         const day = String(date.getDate()).padStart(2, '0');
         return `${year}-${month}-${day}`;
     };
-    console.log("hari ini:", todayCalendar);
 
     const [calendarEdit, setCalendarEdit] = useState([
         {
@@ -289,18 +304,9 @@ export default function PropertyDetail() {
         });
     };
 
-    console.log("ini isi calendarEdit :", calendarEdit);
-    console.log("ini isi inputCheckIn :", inputCheckIn);
-    console.log("ini isi inputCheckOut :", inputCheckOut);
-
-    //gabungin special price event sama normal price event sama yg bisa edit sendiri check in out
     const calendarEvents = [
         ...events,
-        ...calendarEdit.map((event) => ({
-            ...event,
-            editable: true, // Make the calendarEdit event draggable and editable
-            droppable: true,
-        })),
+        ...calendarEdit
     ];
     if (loadingPage) {
         return <Loading />
@@ -386,7 +392,7 @@ export default function PropertyDetail() {
                         </Box>
                         <Modal isOpen={modalProperty.isOpen} onClose={modalProperty.onClose}>
                             {/* <ModalOverlay /> */}
-                            <ModalContent>
+                            <ModalContent maxH="700px" maxW="700px">
                                 <ModalHeader>Picture Property</ModalHeader>
                                 <ModalCloseButton />
                                 <ModalBody>
