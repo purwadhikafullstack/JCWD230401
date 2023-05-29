@@ -196,7 +196,7 @@ export default function OrderListTenant() {
                         <Sidebar />
                     </Box>
                     {/* Right Content */}
-                    <Box w="full" flex="5" px={{ base: "1", sm: "4" }} mt="5">
+                    <Box w="full" flex="5" px={{ base: "5", sm: "4" }} mt="5">
                         <Heading
                             lineHeight={1.1}
                             mb="5"
