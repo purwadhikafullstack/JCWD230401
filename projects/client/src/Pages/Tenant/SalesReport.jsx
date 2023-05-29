@@ -11,11 +11,11 @@ import {
     Heading,
 } from "@chakra-ui/react";
 import { Select, useChakraSelectProps } from "chakra-react-select";
-import TransactionChart from "./TransactionChart";
-import PropertyChart from "./PropertyChart";
-import UserChart from "./UserChart";
-import Sidebar from "./Sidebar";
-import Loading from "./Loading";
+import TransactionChart from "../../Components/TransactionChart";
+import PropertyChart from "../../Components/PropertyChart";
+import UserChart from "../../Components/UserChart";
+import Sidebar from "../../Components/Sidebar";
+import Loading from "../../Components/Loading";
 
 function SalesReport(props) {
     const [loadingPage, setLoadingPage] = useState(true);
