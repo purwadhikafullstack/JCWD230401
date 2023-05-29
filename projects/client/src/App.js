@@ -28,7 +28,7 @@ import ManageRoom from "./Pages/Tenant/ManageRoom";
 import PropertyList from "./Pages/Tenant/PropertyList";
 import RoomList from "./Pages/Tenant/RoomList";
 import RoomConditionList from "./Pages/Tenant/RoomConditionList";
-import SalesReport from "./Components/SalesReport";
+import SalesReport from "./Pages/Tenant/SalesReport";
 import OrderListTenant from "./Pages/Tenant/OrderListTenant";
 
 function App() {

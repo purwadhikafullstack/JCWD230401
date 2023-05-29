@@ -224,13 +224,15 @@ function TenantDashboard() {
 
   //react-slick slider property listing
   const numberOfProperties = propertyListing.length;
-  let slidesToShowValue = 4;
+  let slidesToShowValue = 5;
   if (numberOfProperties === 1) {
     slidesToShowValue = 1;
   } else if (numberOfProperties === 2) {
     slidesToShowValue = 2;
   } else if (numberOfProperties === 3) {
     slidesToShowValue = 3;
+  } else if (numberOfProperties === 4) {
+    slidesToShowValue = 4;
   };
   const settingsMyProperty = {
     infinite: true,
