@@ -59,43 +59,51 @@ export default function Payments() {
     const [details, setDetails] = useState([]);
     const [image, setImage] = useState('');
     const getDetails = async () => {
-        let get = await axios.get(
-            `${process.env.REACT_APP_API_BASE_URL}/room/payment?uuid=${params.uuid}`,
-            {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            }
-        );
-        setDetails(get.data[0]);
-        setImage(get.data[0].picture_rooms[0].picture)
-        console.log("payments get rooms detail transaction", get);
-    };
-    console.log("details", details);
-
-    const [loadingConfirm, setLoadingConfirm] = useState(false);
-    const btnConfirm = async () => {
-        if (!selectedPayment || checkIn == "" || checkOut == "") {
-            alert("Choose payment and date first!");
-        } else {
-            setLoadingPage(true);
-            let addTransaction = await axios.post(
-                `${process.env.REACT_APP_API_BASE_URL}/transaction/`,
-                {
-                    start: checkIn,
-                    end: checkOut,
-                    price: price,
-                    roomId: details.id,
-                    email: emailUser,
-                },
+        try {
+            let get = await axios.get(
+                `${process.env.REACT_APP_API_BASE_URL}/room/payment?uuid=${params.uuid}`,
                 {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
                 }
             );
-            setLoadingPage(false);
-            navigate(`/payment/detail/${addTransaction.data.data1.uuid}`);
+            setDetails(get.data[0]);
+            setImage(get.data[0].picture_rooms[0].picture)
+            console.log("payments get rooms detail transaction", get);
+        } catch (error) {
+            console.log(error);
+        }
+    };
+    console.log("details", details);
+
+    const [loadingConfirm, setLoadingConfirm] = useState(false);
+    const btnConfirm = async () => {
+        try {
+            if (!selectedPayment || checkIn == "" || checkOut == "") {
+                alert("Choose payment and date first!");
+            } else {
+                setLoadingPage(true);
+                let addTransaction = await axios.post(
+                    `${process.env.REACT_APP_API_BASE_URL}/transaction/`,
+                    {
+                        start: checkIn,
+                        end: checkOut,
+                        price: price,
+                        roomId: details.id,
+                        email: emailUser,
+                    },
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                        },
+                    }
+                );
+                setLoadingPage(false);
+                navigate(`/payment/detail/${addTransaction.data.data1.uuid}`);
+            }
+        } catch (error) {
+            console.log(error);
         }
     };
     let now = new Date();
@@ -104,17 +112,21 @@ export default function Payments() {
 
     const [average, setAverage] = useState(0);
     const getAverage = async () => {
-        let get = await axios.get(
-            `${process.env.REACT_APP_API_BASE_URL}/review/average?uuid=${params.uuid}`,
-            {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            }
-        );
-        console.log("average", get);
-        setAverage(get.data.avg_rating);
-        setLoadingPage(false)
+        try {
+            let get = await axios.get(
+                `${process.env.REACT_APP_API_BASE_URL}/review/average?uuid=${params.uuid}`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
+            console.log("average", get);
+            setAverage(get.data.avg_rating);
+            setLoadingPage(false)
+        } catch (error) {
+            console.log(error);
+        }
     };
     function RatingProperty(average) {
         return <Rating style={{ maxWidth: 100 }} value={average} readOnly />;
@@ -173,14 +185,7 @@ export default function Payments() {
                                                 </AccordionButton>
                                             </h2>
                                             <AccordionPanel pb={4}>
-                                                Lorem ipsum dolor sit amet,
-                                                consectetur adipiscing elit, sed
-                                                do eiusmod tempor incididunt ut
-                                                labore et dolore magna aliqua.
-                                                Ut enim ad minim veniam, quis
-                                                nostrud exercitation ullamco
-                                                laboris nisi ut aliquip ex ea
-                                                commodo consequat.
+                                                When making a bank transfer payment, ensure that you provide accurate payment details, including the recipient's account number, bank name, and any additional instructions, to ensure the funds are directed correctly.
                                             </AccordionPanel>
                                         </AccordionItem>
 

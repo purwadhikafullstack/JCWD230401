@@ -217,12 +217,6 @@ function App() {
                             path="/property/detail/:uuid"
                             element={<PropertyDetail />}
                         />
-                        <Route path="/payment/:uuid" element={<Payments />} />
-                        <Route
-                            path="/payment/detail/:uuid"
-                            element={<PaymentDetail />}
-                        />
-                        <Route path="/order/list" element={<OrderLists />} />
                     </Routes>
                 )
             }

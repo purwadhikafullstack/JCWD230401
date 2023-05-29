@@ -33,7 +33,7 @@ export default function OrderLists() {
 
     // PAGINATION
     const [page, setPage] = useState(1);
-    const [size, setSize] = useState(3);
+    const [size, setSize] = useState(5);
     const [transactionStatusId, setTransactionStatusId] = useState("");
     const [invoice, setInvoice] = useState("");
     const [sortBy, setSortBy] = useState("");
@@ -50,20 +50,24 @@ export default function OrderLists() {
     const [orderList, setOrderList] = useState([]);
     const [loadingButton, setLoadingButton] = useState(false);
     const getOrderList = async () => {
-        setLoadingButton(true)
-        let get = await axios.get(
-            `${process.env.REACT_APP_API_BASE_URL}/order?page=${page}&size=${size}&status=${transactionStatusId}&invoice=${invoice}&sortby=${sortBy}&order=${order}&start=${start}&end=${end}`,
-            {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            }
-        );
-        console.log("gett order listt", get);
-        setOrderList(get.data.data);
-        setTotalData(get.data.datanum);
-        setLoadingButton(false)
-        setLoadingPage(false)
+        try {
+            setLoadingButton(true)
+            let get = await axios.get(
+                `${process.env.REACT_APP_API_BASE_URL}/order?page=${page}&size=${size}&status=${transactionStatusId}&invoice=${invoice}&sortby=${sortBy}&order=${order}&start=${start}&end=${end}`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
+            console.log("gett order listt", get);
+            setOrderList(get.data.data);
+            setTotalData(get.data.datanum);
+            setLoadingButton(false)
+            setLoadingPage(false)
+        } catch (error) {
+            console.log(error);
+        }
     };
     console.log("order list", orderList.rows);
 
@@ -146,7 +150,7 @@ export default function OrderLists() {
         return (
             <Container maxW={"7xl"}>
                 {/* TITLE & FILTER */}
-                <Flex justifyContent={"space-between"} alignItems="center" my="5">
+                <Flex display={{ base: 'block', sm: 'flex', md: 'flex' }} justifyContent={"space-between"} alignItems="center" my="5">
                     <Text fontWeight={"bold"} fontSize={"3xl"}>
                         My order
                     </Text>

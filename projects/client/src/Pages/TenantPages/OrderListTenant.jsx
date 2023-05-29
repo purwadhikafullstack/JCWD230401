@@ -63,16 +63,20 @@ export default function OrderListTenant() {
     // DATA FROM getActionsNeeded
     const [actionsNeeded, setActionsNeeded] = useState([]); // all response
     const getActionsNeeded = async () => {
-        let get = await axios.get(
-            `${process.env.REACT_APP_API_BASE_URL}/order/actions-needed?page=${page}&size=${size}&sortby=${sortBy}&order=${order}`,
-            {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            }
-        );
-        setActionsNeeded(get.data.rows);
-        setTotalData(get.data.count);
+        try {
+            let get = await axios.get(
+                `${process.env.REACT_APP_API_BASE_URL}/order/actions-needed?page=${page}&size=${size}&sortby=${sortBy}&order=${order}`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
+            setActionsNeeded(get.data.rows);
+            setTotalData(get.data.count);
+        } catch (error) {
+            console.log(error);
+        }
     };
     console.log("actionsNeeded", actionsNeeded);
 
@@ -117,20 +121,24 @@ export default function OrderListTenant() {
 
     const [dataSummary, setDataSummary] = useState([]);
     const getSummary = async () => {
-        setLoadingButton(true)
-        let get = await axios.get(
-            `${process.env.REACT_APP_API_BASE_URL}/order/summary?page=${pageSummary}&size=${sizeSummary}&sortby=${sortBySummary}&order=${orderSummary}`,
-            {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            }
-        );
-        setDataSummary(get.data.rows);
-        setTotalDataSummary(get.data.count);
-        setLoadingPage(false)
-        setLoadingButton(false)
-        console.log("SUMMARY count", get.data.count);
+        try {
+            setLoadingButton(true)
+            let get = await axios.get(
+                `${process.env.REACT_APP_API_BASE_URL}/order/summary?page=${pageSummary}&size=${sizeSummary}&sortby=${sortBySummary}&order=${orderSummary}`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
+            setDataSummary(get.data.rows);
+            setTotalDataSummary(get.data.count);
+            setLoadingPage(false)
+            setLoadingButton(false)
+            console.log("SUMMARY count", get.data.count);
+        } catch (error) {
+            console.log(error);
+        }
     };
     console.log("SUMMARY", dataSummary);
 
