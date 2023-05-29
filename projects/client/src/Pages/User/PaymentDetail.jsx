@@ -25,10 +25,10 @@ import { Link, useParams } from "react-router-dom";
 import { AiOutlineEye } from "react-icons/ai";
 import { FiUpload } from "react-icons/fi";
 import { MdContentCopy } from "react-icons/md";
-import BookingDetails from "../Components/BookingDetails";
-import { formatRupiah } from "../helper";
-import noimage from "../assets/noimage.png"
-import Loading from "../Components/Loading";
+import BookingDetails from "../../Components/BookingDetails";
+import { formatRupiah } from "../../helper";
+import noimage from "../../assets/noimage.png"
+import Loading from "../../Components/Loading";
 
 export default function PaymentDetail() {
     const [loadingPage, setLoadingPage] = useState(true)

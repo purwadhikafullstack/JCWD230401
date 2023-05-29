@@ -22,10 +22,10 @@ import React, { useEffect } from "react";
 import { useState } from "react";
 import { AiOutlineRight } from "react-icons/ai";
 import { Link } from "react-router-dom";
-import CardOrderList from "../Components/CardOrderList";
-import Pagination from "../Components/Pagination";
+import CardOrderList from "../../Components/CardOrderList";
+import Pagination from "../../Components/Pagination";
 import { Rating } from "@smastrom/react-rating";
-import Loading from "../Components/Loading";
+import Loading from "../../Components/Loading";
 
 export default function OrderLists() {
     const [loadingPage, setLoadingPage] = useState(false)

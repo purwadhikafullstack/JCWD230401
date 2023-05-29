@@ -13,11 +13,11 @@ import {
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import Pagination from "../../Components/Pagination";
-import PropertyCard from "../../Components/PropertyCard";
-import SearchBar from "../../Components/SearchBar/SearchBar";
+import Pagination from "../../../Components/Pagination";
+import PropertyCard from "../../../Components/PropertyCard";
+import SearchBar from "../../../Components/SearchBar/SearchBar";
 import "./FilteredProperty.css"; // import css
-import Loading from "../../Components/Loading"
+import Loading from "../../../Components/Loading"
 
 export default function FilteredProperty() {
     const [loadingPage, setLoadingPage] = useState(true)
