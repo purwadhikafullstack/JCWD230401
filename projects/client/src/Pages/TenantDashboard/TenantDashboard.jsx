@@ -255,7 +255,7 @@ function TenantDashboard() {
         },
       },
       {
-        breakpoint: 600,
+        breakpoint: 770,
         settings: {
           slidesToShow: slidesToShowValue <= 1 ? slidesToShowValue : 1,
           slidesToScroll: 1,

@@ -824,7 +824,7 @@ module.exports = {
                 (endDate >= :start and endDate <= :end)
                 ) AND maintenances.isActive = true AND maintenances.isDeleted = false
             ) AND properties.isDeleted = 0 AND rooms.capacity >= '${capacity}'
-        ) AND categories.category LIKE '%${category}%' AND provinces.name LIKE '%${city}%'
+        ) AND rooms.isDeleted = 0 AND categories.category LIKE '%${category}%' AND provinces.name LIKE '%${city}%'
         group by properties.id, properties.property, provinces.name,
         regencies.name
         order by properties.property ${order} 
