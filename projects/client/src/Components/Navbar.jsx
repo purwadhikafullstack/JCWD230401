@@ -5,28 +5,23 @@ import {
   Box,
   Flex,
   Avatar,
-  HStack,
-  Link, Image,
-  IconButton,
+  HStack, Image,
   Button,
   Menu,
   MenuButton,
   MenuList,
   MenuItem,
-  MenuDivider,
   useDisclosure, Spinner,
-  Stack, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, InputGroup, Input, InputRightElement
+  Modal, ModalOverlay, ModalContent, ModalCloseButton, ModalBody,
 } from "@chakra-ui/react";
-import { HamburgerIcon, CloseIcon, AddIcon } from "@chakra-ui/icons";
-import { TbHomeHeart } from "react-icons/tb";
-import { AiOutlineSearch } from "react-icons/ai";
+import { HamburgerIcon } from "@chakra-ui/icons";
 import Login from "./Login";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { logoutAction } from "../reducers/auth";
 import axios from "axios";
 import Logo from "../assets/logotempatku.png";
-import { Route, Routes, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 
 export default function Navbar(props) {
