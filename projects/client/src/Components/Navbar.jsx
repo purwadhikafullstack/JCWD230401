@@ -60,9 +60,18 @@ export default function Navbar(props) {
   }, [pathname]);
 
   const onBtnLogout = () => {
-    localStorage.removeItem("tempatku_login");
-    dispatch(logoutAction());
-    navigate("/", { replace: true });
+    const cookieValue = document.cookie;
+    // Check if cookie exists, if login by google but register via website
+    if (cookieValue) {
+      document.cookie = "googleAuthToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+      localStorage.removeItem("tempatku_login");
+      dispatch(logoutAction());
+      navigate("/", { replace: true });
+    } else {
+      localStorage.removeItem("tempatku_login");
+      dispatch(logoutAction());
+      navigate("/", { replace: true });
+    }
   };
 
   const onBtnLogoutGoogle = async () => {
@@ -265,7 +274,7 @@ export default function Navbar(props) {
                         <div>
                           <MenuItem onClick={() => navigate("/password/change")}>Change Password</MenuItem>
                         </div>
-                      ) : null }
+                      ) : null}
                       {password === "NULL" ? (
                         <div>
                           <MenuItem
