@@ -281,7 +281,7 @@ export default function PaymentDetail() {
                 );
             }
         } else {
-            if (transactionStatus === "Canceled") {
+            if (transactionStatus === "Cancelled") {
                 // completed = true
                 return (
                     <Stack textAlign={"center"} p={3} align={"center"}>
@@ -300,7 +300,7 @@ export default function PaymentDetail() {
                             align={"center"}
                             justify={"center"}
                         >
-                            <Text fontSize={{ base: "xl" }}>Canceled</Text>
+                            <Text fontSize={{ base: "xl" }}>Cancelled</Text>
                         </Stack>
                     </Stack>
                 );
